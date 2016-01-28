@@ -35,7 +35,7 @@
 
 #include "CodeGenFactory.h"
 
-#include "DREAM3DWidgetsLib/Filter_Parameter_CodeGenFactory_Includes.cpp"
+#include "SIMPLViewWidgetsLib/Filter_Parameter_CodeGenFactory_Includes.cpp"
 
 // -----------------------------------------------------------------------------
 //
@@ -50,5 +50,5 @@ CodeGenFactory::CodeGenFactory()
 // -----------------------------------------------------------------------------
 FPCodeGenerator::Pointer CodeGenFactory::create(QString humanLabel, QString propertyName, QString fpType, QString fpCategory, QString initValue)
 {
-#include "DREAM3DWidgetsLib/Filter_Parameter_CodeGenFactory.cpp"
+#include "SIMPLViewWidgetsLib/Filter_Parameter_CodeGenFactory.cpp"
 }

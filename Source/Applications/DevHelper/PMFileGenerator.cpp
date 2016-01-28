@@ -334,7 +334,7 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
         name.replace("@PluginName@", pluginName);
       }
 
-      rsOut << "AddDREAM3DUnitTest(TESTNAME " << name << "Test\n";
+      rsOut << "AddSIMPLViewUnitTest(TESTNAME " << name << "Test\n";
       rsOut << "                   SOURCES ${${PLUGIN_NAME}Test_SOURCE_DIR}/" + name + "Test.cpp\n";
       rsOut << "                   FOLDER \"${PLUGIN_NAME}Plugin/Test\"\n";
       rsOut << "                   LINK_LIBRARIES ${${PLUGIN_NAME}_Link_Libs})\n";

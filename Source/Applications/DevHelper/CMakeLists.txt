@@ -7,7 +7,7 @@
 #-- This code was partly written under US Air Force Contract FA8650-07-D-5800
 #--
 #--////////////////////////////////////////////////////////////////////////////
-PROJECT( DevHelper VERSION ${DREAM3DProj_VERSION_MAJOR}.${DREAM3DProj_VERSION_MINOR}.${DREAM3DProj_VERSION_PATCH})
+PROJECT( DevHelper VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR}.${SIMPLViewProj_VERSION_PATCH})
 
 
 # --------------------------------------------------------------------
@@ -25,12 +25,12 @@ if(WIN32)
  SET(GUI_TYPE WIN32)
 ENDif(WIN32)
 
-add_definitions(-DDREAM3D_USE_QT)
+add_definitions(-DSIMPLView_USE_QT)
 
 # --------------------------------------------------------------------
 # Generate the License File Headers
 set(PROJECT_PREFIX "PluginMakerProj")
-include(${DREAM3DProj_SOURCE_DIR}/License/License.cmake)
+include(${SIMPLViewProj_SOURCE_DIR}/License/License.cmake)
 
 set(DevHelper_SRCS
   ${DevHelper_SOURCE_DIR}/main.cpp
@@ -48,7 +48,7 @@ set(DevHelper_SRCS
 SET(DevHelper_HDRS
   ${DevHelper_SOURCE_DIR}/FilterBundler.h
   ${DevHelper_SOURCE_DIR}/PMGeneratorTreeItem.h
-  ${BrandedDREAM3D_DIR}/BrandedStrings.h
+  ${BrandedSIMPLView_DIR}/BrandedStrings.h
 )
 
 SET(DevHelper_MOC_HDRS
@@ -152,7 +152,7 @@ SET(DevHelper_UIS
   ${DevHelper_SOURCE_DIR}/UI_Files/AddFilterParameter.ui
   ${DevHelper_SOURCE_DIR}/UI_Files/HelpWidget.ui
   ${DevHelper_SOURCE_DIR}/UI_Files/AddFilterWidget.ui
-#    ${DREAM3DProj_SOURCE_DIR}/Source/QtSupportLib/UI_Files/ApplicationAboutBoxDialog.ui
+#    ${SIMPLViewProj_SOURCE_DIR}/Source/QtSupportLib/UI_Files/ApplicationAboutBoxDialog.ui
   )
 
 cmp_IDE_GENERATED_PROPERTIES("DevHelper/UI_Files" "${DevHelper_UIS}" "")
@@ -191,11 +191,14 @@ set(${PROJECT_NAME}_PROJECT_SRCS
   ${DevHelper_Generated_MOC_SRCS}
 )
 
-include_directories(${DevHelper_SOURCE_DIR} )
-include_directories(${DevHelper_SOURCE_DIR}/.. )
-include_directories(${DevHelper_BINARY_DIR} )
-include_directories(${DREAM3DProj_BINARY_DIR}/QtSupportLib)
-include_directories(${DREAM3DProj_SOURCE_DIR}/Source/QtSupportLib)
+include_directories(${DevHelper_SOURCE_DIR}
+                    ${DevHelper_SOURCE_DIR}/..
+                    ${DevHelper_BINARY_DIR}
+                    ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/QtSupportLib
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+  )
 
 
 if(APPLE)
@@ -216,9 +219,9 @@ BuildQtAppBundle(
     SOURCES ${DevHelper_PROJECT_SRCS}
     DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
     ICON_FILE  ${APPLICATION_ICON}
-    VERSION_MAJOR ${DREAM3D_VER_MAJOR}
-    VERSION_MINOR ${DREAM3D_VER_MINOR}
-    VERSION_PATCH ${DREAM3D_VER_PATCH}
+    VERSION_MAJOR ${SIMPLView_VER_MAJOR}
+    VERSION_MINOR ${SIMPLView_VER_MINOR}
+    VERSION_PATCH ${SIMPLView_VER_PATCH}
     BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
     LINK_LIBRARIES QtSupportLib
     LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
@@ -237,7 +240,7 @@ add_custom_target(TemplateFileCopy ALL
             COMMENT "Copying PluginMakeTemplate into Binary Directory")
 set_target_properties(TemplateFileCopy PROPERTIES FOLDER ZZ_COPY_FILES)
 
-# Make Sure this target is built so that the DREAM3D Application has access to
+# Make Sure this target is built so that the SIMPLView Application has access to
 # the HTML help files
 #add_dependencies(${PROJECT_NAME} TemplateFileCopy)
 

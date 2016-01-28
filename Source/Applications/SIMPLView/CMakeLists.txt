@@ -1,0 +1,227 @@
+#--////////////////////////////////////////////////////////////////////////////
+#--
+#--  Copyright (c) 2015 BlueQuartz Software, LLC
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--
+#-- This code was partly written under US Air Force Contract FA8650-07-D-5800
+#--
+#--////////////////////////////////////////////////////////////////////////////
+# set project's name
+PROJECT( SIMPLView VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR}.${SIMPLViewProj_VERSION_PATCH})
+
+# ---------- Setup output Directories -------------------------
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Libraries"
+  )
+
+# --------- Setup the Executable output Directory -------------
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Executables."
+  )
+
+# --------- Setup the Executable output Directory -------------
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
+  )
+
+add_definitions(-DSIMPLView_USE_QT)
+
+include_directories(${HDF5_INCLUDE_DIR}
+                    ${QT_INCLUDE_DIR}/..
+                    ${SIMPLView_SOURCE_DIR}
+                    ${SIMPLView_BINARY_DIR}
+                    ${PROJECT_CODE_DIR}
+                    ${PROJECT_CODE_DIR}/Plugins
+                    ${PROJECT_CODE_DIR}/QtSupportLib
+                    ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
+                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib
+                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib/Widgets
+                    ${SIMPLViewProj_BINARY_DIR}/SIMPLViewWidgetsLib/
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+                    )
+
+# --------------------------------------------------------------------
+# Generate the License File Headers
+set(PROJECT_PREFIX "SIMPLView")
+set(CMP_HEADER_DIR ${SIMPLView_BINARY_DIR})
+set(CMP_CONFIGURATION_FILE_NAME "SIMPLViewConfiguration.h")
+set(CMP_TYPES_FILE_NAME "SIMPLViewTypes.h")
+set(CMP_VERSION_HEADER_FILE_NAME "SIMPLViewVersion.h")
+set(CMP_VERSION_SOURCE_FILE_NAME "SIMPLViewVersion.cpp")
+set(CMP_TOP_HEADER_FILE "SIMPLView.h")
+set(CMP_PROJECT_NAMESPACE "${PROJECT_NAME}")
+set(CMP_PROJECT_NAME "${PROJECT_NAME}")
+set(CMP_ENABLE_PLUGINS "0")
+set(CMP_LIB_SEARCH_DIRS "")
+set(CMP_GENERATE_VERSION_STRING 1)
+include(${CMP_SOURCE_DIR}/cmpProject.cmake)
+
+cmpConfigureFileWithMD5Check(CONFIGURED_TEMPLATE_PATH ${SIMPLView_SOURCE_DIR}/SIMPLView.h.in
+                            GENERATED_FILE_PATH ${SIMPLView_BINARY_DIR}/${CMP_TOP_HEADER_FILE})
+
+set(SIMPLView_CMP_FILES
+        ${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME}
+        ${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME}
+        ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
+        ${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
+        ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE}
+)
+cmp_IDE_GENERATED_PROPERTIES("SIMPLView" "${SIMPLView_CMP_FILES}" ${PROJECT_INSTALL_HEADERS})
+
+include(${SIMPLViewProj_SOURCE_DIR}/License/License.cmake)
+
+#-- Include the Common Code and set an include directory for the MOC generated files
+include(${SIMPLView_SOURCE_DIR}/../Common/SourceList.cmake)
+include_directories(${SIMPLView_BINARY_DIR}/__/Common)
+
+# List the source files here
+set(SIMPLView_SRCS
+  ${SIMPLView_SOURCE_DIR}/main.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLView_UI.cpp
+  ${SIMPLView_SOURCE_DIR}/DSplashScreen.cpp
+  ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
+  ${SIMPLView_SOURCE_DIR}/AboutPlugins.cpp
+  ${SIMPLView_SOURCE_DIR}/PluginDetails.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
+  ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.cpp
+  )
+
+if(APPLE)
+  set(SIMPLView_SRCS
+    ${SIMPLView_SRCS}
+    ${SIMPLView_SOURCE_DIR}/MacSIMPLViewApplication.cpp
+  )
+endif()
+#------------------------------------------------------------------
+# Headers that do NOT need to have moc run on them, i.e., non-QObject based headers
+set(SIMPLView_HDRS
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewConstants.h
+  ${BrandedSIMPLView_DIR}/BrandedStrings.h
+)
+
+#------------------------------------------------------------------
+# Headers that do need to have moc run on them, i.e., QObject based headers
+SET(SIMPLView_MOC_HDRS
+  ${SIMPLView_SOURCE_DIR}/SIMPLView_UI.h
+  ${SIMPLView_SOURCE_DIR}/DSplashScreen.h
+  ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
+  ${SIMPLView_SOURCE_DIR}/AboutPlugins.h
+  ${SIMPLView_SOURCE_DIR}/PluginDetails.h
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.h
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
+  ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.h
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.h
+)
+
+if(APPLE)
+  set(SIMPLView_MOC_HDRS
+    ${SIMPLView_MOC_HDRS}
+    ${SIMPLView_SOURCE_DIR}/MacSIMPLViewApplication.h
+  )
+endif()
+cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}" "${SIMPLView_SRCS}" ${PROJECT_INSTALL_HEADERS})
+
+# The UI files As generated by Qt Designer
+SET(SIMPLView_UIS
+  ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/AboutPlugins.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/PluginDetails.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewv6Wizard.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewToolbox.ui
+)
+cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
+
+# and finally any resource files
+SET(SIMPLView_RCS
+  # These are generic Icons for the Application
+  ${PROJECT_RESOURCES_DIR}/icons/images/Icons.qrc
+  # this is the SIMPLView specific branding icons
+  ${BrandedSIMPLView_DIR}/branded_files.qrc
+)
+
+# -- Run MOC and UIC on the necessary files
+QT5_ADD_RESOURCES( SIMPLView_Generated_RC_SRCS ${SIMPLView_RCS} ${QRC_LICENSE_FILES})
+
+# this will run uic on .ui files:
+QT5_WRAP_UI( SIMPLView_Generated_UI_HDRS ${SIMPLView_UIS} ${AppsCommon_Widgets_UIS})
+
+# and finally this will run moc:
+QT5_WRAP_CPP( SIMPLView_Generated_MOC_SRCS ${SIMPLView_MOC_HDRS} )
+# These generated moc files will be #include in the FilterWidget source file that
+# are generated so we need to tell the build system to NOT compile these files
+set_source_files_properties( ${SIMPLView_Generated_MOC_SRCS} PROPERTIES GENERATED TRUE)
+set_source_files_properties( ${SIMPLView_Generated_MOC_SRCS} PROPERTIES HEADER_FILE_ONLY TRUE)
+
+
+#-- Put the generated files into their own group for IDEs
+cmp_IDE_GENERATED_PROPERTIES("Generated/ui" "${SIMPLView_Generated_UI_HDRS}" "")
+cmp_IDE_GENERATED_PROPERTIES("Generated/moc" "${SIMPLView_Generated_MOC_SRCS}" "")
+cmp_IDE_GENERATED_PROPERTIES("Generated/qrc" "${QRC_LICENSE_FILES}" "${SIMPLView_Generated_RC_SRCS}")
+
+# -- Finally set the Project Sources to include all the sources
+set(SIMPLView_PROJECT_SRCS
+  ${SIMPLView_SRCS}
+  ${SIMPLView_HDRS}
+  ${SIMPLView_MOC_HDRS}
+  ${SIMPLView_Generated_RC_SRCS}
+  ${SIMPLView_Generated_UI_HDRS}
+  ${SIMPLView_CMP_FILES}
+  ${AppsCommon_Widgets_HDRS}
+  ${AppsCommon_Widgets_SRCS}
+  ${AppsCommon_Widgets_Generated_MOC_SRCS}
+  ${AppsCommon_Widgets_Generated_UI_HDRS}
+
+  # -- This file has all the MOC sources in it
+  ${SIMPLView_Generated_MOC_SRCS}
+)
+
+
+if(APPLE)
+    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/icns/SIMPLView.icns)
+endif(APPLE)
+
+if(WIN32)
+    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/ico/SIMPLView.ico)
+ENDif(WIN32)
+
+set(DEST_DIR ".")
+if(UNIX AND NOT APPLE)
+    set(DEST_DIR "bin")
+endif()
+
+file(READ ${CMP_PLUGIN_LIST_FILE} SIMPLView_PLUGINS)
+file(READ ${SIMPLViewProj_BINARY_DIR}/Qt_Plugins.txt QT_PLUGINS)
+
+message(STATUS "SIMPLView_Qt5_Components: ${SIMPLView_Qt5_Components}")
+
+BuildQtAppBundle(
+    TARGET SIMPLView
+    SOURCES ${${PROJECT_NAME}_PROJECT_SRCS}
+    DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+    ICON_FILE  ${APPLICATION_ICON}
+    VERSION_MAJOR ${SIMPLView_VER_MAJOR}
+    VERSION_MINOR ${SIMPLView_VER_MINOR}
+    VERSION_PATCH ${SIMPLView_VER_PATCH}
+    BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+    LINK_LIBRARIES H5Support SIMPLib QtSupportLib SIMPLViewWidgetsLib
+    LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    QT_PLUGINS    ${QT_PLUGINS}
+    QT5_MODULES   ${SIMPLView_Qt5_Components}
+    OTHER_PLUGINS ${SIMPLView_PLUGINS}
+    PLUGIN_LIST_FILE ${CMP_PLUGIN_LIST_FILE}
+    COMPONENT     Applications
+    INSTALL_DEST  ${DEST_DIR}
+)

@@ -7,25 +7,25 @@ set(AppsCommon_Widgets_UIS "")
 # --------------------------------------------------------------------
 # List the Classes here that are QWidget Derived Classes
 set(APPS_WIDGETS
-	
+
 )
 
-set(DREAM3D_AppsCommon_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(SIMPLView_AppsCommon_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 #-- Only include this widget if we are compiling against QtWebEngine
-if(DREAM3D_USE_QtWebEngine)
-  set(APPS_WIDGETS ${APPS_WIDGETS} DREAM3DUserManualDialog)
+if(SIMPLView_USE_QtWebEngine)
+  set(APPS_WIDGETS ${APPS_WIDGETS} SIMPLViewUserManualDialog)
 endif()
 
 foreach(FPW ${APPS_WIDGETS})
   set(AppsCommon_Widgets_MOC_HDRS ${AppsCommon_Widgets_MOC_HDRS}
-    ${DREAM3DProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.h
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.h
     )
   set(AppsCommon_Widgets_SRCS ${AppsCommon_Widgets_SRCS}
-    ${DREAM3DProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.cpp
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.cpp
     )
   set(AppsCommon_Widgets_UIS ${AppsCommon_Widgets_UIS}
-    ${DREAM3DProj_SOURCE_DIR}/Source/Applications/Common/UI_Files/${FPW}.ui
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/UI_Files/${FPW}.ui
     )
 endforeach()
 
@@ -56,7 +56,7 @@ set_source_files_properties( ${AppsCommon_Widgets_Generated_MOC_SRCS} PROPERTIES
 
 
 # -- Run MOC and UIC on the necessary files
-# QT5_ADD_RESOURCES( AppsCommon_Generated_RC_SRCS "${DREAM3DProj_SOURCE_DIR}/Documentation/Filters/Generated_FilterDocs.qrc"  )
+# QT5_ADD_RESOURCES( AppsCommon_Generated_RC_SRCS "${SIMPLViewProj_SOURCE_DIR}/Documentation/Filters/Generated_FilterDocs.qrc"  )
 
 # --------------------------------------------------------------------
 # Continue on with our Qt5 section

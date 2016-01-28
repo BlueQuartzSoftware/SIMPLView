@@ -45,7 +45,7 @@
 #include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
 
-#include "DREAM3D/License/DevHelperLicenseFiles.h"
+#include "SIMPLView/License/DevHelperLicenseFiles.h"
 
 #include "HelpWidget.h"
 
@@ -135,7 +135,7 @@ void DevHelper::closeEvent(QCloseEvent* event)
 // -----------------------------------------------------------------------------
 void DevHelper::writeSettings()
 {
-  DREAM3DSettings prefs;
+  SIMPLViewSettings prefs;
 
   prefs.beginGroup("DevHelper");
 
@@ -172,7 +172,7 @@ void DevHelper::writeSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DevHelper::writeWindowSettings(DREAM3DSettings& prefs)
+void DevHelper::writeWindowSettings(SIMPLViewSettings& prefs)
 {
   prefs.beginGroup("WindowSettings");
   QByteArray geo_data = saveGeometry();
@@ -187,7 +187,7 @@ void DevHelper::writeWindowSettings(DREAM3DSettings& prefs)
 // -----------------------------------------------------------------------------
 void DevHelper::readSettings()
 {
-  DREAM3DSettings prefs;
+  SIMPLViewSettings prefs;
 
   prefs.beginGroup("DevHelper");
 
@@ -227,7 +227,7 @@ void DevHelper::readSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DevHelper::readWindowSettings(DREAM3DSettings& prefs)
+void DevHelper::readWindowSettings(SIMPLViewSettings& prefs)
 {
   bool ok = false;
   prefs.beginGroup("WindowSettings");

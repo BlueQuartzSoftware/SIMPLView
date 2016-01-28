@@ -3,7 +3,7 @@
 #  All rights reserved.
 #  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #///////////////////////////////////////////////////////////////////////////////
-project(QtSupportLib VERSION ${DREAM3DProj_VERSION_MAJOR}.${DREAM3DProj_VERSION_MINOR})
+project(QtSupportLib VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR})
 
 
 if(NOT PROJECT_RESOURCES_DIR)
@@ -42,7 +42,7 @@ set(QtSupportLib_INSTALL_FILES 0)
 # Include the cmp project to perform all the basic configuration tests for the
 # project.
 #-------------------------------------------------------------------------------
-if(NOT DEFINED DREAM3DProj_BINARY_DIR)
+if(NOT DEFINED SIMPLViewProj_BINARY_DIR)
   set(CMP_HEADER_DIR ${QtSupportLib_BINARY_DIR}/QtSupportLib)
 else()
   set(CMP_HEADER_DIR ${QtSupportLib_BINARY_DIR}/QtSupportLib)
@@ -61,7 +61,7 @@ set(CMP_GENERATE_VERSION_STRING ${GENERATE_GIT_VERSION})
 
 INCLUDE (${CMP_SOURCE_DIR}/cmpProject.cmake)
 
-if(NOT DEFINED DREAM3DProj_BINARY_DIR)
+if(NOT DEFINED SIMPLViewProj_BINARY_DIR)
   cmpConfigureFileWithMD5Check(CONFIGURED_TEMPLATE_PATH ${QtSupportLib_SOURCE_DIR}/QtSupportLibConfiguration.h.in
                             GENERATED_FILE_PATH ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE})
 else()
@@ -81,9 +81,12 @@ set(QtSupportLib_CMP_Generated_SRCS
 cmp_IDE_GENERATED_PROPERTIES("Generated" "${QtSupportLib_CMP_Generated_SRCS}" "")
 
 # Setup the Include Directories
-include_directories(${PROJECT_CODE_DIR})
-include_directories(${QtSupportLib_BINARY_DIR})
-include_directories(${QtSupportLib_SOURCE_DIR}/..)
+include_directories(${PROJECT_CODE_DIR}
+                    ${QtSupportLib_BINARY_DIR}
+                    ${QtSupportLib_SOURCE_DIR}/..
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+  )
 
 set(Project_SRCS "")
 set(Project_HDRS "")
@@ -95,19 +98,17 @@ set(QtSupportLib_SRCS
     ${QtSupportLib_SOURCE_DIR}/BookmarkMissingDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/ColorComboPicker.cpp
     ${QtSupportLib_SOURCE_DIR}/DistributionTypeWidget.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DGraphicsView.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DHelpUrlGenerator.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSettings.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSplitter.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSplitterHandle.cpp
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DStyles.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewGraphicsView.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewHelpUrlGenerator.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSettings.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitter.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitterHandle.cpp
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewStyles.cpp
     ${QtSupportLib_SOURCE_DIR}/FaderWidget.cpp
     ${QtSupportLib_SOURCE_DIR}/FavoritesChangedDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/FileDragMessageBox.cpp
     ${QtSupportLib_SOURCE_DIR}/HelpDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/HoverButton.cpp
-    ${QtSupportLib_SOURCE_DIR}/PoleFigureData.cpp
-    ${QtSupportLib_SOURCE_DIR}/PoleFigureImageUtilities.cpp
     ${QtSupportLib_SOURCE_DIR}/QCheckboxDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/QDroppableScrollArea.cpp
     ${QtSupportLib_SOURCE_DIR}/QFileCompleter.cpp
@@ -123,18 +124,17 @@ set(QtSupportLib_Moc_HDRS
     ${QtSupportLib_SOURCE_DIR}/ApplicationAboutBoxDialog.h
     ${QtSupportLib_SOURCE_DIR}/BookmarkMissingDialog.h
     ${QtSupportLib_SOURCE_DIR}/ColorComboPicker.h
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DGraphicsView.h
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSettings.h
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSplitter.h
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DSplitterHandle.h
-    ${QtSupportLib_SOURCE_DIR}/DREAM3DStyles.h
-    ${QtSupportLib_SOURCE_DIR}/DistributionTypeWidget.h    
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewGraphicsView.h
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSettings.h
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitter.h
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitterHandle.h
+    ${QtSupportLib_SOURCE_DIR}/SIMPLViewStyles.h
+    ${QtSupportLib_SOURCE_DIR}/DistributionTypeWidget.h
     ${QtSupportLib_SOURCE_DIR}/FaderWidget.h
     ${QtSupportLib_SOURCE_DIR}/FavoritesChangedDialog.h
     ${QtSupportLib_SOURCE_DIR}/FileDragMessageBox.h
     ${QtSupportLib_SOURCE_DIR}/HelpDialog.h
     ${QtSupportLib_SOURCE_DIR}/HoverButton.h
-    ${QtSupportLib_SOURCE_DIR}/PoleFigureData.h
     ${QtSupportLib_SOURCE_DIR}/QCheckboxDialog.h
     ${QtSupportLib_SOURCE_DIR}/QDroppableScrollArea.h
     ${QtSupportLib_SOURCE_DIR}/QFSDropLabel.h
@@ -150,9 +150,8 @@ set(QtSupportLib_Moc_HDRS
 # --------------------------------------------------------------------
 set(QtSupportLib_HDRS
   ${QtSupportLib_SOURCE_DIR}/ApplicationFileInfo.h
-  ${QtSupportLib_SOURCE_DIR}/PoleFigureImageUtilities.h
   ${QtSupportLib_SOURCE_DIR}/QtSupportLibDLLExport.h
-  ${QtSupportLib_SOURCE_DIR}/DREAM3DHelpUrlGenerator.h
+  ${QtSupportLib_SOURCE_DIR}/SIMPLViewHelpUrlGenerator.h
 )
 
 cmp_IDE_SOURCE_PROPERTIES("QtSupportLib" "${QtSupportLib_HDRS};${QtSupportLib_MOC_HDRS}" "${QtSupportLib_SRCS}" "0")
@@ -160,7 +159,7 @@ cmp_IDE_SOURCE_PROPERTIES("QtSupportLib" "${QtSupportLib_HDRS};${QtSupportLib_MO
 # --------------------------------------------------------------------
 # The UI files As generated by Qt Designer
 # --------------------------------------------------------------------
-SET(DREAM3D_QT_UI_FILES
+SET(SIMPLView_QT_UI_FILES
   ${QtSupportLib_SOURCE_DIR}/UI_Files/ApplicationAboutBoxDialog.ui
   ${QtSupportLib_SOURCE_DIR}/UI_Files/HelpDialog.ui
   ${QtSupportLib_SOURCE_DIR}/UI_Files/DistributionTypeWidget.ui
@@ -168,7 +167,7 @@ SET(DREAM3D_QT_UI_FILES
   ${QtSupportLib_SOURCE_DIR}/UI_Files/FavoritesChangedDialog.ui
   ${QtSupportLib_SOURCE_DIR}/UI_Files/BookmarkMissingDialog.ui
 )
-cmp_IDE_SOURCE_PROPERTIES( "QtSupportLib/UI_Files" "${DREAM3D_QT_UI_FILES}" "" "0")
+cmp_IDE_SOURCE_PROPERTIES( "QtSupportLib/UI_Files" "${SIMPLView_QT_UI_FILES}" "" "0")
 
 # and finally any resource files
 #SET(QtSupportLib_RCS ${PROJECT_RESOURCES_DIR}/icons/images/Icons.qrc)
@@ -179,7 +178,7 @@ cmp_IDE_SOURCE_PROPERTIES( "QtSupportLib/UI_Files" "${DREAM3D_QT_UI_FILES}" "" "
 
 # --------------------------------------------------------------------
 # this will run uic on .ui files:
-QT5_WRAP_UI( QtSupportLib_Generated_UI_HDRS ${DREAM3D_QT_UI_FILES} )
+QT5_WRAP_UI( QtSupportLib_Generated_UI_HDRS ${SIMPLView_QT_UI_FILES} )
 
 # --------------------------------------------------------------------
 # Run Qts automoc program to generate some source files that get compiled
@@ -203,7 +202,7 @@ set(Project_SRCS ${Project_SRCS}
   # -- Add in our Generated Version Files
   ${QtSupportLib_BINARY_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
   ${QtSupportLib_BINARY_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
-  # -- These are the generated MOC source files 
+  # -- These are the generated MOC source files
   ${QtSupportLib_Generated_MOC_SRCS}
 )
 

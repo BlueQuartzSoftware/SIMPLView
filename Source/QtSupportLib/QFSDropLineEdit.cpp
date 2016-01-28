@@ -44,7 +44,7 @@
 #include <QtWidgets/QWidget>
 #include <QtGui/QDragEnterEvent>
 
-#include "QtSupportLib/DREAM3DStyles.h"
+#include "QtSupportLib/SIMPLViewStyles.h"
 
 #include "moc_QFSDropLineEdit.cpp"
 
@@ -69,11 +69,11 @@ void QFSDropLineEdit::changeStyleSheet(int style)
 
   ss << "QLabel {";
 #if defined(Q_OS_WIN)
-  ss << "font: italic 9 pt \"" << DREAM3DStyles::GetUIFont() << "\";";
+  ss << "font: italic 9 pt \"" << SIMPLViewStyles::GetUIFont() << "\";";
 #elif defined(Q_OS_MAC)
-  ss << "font: italic 12 pt \"" << DREAM3DStyles::GetUIFont() << "\";";
+  ss << "font: italic 12 pt \"" << SIMPLViewStyles::GetUIFont() << "\";";
 #else
-  ss << "font: italic 10 pt \"" << DREAM3DStyles::GetUIFont() << "\";";
+  ss << "font: italic 10 pt \"" << SIMPLViewStyles::GetUIFont() << "\";";
 #endif
 
   if(style == FS_STANDARD_STYLE)

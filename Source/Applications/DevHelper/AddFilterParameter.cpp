@@ -210,7 +210,7 @@ QString AddFilterParameter::getCategory()
 // -----------------------------------------------------------------------------
 QList<QString> AddFilterParameter::getTypeList()
 {
-#include "DREAM3DWidgetsLib/Filter_Parameter_TypeList.cpp"
+#include "SIMPLViewWidgetsLib/Filter_Parameter_TypeList.cpp"
 }
 
 // -----------------------------------------------------------------------------

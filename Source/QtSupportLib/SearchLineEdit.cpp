@@ -16,7 +16,7 @@
 #include <QPaintEvent>
 #include <QDesktopWidget>
 
-#include "Applications/DREAM3D/DREAM3DApplication.h"
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
 
 #include "moc_SearchLineEdit.cpp"
 

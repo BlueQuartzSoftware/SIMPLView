@@ -39,7 +39,7 @@
 
 #include <QtWidgets/QApplication>
 
-#include "Applications/DREAM3D/DREAM3DApplication.h"
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
 
 // -----------------------------------------------------------------------------
 //

@@ -1071,7 +1071,7 @@ qint32 PluginMaker::checkDirtyDocument()
 
   if (this->isWindowModified() == true)
   {
-    int r = QMessageBox::warning(this, tr("DREAM.3D"),
+    int r = QMessageBox::warning(this, tr("SIMPLView"),
                                  tr("The Data has been modified.\nDo you want to save your changes?"),
                                  QMessageBox::Save | QMessageBox::Default,
                                  QMessageBox::Discard,

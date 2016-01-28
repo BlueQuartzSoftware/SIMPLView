@@ -44,7 +44,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QUrl>
 
-#include "Applications/DREAM3D/DREAM3DApplication.h"
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
 #include "moc_HelpDialog.cpp"
 // -----------------------------------------------------------------------------
 //

@@ -39,7 +39,7 @@
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
-#include "DREAM3DWidgetsLib/Filter_Parameter_CodeGenFactory_Includes.cpp"
+#include "SIMPLViewWidgetsLib/Filter_Parameter_CodeGenFactory_Includes.cpp"
 
 class CodeGenFactory
 {
@@ -53,7 +53,7 @@ class CodeGenFactory
     */
     FPCodeGenerator::Pointer create(QString humanLabel, QString propertyName, QString fpType, QString initValue)
     {
-#include "DREAM3DWidgetsLib/Filter_Parameter_CodeGenFactory.cpp"
+#include "SIMPLViewWidgetsLib/Filter_Parameter_CodeGenFactory.cpp"
     }
 
   protected:

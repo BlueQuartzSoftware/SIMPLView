@@ -152,7 +152,7 @@ void QRecentFileList::clear()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void QRecentFileList::writeList(DREAM3DSettings* prefs)
+void QRecentFileList::writeList(SIMPLViewSettings* prefs)
 {
   prefs->setValue("Recent Files", this->fileList());
 }
@@ -160,7 +160,7 @@ void QRecentFileList::writeList(DREAM3DSettings* prefs)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void QRecentFileList::readList(DREAM3DSettings* prefs)
+void QRecentFileList::readList(SIMPLViewSettings* prefs)
 {
   this->clear();
 

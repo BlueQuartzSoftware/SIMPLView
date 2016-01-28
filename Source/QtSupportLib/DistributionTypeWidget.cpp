@@ -64,9 +64,9 @@ DistributionTypeWidget::~DistributionTypeWidget()
 void DistributionTypeWidget::setupGui()
 {
 
-  distributionTypeCombo->addItem(DREAM3D::StringConstants::BetaDistribution);
-  distributionTypeCombo->addItem(DREAM3D::StringConstants::LogNormalDistribution);
-  distributionTypeCombo->addItem(DREAM3D::StringConstants::PowerLawDistribution);
+  distributionTypeCombo->addItem(SIMPL::StringConstants::BetaDistribution);
+  distributionTypeCombo->addItem(SIMPL::StringConstants::LogNormalDistribution);
+  distributionTypeCombo->addItem(SIMPL::StringConstants::PowerLawDistribution);
 
 }
 

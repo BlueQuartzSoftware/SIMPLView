@@ -708,7 +708,7 @@ void FilterMaker::updateTestList()
 
   QString testCMakeCode;
   QTextStream out(&testCMakeCode);
-  out << "AddDREAM3DUnitTest(TESTNAME " << filterName << "Test";
+  out << "AddSIMPLViewUnitTest(TESTNAME " << filterName << "Test";
   // Check to make sure we don't already have this filter in the namespace
   if (contents.contains(testCMakeCode) == true)
   {

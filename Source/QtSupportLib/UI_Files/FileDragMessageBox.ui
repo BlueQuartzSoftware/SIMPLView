@@ -38,7 +38,7 @@
         </font>
        </property>
        <property name="text">
-        <string>A pipeline file has been dragged into the DREAM3D interface.</string>
+        <string>A pipeline file has been dragged into the SIMPLView interface.</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -56,7 +56,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Would you like to extract the pipeline contained in the file, or add a DREAM3D File Reader filter to the existing pipeline?</string>
+        <string>Would you like to extract the pipeline contained in the file, or add a SIMPLView File Reader filter to the existing pipeline?</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -133,7 +133,7 @@
        <item>
         <widget class="QRadioButton" name="addFilterRadioBtn">
          <property name="text">
-          <string>Add DREAM3D File Reader Filter</string>
+          <string>Add SIMPLView File Reader Filter</string>
          </property>
         </widget>
        </item>
