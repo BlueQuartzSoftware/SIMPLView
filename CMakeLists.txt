@@ -122,7 +122,7 @@ endif()
 
 
 # -----------------------------------------------------------------------
-# Add in the Necessary HDF5 Support Sources into a library
+# Bring in the SIMPL Project
 # -----------------------------------------------------------------------
 add_subdirectory( ${SIMPLProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPL)
 
@@ -190,8 +190,8 @@ endif(BUILD_SHARED_LIBS)
 include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
 set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Script Svg Xml OpenGL PrintSupport )
 option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
-CMP_AddQt5Support( "${SIMPLView_Qt5_Components}" 
-                    "${SIMPLView_USE_QtWebEngine}" 
+CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
+                    "${SIMPLView_USE_QtWebEngine}"
                     "${SIMPLViewProj_BINARY_DIR}"
                     "SIMPLView")
 
@@ -218,12 +218,11 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # --------------------------------------------------------------------
 # Should we use Intel Threading Building Blocks
 # --------------------------------------------------------------------
-set(SIMPLView_USE_PARALLEL_ALGORITHMS "")
-option(SIMPLView_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
-if(SIMPLView_USE_MULTITHREADED_ALGOS)
+set(SIMPLib_USE_PARALLEL_ALGORITHMS "")
+option(SIMPLib_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
+if(SIMPLib_USE_MULTITHREADED_ALGOS)
     find_package(TBB)
     if(TBB_FOUND)
-        set(SIMPLView_USE_PARALLEL_ALGORITHMS "1")
         include_directories(${TBB_INCLUDE_DIRS} )
         CMP_COPY_DEPENDENT_LIBRARIES("tbb;tbb_malloc")
         # Append the locations of the TBB libraries to our Library Search Paths
@@ -233,17 +232,18 @@ if(SIMPLView_USE_MULTITHREADED_ALGOS)
     else()
         message(FATAL_ERROR "The Intel Threading Building Blocks library is needed to enable the multithreaded algorithms. Please make sure it is installed properly")
     endif()
+    set(SIMPLib_USE_PARALLEL_ALGORITHMS "1")
 endif()
 
 # --------------------------------------------------------------------
-# DREAM3D needs the Eigen library for Least Squares fit and Eigen
+# SIMPL needs the Eigen library for Least Squares fit and Eigen
 # value/vector calculations.
-set(SIMPLViewProj_USE_EIGEN "")
+set(SIMPLib_USE_EIGEN "")
 Find_Package(Eigen REQUIRED)
 if(EIGEN_FOUND)
   message(STATUS "Found Eigen Library")
   include_directories( ${EIGEN_INCLUDE_DIRS} )
-  set(SIMPLViewProj_USE_EIGEN "1")
+  set(SIMPLib_USE_EIGEN "1")
 else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
 endif()

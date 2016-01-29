@@ -38,7 +38,10 @@
 #include "SIMPLib/SIMPLib.h"
 
 #include <boost/version.hpp>
+
 #include <H5public.h>
+
+#include "SIMPLib/SIMPLib.h"
 
 #if SIMPLib_USE_PARALLEL_ALGORITHMS
 #include <tbb/tbb_stddef.h>
@@ -92,7 +95,7 @@ void AboutSIMPLView::setupGui()
   QString str;
   QTextStream out(&str);
 
-  out << "SIMPLView Version " << SIMPLView::Version::Major() << "." << SIMPLView::Version::Minor() << "." << SIMPLView::Version::Patch();
+  out << BrandedStrings::ApplicationName << " Version " << SIMPLView::Version::Major() << "." << SIMPLView::Version::Minor() << "." << SIMPLView::Version::Patch();
   out << "\n" << BrandedStrings::DistributionName;
 
   versionLabel->setText(str);
@@ -107,6 +110,13 @@ void AboutSIMPLView::setupGui()
   revisionLabel->setText(str);
 
   setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+  QString aboutTitle = QString("About ") + BrandedStrings::ApplicationName;
+  setWindowTitle(QApplication::translate("AboutSIMPLView", aboutTitle.toLatin1().data(), 0));
+  tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("AboutSIMPLView", aboutTitle.toLatin1().data(), 0));
+  QString iconName = QString(":/icons/%1 (PNG)/128x128.png").arg(BrandedStrings::ApplicationName);
+  label->setPixmap(QPixmap(iconName));
+
 
 #if defined (Q_OS_MAC)
   QAction* closeAction = new QAction(this);

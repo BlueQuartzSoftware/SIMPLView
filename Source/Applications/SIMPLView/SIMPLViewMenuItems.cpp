@@ -40,6 +40,8 @@
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 
+#include "BrandedStrings.h"
+
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewMenuItems.cpp"
 
@@ -94,12 +96,12 @@ void SIMPLViewMenuItems::createActions()
   m_ActionClearPipeline = new QAction("Clear Pipeline", this);
   m_ActionLocateFile = new QAction("Locate Bookmark...", this);
   m_ActionShowBookmarkInFileSystem = new QAction(this);
-  m_ActionExit = new QAction("Exit SIMPLView", this);
+  m_ActionExit = new QAction("Exit " + BrandedStrings::ApplicationName, this);
   m_ActionOpen = new QAction("Open...", this);
   m_ActionNew = new QAction("New...", this);
   m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
-  m_ActionShowSIMPLViewHelp = new QAction("SIMPLView Help", this);
-  m_ActionAboutSIMPLView = new QAction("About SIMPLView", this);
+  m_ActionShowSIMPLViewHelp = new QAction(BrandedStrings::ApplicationName + " Help", this);
+  m_ActionAboutSIMPLView = new QAction("About " + BrandedStrings::ApplicationName, this);
   m_ActionCheckForUpdates = new QAction("Check For Updates", this);
   m_ActionPluginInformation = new QAction("Plugin Information", this);
   m_ActionSave = new QAction("Save", this);

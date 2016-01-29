@@ -31,8 +31,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   "Single Directory for all static libraries."
   )
 
-add_definitions(-DSIMPLView_USE_QT)
-
 include_directories(${HDF5_INCLUDE_DIR}
                     ${QT_INCLUDE_DIR}/..
                     ${SIMPLView_SOURCE_DIR}
@@ -70,10 +68,24 @@ cmpConfigureFileWithMD5Check(CONFIGURED_TEMPLATE_PATH ${SIMPLView_SOURCE_DIR}/SI
 set(SIMPLView_CMP_FILES
         ${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME}
         ${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME}
-        ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
-        ${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
         ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE}
 )
+
+if(NOT DEFINED SIMPLView_APPLICATION_NAME)
+  set(SIMPLView_APPLICATION_NAME "SIMPLView")
+  set(SIMPLView_CMP_FILES ${SIMPLView_CMP_FILES}
+        ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
+        ${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}  
+        )
+else()
+  set(SIMPLView_CMP_FILES ${SIMPLView_CMP_FILES}
+        ${SIMPLView_VERSION_HDR_FILE}
+        ${SIMPLView_VERSION_SRC_FILE}  
+        ) 
+endif()
+
+
+
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView" "${SIMPLView_CMP_FILES}" ${PROJECT_INSTALL_HEADERS})
 
 include(${SIMPLViewProj_SOURCE_DIR}/License/License.cmake)
@@ -190,11 +202,11 @@ set(SIMPLView_PROJECT_SRCS
 
 
 if(APPLE)
-    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/icns/SIMPLView.icns)
+    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/icns/${SIMPLView_APPLICATION_NAME}.icns)
 endif(APPLE)
 
 if(WIN32)
-    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/ico/SIMPLView.ico)
+    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/ico/${SIMPLView_APPLICATION_NAME}..ico)
 ENDif(WIN32)
 
 set(DEST_DIR ".")
@@ -205,10 +217,8 @@ endif()
 file(READ ${CMP_PLUGIN_LIST_FILE} SIMPLView_PLUGINS)
 file(READ ${SIMPLViewProj_BINARY_DIR}/Qt_Plugins.txt QT_PLUGINS)
 
-message(STATUS "SIMPLView_Qt5_Components: ${SIMPLView_Qt5_Components}")
-
 BuildQtAppBundle(
-    TARGET SIMPLView
+    TARGET ${SIMPLView_APPLICATION_NAME}
     SOURCES ${${PROJECT_NAME}_PROJECT_SRCS}
     DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
     ICON_FILE  ${APPLICATION_ICON}

@@ -54,6 +54,9 @@
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QScrollBar>
 
+
+#include "Applications/SIMPLView/SIMPLView.h"
+
 #ifdef SIMPLView_USE_QtWebEngine
 #include "Applications/Common/SIMPLViewUserManualDialog.h"
 #else
@@ -90,6 +93,8 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
+
+#include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLView_UI.cpp"

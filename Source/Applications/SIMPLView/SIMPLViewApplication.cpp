@@ -68,6 +68,9 @@
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/DSplashScreen.h"
 
+
+#include "BrandedStrings.h"
+
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewApplication.cpp"
 
@@ -83,6 +86,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 {
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
+  m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
 
   connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
 
@@ -1194,7 +1198,7 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   SIMPLView_UI* newInstance = new SIMPLView_UI(NULL);
   newInstance->setLoadedPlugins(plugins);
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
-  newInstance->setWindowTitle("[*]Untitled Pipeline - SIMPLView");
+  newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
 
   if (NULL != m_ActiveWindow)
   {
