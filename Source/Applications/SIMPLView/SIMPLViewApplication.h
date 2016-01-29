@@ -41,8 +41,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
 
-#include "SIMPLib/SIMPLib.h"
-
 #define dream3dApp (static_cast<SIMPLViewApplication *>(qApp))
 
 class DSplashScreen;

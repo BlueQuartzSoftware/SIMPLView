@@ -40,11 +40,8 @@
 #include <QtWidgets/QMessageBox>
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include "BrandedStrings.h"
 
-namespace Detail
-{
-  QString Dream3DHelpPath = "/Help/SIMPLView/";
-}
 
 // -----------------------------------------------------------------------------
 //
@@ -83,7 +80,7 @@ QUrl SIMPLViewHelpUrlGenerator::generateHTMLUrl(QString htmlName)
   }
 #else
   // We are on Linux - I think
-  QFileInfo fi( helpDir.absolutePath() + Detail::Dream3DHelpPath + htmlName + ".html");
+  QFileInfo fi( helpDir.absolutePath() + "/Help/" + BrandedStrings::ApplicationName + "/" + htmlName + ".html");
   if (fi.exists() == false)
   {
     // The help file does not exist at the default location because we are probably running from the build tree.
@@ -95,7 +92,8 @@ QUrl SIMPLViewHelpUrlGenerator::generateHTMLUrl(QString htmlName)
 
 
 #if defined(Q_OS_WIN) || defined (Q_OS_MAC)
-  QFileInfo fi( helpDir.absolutePath() + Detail::Dream3DHelpPath + htmlName + ".html");
+  QString helpFilePath=QString("%1/Help/%2/%3.html").arg(helpDir.absolutePath()).arg(BrandedStrings::ApplicationName).arg(htmlName);
+  QFileInfo fi(helpFilePath);
   if (fi.exists() == false)
   {
     // The help file does not exist at the default location because we are probably running from Visual Studio or Xcode
@@ -104,7 +102,7 @@ QUrl SIMPLViewHelpUrlGenerator::generateHTMLUrl(QString htmlName)
   }
 #endif
 
-  s = s + helpDir.absolutePath() + Detail::Dream3DHelpPath + htmlName + ".html";
+  s = s + helpDir.absolutePath() + "/Help/" + BrandedStrings::ApplicationName + "/" + htmlName + ".html";
   return QUrl(s);
 }
 
@@ -117,7 +115,7 @@ void SIMPLViewHelpUrlGenerator::openHTMLUrl(QUrl URL, QWidget* parent)
   if(false == didOpen)
   {
     QMessageBox::critical(parent, "Error Opening Help File",
-                          QString::fromLatin1("SIMPLView could not open the help file path ") + URL.path(),
+                          QString("%1 could not open the help file path %2").arg(BrandedStrings::ApplicationName).arg(URL.path()),
                           QMessageBox::Ok, QMessageBox::Ok);
   }
 }

@@ -36,11 +36,12 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${SIMPLView_SOURCE_DIR}
                     ${SIMPLView_BINARY_DIR}
                     ${PROJECT_CODE_DIR}
+                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib
+                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib/Widgets
                     ${PROJECT_CODE_DIR}/Plugins
                     ${PROJECT_CODE_DIR}/QtSupportLib
                     ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
-                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib
-                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib/Widgets
+                    ${SIMPLViewProj_BINARY_DIR}/Applications
                     ${SIMPLViewProj_BINARY_DIR}/SIMPLViewWidgetsLib/
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}

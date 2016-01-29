@@ -120,6 +120,14 @@ if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     )
 endif()
 
+# -----------------------------------------------------------------------
+# Setup a Global property that is used to gather Documentation Information
+# into a single known location
+get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
+if("${DREAM3DDocRoot}" STREQUAL "")
+  set_property(GLOBAL PROPERTY DREAM3DDocRoot "${SIMPLViewProj_BINARY_DIR}")
+endif()
+file(WRITE ${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList "")
 
 # -----------------------------------------------------------------------
 # Bring in the SIMPL Project
@@ -315,12 +323,6 @@ endif()
 
 include_directories(${SIMPLViewProj_SOURCE_DIR}/Source)
 include_directories(${SIMPLViewProj_BINARY_DIR})
-
-# -----------------------------------------------------------------------
-# Setup some Global Lists that are used to gather Documentation Information
-file(WRITE ${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList "")
-
-
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(DREAM3D_BUILD_TESTING "Compile the test programs" ON)

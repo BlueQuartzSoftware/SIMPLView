@@ -55,11 +55,12 @@
 #include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
 #include "QtSupportLib/ApplicationAboutBoxDialog.h"
 
-#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
+
+#include "Applications/SIMPLView/SIMPLView.h"
 #ifdef SIMPLView_USE_QtWebEngine
 #include "Applications/Common/SIMPLViewUserManualDialog.h"
 #endif
-
+#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
 #include "Applications/SIMPLView/AboutPlugins.h"
