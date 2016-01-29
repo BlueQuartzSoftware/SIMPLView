@@ -206,7 +206,7 @@ if(APPLE)
 endif(APPLE)
 
 if(WIN32)
-    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/ico/${SIMPLView_APPLICATION_NAME}..ico)
+    set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/ico/${SIMPLView_APPLICATION_NAME}.ico)
 ENDif(WIN32)
 
 set(DEST_DIR ".")
