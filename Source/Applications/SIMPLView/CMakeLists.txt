@@ -215,8 +215,12 @@ if(UNIX AND NOT APPLE)
     set(DEST_DIR "bin")
 endif()
 
-file(READ ${CMP_PLUGIN_LIST_FILE} SIMPLView_PLUGINS)
-file(READ ${SIMPLViewProj_BINARY_DIR}/Qt_Plugins.txt QT_PLUGINS)
+get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
+file(READ "${SIMPLPluginList}" SIMPLView_PLUGINS)
+
+get_property(QT_PLUGINS_FILE GLOBAL PROPERTY QtPluginsTxtFile)
+file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
+
 
 BuildQtAppBundle(
     TARGET ${SIMPLView_APPLICATION_NAME}
