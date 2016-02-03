@@ -55,44 +55,6 @@ cmake_minimum_required(VERSION 3.1.0)
 # Create the Top level Project
 project(SIMPLViewProj VERSION 1.0.0.0)
 
-#------------------------------------------------------------------------------
-# If the developer has set another CMP directory then use that, otherwise look
-# for the CMP directory at the same level as the SIMPL directory
-if("${CMP_SOURCE_DIR}" STREQUAL "")
-  set(CMP_SOURCE_DIR ${SIMPLViewProj_SOURCE_DIR}/../CMP)
-  message(STATUS "CMP_SOURCE_DIR: ${CMP_SOURCE_DIR}")
-endif()
-
-if(NOT EXISTS "${CMP_SOURCE_DIR}")
-  message(WARNING "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}. Aborting CMake.")
-  message(FATAL_ERROR "CMP can be cloned using git clone -b develop git://github.com/bluequartzsoftware/CMP.git")
-  # TODO: Add in automatic cloning
-endif()
-
-#------------------------------------------------------------------------------
-# If the developer has set another SIMPL directory then use that, otherwise look
-# for the SIMPL directory at the same level as the SIMPL directory
-if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
-  set(SIMPLProj_SOURCE_DIR ${SIMPLViewProj_SOURCE_DIR}/../SIMPL)
-  message(STATUS "SIMPLProj_SOURCE_DIR: ${SIMPLProj_SOURCE_DIR}")
-endif()
-
-if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
-  message(WARNING "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Aborting CMake.")
-  message(FATAL_ERROR "SIMPL can be cloned using git clone -b develop git://github.com/bluequartzsoftware/SIMPL.git")
-  # TODO: Add in automatic cloning
-endif()
-
-
-#------------------------------------------------------------------------------
-# There are several different Release Types that we are going to use.
-# Official: This is an official release from BlueQuartz Software
-# Beta: This is a Beta release that has is getting ready to be officially released.
-# Development: This is currently in development and probably has bugs.
-set(SIMPLViewProj_RELEASE_TYPE "Development")
-
-include(CMakeParseArguments)
-
 # ---------- Setup output Directories -------------------------
 if(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
@@ -119,6 +81,79 @@ if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     "Single Directory for all static libraries."
     )
 endif()
+
+
+
+#------------------------------------------------------------------------------
+# Find the Git Package for Versioning. It should be ok if Git is NOT found
+Find_package(Git)
+
+get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
+
+#------------------------------------------------------------------------------
+# If the developer has set another CMP directory then use that, otherwise look
+# for the CMP directory at the same level as the SIMPL directory
+if("${CMP_SOURCE_DIR}" STREQUAL "")
+  set(CMP_SOURCE_DIR ${SIMPLView_PARENT}/CMP)
+  message(STATUS "CMP_SOURCE_DIR: ${CMP_SOURCE_DIR}")
+endif()
+
+if(NOT EXISTS "${CMP_SOURCE_DIR}")
+  if(Git_FOUND)
+    message(STATUS "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}. Attempting to clone it from Github....")
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b feature/reorg git://github.com/bluequartzsoftware/CMP.git ${SIMPLView_PARENT}/CMP
+                    OUTPUT_VARIABLE CLONE_OUTPUT
+                    RESULT_VARIABLE did_run
+                    ERROR_VARIABLE git_error
+                    WORKING_DIRECTORY ${SIMPLView_PARENT} )
+  endif()
+  # One last check. If it does not exist at this point then we simply Abort CMake 
+  if(NOT EXISTS "${CMP_SOURCE_DIR}")
+    message(FATAL_ERROR "CMP_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
+      to fail. SIMPLView can not proceed without the CMP directory. Please ask a SIMPL developer for more\
+      information about this error. Can you access http://github.com/bluequartzsoftware/CMP.git? is\
+      a firewall blocking the 'git' protocol? ")
+  endif()
+endif()
+
+#------------------------------------------------------------------------------
+# If the developer has set another SIMPL directory then use that, otherwise look
+# for the SIMPLView directory at the same level as the SIMPL directory
+if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
+  set(SIMPLProj_SOURCE_DIR ${SIMPLView_PARENT}/SIMPL)
+  message(STATUS "SIMPLProj_SOURCE_DIR: ${SIMPLProj_SOURCE_DIR}")
+endif()
+
+if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
+  if(Git_FOUND)
+    message(STATUS "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Attempting to clone it from Github....")
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b feature/reorg git://github.com/bluequartzsoftware/SIMPL.git ${SIMPLView_PARENT}/SIMPL
+                    OUTPUT_VARIABLE CLONE_OUTPUT
+                    RESULT_VARIABLE did_run
+                    ERROR_VARIABLE git_error
+                    WORKING_DIRECTORY ${SIMPLView_PARENT}/ )
+    # message(STATUS "CLONE_OUTPUT: ${CLONE_OUTPUT}")
+    # message(STATUS "did_run: ${did_run}")
+    # message(STATUS "git_error: ${git_error}")
+  endif()
+  # One last check. If it does not exist at this point then we simply Abort CMake 
+  if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
+    message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
+      to fail. SIMPLView can not proceed without the SIMPLProj_SOURCE_DIR directory. Please ask a SIMPL developer for more\
+      information about this error. Can you access http://github.com/bluequartzsoftware/SIMPLView.git? is\
+      a firewall blocking the 'git' protocol? ")
+  endif()
+endif()
+
+
+#------------------------------------------------------------------------------
+# There are several different Release Types that we are going to use.
+# Official: This is an official release from BlueQuartz Software
+# Beta: This is a Beta release that has is getting ready to be officially released.
+# Development: This is currently in development and probably has bugs.
+set(SIMPLViewProj_RELEASE_TYPE "Development")
+
+include(CMakeParseArguments)
 
 # -----------------------------------------------------------------------
 # Setup a Global property that is used to gather Documentation Information
