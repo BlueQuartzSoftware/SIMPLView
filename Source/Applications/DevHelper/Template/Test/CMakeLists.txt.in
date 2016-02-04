@@ -74,6 +74,6 @@ AddSIMPLUnitTest(TESTNAME ${PLUGIN_NAME}Test
                     FOLDER "${PLUGIN_NAME}Proj/Test"
                     LINK_LIBRARIES ${${PLUGIN_NAME}_Link_Libs})
 if(MSVC)
-  set_source_files_properties(${${PLUGIN_NAME}Test_SOURCE_DIR}/${PLUGIN_NAME}Test.cpp 
+  set_source_files_properties(${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp 
                               PROPERTIES COMPILE_FLAGS /bigobj)
 endif()
