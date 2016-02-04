@@ -8,12 +8,16 @@ set(PLUGIN_NAME "@PluginName@")
 set(${PLUGIN_NAME}Test_SOURCE_DIR ${${PLUGIN_NAME}_SOURCE_DIR}/Test)
 set(${PLUGIN_NAME}Test_BINARY_DIR ${${PLUGIN_NAME}_BINARY_DIR}/Test)
 
-include(${DREAM3DProj_SOURCE_DIR}/Test/DREAM3DTestFunctions.cmake)
+include(${SIMPLProj_SOURCE_DIR}/Test/SIMPLTestFunctions.cmake)
 
 include_directories(${${PLUGIN_NAME}_SOURCE_DIR}/Test)
 include_directories(${${PLUGIN_NAME}_BINARY_DIR})
 
+#------------------------------------------------------------------------------
+# Set any additional include directories here
+
 set(TEST_TEMP_DIR ${${PLUGIN_NAME}Test_BINARY_DIR}/Test/Temp)
+
 # Make sure the directory is created during CMake time
 file(MAKE_DIRECTORY ${TEST_TEMP_DIR})
 
@@ -23,4 +27,23 @@ configure_file(${${PLUGIN_NAME}_SOURCE_DIR}/Test/TestFileLocations.h.in
 
 set(${PLUGIN_NAME}_Link_Libs Qt5::Core H5Support SIMPLib)
 
+#------------------------------------------------------------------------------
+# List all the source files here. They will NOT be compiled but instead
+# be directly included in the main test source file. We list them here so that
+# they will show up in IDEs
 @AddTestText@
+
+
+# Set the source files properties on each source file.
+foreach(f ${${PLUGIN_NAME}_TEST_SRCS})
+  set_source_files_properties( ${f} PROPERTIES HEADER_FILE_ONLY TRUE)
+endforeach()
+
+AddSIMPLUnitTest(TESTNAME ${PLUGIN_NAME}Test
+                    SOURCES ${${PLUGIN_NAME}_SOURCE_DIR}/${PLUGIN_NAME}Test.cpp ${${PLUGIN_NAME}_TEST_SRCS}
+                    FOLDER "${PLUGIN_NAME}Proj/Test"
+                    LINK_LIBRARIES ${${PLUGIN_NAME}_Link_Libs})
+if(MSVC)
+  set_source_files_properties(${${PLUGIN_NAME}Test_SOURCE_DIR}/${PLUGIN_NAME}Test.cpp 
+                              PROPERTIES COMPILE_FLAGS /bigobj)
+endif()
