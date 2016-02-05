@@ -653,7 +653,7 @@ void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 
   d->setCurrentVersion((SIMPLib::Version::Complete()));
   d->setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
-  d->setApplicationName("SIMPLView");
+  d->setApplicationName(BrandedStrings::ApplicationName);
 
   // Read from the SIMPLViewSettings Pref file the information that we need
   SIMPLViewSettings prefs;

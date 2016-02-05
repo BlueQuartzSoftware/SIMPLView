@@ -112,8 +112,8 @@ void AboutSIMPLView::setupGui()
   setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   QString aboutTitle = QString("About ") + BrandedStrings::ApplicationName;
-  setWindowTitle(QApplication::translate("AboutSIMPLView", aboutTitle.toLatin1().data(), 0));
-  tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("AboutSIMPLView", aboutTitle.toLatin1().data(), 0));
+  setWindowTitle("About" + BrandedStrings::ApplicationName);
+  tabWidget->setTabText(tabWidget->indexOf(tab), "About" + BrandedStrings::ApplicationName);
   QString iconName = QString(":/icons/%1 (PNG)/128x128.png").arg(BrandedStrings::ApplicationName);
   label->setPixmap(QPixmap(iconName));
 

@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 
   QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
   QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
-  QCoreApplication::setApplicationName("SIMPLView");
+  QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
 
 #if defined (Q_OS_MAC)
   dream3dApp->setQuitOnLastWindowClosed(false);

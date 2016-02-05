@@ -278,7 +278,7 @@ bool SIMPLView_UI::savePipeline()
 
     // Set window title and save flag
     QFileInfo prefFileInfo = QFileInfo(filePath);
-    setWindowTitle("[*]" + prefFileInfo.baseName() + " - SIMPLView");
+    setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
     setWindowModified(false);
 
     // Add file to the recent files list
@@ -316,7 +316,7 @@ bool SIMPLView_UI::savePipelineAs()
   if (err >= 0)
   {
     // Set window title and save flag
-    setWindowTitle("[*]" + fi.baseName() + " - SIMPLView");
+    setWindowTitle("[*]" + fi.baseName() + " - " + BrandedStrings::ApplicationName);
     setWindowModified(false);
 
     // Add file to the recent files list
@@ -667,7 +667,7 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineOpened(QString& file, const boo
   if (changeTitle == true)
   {
     QFileInfo fi(file);
-    setWindowTitle(QString("[*]") + fi.baseName() + " - SIMPLView");
+    setWindowTitle(QString("[*]") + fi.baseName() + " - " + BrandedStrings::ApplicationName);
     setWindowModified(false);
   }
   else
@@ -688,7 +688,7 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineChanged()
     fi = QFileInfo(windowFilePath());
   }
 
-  setWindowTitle(QString("[*]") + fi.baseName() + " - SIMPLView");
+  setWindowTitle(QString("[*]") + fi.baseName() + " - " + BrandedStrings::ApplicationName);
   setWindowModified(true);
 }
 
@@ -757,7 +757,7 @@ QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 
   if (this->isWindowModified() == true)
   {
-    int r = QMessageBox::warning(this, tr("SIMPLView"),
+    int r = QMessageBox::warning(this, BrandedStrings::ApplicationName,
                                  tr("The Pipeline has been modified.\nDo you want to save your changes?"),
                                  QMessageBox::Save | QMessageBox::Default,
                                  QMessageBox::Discard,
@@ -983,7 +983,7 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 {
   SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(this);
   d->setCurrentVersion((SIMPLib::Version::Complete()));
-  d->setApplicationName("SIMPLView");
+  d->setApplicationName(BrandedStrings::ApplicationName);
 
   if ( dataObj->hasUpdate() && !dataObj->hasError() )
   {

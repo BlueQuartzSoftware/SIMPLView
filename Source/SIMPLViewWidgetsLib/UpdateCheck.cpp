@@ -60,7 +60,7 @@
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLibVersion.h"
 #include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 
-
+#include "BrandedStrings.h"
 #include "UpdateCheckData.h"
 
 #include "moc_UpdateCheck.cpp"
@@ -131,7 +131,7 @@ void UpdateCheck::networkReplied(QNetworkReply* reply)
   {
     SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(NULL);
     d->setCurrentVersion((SIMPLib::Version::Complete()));
-    d->setApplicationName("SIMPLView");
+    d->setApplicationName(BrandedStrings::ApplicationName);
     QString appName = d->getAppName();
 
     // read data from QNetworkReply here
@@ -149,7 +149,7 @@ void UpdateCheck::networkReplied(QNetworkReply* reply)
 
     QJsonObject root = doc.object();
 
-    QJsonObject d3dJson = root["SIMPLView"].toObject();
+    QJsonObject d3dJson = root[BrandedStrings::ApplicationName].toObject();
     QString releaseDate = d3dJson["Release Date"].toString();
     QString releaseType = d3dJson["Release Type"].toString();
 
