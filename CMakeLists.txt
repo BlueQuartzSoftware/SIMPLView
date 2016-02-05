@@ -107,7 +107,7 @@ if(NOT EXISTS "${CMP_SOURCE_DIR}")
                     ERROR_VARIABLE git_error
                     WORKING_DIRECTORY ${SIMPLView_PARENT} )
   endif()
-  # One last check. If it does not exist at this point then we simply Abort CMake 
+  # One last check. If it does not exist at this point then we simply Abort CMake
   if(NOT EXISTS "${CMP_SOURCE_DIR}")
     message(FATAL_ERROR "CMP_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
       to fail. SIMPLView can not proceed without the CMP directory. Please ask a SIMPL developer for more\
@@ -136,7 +136,7 @@ if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
     # message(STATUS "did_run: ${did_run}")
     # message(STATUS "git_error: ${git_error}")
   endif()
-  # One last check. If it does not exist at this point then we simply Abort CMake 
+  # One last check. If it does not exist at this point then we simply Abort CMake
   if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
     message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
       to fail. SIMPLView can not proceed without the SIMPLProj_SOURCE_DIR directory. Please ask a SIMPL developer for more\
@@ -378,8 +378,8 @@ include_directories(${SIMPLViewProj_SOURCE_DIR}/Source)
 include_directories(${SIMPLViewProj_BINARY_DIR})
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(DREAM3D_BUILD_TESTING "Compile the test programs" ON)
-if(DREAM3D_BUILD_TESTING)
+OPTION(SIMPL_BUILD_TESTING "Compile the test programs" ON)
+if(SIMPL_BUILD_TESTING)
     include( CTest )
 endif()
 
@@ -473,6 +473,6 @@ endif()
 include(${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-if(DREAM3D_BUILD_TESTING)
+if(SIMPL_BUILD_TESTING)
     include(${SIMPLViewProj_SOURCE_DIR}/Test/CMakeLists.txt)
 endif()
