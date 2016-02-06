@@ -101,6 +101,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/Symmetric6x6WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.h
+   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.h
   )
 
 set(DevHelper_CodeGenerator_SRCS
@@ -140,6 +141,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/Symmetric6x6WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.cpp
   )
 
 cmp_IDE_SOURCE_PROPERTIES( "DevHelper/CodeGenerators" "${DevHelper_CodeGenerator_HDRS}" "${DevHelper_CodeGenerator_SRCS}" "${PROJECT_INSTALL_HEADERS}")

@@ -33,6 +33,7 @@ set(SIMPLView_PARAMETER_WIDGETS
     OutputFileWidget
     OutputPathWidget
     PreflightUpdatedValueWidget
+    RangeWidget
     SecondOrderPolynomialWidget
     SeparatorWidget
     StringWidget
