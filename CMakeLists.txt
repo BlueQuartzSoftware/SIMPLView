@@ -127,7 +127,7 @@ endif()
 if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
   if(Git_FOUND)
     message(STATUS "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Attempting to clone it from Github....")
-    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop git://github.com/bluequartzsoftware/SIMPL.git ${SIMPLView_PARENT}/SIMPL
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop ssh://git@thor.bluequartz.net/SIMPL.git ${SIMPLView_PARENT}/SIMPL
                     OUTPUT_VARIABLE CLONE_OUTPUT
                     RESULT_VARIABLE did_run
                     ERROR_VARIABLE git_error
