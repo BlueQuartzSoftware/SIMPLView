@@ -116,7 +116,7 @@ class SIMPLViewWidgetsLib_EXPORT DataContainerArrayProxyWidget : public FilterPa
     DataContainerArrayProxy m_DcaProxy;
     bool m_DidCausePreflight;
 
-
+    void toggleStrikeOutFont(QStandardItem* item, Qt::CheckState state);
 
     DataContainerArrayProxyWidget(const DataContainerArrayProxyWidget&); // Copy Constructor Not Implemented
     void operator=(const DataContainerArrayProxyWidget&); // Operator '=' Not Implemented
