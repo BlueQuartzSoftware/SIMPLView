@@ -36,11 +36,9 @@
 #include "RangeWidget.h"
 
 #include <QtCore/QMetaProperty>
+
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QSequentialAnimationGroup>
-
-#include <QtGui/QDoubleValidator>
-
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLibConstants.h"
 
 #include "FilterParameterWidgetsDialogs.h"
