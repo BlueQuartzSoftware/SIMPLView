@@ -33,20 +33,13 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "SIMPLViewHelpUrlGenerator.h"
-
-#include <QtCore/QDir>
-#include <QtGui/QDesktopServices>
-#include <QtWidgets/QMessageBox>
-
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
-#include "BrandedStrings.h"
-
+#include "RangeWidgetCodeGenerator.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewHelpUrlGenerator::SIMPLViewHelpUrlGenerator()
+RangeWidgetCodeGenerator::RangeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
+  FPCodeGenerator(humanLabel, propertyName, category, initValue)
 {
 
 }
@@ -54,78 +47,50 @@ SIMPLViewHelpUrlGenerator::SIMPLViewHelpUrlGenerator()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewHelpUrlGenerator::~SIMPLViewHelpUrlGenerator()
-{
+RangeWidgetCodeGenerator::~RangeWidgetCodeGenerator()
+{}
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString RangeWidgetCodeGenerator::generateSetupFilterParameters()
+{
+  return "  parameters.push_back(RangeFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QUrl SIMPLViewHelpUrlGenerator::generateHTMLUrl(QString htmlName)
+QString RangeWidgetCodeGenerator::generateReadFilterParameters()
 {
-  QString appPath = dream3dApp->applicationDirPath();
-
-  QDir helpDir = QDir(appPath);
-  QString s("file://");
-
-#if defined(Q_OS_WIN)
-  s = s + "/"; // Need the third slash on windows because file paths start with a drive letter
-#elif defined(Q_OS_MAC)
-  if (helpDir.dirName() == "MacOS")
-  {
-    helpDir.cdUp();
-    helpDir.cdUp();
-    helpDir.cdUp();
-  }
-#else
-  // We are on Linux - I think
-  QFileInfo fi( helpDir.absolutePath() + "/Help/" + BrandedStrings::ApplicationName + "/" + htmlName + ".html");
-  if (fi.exists() == false)
-  {
-    // The help file does not exist at the default location because we are probably running from the build tree.
-    // Try up one more directory
-    helpDir.cdUp();
-  }
-#endif
-
-
-
-#if defined(Q_OS_WIN) || defined (Q_OS_MAC)
-  QString helpFilePath=QString("%1/Help/%2/%3.html").arg(helpDir.absolutePath()).arg(BrandedStrings::ApplicationName).arg(htmlName);
-  QFileInfo fi(helpFilePath);
-  if (fi.exists() == false)
-  {
-    // The help file does not exist at the default location because we are probably running from Visual Studio or Xcode
-    // Try up one more directory
-    helpDir.cdUp();
-  }
-#endif
-
-  s = s + helpDir.absolutePath() + "/Help/" + BrandedStrings::ApplicationName + "/" + htmlName + ".html";
-  return QUrl(s);
+  return "  set" + getPropertyName() + "(reader->readPair(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewHelpUrlGenerator::openHTMLUrl(QUrl URL, QWidget* parent)
+QString RangeWidgetCodeGenerator::generateDataCheck()
 {
-  bool didOpen = QDesktopServices::openUrl(URL);
-  if(false == didOpen)
-  {
-    QMessageBox::critical(parent, "Error Opening Help File",
-                          QString("%1 could not open the help file path %2").arg(BrandedStrings::ApplicationName).arg(URL.path()),
-                          QMessageBox::Ok, QMessageBox::Ok);
-  }
+  return "";
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewHelpUrlGenerator::generateAndOpenHTMLUrl(QString helpName, QWidget* parent)
+QString RangeWidgetCodeGenerator::generateFilterParameters()
 {
-  QUrl URL = generateHTMLUrl(helpName);
-  openHTMLUrl(URL, parent);
+  QString contents;
+  QTextStream ss(&contents);
+  ss << "    SIMPL_FILTER_PARAMETER(QPair<double, double>, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(QPair<double, double> " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+
+  return contents;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString RangeWidgetCodeGenerator::generateCPPIncludes()
+{
+  return "#include \"SIMPLib/FilterParameters/RangeFilterParameter.h\"";
+}

@@ -33,36 +33,34 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerArrayProxyWidget_H_
-#define _DataContainerArrayProxyWidget_H_
+#ifndef _RangeWidget_H_
+#define _RangeWidget_H_
+
+
 
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
-#include <QtGui/QStandardItemModel>
 #include <QtWidgets/QWidget>
 
 #include "QtSupportLib/FaderWidget.h"
 
 #include "SIMPLib/Common/AbstractFilter.h"
-#include "SIMPLib/FilterParameters/DataContainerArrayProxyFilterParameter.h"
-#include "SIMPLib/DataContainers/DataContainerArrayProxy.h"
+#include "SIMPLib/FilterParameters/RangeFilterParameter.h"
 
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
 #include "SIMPLViewWidgetsLib/FilterParameterWidgets/FilterParameterWidget.h"
 
 
-#include "SIMPLViewWidgetsLib/ui_DataContainerArrayProxyWidget.h"
-
-class QStandardItemModel;
+#include "SIMPLViewWidgetsLib/ui_RangeWidget.h"
 
 
 /**
-* @brief
+* @brief This widget is for Filter Parameters that are of a string type.
 * @author
 * @version
 */
-class SIMPLViewWidgetsLib_EXPORT DataContainerArrayProxyWidget : public FilterParameterWidget, private Ui::DataContainerArrayProxyWidget
+class SIMPLViewWidgetsLib_EXPORT RangeWidget : public FilterParameterWidget, private Ui::RangeWidget
 {
     Q_OBJECT
 
@@ -73,56 +71,38 @@ class SIMPLViewWidgetsLib_EXPORT DataContainerArrayProxyWidget : public FilterPa
     * @param filter The instance of the filter that this parameter is a part of
     * @param parent The parent QWidget for this Widget
     */
-    DataContainerArrayProxyWidget(FilterParameter* parameter, AbstractFilter* filter = NULL, QWidget* parent = NULL);
+    RangeWidget(FilterParameter* parameter, AbstractFilter* filter = NULL, QWidget* parent = NULL);
 
-    /**
-     * @brief DataContainerArrayProxyWidget
-     * @param parent
-     */
-    DataContainerArrayProxyWidget(QWidget* parent = NULL);
-
-    virtual ~DataContainerArrayProxyWidget();
-
-    void initialize(FilterParameter* parameter, AbstractFilter* filter = NULL);
+    virtual ~RangeWidget();
 
     /**
     * @brief This method does additional GUI widget connections
     */
     void setupGui();
 
-    void setFilterParameter(FilterParameter* value);
-    FilterParameter* getFilterParameter() const;
-
   public slots:
     void beforePreflight();
     void afterPreflight();
     void filterNeedsInputParameters(AbstractFilter* filter);
-    void itemActivated(QStandardItem* item);
 
+    void on_minValue_textChanged(const QString& text);
+    void on_maxValue_textChanged(const QString& text);
 
   signals:
     void errorSettingFilterParameter(const QString& msg);
     void parametersChanged();
 
-  protected:
-    void updateProxyFromModel();
-
-    void updateModelFromProxy(DataContainerArrayProxy& proxy);
-    void updateProxyFromProxy(DataContainerArrayProxy& current, DataContainerArrayProxy& incoming);
-
   private:
 
-    DataContainerArrayProxyFilterParameter*  m_FilterParameter;
-    DataContainerArrayProxy m_DcaProxy;
     bool m_DidCausePreflight;
 
-    void toggleStrikeOutFont(QStandardItem* item, Qt::CheckState state);
+    RangeFilterParameter* m_FilterParameter;
 
-    DataContainerArrayProxyWidget(const DataContainerArrayProxyWidget&); // Copy Constructor Not Implemented
-    void operator=(const DataContainerArrayProxyWidget&); // Operator '=' Not Implemented
+    RangeWidget(const RangeWidget&); // Copy Constructor Not Implemented
+    void operator=(const RangeWidget&); // Operator '=' Not Implemented
 
 };
 
-#endif /* _DataContainerArrayProxyWidget_H_ */
+#endif /* _RangeWidget_H_ */
 
 

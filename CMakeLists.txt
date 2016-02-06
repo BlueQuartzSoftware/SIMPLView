@@ -55,44 +55,6 @@ cmake_minimum_required(VERSION 3.1.0)
 # Create the Top level Project
 project(SIMPLViewProj VERSION 1.0.0.0)
 
-#------------------------------------------------------------------------------
-# If the developer has set another CMP directory then use that, otherwise look
-# for the CMP directory at the same level as the SIMPL directory
-if("${CMP_SOURCE_DIR}" STREQUAL "")
-  set(CMP_SOURCE_DIR ${SIMPLViewProj_SOURCE_DIR}/../CMP)
-  message(STATUS "CMP_SOURCE_DIR: ${CMP_SOURCE_DIR}")
-endif()
-
-if(NOT EXISTS "${CMP_SOURCE_DIR}")
-  message(WARNING "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}. Aborting CMake.")
-  message(FATAL_ERROR "CMP can be cloned using git clone -b develop git://github.com/bluequartzsoftware/CMP.git")
-  # TODO: Add in automatic cloning
-endif()
-
-#------------------------------------------------------------------------------
-# If the developer has set another SIMPL directory then use that, otherwise look
-# for the SIMPL directory at the same level as the SIMPL directory
-if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
-  set(SIMPLProj_SOURCE_DIR ${SIMPLViewProj_SOURCE_DIR}/../SIMPL)
-  message(STATUS "SIMPLProj_SOURCE_DIR: ${SIMPLProj_SOURCE_DIR}")
-endif()
-
-if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
-  message(WARNING "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Aborting CMake.")
-  message(FATAL_ERROR "SIMPL can be cloned using git clone -b develop git://github.com/bluequartzsoftware/SIMPL.git")
-  # TODO: Add in automatic cloning
-endif()
-
-
-#------------------------------------------------------------------------------
-# There are several different Release Types that we are going to use.
-# Official: This is an official release from BlueQuartz Software
-# Beta: This is a Beta release that has is getting ready to be officially released.
-# Development: This is currently in development and probably has bugs.
-set(SIMPLViewProj_RELEASE_TYPE "Development")
-
-include(CMakeParseArguments)
-
 # ---------- Setup output Directories -------------------------
 if(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
@@ -121,8 +83,108 @@ if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 
+
+#------------------------------------------------------------------------------
+# Find the Git Package for Versioning. It should be ok if Git is NOT found
+Find_package(Git)
+
+get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
+
+#------------------------------------------------------------------------------
+# If the developer has set another CMP directory then use that, otherwise look
+# for the CMP directory at the same level as the SIMPL directory
+if("${CMP_SOURCE_DIR}" STREQUAL "")
+  set(CMP_SOURCE_DIR ${SIMPLView_PARENT}/CMP)
+  message(STATUS "CMP_SOURCE_DIR: ${CMP_SOURCE_DIR}")
+endif()
+
+if(NOT EXISTS "${CMP_SOURCE_DIR}")
+  if(Git_FOUND)
+    message(STATUS "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}. Attempting to clone it from Github....")
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop git://github.com/bluequartzsoftware/CMP.git ${SIMPLView_PARENT}/CMP
+                    OUTPUT_VARIABLE CLONE_OUTPUT
+                    RESULT_VARIABLE did_run
+                    ERROR_VARIABLE git_error
+                    WORKING_DIRECTORY ${SIMPLView_PARENT} )
+  endif()
+  # One last check. If it does not exist at this point then we simply Abort CMake
+  if(NOT EXISTS "${CMP_SOURCE_DIR}")
+    message(FATAL_ERROR "CMP_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
+      to fail. SIMPLView can not proceed without the CMP directory. Please ask a SIMPL developer for more\
+      information about this error. Can you access http://github.com/bluequartzsoftware/CMP.git? is\
+      a firewall blocking the 'git' protocol? ")
+  endif()
+endif()
+
+#------------------------------------------------------------------------------
+# If the developer has set another SIMPL directory then use that, otherwise look
+# for the SIMPLView directory at the same level as the SIMPL directory
+if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
+  set(SIMPLProj_SOURCE_DIR ${SIMPLView_PARENT}/SIMPL)
+  message(STATUS "SIMPLProj_SOURCE_DIR: ${SIMPLProj_SOURCE_DIR}")
+endif()
+
+if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
+  if(Git_FOUND)
+    message(STATUS "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Attempting to clone it from Github....")
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop git://github.com/bluequartzsoftware/SIMPL.git ${SIMPLView_PARENT}/SIMPL
+                    OUTPUT_VARIABLE CLONE_OUTPUT
+                    RESULT_VARIABLE did_run
+                    ERROR_VARIABLE git_error
+                    WORKING_DIRECTORY ${SIMPLView_PARENT}/ )
+    # message(STATUS "CLONE_OUTPUT: ${CLONE_OUTPUT}")
+    # message(STATUS "did_run: ${did_run}")
+    # message(STATUS "git_error: ${git_error}")
+  endif()
+  # One last check. If it does not exist at this point then we simply Abort CMake
+  if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
+    message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
+      to fail. SIMPLView can not proceed without the SIMPLProj_SOURCE_DIR directory. Please ask a SIMPL developer for more\
+      information about this error. Can you access http://github.com/bluequartzsoftware/SIMPLView.git? is\
+      a firewall blocking the 'git' protocol? ")
+  endif()
+endif()
+
+
+#------------------------------------------------------------------------------
+# There are several different Release Types that we are going to use.
+# Official: This is an official release from BlueQuartz Software
+# Beta: This is a Beta release that has is getting ready to be officially released.
+# Development: This is currently in development and probably has bugs.
+set(SIMPLViewProj_RELEASE_TYPE "Development")
+
+include(CMakeParseArguments)
+
 # -----------------------------------------------------------------------
-# Add in the Necessary HDF5 Support Sources into a library
+# Setup a Global property that is used to gather Documentation Information
+# into a single known location
+get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
+if("${DREAM3DDocRoot}" STREQUAL "")
+  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
+  set_property(GLOBAL PROPERTY DREAM3DDocRoot "${SIMPLViewProj_BINARY_DIR}")
+  get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
+  file(WRITE "${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList" "")
+endif()
+
+get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
+if("${SIMPLPluginList}" STREQUAL "")
+  message(STATUS "Setting GLOBAL PROPERTY SIMPLPluginList")
+  set_property(GLOBAL PROPERTY SIMPLPluginList "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt")
+  get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
+  file(WRITE "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt" "")
+endif()
+
+get_property(SIMPLLibSearchDirs GLOBAL PROPERTY SIMPLLibSearchDirs)
+if("${SIMPLLibSearchDirs}" STREQUAL "")
+  message(STATUS "Setting GLOBAL PROPERTY SIMPLLibSearchDirs")
+  set_property(GLOBAL PROPERTY SIMPLLibSearchDirs "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt")
+  get_property(SIMPLLibSearchDirs GLOBAL PROPERTY SIMPLLibSearchDirs)
+  file(WRITE "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt" "")
+endif()
+
+
+# -----------------------------------------------------------------------
+# Bring in the SIMPL Project
 # -----------------------------------------------------------------------
 add_subdirectory( ${SIMPLProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPL)
 
@@ -139,10 +201,9 @@ set(PROJECT_INSTALL_EXECUTABLES "1")
 set(CMP_CONFIGURED_FILES_SOURCE_DIR ${CMP_SOURCE_DIR}/ConfiguredFiles)
 INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 set(CMP_ENABLE_PLUGINS "1")
-set(CMP_PLUGIN_LIST_FILE ${SIMPLViewProj_BINARY_DIR}/SIMPLViewProj_PluginList.txt)
-file(WRITE ${CMP_PLUGIN_LIST_FILE} "")
-set(CMP_PLUGIN_SEARCHDIR_FILE ${SIMPLViewProj_BINARY_DIR}/libsearchdirs.txt)
-file(WRITE ${CMP_PLUGIN_SEARCHDIR_FILE} "${SIMPLViewProj_BINARY_DIR}/Bin/plugins;")
+set(CMP_PLUGIN_LIST_FILE "${SIMPLPluginList}")
+set(CMP_PLUGIN_SEARCHDIR_FILE "${SIMPLLibSearchDirs}")
+file(APPEND ${CMP_PLUGIN_SEARCHDIR_FILE} "${SIMPLViewProj_BINARY_DIR}/Bin/plugins;")
 file(APPEND ${CMP_PLUGIN_SEARCHDIR_FILE} "${SIMPLViewProj_BINARY_DIR}/Bin;")
 set(CMP_LIB_SEARCH_DIRS "")
 set(CMP_MODULES_SOURCE_DIR ${CMP_SOURCE_DIR}/Modules CACHE INTERNAL "")
@@ -190,8 +251,8 @@ endif(BUILD_SHARED_LIBS)
 include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
 set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Script Svg Xml OpenGL PrintSupport )
 option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
-CMP_AddQt5Support( "${SIMPLView_Qt5_Components}" 
-                    "${SIMPLView_USE_QtWebEngine}" 
+CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
+                    "${SIMPLView_USE_QtWebEngine}"
                     "${SIMPLViewProj_BINARY_DIR}"
                     "SIMPLView")
 
@@ -218,12 +279,11 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # --------------------------------------------------------------------
 # Should we use Intel Threading Building Blocks
 # --------------------------------------------------------------------
-set(SIMPLView_USE_PARALLEL_ALGORITHMS "")
-option(SIMPLView_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
-if(SIMPLView_USE_MULTITHREADED_ALGOS)
+set(SIMPLib_USE_PARALLEL_ALGORITHMS "")
+option(SIMPLib_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
+if(SIMPLib_USE_MULTITHREADED_ALGOS)
     find_package(TBB)
     if(TBB_FOUND)
-        set(SIMPLView_USE_PARALLEL_ALGORITHMS "1")
         include_directories(${TBB_INCLUDE_DIRS} )
         CMP_COPY_DEPENDENT_LIBRARIES("tbb;tbb_malloc")
         # Append the locations of the TBB libraries to our Library Search Paths
@@ -233,17 +293,18 @@ if(SIMPLView_USE_MULTITHREADED_ALGOS)
     else()
         message(FATAL_ERROR "The Intel Threading Building Blocks library is needed to enable the multithreaded algorithms. Please make sure it is installed properly")
     endif()
+    set(SIMPLib_USE_PARALLEL_ALGORITHMS "1")
 endif()
 
 # --------------------------------------------------------------------
-# DREAM3D needs the Eigen library for Least Squares fit and Eigen
+# SIMPL needs the Eigen library for Least Squares fit and Eigen
 # value/vector calculations.
-set(SIMPLViewProj_USE_EIGEN "")
+set(SIMPLib_USE_EIGEN "")
 Find_Package(Eigen REQUIRED)
 if(EIGEN_FOUND)
   message(STATUS "Found Eigen Library")
   include_directories( ${EIGEN_INCLUDE_DIRS} )
-  set(SIMPLViewProj_USE_EIGEN "1")
+  set(SIMPLib_USE_EIGEN "1")
 else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
 endif()
@@ -316,15 +377,9 @@ endif()
 include_directories(${SIMPLViewProj_SOURCE_DIR}/Source)
 include_directories(${SIMPLViewProj_BINARY_DIR})
 
-# -----------------------------------------------------------------------
-# Setup some Global Lists that are used to gather Documentation Information
-file(WRITE ${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList "")
-
-
-
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(DREAM3D_BUILD_TESTING "Compile the test programs" ON)
-if(DREAM3D_BUILD_TESTING)
+OPTION(SIMPL_BUILD_TESTING "Compile the test programs" ON)
+if(SIMPL_BUILD_TESTING)
     include( CTest )
 endif()
 
@@ -418,6 +473,6 @@ endif()
 include(${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-if(DREAM3D_BUILD_TESTING)
+if(SIMPL_BUILD_TESTING)
     include(${SIMPLViewProj_SOURCE_DIR}/Test/CMakeLists.txt)
 endif()

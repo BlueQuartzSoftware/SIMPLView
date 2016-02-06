@@ -33,150 +33,120 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "AboutSIMPLView.h"
+#include "RangeWidget.h"
 
-#include "SIMPLib/SIMPLib.h"
+#include <QtCore/QMetaProperty>
 
-#include <boost/version.hpp>
+#include <QtCore/QPropertyAnimation>
+#include <QtCore/QSequentialAnimationGroup>
+#include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLibConstants.h"
 
-#include <H5public.h>
-
-#include "SIMPLib/SIMPLib.h"
-
-#if SIMPLib_USE_PARALLEL_ALGORITHMS
-#include <tbb/tbb_stddef.h>
-#endif
-
-#include <Eigen/src/Core/util/Macros.h>
+#include "FilterParameterWidgetsDialogs.h"
 
 
-
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-
-#include "QtSupportLib/SIMPLViewStyles.h"
-
-#include "SIMPLib/Common/AbstractFilter.h"
-#include "SIMPLib/Common/FilterManager.h"
-#include "SIMPLib/SIMPLibVersion.h"
-
-#include "Applications/SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"
-#include "Applications/SIMPLView/SIMPLViewVersion.h"
-
-#include "BrandedStrings.h"
-
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
-#include "moc_AboutSIMPLView.cpp"
+// Include the MOC generated file for this class
+#include "moc_RangeWidget.cpp"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AboutSIMPLView::AboutSIMPLView(QWidget* parent) :
-  QDialog(parent)
+RangeWidget::RangeWidget(FilterParameter* parameter, AbstractFilter* filter, QWidget* parent) :
+  FilterParameterWidget(parameter, filter, parent)
 {
+  m_FilterParameter = dynamic_cast<RangeFilterParameter*>(parameter);
+  Q_ASSERT_X(m_FilterParameter != NULL, "NULL Pointer", "RangeWidget can ONLY be used with a RangeFilterParameter object");
+
   setupUi(this);
   setupGui();
-  readVersions();
-  setLicenseFiles(SIMPLView::LicenseList);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AboutSIMPLView::~AboutSIMPLView()
-{
-}
+RangeWidget::~RangeWidget()
+{}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::setupGui()
+void RangeWidget::setupGui()
 {
-  QString str;
-  QTextStream out(&str);
-
-  out << BrandedStrings::ApplicationName << " Version " << SIMPLView::Version::Major() << "." << SIMPLView::Version::Minor() << "." << SIMPLView::Version::Patch();
-  out << "\n" << BrandedStrings::DistributionName;
-
-  versionLabel->setText(str);
-  versionLabel->setFont(SIMPLViewStyles::GetTitleFont());
-
-  str.clear();
-  out << "Built on " << SIMPLView::Version::BuildDate();
-  buildDateLabel->setText(str);
-
-  str.clear();
-  out << "From revision " << SIMPLView::Version::Revision();
-  revisionLabel->setText(str);
-
-  setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-  QString aboutTitle = QString("About ") + BrandedStrings::ApplicationName;
-  setWindowTitle("About" + BrandedStrings::ApplicationName);
-  tabWidget->setTabText(tabWidget->indexOf(tab), "About" + BrandedStrings::ApplicationName);
-  QString iconName = QString(":/icons/%1 (PNG)/128x128.png").arg(BrandedStrings::ApplicationName);
-  label->setPixmap(QPixmap(iconName));
-
-
-#if defined (Q_OS_MAC)
-  QAction* closeAction = new QAction(this);
-  closeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
-  connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-  addAction(closeAction);
-#endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void AboutSIMPLView::setLicenseFiles(QStringList files)
-{
-  m_licenseFiles = files;
-  licenseCombo->clear();
-  m_licenseFiles = files;
-  for (int i = 0; i < m_licenseFiles.size(); ++i)
+  blockSignals(true);
+  if (getFilterParameter() != NULL)
   {
-    QString s = m_licenseFiles[i];
-    s.remove(0, 2);
-    s.remove(".license", Qt::CaseSensitive);
-    licenseCombo->addItem(s);
+    label->setText(getFilterParameter()->getHumanLabel() );
+
+    QPair<double, double> range = getFilter()->property(PROPERTY_NAME_AS_CHAR).value<QPair<double, double> >();
+    minValue->setText(QString::number(range.first));
+    maxValue->setText(QString::number(range.second));
   }
-}
+  blockSignals(false);
 
+  minValue->setValidator(new QDoubleValidator(minValue));
+  maxValue->setValidator(new QDoubleValidator(maxValue));
+
+  // Catch when the filter is about to execute the preflight
+  connect(getFilter(), SIGNAL(preflightAboutToExecute()),
+          this, SLOT(beforePreflight()));
+
+  // Catch when the filter is finished running the preflight
+  connect(getFilter(), SIGNAL(preflightExecuted()),
+          this, SLOT(afterPreflight()));
+
+  // Catch when the filter wants its values updated
+  connect(getFilter(), SIGNAL(updateFilterParameters(AbstractFilter*)),
+          this, SLOT(filterNeedsInputParameters(AbstractFilter*)));
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::on_licenseCombo_currentIndexChanged(int index)
+void RangeWidget::beforePreflight()
 {
-  //qDebug() << "on_licenseCombo_action" << "\n";
-  QString resourceFile = m_licenseFiles[licenseCombo->currentIndex()];
-  loadResourceFile(resourceFile);
+
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::loadResourceFile(const QString qresourceFile)
+void RangeWidget::afterPreflight()
 {
-  QFile inputFile(qresourceFile);
-  inputFile.open(QIODevice::ReadOnly);
-  QTextStream in(&inputFile);
-  QString line = in.readAll();
-  inputFile.close();
 
-//  appHelpText->append(line);
-  appHelpText->setHtml(line);
-  appHelpText->setUndoRedoEnabled(false);
-  appHelpText->setUndoRedoEnabled(true);
 }
-
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::readVersions()
+void RangeWidget::on_minValue_textChanged(const QString& text)
 {
+  emit parametersChanged(); // This should force the preflight to run because we are emitting a signal
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void RangeWidget::on_maxValue_textChanged(const QString& text)
+{
+  emit parametersChanged(); // This should force the preflight to run because we are emitting a signal
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void RangeWidget::filterNeedsInputParameters(AbstractFilter* filter)
+{
+  QPair<double, double> pair;
+  pair.first = minValue->text().toDouble();
+  pair.second = maxValue->text().toDouble();
+
+  QVariant var;
+  var.setValue(pair);
+  QString propertyName = PROPERTY_NAME_AS_CHAR;
+  bool ok = filter->setProperty(PROPERTY_NAME_AS_CHAR, var);
+  if(false == ok)
+  {
+    FilterParameterWidgetsDialogs::ShowCouldNotSetFilterParameter(getFilter(), getFilterParameter());
+  }
 
 }
 

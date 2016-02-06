@@ -60,6 +60,7 @@
 #include "PMDirGenerator.h"
 #include "PMFileGenerator.h"
 #include "PMGeneratorTreeItem.h"
+#include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_PluginMaker.cpp"
@@ -1071,7 +1072,7 @@ qint32 PluginMaker::checkDirtyDocument()
 
   if (this->isWindowModified() == true)
   {
-    int r = QMessageBox::warning(this, tr("SIMPLView"),
+    int r = QMessageBox::warning(this, BrandedStrings::ApplicationName,
                                  tr("The Data has been modified.\nDo you want to save your changes?"),
                                  QMessageBox::Save | QMessageBox::Default,
                                  QMessageBox::Discard,

@@ -37,9 +37,13 @@
 
 #include <assert.h>
 
-
 #include <QtCore/QMetaProperty>
 #include <QtCore/QItemSelectionModel>
+
+#include <QtGui/QColor>
+#include <QtGui/QBrush>
+#include <QtGui/QFont>
+
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLibConstants.h"
 
 #include "FilterParameterWidgetsDialogs.h"
@@ -117,6 +121,8 @@ void DataContainerArrayProxyWidget::setupGui()
   dcaProxyView->setModel(model);
   delete oldModel;
 
+  setStyleSheet("QColumnView { text-decoration-color: red; }");
+
   connect(model, SIGNAL(itemChanged(QStandardItem*)),
           this, SLOT(itemActivated(QStandardItem*)));
 
@@ -143,8 +149,45 @@ void DataContainerArrayProxyWidget::itemActivated(QStandardItem* item)
 {
   m_DidCausePreflight = true;
   updateProxyFromModel();
+
+  dcaProxyView->model()->blockSignals(true);
+  toggleStrikeOutFont(item, item->checkState());
+  dcaProxyView->model()->blockSignals(false);
+
   emit parametersChanged();
   m_DidCausePreflight = false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void DataContainerArrayProxyWidget::toggleStrikeOutFont(QStandardItem* item, Qt::CheckState state)
+{
+  QFont font = item->font();
+
+  QColor errorColor(255, 191, 193);
+  QBrush errorBrush(errorColor);
+
+  QColor defaultColor(Qt::white);
+  QBrush defaultBrush(defaultColor);
+
+  if (state == Qt::Checked || (NULL != item->parent() && item->parent()->font().strikeOut() == true) )
+  {
+    font.setStrikeOut(true);
+    item->setBackground(errorBrush);
+  }
+  else if (item->checkState() == false)
+  {
+    font.setStrikeOut(false);
+    item->setBackground(defaultBrush);
+  }
+
+  item->setFont(font);
+
+  for (int i = 0; i < item->rowCount(); i++)
+  {
+    toggleStrikeOutFont(item->child(i), state);
+  }
 }
 
 // -----------------------------------------------------------------------------

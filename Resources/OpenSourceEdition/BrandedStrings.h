@@ -9,6 +9,9 @@ namespace BrandedStrings
   static const QString OrganizationDomain("www.bluequartz.net");
   static const QString OrganizationName("BlueQuartz Software");
   static const QString DistributionName("OpenSource Edition");
+
+  static const QString ApplicationName("SIMPLView");
+
 }
 
 

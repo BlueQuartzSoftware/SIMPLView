@@ -150,7 +150,7 @@ const QString @ClassName@::getFilterVersion()
 //
 // -----------------------------------------------------------------------------
 const QString @ClassName@::getGroupName()
-{ return DREAM3D::FilterGroups::Unsupported; }
+{ return SIMPL::FilterGroups::Unsupported; }
 
 // -----------------------------------------------------------------------------
 //

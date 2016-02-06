@@ -55,11 +55,12 @@
 #include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
 #include "QtSupportLib/ApplicationAboutBoxDialog.h"
 
-#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
+
+#include "Applications/SIMPLView/SIMPLView.h"
 #ifdef SIMPLView_USE_QtWebEngine
 #include "Applications/Common/SIMPLViewUserManualDialog.h"
 #endif
-
+#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
 #include "Applications/SIMPLView/AboutPlugins.h"
@@ -67,6 +68,9 @@
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/DSplashScreen.h"
+
+
+#include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewApplication.cpp"
@@ -83,6 +87,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 {
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
+  m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
 
   connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
 
@@ -648,7 +653,7 @@ void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 
   d->setCurrentVersion((SIMPLib::Version::Complete()));
   d->setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
-  d->setApplicationName("SIMPLView");
+  d->setApplicationName(BrandedStrings::ApplicationName);
 
   // Read from the SIMPLViewSettings Pref file the information that we need
   SIMPLViewSettings prefs;
@@ -1194,7 +1199,7 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   SIMPLView_UI* newInstance = new SIMPLView_UI(NULL);
   newInstance->setLoadedPlugins(plugins);
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
-  newInstance->setWindowTitle("[*]Untitled Pipeline - SIMPLView");
+  newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
 
   if (NULL != m_ActiveWindow)
   {
