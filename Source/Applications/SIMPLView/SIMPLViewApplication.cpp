@@ -105,14 +105,6 @@ SIMPLViewApplication::~SIMPLViewApplication()
   delete this->Splash;
   this->Splash = NULL;
 
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog* ptr = SIMPLViewUserManualDialog::Instance();
-  delete ptr;
-#endif
-
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  toolbox->writeSettings();
-
   SIMPLViewSettings prefs;
   if (prefs.value("Program Mode", QString("")) == "Clear Cache")
   {
@@ -384,7 +376,14 @@ bool SIMPLViewApplication::event(QEvent* event)
   }
   else if (event->type() == QEvent::Close)
   {
-    // We are already handling this event, so don't pass it on
+    /* We need to write the toolbox's settings here, because we need to write
+     * whether the toolbox is showing or not, and that can only be done before
+     * the toolbox enters its closeEvent function (the toolbox is already hidden
+     * when the closeEvent occurs) */
+    SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
+    toolbox->writeSettings();
+
+    // We are already handling this event past this point, so don't pass it on
     return false;
   }
 
