@@ -61,7 +61,10 @@ StandardSIMPLViewApplication::StandardSIMPLViewApplication(int& argc, char** arg
 // -----------------------------------------------------------------------------
 StandardSIMPLViewApplication::~StandardSIMPLViewApplication()
 {
-
+#if defined(Q_OS_WIN)
+  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
+  toolbox->writeSettings();
+#endif
 }
 
 // -----------------------------------------------------------------------------
