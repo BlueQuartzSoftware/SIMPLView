@@ -374,18 +374,6 @@ bool SIMPLViewApplication::event(QEvent* event)
 
     return true;
   }
-  else if (event->type() == QEvent::Close)
-  {
-    /* We need to write the toolbox's settings here, because we need to write
-     * whether the toolbox is showing or not, and that can only be done before
-     * the toolbox enters its closeEvent function (the toolbox is already hidden
-     * when the closeEvent occurs) */
-    SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-    toolbox->writeSettings();
-
-    // We are already handling this event past this point, so don't pass it on
-    return false;
-  }
 
   return QApplication::event(event);
 }
@@ -1053,6 +1041,10 @@ void SIMPLViewApplication::on_actionCloseWindow_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionExit_triggered()
 {
+  // Write Toolbox Settings
+  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
+  toolbox->writeSettings();
+
   bool shouldReallyClose = true;
   for (int i = 0; i<m_SIMPLViewInstances.size(); i++)
   {

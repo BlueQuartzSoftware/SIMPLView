@@ -52,6 +52,13 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
 
     void toEmptyMenuState();
 
+    /**
+     * @brief event
+     * @param event
+     * @return
+     */
+    bool event(QEvent* event);
+
   protected slots:
 
   /**
