@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _CustomWidget_H_
-#define _CustomWidget_H_
+#ifndef _customwidget_h_
+#define _customwidget_h_
 
 
 

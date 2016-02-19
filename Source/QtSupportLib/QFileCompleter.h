@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _R3DFILECOMPLETER_H_
-#define _R3DFILECOMPLETER_H_
+#ifndef _qfilecompleter_h_
+#define _qfilecompleter_h_
 
 #include <QtCore/QObject>
 #include <QtWidgets/QCompleter>

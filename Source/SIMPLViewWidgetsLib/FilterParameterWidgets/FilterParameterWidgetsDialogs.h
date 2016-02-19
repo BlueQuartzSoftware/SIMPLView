@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterParameterWidgetsDialogs_H_
-#define _FilterParameterWidgetsDialogs_H_
+#ifndef _filterparameterwidgetsdialogs_h_
+#define _filterparameterwidgetsdialogs_h_
 
 #include <QtCore/QString>
 

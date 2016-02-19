@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerArrayProxyWidgetCodeGenerator_H_
-#define _DataContainerArrayProxyWidgetCodeGenerator_H_
+#ifndef _datacontainerarrayproxywidgetcodegenerator_h_
+#define _datacontainerarrayproxywidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

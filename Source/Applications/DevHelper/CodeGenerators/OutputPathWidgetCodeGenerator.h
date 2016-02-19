@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _OutputPathWidgetCodeGenerator_H_
-#define _OutputPathWidgetCodeGenerator_H_
+#ifndef _outputpathwidgetcodegenerator_h_
+#define _outputpathwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

@@ -35,8 +35,8 @@
 
 
 
-#ifndef _AboutSIMPLView_H_
-#define _AboutSIMPLView_H_
+#ifndef _aboutsimplview_h_
+#define _aboutsimplview_h_
 
 #include <QtCore/QObject>
 

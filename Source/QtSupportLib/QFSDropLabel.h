@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _QFSDropLabel_H
-#define _QFSDropLabel_H
+#ifndef _qfsdroplabel_h_
+#define _qfsdroplabel_h_
 
 #include <QtWidgets/QLabel>
 

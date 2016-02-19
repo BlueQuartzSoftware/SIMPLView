@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AxisAngleWidget_H_
-#define _AxisAngleWidget_H_
+#ifndef _axisanglewidget_h_
+#define _axisanglewidget_h_
 
 
 #include <QtCore/QObject>

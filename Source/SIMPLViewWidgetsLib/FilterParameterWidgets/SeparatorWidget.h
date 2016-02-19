@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SeparatorWidget_H_
-#define _SeparatorWidget_H_
+#ifndef _separatorwidget_h_
+#define _separatorwidget_h_
 
 
 #include <QtCore/QObject>

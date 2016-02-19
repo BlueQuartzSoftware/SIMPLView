@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _InputFileWidget_H_
-#define _InputFileWidget_H_
+#ifndef _inputfilewidget_h_
+#define _inputfilewidget_h_
 
 
 #include <QtCore/QObject>

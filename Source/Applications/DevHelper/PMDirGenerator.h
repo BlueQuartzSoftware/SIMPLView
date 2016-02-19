@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _PMDIRTWI_H_
-#define _PMDIRTWI_H_
+#ifndef _pmdirgenerator_h_
+#define _pmdirgenerator_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

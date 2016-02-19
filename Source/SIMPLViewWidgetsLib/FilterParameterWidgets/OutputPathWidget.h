@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _OutputPathWidget_H_
-#define _OutputPathWidget_H_
+#ifndef _outputpathwidget_h_
+#define _outputpathwidget_h_
 
 
 

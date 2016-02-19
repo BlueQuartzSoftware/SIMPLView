@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DropBoxWidget_H_
-#define _DropBoxWidget_H_
+#ifndef _dropboxwidget_h_
+#define _dropboxwidget_h_
 
 #include <QtWidgets/QWidget>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FloatVec3Widget_H_
-#define _FloatVec3Widget_H_
+#ifndef _floatvec3widget_h_
+#define _floatvec3widget_h_
 
 
 #include <QtCore/QObject>

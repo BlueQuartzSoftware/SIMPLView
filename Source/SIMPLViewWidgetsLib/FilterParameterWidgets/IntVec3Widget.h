@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _IntVec3Widget_H_
-#define _IntVec3Widget_H_
+#ifndef _intvec3widget_h_
+#define _intvec3widget_h_
 
 
 

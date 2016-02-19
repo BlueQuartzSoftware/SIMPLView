@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AttributeMatrixCreationWidgetCodeGenerator_H_
-#define _AttributeMatrixCreationWidgetCodeGenerator_H_
+#ifndef _attributematrixcreationwidgetcodegenerator_h_
+#define _attributematrixcreationwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

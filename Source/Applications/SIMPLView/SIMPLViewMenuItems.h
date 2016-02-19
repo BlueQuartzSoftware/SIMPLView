@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewMenuItems_H_
-#define _SIMPLViewMenuItems_H_
+#ifndef _simplviewmenuitems_h_
+#define _simplviewmenuitems_h_
 
 #include <QtCore/QObject>
 

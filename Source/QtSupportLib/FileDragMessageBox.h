@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _FileDragMessageBox_H_
-#define _FileDragMessageBox_H_
+#ifndef _filedragmessagebox_h_
+#define _filedragmessagebox_h_
 
 
 #include <QDialog>

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef HoverButton_H
-#define HoverButton_H
+#ifndef _hoverbutton_h_
+#define _hoverbutton_h_
 
 #include <QPushButton>
 

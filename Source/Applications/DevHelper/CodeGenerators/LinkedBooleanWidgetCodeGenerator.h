@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _LinkedBooleanWidgetCodeGenerator_H_
-#define _LinkedBooleanWidgetCodeGenerator_H_
+#ifndef _linkedbooleanwidgetcodegenerator_h_
+#define _linkedbooleanwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

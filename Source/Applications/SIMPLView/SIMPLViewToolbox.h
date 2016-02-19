@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef SIMPLViewToolbox_H
-#define SIMPLViewToolbox_H
+#ifndef _simplviewtoolbox_h_
+#define _simplviewtoolbox_h_
 
 #include <QtWidgets/QMainWindow>
 

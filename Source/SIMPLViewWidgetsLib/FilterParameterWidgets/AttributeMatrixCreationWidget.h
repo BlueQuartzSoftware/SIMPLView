@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AttributeMatrixCreationWidget_H_
-#define _AttributeMatrixCreationWidget_H_
+#ifndef _attributematrixcreationwidget_h_
+#define _attributematrixcreationwidget_h_
 
 
 #include <QtCore/QObject>

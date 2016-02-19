@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _FilterListWidget_H_
-#define _FilterListWidget_H_
+#ifndef _filterlistwidget_h_
+#define _filterlistwidget_h_
 
 #include <QtCore/QPoint>
 #include <QtWidgets/QListWidget>

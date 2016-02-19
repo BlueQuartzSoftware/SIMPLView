@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _MacSIMPLViewApplication_H_
-#define _MacSIMPLViewApplication_H_
+#ifndef _macsimplviewapplication_h_
+#define _macsimplviewapplication_h_
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
 

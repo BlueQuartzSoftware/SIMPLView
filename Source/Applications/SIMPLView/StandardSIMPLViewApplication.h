@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _StandardSIMPLViewApplication_H_
-#define _StandardSIMPLViewApplication_H_
+#ifndef _standardsimplviewapplication_h_
+#define _standardsimplviewapplication_h_
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
 

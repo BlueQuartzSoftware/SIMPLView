@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterMaker_H_
-#define _FilterMaker_H_
+#ifndef _filtermaker_h_
+#define _filtermaker_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QSettings>

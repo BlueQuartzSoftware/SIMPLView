@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataArrayInformationDisplayWidget_H_
-#define _DataArrayInformationDisplayWidget_H_
+#ifndef _dataarrayinformationdisplaywidget_h_
+#define _dataarrayinformationdisplaywidget_h_
 
 
 #include <QtCore/QObject>

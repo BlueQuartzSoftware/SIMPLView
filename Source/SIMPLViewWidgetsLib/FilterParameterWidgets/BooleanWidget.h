@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _BooleanWidget_H_
-#define _BooleanWidget_H_
+#ifndef _booleanwidget_h_
+#define _booleanwidget_h_
 
 
 #include <QtCore/QObject>

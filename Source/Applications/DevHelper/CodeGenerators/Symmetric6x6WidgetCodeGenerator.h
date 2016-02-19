@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _Symmetric6x6WidgetCodeGenerator_H_
-#define _Symmetric6x6WidgetCodeGenerator_H_
+#ifndef _symmetric6x6widgetcodegenerator_h_
+#define _symmetric6x6widgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

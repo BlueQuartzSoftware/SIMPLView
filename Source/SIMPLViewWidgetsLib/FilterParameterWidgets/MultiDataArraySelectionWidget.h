@@ -32,8 +32,8 @@
 *    United States Prime Contract Navy N00173-07-C-2068
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#ifndef _MultiDataArraySelectionWidget_H_
-#define _MultiDataArraySelectionWidget_H_
+#ifndef _multidataarrayselectionwidget_h_
+#define _multidataarrayselectionwidget_h_
 
 
 #include <QtCore/QObject>

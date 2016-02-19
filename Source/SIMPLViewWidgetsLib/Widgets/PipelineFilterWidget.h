@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _PipelineFilterWidget_H_
-#define _PipelineFilterWidget_H_
+#ifndef _pipelinefilterwidget_h_
+#define _pipelinefilterwidget_h_
 
 #include <QtCore/QStringList>
 #include <QtCore/QSettings>

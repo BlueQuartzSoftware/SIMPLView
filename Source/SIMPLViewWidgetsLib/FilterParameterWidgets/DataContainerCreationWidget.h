@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerCreationWidget_H_
-#define _DataContainerCreationWidget_H_
+#ifndef _datacontainercreationwidget_h_
+#define _datacontainercreationwidget_h_
 
 
 

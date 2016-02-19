@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _QRECENTFILELIST_H_
-#define _QRECENTFILELIST_H_
+#ifndef _qrecentfilelist_h_
+#define _qrecentfilelist_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>

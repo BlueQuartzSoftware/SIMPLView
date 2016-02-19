@@ -37,8 +37,8 @@
 
 
 
-#ifndef _SIMPLViewWidgetsLib_COMMON_DLL_EXPORT_H_
-#define _SIMPLViewWidgetsLib_COMMON_DLL_EXPORT_H_
+#ifndef _simplviewwidgetslibdllexport_h_
+#define _simplviewwidgetslibdllexport_h_
 
 
 #if defined (_MSC_VER)
@@ -78,8 +78,8 @@ building the MXADatModel DLL on windows.
 #endif
 
 /* If SIMPLViewWidgetsLib_EXPORT was never defined, define it here */
-#ifndef SIMPLViewWidgetsLib_EXPORT
-#define SIMPLViewWidgetsLib_EXPORT
+#ifndef _simplviewwidgetslibdllexport_h_
+#define _simplviewwidgetslibdllexport_h_
 #endif
 
 

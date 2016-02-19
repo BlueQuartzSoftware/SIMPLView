@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef ABOUTPLUGINS_H
-#define ABOUTPLUGINS_H
+#ifndef _aboutplugins_h_
+#define _aboutplugins_h_
 
 #include <QtWidgets/QCheckBox>
 

@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _FileListInfoWidget_H_
-#define _FileListInfoWidget_H_
+#ifndef _filelistinfowidget_h_
+#define _filelistinfowidget_h_
 
 
 #include <QtCore/QString>

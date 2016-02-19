@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ThirdOrderPolynomialWidget_H_
-#define _ThirdOrderPolynomialWidget_H_
+#ifndef _thirdorderpolynomialwidget_h_
+#define _thirdorderpolynomialwidget_h_
 
 
 #include <QtCore/QObject>

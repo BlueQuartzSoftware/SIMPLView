@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerReaderWidgetCodeGenerator_H_
-#define _DataContainerReaderWidgetCodeGenerator_H_
+#ifndef _datacontainerreaderwidgetcodegenerator_h_
+#define _datacontainerreaderwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _PLUGINMAKER_H_
-#define _PLUGINMAKER_H_
+#ifndef _pluginmaker_h_
+#define _pluginmaker_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

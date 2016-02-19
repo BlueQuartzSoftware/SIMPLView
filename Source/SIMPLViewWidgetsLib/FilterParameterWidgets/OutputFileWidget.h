@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _OutputFileWidget_H_
-#define _OutputFileWidget_H_
+#ifndef _outputfilewidget_h_
+#define _outputfilewidget_h_
 
 
 

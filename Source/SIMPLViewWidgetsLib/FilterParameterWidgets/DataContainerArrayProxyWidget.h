@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerArrayProxyWidget_H_
-#define _DataContainerArrayProxyWidget_H_
+#ifndef _datacontainerarrayproxywidget_h_
+#define _datacontainerarrayproxywidget_h_
 
 
 #include <QtCore/QObject>

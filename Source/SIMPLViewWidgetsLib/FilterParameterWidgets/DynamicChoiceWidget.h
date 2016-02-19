@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DynamicChoiceWidget_H_
-#define _DynamicChoiceWidget_H_
+#ifndef _dynamicchoicewidget_h_
+#define _dynamicchoicewidget_h_
 
 
 #include <QtCore/QObject>

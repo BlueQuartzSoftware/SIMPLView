@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewUpdateCheckDialog_H_
-#define _SIMPLViewUpdateCheckDialog_H_
+#ifndef _simplviewupdatecheckdialog_h_
+#define _simplviewupdatecheckdialog_h_
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>

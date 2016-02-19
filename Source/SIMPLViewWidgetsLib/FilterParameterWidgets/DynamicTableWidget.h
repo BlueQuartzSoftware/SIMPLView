@@ -32,8 +32,8 @@
 *    United States Prime Contract Navy N00173-07-C-2068
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#ifndef _DynamicTableWidget_H_
-#define _DynamicTableWidget_H_
+#ifndef _dynamictablewidget_h_
+#define _dynamictablewidget_h_
 
 
 #include <QtCore/QObject>

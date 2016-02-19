@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _QFSDropLineEdit_H
-#define _QFSDropLineEdit_H
+#ifndef _qfsdroplineedit_h_
+#define _qfsdroplineedit_h_
 
 #include <QtWidgets/QLineEdit>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AttributeMatrixSelectionWidget_H_
-#define _AttributeMatrixSelectionWidget_H_
+#ifndef _attributematrixselectionwidget_h_
+#define _attributematrixselectionwidget_h_
 
 
 #include <QtCore/QObject>

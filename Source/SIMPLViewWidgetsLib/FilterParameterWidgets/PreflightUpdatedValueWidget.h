@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _PreflightUpdatedValueWidget_H_
-#define _PreflightUpdatedValueWidget_H_
+#ifndef _preflightupdatedvaluewidget_h_
+#define _preflightupdatedvaluewidget_h_
 
 
 

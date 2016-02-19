@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewUserManualDialog_H_
-#define _SIMPLViewUserManualDialog_H_
+#ifndef _simplviewusermanualdialog_h_
+#define _simplviewusermanualdialog_h_
 
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
 

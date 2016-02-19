@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _EMMPM_GRAPHICS_VIEW_H_
-#define _EMMPM_GRAPHICS_VIEW_H_
+#ifndef _simplviewgraphicsview_h_
+#define _simplviewgraphicsview_h_
 
 #include <iostream>
 

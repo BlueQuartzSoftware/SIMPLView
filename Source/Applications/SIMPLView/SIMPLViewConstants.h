@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLView_CONSTANTS_H_
-#define _SIMPLView_CONSTANTS_H_
+#ifndef _simplviewconstants_h_
+#define _simplviewconstants_h_
 
 #include <QtCore/QString>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _BookmarksItemDelegate_H
-#define _BookmarksItemDelegate_H
+#ifndef _bookmarksitemdelegate_h_
+#define _bookmarksitemdelegate_h_
 
 #include <QtCore/QModelIndex>
 

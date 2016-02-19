@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _PhaseTypeSelectionWidget_H_
-#define _PhaseTypeSelectionWidget_H_
+#ifndef _phasetypeselectionwidget_h_
+#define _phasetypeselectionwidget_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>

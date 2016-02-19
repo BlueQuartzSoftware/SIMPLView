@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerReaderWidget_H_
-#define _DataContainerReaderWidget_H_
+#ifndef _datacontainerreaderwidget_h_
+#define _datacontainerreaderwidget_h_
 
 
 #include <QtCore/QObject>

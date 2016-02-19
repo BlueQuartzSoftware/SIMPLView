@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterListToolboxWidget_H_
-#define _FilterListToolboxWidget_H_
+#ifndef _filterlisttoolboxwidget_h_
+#define _filterlisttoolboxwidget_h_
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QMenu>

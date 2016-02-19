@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _FilterLibraryTreeWidget_H_
-#define _FilterLibraryTreeWidget_H_
+#ifndef _filterlibrarytreewidget_h_
+#define _filterlibrarytreewidget_h_
 
 #include <QtCore/QPoint>
 #include <QtWidgets/QTreeWidget>

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DynamicTableItemDelegate_H
-#define _DynamicTableItemDelegate_H
+#ifndef _dynamictableitemdelegate_h_
+#define _dynamictableitemdelegate_h_
 
 #include <QtCore/QModelIndex>
 

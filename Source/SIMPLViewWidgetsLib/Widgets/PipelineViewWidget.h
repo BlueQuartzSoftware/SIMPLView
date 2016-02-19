@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _PipelineViewWidget_H
-#define _PipelineViewWidget_H
+#ifndef _pipelineviewwidget_h_
+#define _pipelineviewwidget_h_
 
 #include <vector>
 

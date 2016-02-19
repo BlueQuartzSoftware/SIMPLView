@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterLibraryToolboxWidget_H_
-#define _FilterLibraryToolboxWidget_H_
+#ifndef _filterlibrarytoolboxwidget_h_
+#define _filterlibrarytoolboxwidget_h_
 
 
 #include <QtWidgets/QDockWidget>

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewSplitterHandle_H
-#define _SIMPLViewSplitterHandle_H
+#ifndef _simplviewsplitterhandle_h_
+#define _simplviewsplitterhandle_h_
 
 #include <QtWidgets/QSplitterHandle>
 

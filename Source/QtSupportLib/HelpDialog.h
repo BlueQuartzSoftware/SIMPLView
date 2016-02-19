@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _HELPDIALOG_H_
-#define _HELPDIALOG_H_
+#ifndef _helpdialog_h_
+#define _helpdialog_h_
 
 #include <QtCore/QSharedPointer>
 #include <QtWidgets/QDialog>

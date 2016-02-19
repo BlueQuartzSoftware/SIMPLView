@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef PLUGINDETAILS_H
-#define PLUGINDETAILS_H
+#ifndef _plugindetails_h_
+#define _plugindetails_h_
 
 #include <QtCore/QObject>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerSelectionWidgetCodeGenerator_H_
-#define _DataContainerSelectionWidgetCodeGenerator_H_
+#ifndef _datacontainerselectionwidgetcodegenerator_h_
+#define _datacontainerselectionwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

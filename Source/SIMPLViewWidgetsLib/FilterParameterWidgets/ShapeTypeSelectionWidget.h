@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ShapeTypeSelectionWidget_H_
-#define _ShapeTypeSelectionWidget_H_
+#ifndef _shapetypeselectionwidget_h_
+#define _shapetypeselectionwidget_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>

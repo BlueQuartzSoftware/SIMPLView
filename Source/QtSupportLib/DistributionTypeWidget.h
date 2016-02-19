@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DistributionTypeWidget_H_
-#define _DistributionTypeWidget_H_
+#ifndef _distributiontypewidget_h_
+#define _distributiontypewidget_h_
 
 
 

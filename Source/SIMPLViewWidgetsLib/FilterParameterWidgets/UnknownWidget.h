@@ -32,8 +32,8 @@
 *    United States Prime Contract Navy N00173-07-C-2068
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#ifndef _UnknownWidget_H_
-#define _UnknownWidget_H_
+#ifndef _unknownwidget_h_
+#define _unknownwidget_h_
 
 
 #include <QtCore/QObject>

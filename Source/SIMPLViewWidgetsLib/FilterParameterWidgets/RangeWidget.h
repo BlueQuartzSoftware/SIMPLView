@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _RangeWidget_H_
-#define _RangeWidget_H_
+#ifndef _rangewidget_h_
+#define _rangewidget_h_
 
 
 

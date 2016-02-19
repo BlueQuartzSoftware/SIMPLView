@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _PMGENERATORTREEITEM_H_
-#define _PMGENERATORTREEITEM_H_
+#ifndef _pmgeneratortreeitem_h_
+#define _pmgeneratortreeitem_h_
 
 #include <QtWidgets/QTreeWidgetItem>
 #include "PMDirGenerator.h"

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _IssuesDockWidget_H_
-#define _IssuesDockWidget_H_
+#ifndef _issuesdockwidget_h_
+#define _issuesdockwidget_h_
 
 
 #include <QtWidgets/QDockWidget>

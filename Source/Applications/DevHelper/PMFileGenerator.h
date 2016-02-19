@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _PMFILEGENERATOR_H_
-#define _PMFILEGENERATOR_H_
+#ifndef _pmfilegenerator_h_
+#define _pmfilegenerator_h_
 
 #include "PMDirGenerator.h"
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _QDROPPABLEWIDGET_H_
-#define _QDROPPABLEWIDGET_H_
+#ifndef _qdroppablescrollarea_h_
+#define _qdroppablescrollarea_h_
 
 #include <QtWidgets/QScrollArea>
 

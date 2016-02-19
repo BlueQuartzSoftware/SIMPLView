@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterParameterWidget_H_
-#define _FilterParameterWidget_H_
+#ifndef _filterparameterwidget_h_
+#define _filterparameterwidget_h_
 
 
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewWidgetsLibConstants_H_
-#define _SIMPLViewWidgetsLibConstants_H_
+#ifndef _simplviewwidgetslibconstants_h_
+#define _simplviewwidgetslibconstants_h_
 
 #include <QtGui/QColor>
 

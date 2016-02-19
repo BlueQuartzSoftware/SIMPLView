@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _HELPWIDGET_H_
-#define _HELPWIDGET_H_
+#ifndef _helpwidget_h_
+#define _helpwidget_h_
 
 #include <QtCore/QObject>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataArrayCreationWidget_H_
-#define _DataArrayCreationWidget_H_
+#ifndef _dataarraycreationwidget_h_
+#define _dataarraycreationwidget_h_
 
 
 #include <QtCore/QObject>

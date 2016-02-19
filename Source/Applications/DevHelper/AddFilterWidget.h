@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _ADDFILTERWIDGET_H_
-#define _ADDFILTERWIDGET_H_
+#ifndef _addfilterwidget_h_
+#define _addfilterwidget_h_
 
 #include "ui_AddFilterWidget.h"
 

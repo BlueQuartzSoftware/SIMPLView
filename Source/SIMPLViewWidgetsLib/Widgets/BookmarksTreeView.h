@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _BookmarksTreeView_H_
-#define _BookmarksTreeView_H_
+#ifndef _bookmarkstreeview_h_
+#define _bookmarkstreeview_h_
 
 #include <QApplication>
 

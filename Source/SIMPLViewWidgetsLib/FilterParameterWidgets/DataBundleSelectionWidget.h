@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataBundleSelectionWidget_H_
-#define _DataBundleSelectionWidget_H_
+#ifndef _databundleselectionwidget_h_
+#define _databundleselectionwidget_h_
 
 
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FloatVec4WidgetCodeGenerator_H_
-#define _FloatVec4WidgetCodeGenerator_H_
+#ifndef _floatvec4widgetcodegenerator_h_
+#define _floatvec4widgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

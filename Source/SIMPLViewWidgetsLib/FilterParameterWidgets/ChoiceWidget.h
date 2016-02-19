@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ChoiceWidget_H_
-#define _ChoiceWidget_H_
+#ifndef _choicewidget_h_
+#define _choicewidget_h_
 
 
 #include <QtCore/QObject>

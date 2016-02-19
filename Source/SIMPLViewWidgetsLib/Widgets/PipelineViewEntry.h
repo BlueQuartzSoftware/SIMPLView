@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _PipelineViewEntry_H_
-#define _PipelineViewEntry_H_
+#ifndef _pipelineviewentry_h_
+#define _pipelineviewentry_h_
 
 #include <QtCore/QObject>
 

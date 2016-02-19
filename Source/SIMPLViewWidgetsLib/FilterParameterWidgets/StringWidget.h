@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _StringWidget_H_
-#define _StringWidget_H_
+#ifndef _stringwidget_h_
+#define _stringwidget_h_
 
 
 

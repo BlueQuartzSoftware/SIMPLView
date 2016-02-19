@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataContainerSelectionWidget_H_
-#define _DataContainerSelectionWidget_H_
+#ifndef _datacontainerselectionwidget_h_
+#define _datacontainerselectionwidget_h_
 
 
 

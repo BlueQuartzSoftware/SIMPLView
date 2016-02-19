@@ -35,8 +35,8 @@
 
 
 
-#ifndef _SIMPLView_UI_H_
-#define _SIMPLView_UI_H_
+#ifndef _simplview_ui_h_
+#define _simplview_ui_h_
 
 
 //-- Qt Includes

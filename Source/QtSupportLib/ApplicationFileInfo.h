@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ApplicationFileInfo_H_
-#define _ApplicationFileInfo_H_
+#ifndef _applicationfileinfo_h_
+#define _applicationfileinfo_h_
 
 #include <QtCore/QString>
 

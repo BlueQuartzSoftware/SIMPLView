@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _PreflightUpdatedValueWidgetCodeGenerator_H_
-#define _PreflightUpdatedValueWidgetCodeGenerator_H_
+#ifndef _preflightupdatedvaluewidgetcodegenerator_h_
+#define _preflightupdatedvaluewidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

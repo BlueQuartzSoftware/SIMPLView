@@ -35,8 +35,8 @@
 
 
 
-#ifndef _UPDATECHECKDATA_H_
-#define _UPDATECHECKDATA_H_
+#ifndef _updatecheckdata_h_
+#define _updatecheckdata_h_
 
 #include <QtWidgets/QWidget>
 

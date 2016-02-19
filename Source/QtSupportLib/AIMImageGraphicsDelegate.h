@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AIMIMAGEGRAPHICSDELEGATE_H_
-#define _AIMIMAGEGRAPHICSDELEGATE_H_
+#ifndef _aimimagegraphicsdelegate_h_
+#define _aimimagegraphicsdelegate_h_
 
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 

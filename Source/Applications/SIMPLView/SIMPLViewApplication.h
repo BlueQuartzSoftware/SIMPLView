@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewApplication_H_
-#define _SIMPLViewApplication_H_
+#ifndef _simplviewapplication_h_
+#define _simplviewapplication_h_
 
 #include <QtCore/QSet>
 

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FourthOrderPolynomialWidgetCodeGenerator_H_
-#define _FourthOrderPolynomialWidgetCodeGenerator_H_
+#ifndef _fourthorderpolynomialwidgetcodegenerator_h_
+#define _fourthorderpolynomialwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

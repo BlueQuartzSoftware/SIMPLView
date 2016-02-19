@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FavoritesChangedDialog_H_
-#define _FavoritesChangedDialog_H_
+#ifndef _favoriteschangeddialog_h_
+#define _favoriteschangeddialog_h_
 
 #include <QtWidgets/QDialog>
 

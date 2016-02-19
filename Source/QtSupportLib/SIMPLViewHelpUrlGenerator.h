@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _SIMPLViewHelpUrlGenerator_H
-#define _SIMPLViewHelpUrlGenerator_H
+#ifndef _simplviewhelpurlgenerator_h_
+#define _simplviewhelpurlgenerator_h_
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>

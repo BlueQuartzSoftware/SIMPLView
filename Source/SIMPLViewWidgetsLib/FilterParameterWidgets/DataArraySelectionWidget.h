@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataArraySelectionWidget_H_
-#define _DataArraySelectionWidget_H_
+#ifndef _dataarrayselectionwidget_h_
+#define _dataarrayselectionwidget_h_
 
 
 #include <QtCore/QObject>

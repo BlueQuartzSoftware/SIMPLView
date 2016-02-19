@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _IFILTERWIDGETFACTOR_H_
-#define _IFILTERWIDGETFACTOR_H_
+#ifndef _ifilterwidgetfactory_h_
+#define _ifilterwidgetfactory_h_
 
 
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

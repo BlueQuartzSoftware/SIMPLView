@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AxisAngleWidgetCodeGenerator_H_
-#define _AxisAngleWidgetCodeGenerator_H_
+#ifndef _axisanglewidgetcodegenerator_h_
+#define _axisanglewidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

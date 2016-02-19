@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef BookmarksItem_H
-#define BookmarksItem_H
+#ifndef _bookmarksitem_h_
+#define _bookmarksitem_h_
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AddFilterParameter_H_
-#define _AddFilterParameter_H_
+#ifndef _addfilterparameter_h_
+#define _addfilterparameter_h_
 
 #include <QtCore/QObject>
 #include <QtWidgets/QWidget>

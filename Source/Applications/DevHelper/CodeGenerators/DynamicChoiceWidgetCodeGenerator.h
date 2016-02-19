@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DynamicChoiceWidgetCodeGenerator_H_
-#define _DynamicChoiceWidgetCodeGenerator_H_
+#ifndef _dynamicchoicewidgetcodegenerator_h_
+#define _dynamicchoicewidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

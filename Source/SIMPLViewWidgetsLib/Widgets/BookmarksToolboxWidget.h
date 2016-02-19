@@ -32,8 +32,8 @@
 *    United States Prime Contract Navy N00173-07-C-2068
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#ifndef _BookmarksToolboxWidget_H_
-#define _BookmarksToolboxWidget_H_
+#ifndef _bookmarkstoolboxwidget_h_
+#define _bookmarkstoolboxwidget_h_
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QSettings>

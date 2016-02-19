@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _IntWidget_H_
-#define _IntWidget_H_
+#ifndef _intwidget_h_
+#define _intwidget_h_
 
 
 #include <QtCore/QObject>

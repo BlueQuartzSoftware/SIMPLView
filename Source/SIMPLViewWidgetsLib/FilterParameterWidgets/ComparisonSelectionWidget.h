@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ComparisonSelectionWidget_H_
-#define _ComparisonSelectionWidget_H_
+#ifndef _comparisonselectionwidget_h_
+#define _comparisonselectionwidget_h_
 
 
 #include <QtCore/QObject>

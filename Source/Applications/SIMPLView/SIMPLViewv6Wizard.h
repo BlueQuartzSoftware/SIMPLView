@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewv6Wizard_H_
-#define _SIMPLViewv6Wizard_H_
+#ifndef _simplviewv6wizard_h_
+#define _simplviewv6wizard_h_
 
 #include <QtWidgets/QWizard>
 

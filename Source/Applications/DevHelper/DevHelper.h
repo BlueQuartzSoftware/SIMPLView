@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DevHelper_H_
-#define _DevHelper_H_
+#ifndef _devhelper_h_
+#define _devhelper_h_
 
 #include <QtCore/QObject>
 #include <QtWidgets/QWidget>

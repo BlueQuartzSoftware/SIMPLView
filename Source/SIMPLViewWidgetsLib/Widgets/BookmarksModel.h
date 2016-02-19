@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef BookmarksModel_H
-#define BookmarksModel_H
+#ifndef _bookmarksmodel_h_
+#define _bookmarksmodel_h_
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QModelIndex>

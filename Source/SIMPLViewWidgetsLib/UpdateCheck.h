@@ -35,8 +35,8 @@
 
 
 
-#ifndef _UPDATECHECK_H_
-#define _UPDATECHECK_H_
+#ifndef _updatecheck_h_
+#define _updatecheck_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QUrl>

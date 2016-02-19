@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DoubleWidget_H_
-#define _DoubleWidget_H_
+#ifndef _doublewidget_h_
+#define _doublewidget_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>

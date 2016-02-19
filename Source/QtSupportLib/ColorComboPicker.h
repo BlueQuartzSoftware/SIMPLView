@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _COLORCOMBOPICKER_H_
-#define _COLORCOMBOPICKER_H_
+#ifndef _colorcombopicker_h_
+#define _colorcombopicker_h_
 
 #include <QComboBox>
 

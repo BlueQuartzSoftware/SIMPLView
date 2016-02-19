@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _MultiDataArraySelectionWidgetCodeGenerator_H_
-#define _MultiDataArraySelectionWidgetCodeGenerator_H_
+#ifndef _multidataarrayselectionwidgetcodegenerator_h_
+#define _multidataarrayselectionwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

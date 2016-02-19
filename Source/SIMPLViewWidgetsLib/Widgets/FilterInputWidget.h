@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _FilterInputWidget_H_
-#define _FilterInputWidget_H_
+#ifndef _filterinputwidget_h_
+#define _filterinputwidget_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>

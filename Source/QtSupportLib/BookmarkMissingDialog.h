@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _BookmarkMissingDialog_H_
-#define _BookmarkMissingDialog_H_
+#ifndef _bookmarkmissingdialog_h_
+#define _bookmarkmissingdialog_h_
 
 #include <QtWidgets/QDialog>
 

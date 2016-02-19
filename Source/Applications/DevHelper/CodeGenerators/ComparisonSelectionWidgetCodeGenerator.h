@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ComparisonSelectionWidgetCodeGenerator_H_
-#define _ComparisonSelectionWidgetCodeGenerator_H_
+#ifndef _comparisonselectionwidgetcodegenerator_h_
+#define _comparisonselectionwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

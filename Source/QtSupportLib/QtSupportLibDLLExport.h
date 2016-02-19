@@ -37,8 +37,8 @@
 
 
 
-#ifndef _QtSupportLib_COMMON_DLL_EXPORT_H_
-#define _QtSupportLib_COMMON_DLL_EXPORT_H_
+#ifndef _qtsupportlibdllexport_h_
+#define _qtsupportlibdllexport_h_
 
 
 #if defined (_MSC_VER)
@@ -78,8 +78,8 @@ building the MXADatModel DLL on windows.
 #endif
 
 /* If QtSupportLib_EXPORT was never defined, define it here */
-#ifndef QtSupportLib_EXPORT
-#define QtSupportLib_EXPORT
+#ifndef _qtsupportlibdllexport_h_
+#define _qtsupportlibdllexport_h_
 #endif
 
 

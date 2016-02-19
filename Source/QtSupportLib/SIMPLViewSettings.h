@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewSettings_H_
-#define _SIMPLViewSettings_H_
+#ifndef _simplviewsettings_h_
+#define _simplviewsettings_h_
 
 #include <QtCore/QString>
 #include <QtCore/QObject>

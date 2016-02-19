@@ -35,8 +35,8 @@
 
 
 
-#ifndef _QUALITYMETRICITEMDELEGATE_H_
-#define _QUALITYMETRICITEMDELEGATE_H_
+#ifndef _comparisonselectionitemdelegate_h_
+#define _comparisonselectionitemdelegate_h_
 #include <iostream>
 
 

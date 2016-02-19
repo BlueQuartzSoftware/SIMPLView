@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _ThirdOrderPolynomialWidgetCodeGenerator_H_
-#define _ThirdOrderPolynomialWidgetCodeGenerator_H_
+#ifndef _thirdorderpolynomialwidgetcodegenerator_h_
+#define _thirdorderpolynomialwidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"

@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewStyles_H_
-#define _SIMPLViewStyles_H_
+#ifndef _simplviewstyles_h_
+#define _simplviewstyles_h_
 
 #include <QtGui/QFont>
 

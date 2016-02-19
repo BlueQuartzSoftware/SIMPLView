@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _AIM_PLUGIN_FRAME_H_
-#define _AIM_PLUGIN_FRAME_H_
+#ifndef _simplpluginframe_h_
+#define _simplpluginframe_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

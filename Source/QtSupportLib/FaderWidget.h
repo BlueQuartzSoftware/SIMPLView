@@ -21,8 +21,8 @@
 **
 ****************************************************************************/
 
-#ifndef FADERWIDGET_H
-#define FADERWIDGET_H
+#ifndef _faderwidget_h_
+#define _faderwidget_h_
 
 #include <QWidget>
 
