@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _DataArrayInformationDisplayWidget_H_
-#define _DataArrayInformationDisplayWidget_H_
+#ifndef _dataarrayinformationdisplaywidget_h_
+#define _dataarrayinformationdisplaywidget_h_
 
 
 #include <QtCore/QObject>

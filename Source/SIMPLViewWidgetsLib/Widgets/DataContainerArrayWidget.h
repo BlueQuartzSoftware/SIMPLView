@@ -1,5 +1,5 @@
-#ifndef _DataContainerArrayWidget_H_
-#define _DataContainerArrayWidget_H_
+#ifndef _datacontainerarraywidget_h_
+#define _datacontainerarraywidget_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>

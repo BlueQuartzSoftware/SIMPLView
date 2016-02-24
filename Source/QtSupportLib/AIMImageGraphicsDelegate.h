@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _AIMIMAGEGRAPHICSDELEGATE_H_
-#define _AIMIMAGEGRAPHICSDELEGATE_H_
+#ifndef _aimimagegraphicsdelegate_h_
+#define _aimimagegraphicsdelegate_h_
 
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 

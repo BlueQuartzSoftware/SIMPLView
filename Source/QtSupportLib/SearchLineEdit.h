@@ -1,5 +1,5 @@
-#ifndef _SearchLineEdit_H_
-#define _SearchLineEdit_H_
+#ifndef _searchlineedit_h_
+#define _searchlineedit_h_
 
 
 

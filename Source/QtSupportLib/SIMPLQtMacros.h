@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -34,8 +34,8 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _AIM_QTMACROS_H_
-#define _AIM_QTMACROS_H_
+#ifndef _simplqtmacros_h_
+#define _simplqtmacros_h_
 
 
 #define READ_CHECKBOX_SETTING(prefs, prefix, tag, emptyValue)\

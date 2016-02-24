@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -120,6 +120,27 @@ void MacSIMPLViewApplication::on_actionClearRecentFiles_triggered()
   // Write out the empty list
   QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
   recents->writeList(prefs.data());
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool MacSIMPLViewApplication::event(QEvent* event)
+{
+  if (event->type() == QEvent::Close)
+  {
+    /* We need to write the toolbox's settings here, because we need to write
+     * whether the toolbox is showing or not, and that can only be done before
+     * the toolbox enters its closeEvent function (the toolbox is already hidden
+     * when the closeEvent occurs) */
+    SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
+    toolbox->writeSettings();
+
+    // We are already handling this event past this point, so don't pass it on
+    return false;
+  }
+
+  return QApplication::event(event);
 }
 
 // -----------------------------------------------------------------------------

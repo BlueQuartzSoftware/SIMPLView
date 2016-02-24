@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _MacSIMPLViewApplication_H_
-#define _MacSIMPLViewApplication_H_
+#ifndef _macsimplviewapplication_h_
+#define _macsimplviewapplication_h_
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
 
@@ -51,6 +51,13 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
     void toEmptyMenuState();
+
+    /**
+     * @brief event
+     * @param event
+     * @return
+     */
+    bool event(QEvent* event);
 
   protected slots:
 
