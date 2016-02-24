@@ -149,6 +149,11 @@ bool MacSIMPLViewApplication::event(QEvent* event)
 void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
+
+  if (m_SIMPLViewInstances.size() <= 0)
+  {
+    m_ActiveWindow = NULL;
+  }
 }
 
 // -----------------------------------------------------------------------------
