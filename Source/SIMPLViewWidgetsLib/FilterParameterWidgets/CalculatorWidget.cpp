@@ -98,10 +98,8 @@ void CalculatorWidget::setupGui()
   connect(getFilter(), SIGNAL(updateFilterParameters(AbstractFilter*)),
           this, SLOT(filterNeedsInputParameters(AbstractFilter*)));
 
-
   connect(equation, SIGNAL(textChanged(const QString&)),
           this, SLOT(widgetChanged(const QString&)));
-
 
   connect(absBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(acosBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
@@ -130,14 +128,8 @@ void CalculatorWidget::setupGui()
   connect(subtractBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(tanBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(tanhBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-}
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::widgetChanged(const QString& text)
-{
-  emit parametersChanged();
+  applyChangesBtn->setVisible(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -203,43 +195,14 @@ void CalculatorWidget::on_xExpYBtn_pressed()
 // -----------------------------------------------------------------------------
 void CalculatorWidget::on_scalarsBtn_pressed()
 {
-  scalarsBtn->showMenu();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::on_vectorsBtn_pressed()
-{
-  vectorsBtn->showMenu();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::beforePreflight()
-{
-  if (NULL != m_ScalarsMenu)
+  if (NULL != m_VectorsMenu)
   {
     delete m_ScalarsMenu;
     m_ScalarsMenu = NULL;
   }
 
-  if (NULL != m_VectorsMenu)
-  {
-    delete m_VectorsMenu;
-    m_VectorsMenu = NULL;
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::afterPreflight()
-{
-  // Create Scalars and Vectors Menu
+  // Create Scalars Menu
   m_ScalarsMenu = new QMenu(this);
-  m_VectorsMenu = new QMenu(this);
 
   AttributeMatrix::Pointer am = m_Filter->getDataContainerArray()->getAttributeMatrix(m_Filter->getSelectedAttributeMatrix());
   if (NULL == am)
@@ -257,7 +220,38 @@ void CalculatorWidget::afterPreflight()
       connect(action, SIGNAL(triggered()), this, SLOT(printActionName()));
       m_ScalarsMenu->addAction(action);
     }
-    else if (am->getAttributeArray(nameList[i])->getComponentDimensions()[0] > 1)
+  }
+
+  scalarsBtn->setMenu(m_ScalarsMenu);
+
+  scalarsBtn->showMenu();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_vectorsBtn_pressed()
+{
+  if (NULL != m_VectorsMenu)
+  {
+    delete m_VectorsMenu;
+    m_VectorsMenu = NULL;
+  }
+
+  // Create Vectors Menu
+  m_VectorsMenu = new QMenu(this);
+
+  AttributeMatrix::Pointer am = m_Filter->getDataContainerArray()->getAttributeMatrix(m_Filter->getSelectedAttributeMatrix());
+  if (NULL == am)
+  {
+    return;
+  }
+
+  QStringList nameList = am->getAttributeArrayNames();
+
+  for (int i = 0; i < nameList.size(); i++)
+  {
+    if (am->getAttributeArray(nameList[i])->getComponentDimensions()[0] > 1)
     {
       QAction* action = new QAction(nameList[i], m_VectorsMenu);
       connect(action, SIGNAL(triggered()), this, SLOT(printActionName()));
@@ -265,8 +259,79 @@ void CalculatorWidget::afterPreflight()
     }
   }
 
-  scalarsBtn->setMenu(m_ScalarsMenu);
   vectorsBtn->setMenu(m_VectorsMenu);
+
+  vectorsBtn->showMenu();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_scalarsBtn_triggered(QAction *action)
+{
+  Q_UNUSED(action)
+
+  on_scalarsBtn_pressed();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_vectorsBtn_triggered(QAction *action)
+{
+  Q_UNUSED(action)
+
+  on_vectorsBtn_pressed();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_equation_returnPressed()
+{
+  //qDebug() << "DataArrayCreationWidget::on_value_returnPressed() " << this;
+  m_DidCausePreflight = true;
+  on_applyChangesBtn_clicked();
+  m_DidCausePreflight = false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::hideButton()
+{
+  equation->setToolTip("");
+  applyChangesBtn->setVisible(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::widgetChanged(const QString& text)
+{
+  equation->setStyleSheet(QString::fromLatin1("color: rgb(255, 0, 0);"));
+  equation->setToolTip("Press the 'Return' key to apply your changes");
+  if(applyChangesBtn->isVisible() == false)
+  {
+    applyChangesBtn->setVisible(true);
+    fadeInWidget(applyChangesBtn);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::beforePreflight()
+{
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::afterPreflight()
+{
+
 }
 
 // -----------------------------------------------------------------------------
@@ -279,5 +344,27 @@ void CalculatorWidget::filterNeedsInputParameters(AbstractFilter* filter)
   {
     FilterParameterWidgetsDialogs::ShowCouldNotSetFilterParameter(getFilter(), getFilterParameter());
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_applyChangesBtn_clicked()
+{
+  equation->setStyleSheet(QString(""));
+  emit parametersChanged();
+
+  QPointer<FaderWidget> faderWidget = new FaderWidget(applyChangesBtn);
+  setFaderWidget(faderWidget);
+
+  if (getFaderWidget())
+  {
+    faderWidget->close();
+  }
+  faderWidget = new FaderWidget(applyChangesBtn);
+  faderWidget->setFadeOut();
+  connect(faderWidget, SIGNAL(animationComplete() ),
+          this, SLOT(hideButton()));
+  faderWidget->start();
 }
 

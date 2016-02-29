@@ -86,7 +86,11 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void afterPreflight();
     void filterNeedsInputParameters(AbstractFilter* filter);
 
+    void on_equation_returnPressed();
+    void on_applyChangesBtn_clicked();
     void widgetChanged(const QString& msg);
+
+    void hideButton();
 
     protected slots:
     void printButtonName();
@@ -97,6 +101,8 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void on_xExpYBtn_pressed();
     void on_scalarsBtn_pressed();
     void on_vectorsBtn_pressed();
+    void on_scalarsBtn_triggered(QAction* action);
+    void on_vectorsBtn_triggered(QAction* action);
 
   signals:
     void errorSettingFilterParameter(const QString& msg);

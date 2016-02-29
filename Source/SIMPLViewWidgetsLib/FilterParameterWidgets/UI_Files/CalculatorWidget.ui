@@ -6,22 +6,85 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>262</height>
+    <width>843</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="5" column="0">
+    <widget class="QPushButton" name="sinhBtn">
+     <property name="text">
+      <string>sinh</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QPushButton" name="tanhBtn">
+     <property name="text">
+      <string>tanh</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="5">
+    <widget class="QPushButton" name="addBtn">
+     <property name="text">
+      <string>+</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QPushButton" name="jHatBtn">
+     <property name="text">
+      <string>jHat</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="rightBraceBtn">
+     <property name="text">
+      <string>)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="5">
+    <widget class="QPushButton" name="subtractBtn">
+     <property name="text">
+      <string>-</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="clearBtn">
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+   </item>
    <item row="5" column="4">
+    <widget class="QPushButton" name="expBtn">
+     <property name="text">
+      <string>exp</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4">
     <widget class="QPushButton" name="log10Btn">
      <property name="text">
       <string>log10</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="5">
+   <item row="2" column="3">
+    <widget class="QPushButton" name="iHatBtn">
+     <property name="text">
+      <string>iHat</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="5">
     <widget class="QPushButton" name="multiplyBtn">
      <property name="text">
       <string>*</string>
@@ -29,205 +92,139 @@
     </widget>
    </item>
    <item row="3" column="4">
-    <widget class="QPushButton" name="floorBtn">
-     <property name="text">
-      <string>floor</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="4">
     <widget class="QPushButton" name="sqrtBtn">
      <property name="text">
       <string>sqrt</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="5">
+   <item row="4" column="4">
+    <widget class="QPushButton" name="floorBtn">
+     <property name="text">
+      <string>floor</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="5">
     <widget class="QPushButton" name="divideBtn">
      <property name="text">
       <string>/</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="4">
-    <widget class="QPushButton" name="expBtn">
-     <property name="text">
-      <string>exp</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="5">
-    <widget class="QPushButton" name="addBtn">
-     <property name="text">
-      <string>+</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="5">
-    <widget class="QPushButton" name="subtractBtn">
-     <property name="text">
-      <string>-</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4">
-    <widget class="QPushButton" name="jHatBtn">
-     <property name="text">
-      <string>jHat</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="clearBtn">
-     <property name="text">
-      <string>Clear</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QPushButton" name="tanhBtn">
-     <property name="text">
-      <string>tanh</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QPushButton" name="rightBraceBtn">
-     <property name="text">
-      <string>)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QPushButton" name="sinhBtn">
-     <property name="text">
-      <string>sinh</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QPushButton" name="iHatBtn">
-     <property name="text">
-      <string>iHat</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <widget class="QPushButton" name="leftBraceBtn">
      <property name="text">
       <string>(</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="6">
-    <widget class="QLineEdit" name="equation"/>
-   </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QPushButton" name="sinBtn">
      <property name="text">
       <string>sin</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="5">
+   <item row="2" column="5">
     <widget class="QPushButton" name="kHatBtn">
      <property name="text">
       <string>kHat</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
+   <item row="6" column="2">
     <widget class="QPushButton" name="normBtn">
      <property name="text">
       <string>norm</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
+   <item row="4" column="2">
     <widget class="QPushButton" name="atanBtn">
      <property name="text">
       <string>atan</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <widget class="QPushButton" name="magBtn">
      <property name="text">
       <string>mag</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="3" column="3">
     <widget class="QPushButton" name="absBtn">
      <property name="text">
       <string>abs</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QPushButton" name="v1v2Btn">
      <property name="text">
       <string>v1.v2</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item row="3" column="2">
     <widget class="QPushButton" name="tanBtn">
      <property name="text">
       <string>tan</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QPushButton" name="coshBtn">
      <property name="text">
       <string>cosh</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QPushButton" name="asinBtn">
      <property name="text">
       <string>asin</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="3">
+   <item row="6" column="3">
     <widget class="QPushButton" name="lnBtn">
      <property name="text">
       <string>ln</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="3">
+   <item row="5" column="3">
     <widget class="QPushButton" name="xExpYBtn">
      <property name="text">
       <string>x^y</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="3">
+   <item row="4" column="3">
     <widget class="QPushButton" name="ceilBtn">
      <property name="text">
       <string>ceil</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="4" column="1">
     <widget class="QPushButton" name="acosBtn">
      <property name="text">
       <string>acos</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <widget class="QPushButton" name="cosBtn">
      <property name="text">
       <string>cos</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="3">
+   <item row="7" column="0" colspan="3">
     <widget class="QToolButton" name="scalarsBtn">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -246,7 +243,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="3" colspan="3">
+   <item row="7" column="3" colspan="3">
     <widget class="QToolButton" name="vectorsBtn">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -261,6 +258,26 @@
       <enum>QToolButton::MenuButtonPopup</enum>
      </property>
     </widget>
+   </item>
+   <item row="1" column="0" colspan="6">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="equation"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="applyChangesBtn">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
