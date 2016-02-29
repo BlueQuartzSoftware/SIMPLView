@@ -53,7 +53,9 @@
 //
 // -----------------------------------------------------------------------------
 CalculatorWidget::CalculatorWidget(FilterParameter* parameter, AbstractFilter* filter, QWidget* parent) :
-  FilterParameterWidget(parameter, filter, parent)
+  FilterParameterWidget(parameter, filter, parent),
+  m_ScalarsMenu(NULL),
+  m_VectorsMenu(NULL)
 {
   m_Filter = dynamic_cast<ArrayCalculator*>(filter);
   Q_ASSERT_X(m_Filter != NULL, "NULL Pointer", "CalculatorWidget can ONLY be used with an ArrayCalculator filter");
@@ -201,7 +203,43 @@ void CalculatorWidget::on_xExpYBtn_pressed()
 // -----------------------------------------------------------------------------
 void CalculatorWidget::on_scalarsBtn_pressed()
 {
-  QMenu* menu = new QMenu(this);
+  scalarsBtn->showMenu();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_vectorsBtn_pressed()
+{
+  vectorsBtn->showMenu();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::beforePreflight()
+{
+  if (NULL != m_ScalarsMenu)
+  {
+    delete m_ScalarsMenu;
+    m_ScalarsMenu = NULL;
+  }
+
+  if (NULL != m_VectorsMenu)
+  {
+    delete m_VectorsMenu;
+    m_VectorsMenu = NULL;
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::afterPreflight()
+{
+  // Create Scalars and Vectors Menu
+  m_ScalarsMenu = new QMenu(this);
+  m_VectorsMenu = new QMenu(this);
 
   AttributeMatrix::Pointer am = m_Filter->getDataContainerArray()->getAttributeMatrix(m_Filter->getSelectedAttributeMatrix());
   if (NULL == am)
@@ -215,61 +253,20 @@ void CalculatorWidget::on_scalarsBtn_pressed()
   {
     if (am->getAttributeArray(nameList[i])->getComponentDimensions()[0] == 1)
     {
-      QAction* action = new QAction(nameList[i], menu);
+      QAction* action = new QAction(nameList[i], m_ScalarsMenu);
       connect(action, SIGNAL(triggered()), this, SLOT(printActionName()));
-      menu->addAction(action);
+      m_ScalarsMenu->addAction(action);
     }
-  }
-
-  scalarsBtn->setMenu(menu);
-
-  scalarsBtn->showMenu();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::on_vectorsBtn_pressed()
-{
-  QMenu* menu = new QMenu(this);
-
-  AttributeMatrix::Pointer am = m_Filter->getDataContainerArray()->getAttributeMatrix(m_Filter->getSelectedAttributeMatrix());
-  if (NULL == am)
-  {
-    return;
-  }
-
-  QStringList nameList = am->getAttributeArrayNames();
-
-  for (int i = 0; i < nameList.size(); i++)
-  {
-    if (am->getAttributeArray(nameList[i])->getComponentDimensions()[0] > 1)
+    else if (am->getAttributeArray(nameList[i])->getComponentDimensions()[0] > 1)
     {
-      QAction* action = new QAction(nameList[i], menu);
+      QAction* action = new QAction(nameList[i], m_VectorsMenu);
       connect(action, SIGNAL(triggered()), this, SLOT(printActionName()));
-      menu->addAction(action);
+      m_VectorsMenu->addAction(action);
     }
   }
 
-  vectorsBtn->setMenu(menu);
-
-  vectorsBtn->showMenu();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::beforePreflight()
-{
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::afterPreflight()
-{
-
+  scalarsBtn->setMenu(m_ScalarsMenu);
+  vectorsBtn->setMenu(m_VectorsMenu);
 }
 
 // -----------------------------------------------------------------------------

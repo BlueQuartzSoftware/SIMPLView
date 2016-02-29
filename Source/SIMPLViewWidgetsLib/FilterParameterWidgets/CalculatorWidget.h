@@ -109,6 +109,9 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     ArrayCalculator*                  m_Filter;
     CalculatorFilterParameter*        m_FilterParameter;
 
+    QMenu*                            m_ScalarsMenu;
+    QMenu*                            m_VectorsMenu;
+
     CalculatorWidget(const CalculatorWidget&); // Copy Constructor Not Implemented
     void operator=(const CalculatorWidget&); // Operator '=' Not Implemented
 
