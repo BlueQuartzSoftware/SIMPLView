@@ -55,7 +55,9 @@
 CalculatorWidget::CalculatorWidget(FilterParameter* parameter, AbstractFilter* filter, QWidget* parent) :
   FilterParameterWidget(parameter, filter, parent),
   m_ScalarsMenu(NULL),
-  m_VectorsMenu(NULL)
+  m_VectorsMenu(NULL),
+  m_SelectedText(""),
+  m_SelectionStart(-1)
 {
   m_Filter = dynamic_cast<ArrayCalculator*>(filter);
   Q_ASSERT_X(m_Filter != NULL, "NULL Pointer", "CalculatorWidget can ONLY be used with an ArrayCalculator filter");
@@ -101,6 +103,9 @@ void CalculatorWidget::setupGui()
   connect(equation, SIGNAL(textChanged(const QString&)),
           this, SLOT(widgetChanged(const QString&)));
 
+  connect(equation, SIGNAL(selectionChanged()),
+          this, SLOT(updateSelection()));
+
   connect(absBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(acosBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(addBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
@@ -141,8 +146,25 @@ void CalculatorWidget::printButtonName()
   if (NULL != button)
   {
     QString equationText = equation->text();
-    equationText.append(button->text());
-    equation->setText(equationText);
+
+    if (m_SelectedText.isEmpty() == false && m_SelectionStart >= 0)
+    {
+      equationText.replace(m_SelectionStart, m_SelectedText.size(), button->text());
+      equation->setText(equationText);
+      equation->setCursorPosition(m_SelectionStart+button->text().size());
+
+      m_SelectedText.clear();
+      m_SelectionStart = -1;
+    }
+    else
+    {
+      int pos = equation->cursorPosition();
+      equationText.insert(pos, button->text());
+      equation->setText(equationText);
+      equation->setCursorPosition(pos+button->text().size());
+    }
+
+    equation->setFocus();
     return;
   }
 }
@@ -151,13 +173,31 @@ void CalculatorWidget::printButtonName()
 //
 // -----------------------------------------------------------------------------
 void CalculatorWidget::printActionName()
-{
+{ 
   QAction* action = static_cast<QAction*>(sender());
   if (NULL != action)
   {
     QString equationText = equation->text();
-    equationText.append(action->text());
-    equation->setText(equationText);
+
+    if (m_SelectedText.isEmpty() == false && m_SelectionStart >= 0)
+    {
+      equationText.replace(m_SelectionStart, m_SelectedText.size(), action->text());
+      equation->setFocus();
+      equation->setText(equationText);
+      equation->setCursorPosition(m_SelectionStart+action->text().size());
+
+      m_SelectedText.clear();
+      m_SelectionStart = -1;
+    }
+    else
+    {
+      int pos = equation->cursorPosition();
+      equationText.insert(pos, action->text());
+      equation->setText(equationText);
+      equation->setCursorPosition(pos+action->text().size());
+      equation->setFocus();
+    }
+
     return;
   }
 }
@@ -293,6 +333,18 @@ void CalculatorWidget::on_equation_returnPressed()
   m_DidCausePreflight = true;
   on_applyChangesBtn_clicked();
   m_DidCausePreflight = false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::updateSelection()
+{
+  if (equation->hasFocus())
+  {
+    m_SelectedText = equation->selectedText();
+    m_SelectionStart = equation->selectionStart();
+  }
 }
 
 // -----------------------------------------------------------------------------

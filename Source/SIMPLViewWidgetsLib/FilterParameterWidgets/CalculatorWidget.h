@@ -95,6 +95,7 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     protected slots:
     void printButtonName();
     void printActionName();
+    void updateSelection();
 
     void on_clearBtn_pressed();
     void on_v1v2Btn_pressed();
@@ -117,6 +118,9 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
 
     QMenu*                            m_ScalarsMenu;
     QMenu*                            m_VectorsMenu;
+
+    QString                           m_SelectedText;
+    int                               m_SelectionStart;
 
     CalculatorWidget(const CalculatorWidget&); // Copy Constructor Not Implemented
     void operator=(const CalculatorWidget&); // Operator '=' Not Implemented

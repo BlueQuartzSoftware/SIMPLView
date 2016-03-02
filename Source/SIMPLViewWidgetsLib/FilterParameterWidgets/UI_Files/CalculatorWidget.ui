@@ -268,7 +268,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="equation"/>
+      <widget class="QLineEdit" name="equation">
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="applyChangesBtn">
