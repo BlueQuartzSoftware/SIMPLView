@@ -280,10 +280,7 @@ void DataArrayCreationWidget::on_attributeMatrixCombo_currentIndexChanged(int in
 // -----------------------------------------------------------------------------
 void DataArrayCreationWidget::on_dataArrayName_returnPressed()
 {
-  //qDebug() << "DataArrayCreationWidget::on_value_returnPressed() " << this;
-  m_DidCausePreflight = true;
   on_applyChangesBtn_clicked();
-  m_DidCausePreflight = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -363,6 +360,7 @@ void DataArrayCreationWidget::filterNeedsInputParameters(AbstractFilter* filter)
 // -----------------------------------------------------------------------------
 void DataArrayCreationWidget::on_applyChangesBtn_clicked()
 {
+  m_DidCausePreflight = true;
   dataArrayName->setStyleSheet(QString(""));
   emit parametersChanged();
 
@@ -378,4 +376,5 @@ void DataArrayCreationWidget::on_applyChangesBtn_clicked()
   connect(faderWidget, SIGNAL(animationComplete() ),
           this, SLOT(hideButton()));
   faderWidget->start();
+  m_DidCausePreflight = false;
 }
