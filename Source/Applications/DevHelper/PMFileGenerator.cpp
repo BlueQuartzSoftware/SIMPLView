@@ -209,6 +209,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     QTextStream in(&rfile);
     text = in.readAll();
     text.replace("@PluginName@", pluginName);
+    text.replace("@PluginNameLowerCase@", pluginName.toLower());
     text.replace("@ClassName@", className);
     text.replace("@FilterName@", filterName);
     text.replace("@MD_FILE_NAME@", m_FileName);
