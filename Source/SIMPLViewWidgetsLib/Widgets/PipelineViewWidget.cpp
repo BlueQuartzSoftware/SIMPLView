@@ -661,6 +661,7 @@ void PipelineViewWidget::preflightPipeline()
     }
   }
   emit preflightPipelineComplete();
+  emit preflightFinished(err);
 }
 
 
