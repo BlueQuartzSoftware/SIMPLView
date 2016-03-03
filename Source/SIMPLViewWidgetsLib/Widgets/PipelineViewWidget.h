@@ -304,6 +304,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void filterInputWidgetEdited();
     void preflightPipelineComplete();
+    void preflightFinished(int err);
 
   protected:
     void setupGui();

@@ -208,6 +208,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void on_startPipelineBtn_clicked();
 
     /**
+    * @brief pipelineDidFinish
+    */
+    void preflightDidFinish(int err);
+
+    /**
      * @brief pipelineDidFinish
      */
     void pipelineDidFinish();

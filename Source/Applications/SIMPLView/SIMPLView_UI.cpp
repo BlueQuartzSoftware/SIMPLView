@@ -609,6 +609,9 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
 
+  disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
+
   disconnect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
 }
@@ -639,6 +642,9 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
+
+  connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -1185,6 +1191,21 @@ void SIMPLView_UI::changeEvent(QEvent* event)
   if (event->type() == QEvent::ActivationChange)
   {
     emit dream3dWindowChangedState(this);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::preflightDidFinish(int err)
+{
+  if (err < 0)
+  {
+    startPipelineBtn->setDisabled(true);
+  }
+  else
+  {
+    startPipelineBtn->setEnabled(true);
   }
 }
 
