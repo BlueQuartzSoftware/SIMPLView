@@ -47,13 +47,29 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class UpdateCheckData;
 
+
+
 class SIMPLViewWidgetsLib_EXPORT UpdateCheck : public QObject
 {
     Q_OBJECT
 
   public:
-    UpdateCheck(QObject* parent = 0);
+
+    typedef struct {
+      QString complete;
+      QString major;
+      QString minor;
+      QString patch;
+      QString package;
+      QString revision;
+      QString packageComplete;
+      QString buildDate;
+    } SIMPLVersionData_t;
+
+
+    UpdateCheck(SIMPLVersionData_t versionData, QObject* parent = 0);
     virtual ~UpdateCheck();
+
 
     void checkVersion(QUrl website);
 
@@ -68,6 +84,7 @@ class SIMPLViewWidgetsLib_EXPORT UpdateCheck : public QObject
 
   private:
     QNetworkAccessManager*        m_Nam;
+    UpdateCheck::SIMPLVersionData_t m_VersionData;
 
     UpdateCheck(const UpdateCheck&);    // Copy Constructor Not Implemented
     void operator=(const UpdateCheck&);  // Operator '=' Not Implemented

@@ -56,13 +56,15 @@ class QNetworkReply;
 class UpdateCheck;
 class UpdateCheckData;
 
-
+/**
+ * @brief The SIMPLViewUpdateCheckDialog class
+ */
 class SIMPLViewWidgetsLib_EXPORT SIMPLViewUpdateCheckDialog : public QDialog, private Ui::SIMPLViewUpdateCheckDialog
 {
     Q_OBJECT
 
   public:
-    SIMPLViewUpdateCheckDialog(QWidget* parent = 0);
+    SIMPLViewUpdateCheckDialog(UpdateCheck::SIMPLVersionData_t versionData, QWidget* parent = 0);
     virtual ~SIMPLViewUpdateCheckDialog();
 
     enum UpdateType
@@ -82,7 +84,6 @@ class SIMPLViewWidgetsLib_EXPORT SIMPLViewUpdateCheckDialog : public QDialog, pr
     int getWhenToCheck();
 
     QString getUpdatePreferencesPath();
-    QString getCurrentVersion();
     QLabel* getCurrentVersionLabel();
     QLabel* getLatestVersionLabel();
     QString getAppName();
@@ -93,11 +94,10 @@ class SIMPLViewWidgetsLib_EXPORT SIMPLViewUpdateCheckDialog : public QDialog, pr
     QComboBox* getHowOftenComboBox();
     QPushButton* getCheckNowBtn();
 
-    static QString getUpdatePreferencesGroup();
-    static QString getUpdateCheckKey();
+    static QString GetUpdatePreferencesGroup();
+    static QString GetUpdateCheckKey();
 
 
-    void setCurrentVersion(QString version);
     void setLastCheckDateTime(QDateTime lastDateTime);
     void setWhenToCheck(int whenToCheck);
     void setUpdateWebSite(QString url);
@@ -137,7 +137,6 @@ class SIMPLViewWidgetsLib_EXPORT SIMPLViewUpdateCheckDialog : public QDialog, pr
     void updateFound();
 
   private:
-    QString           m_CurrentVersion;
     QDateTime         m_LastCheckDateTime;
     int             m_WhenToCheck;
     QString           m_UpdatePreferencesPath;
@@ -146,6 +145,7 @@ class SIMPLViewWidgetsLib_EXPORT SIMPLViewUpdateCheckDialog : public QDialog, pr
     UpdateCheck*        m_UpdateCheck;
     QThread*          m_UpdateCheckThread;
     DialogState         m_DialogState;
+    UpdateCheck::SIMPLVersionData_t m_VersionData;
 
     SIMPLViewUpdateCheckDialog(const SIMPLViewUpdateCheckDialog&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewUpdateCheckDialog&); // Operator '=' Not Implemented

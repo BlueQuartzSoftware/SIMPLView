@@ -65,12 +65,13 @@ namespace Detail
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewUpdateCheckDialog::SIMPLViewUpdateCheckDialog(QWidget* parent) :
+SIMPLViewUpdateCheckDialog::SIMPLViewUpdateCheckDialog(UpdateCheck::SIMPLVersionData_t versionData, QWidget* parent) :
   QDialog(parent),
   m_WhenToCheck(UpdateCheckMonthly),
   m_UpdateCheck(NULL),
   m_UpdateCheckThread(NULL),
-  m_DialogState(DefaultDialog)
+  m_DialogState(DefaultDialog),
+  m_VersionData(versionData)
 {
 
   setupUi(this);
@@ -107,7 +108,7 @@ SIMPLViewUpdateCheckDialog::~SIMPLViewUpdateCheckDialog()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString SIMPLViewUpdateCheckDialog::getUpdatePreferencesGroup()
+QString SIMPLViewUpdateCheckDialog::GetUpdatePreferencesGroup()
 {
   return Detail::UpdatePreferencesGroup;
 }
@@ -115,7 +116,7 @@ QString SIMPLViewUpdateCheckDialog::getUpdatePreferencesGroup()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString SIMPLViewUpdateCheckDialog::getUpdateCheckKey()
+QString SIMPLViewUpdateCheckDialog::GetUpdateCheckKey()
 {
   return Detail::UpdateCheckDateKey;
 }
@@ -150,14 +151,6 @@ QComboBox* SIMPLViewUpdateCheckDialog::getHowOftenComboBox()
 QPushButton* SIMPLViewUpdateCheckDialog::getCheckNowBtn()
 {
   return checkNowBtn;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString SIMPLViewUpdateCheckDialog::getCurrentVersion()
-{
-  return m_CurrentVersion;
 }
 
 // -----------------------------------------------------------------------------
@@ -198,21 +191,6 @@ QLabel* SIMPLViewUpdateCheckDialog::getFeedbackTextLabel()
 QString SIMPLViewUpdateCheckDialog::getUpdatePreferencesPath()
 {
   return m_UpdatePreferencesPath;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewUpdateCheckDialog::setCurrentVersion(QString version)
-{
-  m_CurrentVersion = version;
-  QStringList appVersionParts = m_CurrentVersion.split(QString("."));
-
-  {
-    QString vStr(appVersionParts.at(0));
-    vStr.append(".").append(appVersionParts.at(1)).append(".").append(appVersionParts.at(2));
-    currentVersion->setText(vStr);
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -275,6 +253,9 @@ void SIMPLViewUpdateCheckDialog::setupGui()
   latestVersion->setText("Not Checked");
   feedbackText->setText("");
 
+  QString vers = QString("%1.%2.%3").arg(m_VersionData.major).arg(m_VersionData.minor).arg(m_VersionData.patch);
+  currentVersion->setText(vers);
+
   setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 #if defined (Q_OS_MAC)
@@ -293,7 +274,7 @@ void SIMPLViewUpdateCheckDialog::on_checkNowBtn_clicked()
 {
   checkNowBtn->setEnabled(false);
   feedbackText->setText("Checking for Updates...");
-  m_UpdateCheck = new UpdateCheck(this);
+  m_UpdateCheck = new UpdateCheck(m_VersionData, this);
 
   connect(m_UpdateCheck, SIGNAL( latestVersion(UpdateCheckData*) ),
           this, SLOT( LatestVersionReplied(UpdateCheckData*) ) );
@@ -424,8 +405,8 @@ void SIMPLViewUpdateCheckDialog::LatestVersionReplied(UpdateCheckData* dataObj)
   feedbackText->setText(message);
   if (!dataObj->hasError())
   {
-    currentVersion->setText( dataObj->getAppString() );
-    setCurrentVersion( dataObj->getAppString() );
+    //currentVersion->setText( dataObj->getAppString() );
+    //setCurrentVersion( dataObj->getAppString() );
     latestVersion->setText( dataObj->getServerString() );
   }
   else
