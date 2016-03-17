@@ -113,8 +113,6 @@ void CalculatorWidget::setupGui()
   connect(atanBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(ceilBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(cosBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(coshBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(divideBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(expBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(floorBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(iHatBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
@@ -123,16 +121,13 @@ void CalculatorWidget::setupGui()
   connect(leftBraceBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(lnBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(log10Btn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(magBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(multiplyBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(normBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(rightBraceBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(sinBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(sinhBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(sqrtBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(subtractBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(tanBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(tanhBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
 
   applyChangesBtn->setVisible(false);
 }
@@ -208,6 +203,22 @@ void CalculatorWidget::printActionName()
 void CalculatorWidget::on_clearBtn_pressed()
 {
   equation->clear();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_radiansBtn_pressed()
+{
+  m_Filter->setUnits(ArrayCalculator::Radians);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_degreesBtn_pressed()
+{
+  m_Filter->setUnits(ArrayCalculator::Degrees);
 }
 
 // -----------------------------------------------------------------------------
