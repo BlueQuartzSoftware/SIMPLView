@@ -208,17 +208,11 @@ void CalculatorWidget::on_clearBtn_pressed()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void CalculatorWidget::on_radiansBtn_pressed()
+void CalculatorWidget::on_radiansBtn_toggled(bool checked)
 {
-  m_Filter->setUnits(ArrayCalculator::Radians);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::on_degreesBtn_pressed()
-{
-  m_Filter->setUnits(ArrayCalculator::Degrees);
+  m_DidCausePreflight = true;
+  emit parametersChanged();
+  m_DidCausePreflight = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -406,6 +400,18 @@ void CalculatorWidget::filterNeedsInputParameters(AbstractFilter* filter)
   if (false == ok)
   {
     FilterParameterWidgetsDialogs::ShowCouldNotSetFilterParameter(getFilter(), getFilterParameter());
+  }
+
+  ArrayCalculator* calculatorFilter = dynamic_cast<ArrayCalculator*>(filter);
+  Q_ASSERT_X(calculatorFilter != NULL, "NULL Pointer", "CalculatorWidget can ONLY be used with an ArrayCalculator filter");
+
+  if (radiansBtn->isChecked())
+  {
+    calculatorFilter->setUnits(ArrayCalculator::Radians);
+  }
+  else
+  {
+    calculatorFilter->setUnits(ArrayCalculator::Degrees);
   }
 }
 
