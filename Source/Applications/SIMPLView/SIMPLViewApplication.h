@@ -41,6 +41,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
 
+#include "SIMPLViewWidgetsLib/UpdateCheck.h"
+
 #define dream3dApp (static_cast<SIMPLViewApplication *>(qApp))
 
 class DSplashScreen;
@@ -57,11 +59,18 @@ class SIMPLViewApplication : public QApplication
     SIMPLViewApplication(int& argc, char** argv);
     ~SIMPLViewApplication();
 
+     /**
+     * @brief fillVersionData
+     * @return
+     */
+    static UpdateCheck::SIMPLVersionData_t FillVersionData();
+
     bool initialize(int argc, char* argv[]);
 
     QList<SIMPLView_UI*> getSIMPLViewInstances();
 
     void registerSIMPLViewWindow(SIMPLView_UI* window);
+
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
     SIMPLView_UI* getNewSIMPLViewInstance();
@@ -78,6 +87,7 @@ class SIMPLViewApplication : public QApplication
      * @return
      */
     bool event(QEvent* event);
+
 
   public slots:
 
