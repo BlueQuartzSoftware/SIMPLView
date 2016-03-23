@@ -312,26 +312,6 @@ void CalculatorWidget::on_vectorsBtn_pressed()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void CalculatorWidget::on_scalarsBtn_triggered(QAction *action)
-{
-  Q_UNUSED(action)
-
-  on_scalarsBtn_pressed();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CalculatorWidget::on_vectorsBtn_triggered(QAction *action)
-{
-  Q_UNUSED(action)
-
-  on_vectorsBtn_pressed();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void CalculatorWidget::on_equation_returnPressed()
 {
   //qDebug() << "DataArrayCreationWidget::on_value_returnPressed() " << this;

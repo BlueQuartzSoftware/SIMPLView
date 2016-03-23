@@ -103,8 +103,6 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void on_xExpYBtn_pressed();
     void on_scalarsBtn_pressed();
     void on_vectorsBtn_pressed();
-    void on_scalarsBtn_triggered(QAction* action);
-    void on_vectorsBtn_triggered(QAction* action);
 
   signals:
     void errorSettingFilterParameter(const QString& msg);
