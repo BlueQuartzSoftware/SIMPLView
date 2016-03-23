@@ -111,7 +111,6 @@ void CalculatorWidget::setupGui()
   connect(sinBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(cosBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(tanBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
-  connect(rootBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(sqrtBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(asinBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(acosBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
@@ -120,7 +119,6 @@ void CalculatorWidget::setupGui()
   connect(floorBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(log10Btn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
   connect(lnBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
-  connect(expBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
 
   // Other Buttons
   connect(leftBraceBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
@@ -247,9 +245,25 @@ void CalculatorWidget::on_logBtn_pressed()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void CalculatorWidget::on_expBtn_pressed()
+{
+  printStringToEquation("exp(");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void CalculatorWidget::on_powBtn_pressed()
 {
   printStringToEquation("^");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_rootBtn_pressed()
+{
+  printStringToEquation("root(");
 }
 
 // -----------------------------------------------------------------------------

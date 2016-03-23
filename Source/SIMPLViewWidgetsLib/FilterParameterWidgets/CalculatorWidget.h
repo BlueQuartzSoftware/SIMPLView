@@ -103,6 +103,8 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void on_radiansBtn_toggled(bool checked);
     void on_powBtn_pressed();
     void on_logBtn_pressed();
+    void on_expBtn_pressed();
+    void on_rootBtn_pressed();
     void on_scalarsBtn_pressed();
     void on_vectorsBtn_pressed();
 
