@@ -93,14 +93,16 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void hideButton();
 
     protected slots:
+    void printUnaryButtonName();
     void printButtonName();
     void printActionName();
     void updateSelection();
 
     void on_clearBtn_pressed();
+    void on_backspaceBtn_pressed();
     void on_radiansBtn_toggled(bool checked);
-    void on_v1v2Btn_pressed();
-    void on_xExpYBtn_pressed();
+    void on_powBtn_pressed();
+    void on_logBtn_pressed();
     void on_scalarsBtn_pressed();
     void on_vectorsBtn_pressed();
 
@@ -109,8 +111,7 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
     void parametersChanged();
 
   private:
-
-    bool m_DidCausePreflight;
+    bool                              m_DidCausePreflight;
 
     ArrayCalculator*                  m_Filter;
     CalculatorFilterParameter*        m_FilterParameter;
@@ -120,6 +121,8 @@ class SIMPLViewWidgetsLib_EXPORT CalculatorWidget : public FilterParameterWidget
 
     QString                           m_SelectedText;
     int                               m_SelectionStart;
+
+    void printStringToEquation(QString str);
 
     CalculatorWidget(const CalculatorWidget&); // Copy Constructor Not Implemented
     void operator=(const CalculatorWidget&); // Operator '=' Not Implemented

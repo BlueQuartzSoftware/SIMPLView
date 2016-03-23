@@ -106,30 +106,55 @@ void CalculatorWidget::setupGui()
   connect(equation, SIGNAL(selectionChanged()),
           this, SLOT(updateSelection()));
 
-  connect(absBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(acosBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(addBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(asinBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(atanBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(ceilBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(cosBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(expBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(floorBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(iHatBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(jHatBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(kHatBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  // Unary Operator Buttons
+  connect(absBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(sinBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(cosBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(tanBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(rootBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(sqrtBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(asinBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(acosBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(atanBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(ceilBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(floorBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(log10Btn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(lnBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+  connect(expBtn, SIGNAL(pressed()), this, SLOT(printUnaryButtonName()));
+
+  // Other Buttons
   connect(leftBraceBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(lnBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(log10Btn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(multiplyBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(normBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(rightBraceBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(sinBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(sqrtBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(commaBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(addBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
   connect(subtractBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
-  connect(tanBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(multiplyBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(divideBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(oneBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(twoBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(threeBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(fourBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(fiveBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(sixBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(sevenBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(eightBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(nineBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(zeroBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
+  connect(decimalBtn, SIGNAL(pressed()), this, SLOT(printButtonName()));
 
   applyChangesBtn->setVisible(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::printUnaryButtonName()
+{
+  QPushButton* button = static_cast<QPushButton*>(sender());
+  if (NULL != button)
+  {
+    printStringToEquation(button->text() + "(");
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -140,27 +165,7 @@ void CalculatorWidget::printButtonName()
   QPushButton* button = static_cast<QPushButton*>(sender());
   if (NULL != button)
   {
-    QString equationText = equation->text();
-
-    if (m_SelectedText.isEmpty() == false && m_SelectionStart >= 0)
-    {
-      equationText.replace(m_SelectionStart, m_SelectedText.size(), button->text());
-      equation->setText(equationText);
-      equation->setCursorPosition(m_SelectionStart+button->text().size());
-
-      m_SelectedText.clear();
-      m_SelectionStart = -1;
-    }
-    else
-    {
-      int pos = equation->cursorPosition();
-      equationText.insert(pos, button->text());
-      equation->setText(equationText);
-      equation->setCursorPosition(pos+button->text().size());
-    }
-
-    equation->setFocus();
-    return;
+    printStringToEquation(button->text());
   }
 }
 
@@ -172,28 +177,34 @@ void CalculatorWidget::printActionName()
   QAction* action = static_cast<QAction*>(sender());
   if (NULL != action)
   {
-    QString equationText = equation->text();
+    printStringToEquation(action->text());
+  }
+}
 
-    if (m_SelectedText.isEmpty() == false && m_SelectionStart >= 0)
-    {
-      equationText.replace(m_SelectionStart, m_SelectedText.size(), action->text());
-      equation->setFocus();
-      equation->setText(equationText);
-      equation->setCursorPosition(m_SelectionStart+action->text().size());
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::printStringToEquation(QString str)
+{
+  QString equationText = equation->text();
 
-      m_SelectedText.clear();
-      m_SelectionStart = -1;
-    }
-    else
-    {
-      int pos = equation->cursorPosition();
-      equationText.insert(pos, action->text());
-      equation->setText(equationText);
-      equation->setCursorPosition(pos+action->text().size());
-      equation->setFocus();
-    }
+  if (m_SelectedText.isEmpty() == false && m_SelectionStart >= 0)
+  {
+    equationText.replace(m_SelectionStart, m_SelectedText.size(), str);
+    equation->setFocus();
+    equation->setText(equationText);
+    equation->setCursorPosition(m_SelectionStart + str.size());
 
-    return;
+    m_SelectedText.clear();
+    m_SelectionStart = -1;
+  }
+  else
+  {
+    int pos = equation->cursorPosition();
+    equationText.insert(pos, str);
+    equation->setText(equationText);
+    equation->setCursorPosition(pos + str.size());
+    equation->setFocus();
   }
 }
 
@@ -203,6 +214,16 @@ void CalculatorWidget::printActionName()
 void CalculatorWidget::on_clearBtn_pressed()
 {
   equation->clear();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CalculatorWidget::on_backspaceBtn_pressed()
+{
+  QString equationText = equation->text();
+  equationText.chop(1);
+  equation->setText(equationText);
 }
 
 // -----------------------------------------------------------------------------
@@ -218,21 +239,17 @@ void CalculatorWidget::on_radiansBtn_toggled(bool checked)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void CalculatorWidget::on_v1v2Btn_pressed()
+void CalculatorWidget::on_logBtn_pressed()
 {
-  QString equationText = equation->text();
-  equationText.append('.');
-  equation->setText(equationText);
+  printStringToEquation("log(");
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void CalculatorWidget::on_xExpYBtn_pressed()
+void CalculatorWidget::on_powBtn_pressed()
 {
-  QString equationText = equation->text();
-  equationText.append('^');
-  equation->setText(equationText);
+  printStringToEquation("^");
 }
 
 // -----------------------------------------------------------------------------
