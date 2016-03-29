@@ -9,6 +9,7 @@ set(SIMPLView_PARAMETER_WIDGETS
     AttributeMatrixSelectionWidget
     AxisAngleWidget
     BooleanWidget
+    CalculatorWidget
     ChoiceWidget
     ComparisonSelectionWidget
     DataArrayCreationWidget

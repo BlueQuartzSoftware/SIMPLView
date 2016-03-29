@@ -70,6 +70,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.h
@@ -110,6 +111,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.cpp

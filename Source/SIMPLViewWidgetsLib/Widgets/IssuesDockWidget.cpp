@@ -77,7 +77,6 @@ void IssuesDockWidget::setupGui()
   errorTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   errorTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
   errorTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-  errorTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   errorTableWidget->setVisible(true);
 }
 
