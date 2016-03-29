@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -209,6 +209,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     QTextStream in(&rfile);
     text = in.readAll();
     text.replace("@PluginName@", pluginName);
+    text.replace("@PluginNameLowerCase@", pluginName.toLower());
     text.replace("@ClassName@", className);
     text.replace("@FilterName@", filterName);
     text.replace("@MD_FILE_NAME@", m_FileName);

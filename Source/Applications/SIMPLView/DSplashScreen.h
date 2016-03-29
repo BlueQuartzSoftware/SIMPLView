@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef _DSplashScreen_H_
-#define _DSplashScreen_H_
+#ifndef _dsplashscreen_h_
+#define _dsplashscreen_h_
 
 #include <QtCore/QString>
 

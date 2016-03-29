@@ -1,5 +1,5 @@
-#ifndef _BrandedStrings_H_
-#define _BrandedStrings_H_
+#ifndef _brandedstrings_h_
+#define _brandedstrings_h_
 
 #include <QtCore/QString>
 

@@ -1,8 +1,8 @@
 /*
  * Your License should go here
  */
-#ifndef _@PluginName@Constants_H_
-#define _@PluginName@Constants_H_
+#ifndef _@PluginNameLowerCase@constants_h_
+#define _@PluginNameLowerCase@constants_h_
 
 #include <QtCore/QString>
 

@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -35,8 +35,8 @@
 
 
 
-#ifndef _SIMPLView_UI_H_
-#define _SIMPLView_UI_H_
+#ifndef _simplview_ui_h_
+#define _simplview_ui_h_
 
 
 //-- Qt Includes
@@ -206,6 +206,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     // Buttons and other widgets that send signals that we want to catch
     void on_startPipelineBtn_clicked();
+
+    /**
+    * @brief pipelineDidFinish
+    */
+    void preflightDidFinish(int err);
 
     /**
      * @brief pipelineDidFinish

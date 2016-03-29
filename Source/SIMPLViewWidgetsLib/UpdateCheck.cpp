@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -55,6 +55,7 @@
 #include "SIMPLib/Common/AppVersion.h"
 #include "SIMPLib/Common/Constants.h"
 
+#include "QtSupportLib/SIMPLViewSettings.h"
 
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
 #include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLibVersion.h"
@@ -68,9 +69,10 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-UpdateCheck::UpdateCheck(QObject* parent) :
+UpdateCheck::UpdateCheck(SIMPLVersionData_t versionData, QObject* parent) :
   QObject(parent),
-  m_Nam(NULL)
+  m_Nam(NULL),
+  m_VersionData(versionData)
 {
 
 }
@@ -129,20 +131,13 @@ void UpdateCheck::networkReplied(QNetworkReply* reply)
   // no error received?
   if (reply->error() == QNetworkReply::NoError)
   {
-    SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(NULL);
-    d->setCurrentVersion((SIMPLib::Version::Complete()));
-    d->setApplicationName(BrandedStrings::ApplicationName);
-    QString appName = d->getAppName();
+    QString appName = BrandedStrings::ApplicationName;
 
     // read data from QNetworkReply here
-
-    // Example 2: Reading bytes form the reply
     QString message;
     QTextStream outMsg(&message);
 
-
     QByteArray byteArray = reply->readAll();  // bytes
-//   QString serverVersionStr(bytes); // string
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(byteArray, &parseError);
@@ -157,9 +152,9 @@ void UpdateCheck::networkReplied(QNetworkReply* reply)
     QString serverMinor = d3dJson["Minor"].toString();
     QString serverPatch = d3dJson["Patch"].toString();
 
-    QString appMajor = SIMPLib::Version::Major();
-    QString appMinor = SIMPLib::Version::Minor();
-    QString appPatch = SIMPLib::Version::Patch();
+    QString appMajor = m_VersionData.major;
+    QString appMinor = m_VersionData.minor;
+    QString appPatch = m_VersionData.patch;
 
     bool ok = false;
     AppVersion appVersion;
@@ -231,7 +226,7 @@ void UpdateCheck::writeUpdateCheckDate()
 
   SIMPLViewSettings updatePrefs;
 
-  updatePrefs.beginGroup( SIMPLViewUpdateCheckDialog::getUpdatePreferencesGroup() );
-  updatePrefs.setValue (SIMPLViewUpdateCheckDialog::getUpdateCheckKey(), currentDateToday.currentDate());
+  updatePrefs.beginGroup( SIMPLViewUpdateCheckDialog::GetUpdatePreferencesGroup() );
+  updatePrefs.setValue (SIMPLViewUpdateCheckDialog::GetUpdateCheckKey(), currentDateToday.currentDate());
   updatePrefs.endGroup();
 }

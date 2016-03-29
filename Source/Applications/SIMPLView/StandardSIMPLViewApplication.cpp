@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -61,10 +61,8 @@ StandardSIMPLViewApplication::StandardSIMPLViewApplication(int& argc, char** arg
 // -----------------------------------------------------------------------------
 StandardSIMPLViewApplication::~StandardSIMPLViewApplication()
 {
-#if defined(Q_OS_WIN)
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
   toolbox->writeSettings();
-#endif
 }
 
 // -----------------------------------------------------------------------------

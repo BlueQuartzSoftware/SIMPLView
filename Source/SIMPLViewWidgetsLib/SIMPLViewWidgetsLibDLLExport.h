@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -37,8 +37,8 @@
 
 
 
-#ifndef _SIMPLViewWidgetsLib_COMMON_DLL_EXPORT_H_
-#define _SIMPLViewWidgetsLib_COMMON_DLL_EXPORT_H_
+#ifndef _simplviewwidgetslibdllexport_h_
+#define _simplviewwidgetslibdllexport_h_
 
 
 #if defined (_MSC_VER)
@@ -78,8 +78,8 @@ building the MXADatModel DLL on windows.
 #endif
 
 /* If SIMPLViewWidgetsLib_EXPORT was never defined, define it here */
-#ifndef SIMPLViewWidgetsLib_EXPORT
-#define SIMPLViewWidgetsLib_EXPORT
+#ifndef _simplviewwidgetslibdllexport_h_
+#define _simplviewwidgetslibdllexport_h_
 #endif
 
 

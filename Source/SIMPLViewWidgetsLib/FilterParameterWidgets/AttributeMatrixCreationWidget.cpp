@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -238,9 +238,7 @@ QString AttributeMatrixCreationWidget::checkStringValues(QString curDcName, QStr
 // -----------------------------------------------------------------------------
 void AttributeMatrixCreationWidget::on_dataContainerCombo_currentIndexChanged(int index)
 {
-  m_DidCausePreflight = true;
   on_applyChangesBtn_clicked();
-  m_DidCausePreflight = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -248,9 +246,7 @@ void AttributeMatrixCreationWidget::on_dataContainerCombo_currentIndexChanged(in
 // -----------------------------------------------------------------------------
 void AttributeMatrixCreationWidget::on_attributeMatrixName_returnPressed()
 {
-  m_DidCausePreflight = true;
   on_applyChangesBtn_clicked();
-  m_DidCausePreflight = false;
 }
 
 // -----------------------------------------------------------------------------
@@ -330,6 +326,8 @@ void AttributeMatrixCreationWidget::filterNeedsInputParameters(AbstractFilter* f
 // -----------------------------------------------------------------------------
 void AttributeMatrixCreationWidget::on_applyChangesBtn_clicked()
 {
+  m_DidCausePreflight = true;
+
   attributeMatrixName->setStyleSheet(QString(""));
   emit parametersChanged();
 
@@ -345,4 +343,6 @@ void AttributeMatrixCreationWidget::on_applyChangesBtn_clicked()
   connect(faderWidget, SIGNAL(animationComplete()),
     this, SLOT(hideButton()));
   faderWidget->start();
+
+  m_DidCausePreflight = false;
 }

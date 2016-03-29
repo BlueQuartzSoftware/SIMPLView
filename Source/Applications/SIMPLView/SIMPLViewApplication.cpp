@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -68,6 +68,7 @@
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/DSplashScreen.h"
+#include "Applications/SIMPLView/SIMPLViewVersion.h"
 
 
 #include "BrandedStrings.h"
@@ -75,6 +76,23 @@
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewApplication.cpp"
 
+namespace Detail {
+
+  // -----------------------------------------------------------------------------
+  //
+  // -----------------------------------------------------------------------------
+  void fillVersionData(UpdateCheck::SIMPLVersionData_t &data)
+  {
+        data.complete = SIMPLView::Version::Complete();
+        data.major = SIMPLView::Version::Major();
+        data.minor = SIMPLView::Version::Minor();
+        data.patch = SIMPLView::Version::Patch();
+        data.package = SIMPLView::Version::Package();
+        data.revision = SIMPLView::Version::Revision();
+        data.packageComplete = SIMPLView::Version::PackageComplete();
+        data.buildDate = SIMPLView::Version::BuildDate();
+  }
+}
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -374,18 +392,6 @@ bool SIMPLViewApplication::event(QEvent* event)
 
     return true;
   }
-  else if (event->type() == QEvent::Close)
-  {
-    /* We need to write the toolbox's settings here, because we need to write
-     * whether the toolbox is showing or not, and that can only be done before
-     * the toolbox enters its closeEvent function (the toolbox is already hidden
-     * when the closeEvent occurs) */
-    SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-    toolbox->writeSettings();
-
-    // We are already handling this event past this point, so don't pass it on
-    return false;
-  }
 
   return QApplication::event(event);
 }
@@ -646,23 +652,44 @@ void SIMPLViewApplication::on_actionAboutSIMPLView_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+UpdateCheck::SIMPLVersionData_t SIMPLViewApplication::FillVersionData()
+{
+  UpdateCheck::SIMPLVersionData_t data;
+  data.complete = SIMPLView::Version::Complete();
+  data.major = SIMPLView::Version::Major();
+  data.minor = SIMPLView::Version::Minor();
+  data.patch = SIMPLView::Version::Patch();
+  data.package = SIMPLView::Version::Package();
+  data.revision = SIMPLView::Version::Revision();
+  data.packageComplete = SIMPLView::Version::PackageComplete();
+  data.buildDate = SIMPLView::Version::BuildDate();
+  return data;
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 {
-  SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(NULL);
 
-  d->setCurrentVersion((SIMPLib::Version::Complete()));
-  d->setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
-  d->setApplicationName(BrandedStrings::ApplicationName);
+  UpdateCheck::SIMPLVersionData_t data;
+  Detail::fillVersionData(data);
+  SIMPLViewUpdateCheckDialog d(data, NULL);
+
+  //d.setCurrentVersion(SIMPLib::Version::Complete());
+  d.setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
+  d.setApplicationName(BrandedStrings::ApplicationName);
 
   // Read from the SIMPLViewSettings Pref file the information that we need
   SIMPLViewSettings prefs;
   prefs.beginGroup(SIMPLView::UpdateWebsite::VersionCheckGroupName);
   QDateTime dateTime = prefs.value(SIMPLView::UpdateWebsite::LastVersionCheck, QDateTime::currentDateTime()).toDateTime();
-  d->setLastCheckDateTime(dateTime);
+  d.setLastCheckDateTime(dateTime);
   prefs.endGroup();
 
   // Now display the dialog box
-  d->exec();
+  d.exec();
 }
 
 // -----------------------------------------------------------------------------
@@ -1053,6 +1080,10 @@ void SIMPLViewApplication::on_actionCloseWindow_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionExit_triggered()
 {
+  // Write Toolbox Settings
+  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
+  toolbox->writeSettings();
+
   bool shouldReallyClose = true;
   for (int i = 0; i<m_SIMPLViewInstances.size(); i++)
   {

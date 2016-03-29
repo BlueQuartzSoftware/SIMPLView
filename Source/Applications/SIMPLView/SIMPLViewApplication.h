@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,13 +33,15 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _SIMPLViewApplication_H_
-#define _SIMPLViewApplication_H_
+#ifndef _simplviewapplication_h_
+#define _simplviewapplication_h_
 
 #include <QtCore/QSet>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
+
+#include "SIMPLViewWidgetsLib/UpdateCheck.h"
 
 #define dream3dApp (static_cast<SIMPLViewApplication *>(qApp))
 
@@ -57,11 +59,18 @@ class SIMPLViewApplication : public QApplication
     SIMPLViewApplication(int& argc, char** argv);
     ~SIMPLViewApplication();
 
+     /**
+     * @brief fillVersionData
+     * @return
+     */
+    static UpdateCheck::SIMPLVersionData_t FillVersionData();
+
     bool initialize(int argc, char* argv[]);
 
     QList<SIMPLView_UI*> getSIMPLViewInstances();
 
     void registerSIMPLViewWindow(SIMPLView_UI* window);
+
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
     SIMPLView_UI* getNewSIMPLViewInstance();
@@ -78,6 +87,7 @@ class SIMPLViewApplication : public QApplication
      * @return
      */
     bool event(QEvent* event);
+
 
   public slots:
 

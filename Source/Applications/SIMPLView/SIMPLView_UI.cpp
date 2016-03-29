@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -67,7 +67,6 @@
 
 
 //-- SIMPLView Includes
-#include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/Common/Constants.h"
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/Common/DocRequestManager.h"
@@ -101,6 +100,7 @@
 
 // Initialize private static member variable
 QString SIMPLView_UI::m_OpenDialogLastDirectory = "";
+
 
 // -----------------------------------------------------------------------------
 //
@@ -514,13 +514,15 @@ void SIMPLView_UI::writeDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::checkForUpdatesAtStartup()
 {
-  SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(this);
-  if ( d->getAutomaticallyBtn()->isChecked() )
+
+  UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
+  SIMPLViewUpdateCheckDialog d(data, this);
+  if ( d.getAutomaticallyBtn()->isChecked() )
   {
     SIMPLViewSettings updatePrefs;
 
-    updatePrefs.beginGroup( SIMPLViewUpdateCheckDialog::getUpdatePreferencesGroup() );
-    QDate lastUpdateCheckDate = updatePrefs.value(SIMPLViewUpdateCheckDialog::getUpdateCheckKey(), QString("")).toDate();
+    updatePrefs.beginGroup( SIMPLViewUpdateCheckDialog::GetUpdatePreferencesGroup() );
+    QDate lastUpdateCheckDate = updatePrefs.value(SIMPLViewUpdateCheckDialog::GetUpdateCheckKey(), QString("")).toDate();
     updatePrefs.endGroup();
 
     QDate systemDate;
@@ -530,11 +532,11 @@ void SIMPLView_UI::checkForUpdatesAtStartup()
     QDate weeklyThreshold = lastUpdateCheckDate.addDays(7);
     QDate monthlyThreshold = lastUpdateCheckDate.addMonths(1);
 
-    if ( (d->getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckDaily && currentDateToday >= dailyThreshold)
-         || (d->getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckWeekly && currentDateToday >= weeklyThreshold)
-         || (d->getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckMonthly && currentDateToday >= monthlyThreshold) )
+    if ( (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckDaily && currentDateToday >= dailyThreshold)
+         || (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckWeekly && currentDateToday >= weeklyThreshold)
+         || (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckMonthly && currentDateToday >= monthlyThreshold) )
     {
-      m_UpdateCheck = QSharedPointer<UpdateCheck>(new UpdateCheck(this));
+      m_UpdateCheck = QSharedPointer<UpdateCheck>(new UpdateCheck(data, this));
 
       connect(m_UpdateCheck.data(), SIGNAL( latestVersion(UpdateCheckData*) ),
               this, SLOT( versionCheckReply(UpdateCheckData*) ) );
@@ -542,8 +544,6 @@ void SIMPLView_UI::checkForUpdatesAtStartup()
       m_UpdateCheck->checkVersion(SIMPLView::UpdateWebsite::UpdateWebSite);
     }
   }
-
-
 }
 
 // -----------------------------------------------------------------------------
@@ -609,6 +609,9 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
 
+  disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
+
   disconnect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
 }
@@ -639,6 +642,9 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
+
+  connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -981,20 +987,22 @@ void SIMPLView_UI::pipelineDidFinish()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 {
-  SIMPLViewUpdateCheckDialog* d = new SIMPLViewUpdateCheckDialog(this);
-  d->setCurrentVersion((SIMPLib::Version::Complete()));
-  d->setApplicationName(BrandedStrings::ApplicationName);
+  UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
+
+  SIMPLViewUpdateCheckDialog d(data, this);
+  //d->setCurrentVersion(data.complete);
+  d.setApplicationName(BrandedStrings::ApplicationName);
 
   if ( dataObj->hasUpdate() && !dataObj->hasError() )
   {
     QString message = dataObj->getMessageDescription();
-    QLabel* feedbackTextLabel = d->getFeedbackTextLabel();
-    d->toSimpleUpdateCheckDialog();
+    QLabel* feedbackTextLabel = d.getFeedbackTextLabel();
+    d.toSimpleUpdateCheckDialog();
     feedbackTextLabel->setText(message);
-    d->getCurrentVersionLabel()->setText( dataObj->getAppString() );
-    d->setCurrentVersion( dataObj->getAppString() );
-    d->getLatestVersionLabel()->setText( dataObj->getServerString() );
-    d->exec();
+    d.getCurrentVersionLabel()->setText( dataObj->getAppString() );
+    //d->setCurrentVersion( dataObj->getAppString() );
+    d.getLatestVersionLabel()->setText( dataObj->getServerString() );
+    d.exec();
   }
 }
 
@@ -1185,6 +1193,21 @@ void SIMPLView_UI::changeEvent(QEvent* event)
   if (event->type() == QEvent::ActivationChange)
   {
     emit dream3dWindowChangedState(this);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::preflightDidFinish(int err)
+{
+  if (err < 0)
+  {
+    startPipelineBtn->setDisabled(true);
+  }
+  else
+  {
+    startPipelineBtn->setEnabled(true);
   }
 }
 

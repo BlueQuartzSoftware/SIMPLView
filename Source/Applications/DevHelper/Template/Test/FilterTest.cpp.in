@@ -58,7 +58,7 @@ class @FilterName@Test
   // -----------------------------------------------------------------------------
   //
   // -----------------------------------------------------------------------------
-  int Test1()
+  int Test@FilterName@()
   {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    /* Please write @FilterName@ test code here.
@@ -94,7 +94,7 @@ class @FilterName@Test
 
     DREAM3D_REGISTER_TEST( TestFilterAvailability() );
 
-    DREAM3D_REGISTER_TEST( Test1() )
+    DREAM3D_REGISTER_TEST( Test@FilterName@() )
 
     DREAM3D_REGISTER_TEST( RemoveTestFiles() )
   }

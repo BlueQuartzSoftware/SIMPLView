@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -35,8 +35,8 @@
 
 
 
-#ifndef _UPDATECHECK_H_
-#define _UPDATECHECK_H_
+#ifndef _updatecheck_h_
+#define _updatecheck_h_
 
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
@@ -47,13 +47,29 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class UpdateCheckData;
 
+
+
 class SIMPLViewWidgetsLib_EXPORT UpdateCheck : public QObject
 {
     Q_OBJECT
 
   public:
-    UpdateCheck(QObject* parent = 0);
+
+    typedef struct {
+      QString complete;
+      QString major;
+      QString minor;
+      QString patch;
+      QString package;
+      QString revision;
+      QString packageComplete;
+      QString buildDate;
+    } SIMPLVersionData_t;
+
+
+    UpdateCheck(SIMPLVersionData_t versionData, QObject* parent = 0);
     virtual ~UpdateCheck();
+
 
     void checkVersion(QUrl website);
 
@@ -68,6 +84,7 @@ class SIMPLViewWidgetsLib_EXPORT UpdateCheck : public QObject
 
   private:
     QNetworkAccessManager*        m_Nam;
+    UpdateCheck::SIMPLVersionData_t m_VersionData;
 
     UpdateCheck(const UpdateCheck&);    // Copy Constructor Not Implemented
     void operator=(const UpdateCheck&);  // Operator '=' Not Implemented
