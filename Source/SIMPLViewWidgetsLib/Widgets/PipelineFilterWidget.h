@@ -117,7 +117,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
   public slots:
 
 
-    virtual void setIsSelected(bool b);
+    virtual void setIsSelected(bool b, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
 
     /**
@@ -187,8 +187,9 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     /**
      * @brief widgetSelected
      * @param w
+     * @param modifiers
      */
-    void widgetSelected(PipelineFilterWidget* w);
+    void widgetSelected(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers);
 
     /**
      * @brief filterWidgetRemoved

@@ -87,7 +87,8 @@
 // -----------------------------------------------------------------------------
 PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   QFrame(parent),
-  m_SelectedFilterWidget(NULL),
+  m_ActiveFilterWidget(NULL),
+  m_OldActiveFilterWidget(NULL),
   m_FilterWidgetLayout(NULL),
   m_CurrentFilterBeingDragged(NULL),
   m_PreviousFilterBeingDragged(NULL),
@@ -290,7 +291,7 @@ void PipelineViewWidget::clearWidgets()
       m_FilterWidgetLayout->removeItem(spacer);
     }
   }
-  m_SelectedFilterWidget = NULL;
+  m_SelectedFilterWidgets.clear();
   resetLayout();
 
 }
@@ -569,8 +570,8 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
           this, SLOT(removeFilterWidget(PipelineFilterWidget*)) );
 
   // When the FilterWidget is selected
-  connect(pipelineFilterWidget, SIGNAL(widgetSelected(PipelineFilterWidget*)),
-          this, SLOT(setSelectedFilterWidget(PipelineFilterWidget*)) );
+  connect(pipelineFilterWidget, SIGNAL(widgetSelected(PipelineFilterWidget*, Qt::KeyboardModifiers)),
+          this, SLOT(setSelectedFilterWidget(PipelineFilterWidget*, Qt::KeyboardModifiers)));
 
   // When the filter widget is dragged
   connect(pipelineFilterWidget, SIGNAL(dragStarted(PipelineFilterWidget*)),
@@ -674,16 +675,16 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
   {
     QWidget* w = qobject_cast<QWidget*>(whoSent);
 
-    if (m_SelectedFilterWidget == w)
+    if (m_SelectedFilterWidgets.contains(dynamic_cast<PipelineFilterWidget*>(w)))
     {
       int index = m_FilterWidgetLayout->indexOf(w);
-      if (NULL != m_FilterWidgetLayout->itemAt(index - 1))
+      if (NULL != m_FilterWidgetLayout->itemAt(index - 1) && m_SelectedFilterWidgets.count() > 1)
       {
         PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index - 1)->widget());
         setSelectedFilterWidget(widget);
         widget->setIsSelected(true);
       }
-      else if (NULL != m_FilterWidgetLayout->itemAt(index + 1))
+      else if (NULL != m_FilterWidgetLayout->itemAt(index + 1) && m_SelectedFilterWidgets.count() > 1)
       {
         PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index + 1)->widget());
         if (NULL != widget)
@@ -693,12 +694,12 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
         }
         else
         {
-          m_SelectedFilterWidget = NULL;
+          m_SelectedFilterWidgets.clear();
         }
       }
       else
       {
-        m_SelectedFilterWidget = NULL;
+        m_SelectedFilterWidgets.clear();
       }
     }
 
@@ -736,16 +737,85 @@ void PipelineViewWidget::setFilterBeingDragged(PipelineFilterWidget* w)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w)
+void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers)
 {
-  if(NULL != m_SelectedFilterWidget && w != m_SelectedFilterWidget)
+  if (modifiers == Qt::ShiftModifier)
   {
-    m_SelectedFilterWidget->setIsSelected(false);
+    clearSelectedFilterWidgets();
+
+    int begin;
+    int end;
+    if (m_FilterWidgetLayout->indexOf(w) < m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget))
+    {
+      begin = m_FilterWidgetLayout->indexOf(w);
+      end = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
+    }
+    else
+    {
+      begin = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
+      end = m_FilterWidgetLayout->indexOf(w);
+    }
+
+    for (int i = begin; i <= end; i++)
+    {
+      filterWidgetAt(i)->setIsSelected(true, Qt::ControlModifier);
+    }
+
+    m_OldActiveFilterWidget = m_ActiveFilterWidget;
+    m_ActiveFilterWidget = w;
+  }
+  else if (modifiers == Qt::ControlModifier)
+  {
+    if (m_SelectedFilterWidgets.contains(w))
+    {
+      w->setIsSelected(false);
+      m_SelectedFilterWidgets.removeAll(w);
+      m_ActiveFilterWidget = m_OldActiveFilterWidget;
+    }
+    else
+    {
+      m_SelectedFilterWidgets.push_back(w);
+      m_OldActiveFilterWidget = m_ActiveFilterWidget;
+      m_ActiveFilterWidget = w;
+    }
+  }
+  else
+  {
+    for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+    {
+      if (m_SelectedFilterWidgets[i] != w)
+      {
+        m_SelectedFilterWidgets[i]->setIsSelected(false);
+        m_SelectedFilterWidgets.remove(i);
+        i--;
+      }
+    }
+
+    m_SelectedFilterWidgets.push_back(w);
+    m_OldActiveFilterWidget = m_ActiveFilterWidget;
+    m_ActiveFilterWidget = w;
   }
 
-  m_SelectedFilterWidget = w;
+  if (m_SelectedFilterWidgets.size() == 1)
+  {
+    emit filterInputWidgetChanged(m_SelectedFilterWidgets[0]->getFilterInputWidget());
+  }
+  else
+  {
+    emit noFilterWidgetsInPipeline();
+  }
+}
 
-  emit filterInputWidgetChanged(w->getFilterInputWidget());
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::clearSelectedFilterWidgets()
+{
+  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  {
+    m_SelectedFilterWidgets[i]->setIsSelected(false);
+  }
+  m_SelectedFilterWidgets.clear();
 }
 
 // -----------------------------------------------------------------------------

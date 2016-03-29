@@ -683,11 +683,11 @@ void PipelineFilterWidget::setHasPreflightWarnings(bool hasWarnings)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineFilterWidget::setIsSelected(bool b)
+void PipelineFilterWidget::setIsSelected(bool b, Qt::KeyboardModifiers modifiers)
 {
   m_IsSelected = b;
   changeStyle();
-  if(true == b) { emit widgetSelected(this); }
+  if(true == b) { emit widgetSelected(this, modifiers); }
 }
 
 // -----------------------------------------------------------------------------
@@ -823,7 +823,7 @@ void PipelineFilterWidget::mouseReleaseEvent(QMouseEvent* event)
   }
   else
   {
-    setIsSelected(true);
+    setIsSelected(true, qApp->keyboardModifiers());
     event->accept();
   }
 }

@@ -216,8 +216,9 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     /**
      * @brief setSelectedFilterWidget
      * @param w
+     * @param modifiers
      */
-    void setSelectedFilterWidget(PipelineFilterWidget* w);
+    void setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /**
      * @brief setFilterBeingDragged
@@ -317,25 +318,29 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void handleFilterParameterChanged();
 
   private:
-    PipelineFilterWidget*     m_SelectedFilterWidget;
-    QVBoxLayout*              m_FilterWidgetLayout;
-    PipelineFilterWidget*     m_CurrentFilterBeingDragged;
-    PipelineFilterWidget*     m_PreviousFilterBeingDragged;
-    int                       m_FilterOrigPos;
-    DropBoxWidget*            m_DropBox;
-    int                       m_DropIndex;
-    QLabel*                   m_EmptyPipelineLabel;
-    QPoint                    m_LastDragPoint;
-    QScrollArea*              m_ScrollArea;
-    QTimer                    m_autoScrollTimer;
-    bool                      m_AutoScroll;
-    int                       m_AutoScrollMargin;
-    int                       m_autoScrollCount;
-    QWidget*                  m_InputParametersWidget;
-    QObject*                  m_PipelineMessageObserver;
-    QMenu                     m_Menu;
-    QStatusBar*               m_StatusBar;
-    QList<QAction*>           m_MenuActions;
+    QVector<PipelineFilterWidget*>      m_SelectedFilterWidgets;
+    PipelineFilterWidget*               m_ActiveFilterWidget;
+    PipelineFilterWidget*               m_OldActiveFilterWidget;
+    QVBoxLayout*                        m_FilterWidgetLayout;
+    PipelineFilterWidget*               m_CurrentFilterBeingDragged;
+    PipelineFilterWidget*               m_PreviousFilterBeingDragged;
+    int                                 m_FilterOrigPos;
+    DropBoxWidget*                      m_DropBox;
+    int                                 m_DropIndex;
+    QLabel*                             m_EmptyPipelineLabel;
+    QPoint                              m_LastDragPoint;
+    QScrollArea*                        m_ScrollArea;
+    QTimer                              m_autoScrollTimer;
+    bool                                m_AutoScroll;
+    int                                 m_AutoScrollMargin;
+    int                                 m_autoScrollCount;
+    QWidget*                            m_InputParametersWidget;
+    QObject*                            m_PipelineMessageObserver;
+    QMenu                               m_Menu;
+    QStatusBar*                         m_StatusBar;
+    QList<QAction*>                     m_MenuActions;
+
+    void clearSelectedFilterWidgets();
 
     PipelineViewWidget(const PipelineViewWidget&); // Copy Constructor Not Implemented
     void operator=(const PipelineViewWidget&); // Operator '=' Not Implemented
