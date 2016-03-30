@@ -72,6 +72,7 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/DataContainerArrayWidget.h"
 
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
 
 #define PADDING 5
 #define BORDER 2
@@ -101,7 +102,6 @@ PipelineFilterWidget::PipelineFilterWidget(QWidget* parent) :
   m_VariablesWidget(NULL),
   m_CurrentStructureWidget(NULL),
   m_Observer(NULL),
-  m_ContextMenu(NULL),
   m_FilterInputWidget(NULL)
 {
   initialize(AbstractFilter::NullPointer());
@@ -117,7 +117,6 @@ PipelineFilterWidget::PipelineFilterWidget(AbstractFilter::Pointer filter, IObse
   m_HasPreflightWarnings(false),
   m_VariablesWidget(NULL),
   m_Observer(observer),
-  m_ContextMenu(new QMenu(this)),
   m_FilterInputWidget(NULL)
 {
   initialize(filter);
@@ -133,7 +132,7 @@ void PipelineFilterWidget::initialize(AbstractFilter::Pointer filter)
 
   setContextMenuPolicy(Qt::CustomContextMenu);
 
-  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenuForWidget(const QPoint&)));
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_pipelineFilterWidget_contextMenuRequested(const QPoint&)));
 
   setupUi(this);
 
@@ -901,33 +900,6 @@ void PipelineFilterWidget::on_deleteBtn_clicked()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineFilterWidget::showContextMenuForWidget(const QPoint& pos)
-{
-  if (NULL != getFilter())
-  {
-    // Clear the existing context menu
-    m_ContextMenu->clear();
-
-    QAction* actionLaunchHelp = new QAction(m_ContextMenu);
-    actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
-    actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
-    connect(actionLaunchHelp, SIGNAL(triggered()),
-            this, SLOT(launchHelpForItem()));
-
-    //QAction* actionLaunchHelp = new QAction(m_ContextMenu);
-    //actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
-    //actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
-    //connect(actionLaunchHelp, SIGNAL(triggered()),
-    //  this, SLOT(launchHelpForItem()));
-
-    m_ContextMenu->addAction(actionLaunchHelp);
-    m_ContextMenu->exec(QCursor::pos());
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void PipelineFilterWidget::launchHelpForItem()
 {
   QString className = getFilterClassName();
@@ -961,4 +933,16 @@ void PipelineFilterWidget::toIdleState()
 {
   m_FilterInputWidget->getVariablesTabContentsWidget()->setEnabled(true);
   deleteBtn->setEnabled(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+PipelineFilterWidget* PipelineFilterWidget::deepCopy()
+{
+  PipelineFilterWidget* newWidget = new PipelineFilterWidget(getFilter(), NULL, dynamic_cast<QWidget*>(parent()));
+  newWidget->m_HasPreflightErrors = m_HasPreflightErrors;
+  newWidget->m_HasPreflightWarnings = m_HasPreflightWarnings;
+
+  return newWidget;
 }

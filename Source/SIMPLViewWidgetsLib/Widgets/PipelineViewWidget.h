@@ -59,6 +59,8 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/DropBoxWidget.h"
 
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
+
 #include "QtSupportLib/FileDragMessageBox.h"
 
 class QScrollArea;
@@ -205,7 +207,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @param filter
      * @param index
      */
-    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1);
+    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1, bool replaceSelection = true);
 
     /**
      * @brief removeFilterWidget
@@ -307,6 +309,10 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
+    void filterWidgetsCut(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+    void filterWidgetsCopied(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+    void filterWidgetsPasted(PipelineViewWidget* destination);
+
   protected:
     void setupGui();
     void dragEnterEvent(QDragEnterEvent* event);
@@ -316,6 +322,10 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
   protected slots:
     void handleFilterParameterChanged();
+
+    void cutFilterWidgets();
+    void copyFilterWidgets();
+    void pasteFilterWidgets();
 
   private:
     QVector<PipelineFilterWidget*>      m_SelectedFilterWidgets;

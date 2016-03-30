@@ -50,6 +50,8 @@ class SIMPLView_UI;
 class QPluginLoader;
 class ISIMPLibPlugin;
 class SIMPLViewToolbox;
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
 class SIMPLViewApplication : public QApplication
 {
@@ -58,6 +60,13 @@ class SIMPLViewApplication : public QApplication
   public:
     SIMPLViewApplication(int& argc, char** argv);
     ~SIMPLViewApplication();
+
+    enum PasteType
+    {
+      None,
+      Cut,
+      Copy
+    };
 
      /**
      * @brief fillVersionData
@@ -87,6 +96,8 @@ class SIMPLViewApplication : public QApplication
      * @return
      */
     bool event(QEvent* event);
+
+    bool canPasteFilterWidgets();
 
 
   public slots:
@@ -142,12 +153,17 @@ class SIMPLViewApplication : public QApplication
     void on_actionAboutSIMPLView_triggered();
 
     void on_pipelineViewContextMenuRequested(const QPoint&);
+    void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
 
     void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void toPipelineRunningState();
     void toPipelineIdleState();
+
+    void copyFilterWidgetsToClipboard(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+
+    void pasteFilterWidgets(PipelineViewWidget* destination);
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
@@ -167,6 +183,10 @@ class SIMPLViewApplication : public QApplication
     void addFilter(const QString &text);
 
   private:
+    QPair<QVector<PipelineFilterWidget*>, PipelineViewWidget*>                m_Clipboard;
+    PasteType                                                                 m_CurrentPasteType;
+
+    QMenu*                                                                    m_ContextMenu;
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

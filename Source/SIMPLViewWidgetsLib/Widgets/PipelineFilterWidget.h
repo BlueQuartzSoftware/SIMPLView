@@ -114,6 +114,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
 
     SIMPL_INSTANCE_PROPERTY(QString, BorderColorStyle)
 
+    PipelineFilterWidget* deepCopy();
+
   public slots:
 
 
@@ -154,12 +156,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
      * @param state
      */
     void adjustLayout(QWidget* w, int state);
-
-    /**
-    * @brief showContextMenuForWidget
-    * @param pos
-    */
-    void showContextMenuForWidget(const QPoint& pos);
 
     /**
     * @brief launchHelpForItem
@@ -207,6 +203,21 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
      * @brief parametersChanged
      */
     void parametersChanged();
+
+    /**
+    * @brief filterWidgetCut
+    */
+    void filterWidgetCut();
+
+    /**
+    * @brief filterWidgetCopied
+    */
+    void filterWidgetCopied();
+
+    /**
+    * @brief filterWidgetPasted
+    */
+    void filterWidgetPasted();
 
   protected:
     /**
@@ -259,9 +270,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     QWidget*                  m_CurrentStructureWidget;
     IObserver*                m_Observer;
     QMap<QString, QWidget*>   m_PropertyToWidget;
-    QMenu*                    m_ContextMenu;
     FilterInputWidget*        m_FilterInputWidget;
-
 
     /**
      * @brief initialize Calls all the necessary initialization code for the widget
