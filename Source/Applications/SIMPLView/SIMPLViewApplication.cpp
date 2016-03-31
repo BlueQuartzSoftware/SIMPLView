@@ -1232,16 +1232,10 @@ void SIMPLViewApplication::pasteFilterWidgets(PipelineViewWidget* destination)
 
     widgets = copiedWidgets;
 
+    destination->clearSelectedFilterWidgets();
     for (int i = 0; i < widgets.size(); i++)
     {
-      if (i == 0)
-      {
-        destination->addFilterWidget(widgets[i], -1, true);
-      }
-      else
-      {
-        destination->addFilterWidget(widgets[i], -1, false);
-      }
+      destination->addFilterWidget(widgets[i], -1);
     }
   }
 

@@ -531,7 +531,7 @@ void PipelineViewWidget::addFilter(const QString& filterClassName, int index)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index, bool replaceSelection)
+void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index)
 {
   bool addSpacer = false;
   if (filterCount() <= 0)
@@ -611,14 +611,7 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
   // Make sure the widget titles are all correct
   reindexWidgetTitles();
   
-  if (replaceSelection == true)
-  {
-    pipelineFilterWidget->setIsSelected(true, Qt::NoModifier);
-  }
-  else
-  {
-    pipelineFilterWidget->setIsSelected(true, Qt::ControlModifier);
-  }
+  pipelineFilterWidget->setIsSelected(true, pipelineFilterWidget->getSelectionModifiers());
 
   // Finally, set this new filter widget as selected in order to show the input parameters right away
   //pipelineFilterWidget->setIsSelected(true);

@@ -169,6 +169,11 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void resetLayout();
 
     /**
+    * @brief clearSelectedFilterWidgets
+    */
+    void clearSelectedFilterWidgets();
+
+    /**
      * @brief setPipelineMessageObserver
      * @param pipelineMessageObserver
      */
@@ -207,7 +212,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @param filter
      * @param index
      */
-    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1, bool replaceSelection = true);
+    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1);
 
     /**
      * @brief removeFilterWidget
@@ -349,8 +354,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     QMenu                               m_Menu;
     QStatusBar*                         m_StatusBar;
     QList<QAction*>                     m_MenuActions;
-
-    void clearSelectedFilterWidgets();
 
     PipelineViewWidget(const PipelineViewWidget&); // Copy Constructor Not Implemented
     void operator=(const PipelineViewWidget&); // Operator '=' Not Implemented
