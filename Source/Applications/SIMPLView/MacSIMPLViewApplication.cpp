@@ -300,6 +300,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   QMenu* menuFile = new QMenu("File", m_GlobalMenu);
+  QMenu* menuEdit = new QMenu("Edit", m_GlobalMenu);
   QMenu* menuView = new QMenu("View", m_GlobalMenu);
   QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu);
   QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu);
@@ -327,6 +328,8 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionShowBookmarks = menuItems->getActionShowBookmarks();
   QAction* actionAddBookmark = menuItems->getActionAddBookmark();
   QAction* actionNewFolder = menuItems->getActionNewFolder();
+  QAction* actionUndo = menuItems->getActionUndo();
+  QAction* actionRedo = menuItems->getActionRedo();
 
   m_GlobalMenu = new QMenuBar(NULL);
 
@@ -343,6 +346,11 @@ void MacSIMPLViewApplication::createGlobalMenu()
   menuRecentFiles->addAction(actionClearRecentFiles);
   menuFile->addSeparator();
   menuFile->addAction(actionExit);
+
+  // Create Edit Menu
+  m_GlobalMenu->addMenu(menuEdit);
+  menuEdit->addAction(actionUndo);
+  menuEdit->addAction(actionRedo);
 
   // Create View Menu
   m_GlobalMenu->addMenu(menuView);
