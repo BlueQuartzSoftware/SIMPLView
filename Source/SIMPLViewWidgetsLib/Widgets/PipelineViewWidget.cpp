@@ -794,7 +794,7 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
     bool allShiftSelections = true;
     for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
     {
-      if (m_SelectedFilterWidgets[i]->getSelectionModifiers() == Qt::ControlModifier)
+      if (m_SelectedFilterWidgets[i]->getSelectionModifiers() != Qt::ShiftModifier)
       {
         allShiftSelections = false;
       }
