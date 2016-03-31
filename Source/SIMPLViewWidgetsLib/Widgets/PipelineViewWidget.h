@@ -290,6 +290,10 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
   public slots:
     void showFilterHelp(const QString& className);
 
+    void cutFilterWidgets();
+    void copyFilterWidgets();
+    void pasteFilterWidgets();
+
   signals:
     void addPlaceHolderFilter(QPoint p);
     void removePlaceHolderFilter();
@@ -322,10 +326,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
   protected slots:
     void handleFilterParameterChanged();
-
-    void cutFilterWidgets();
-    void copyFilterWidgets();
-    void pasteFilterWidgets();
 
   private:
     QList<PipelineFilterWidget*>        m_SelectedFilterWidgets;

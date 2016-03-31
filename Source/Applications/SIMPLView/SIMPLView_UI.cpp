@@ -380,6 +380,28 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::keyPressEvent(QKeyEvent* event)
+{
+  if (event->modifiers() == Qt::ControlModifier)
+  {
+    if (event->key() == Qt::Key_X)
+    {
+      getPipelineViewWidget()->cutFilterWidgets();
+    }
+    else if (event->key() == Qt::Key_C)
+    {
+      getPipelineViewWidget()->copyFilterWidgets();
+    }
+    else if (event->key() == Qt::Key_V && dream3dApp->canPasteFilterWidgets() == true)
+    {
+      getPipelineViewWidget()->pasteFilterWidgets();
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
 //  Read our settings from a file
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::readSettings()

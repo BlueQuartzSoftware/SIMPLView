@@ -313,6 +313,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void changeEvent(QEvent* event);
 
+    void keyPressEvent(QKeyEvent* event);
+
     /**
      *
      * @param prefs
