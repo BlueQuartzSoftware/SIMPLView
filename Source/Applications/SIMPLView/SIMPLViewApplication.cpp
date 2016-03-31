@@ -1227,6 +1227,7 @@ void SIMPLViewApplication::pasteFilterWidgets(PipelineViewWidget* destination)
       }
 
       m_CurrentPasteType = None;
+      origin->preflightPipeline();
     }
 
     widgets = copiedWidgets;
@@ -1243,6 +1244,8 @@ void SIMPLViewApplication::pasteFilterWidgets(PipelineViewWidget* destination)
       }
     }
   }
+
+  destination->preflightPipeline();
 }
 
 // -----------------------------------------------------------------------------
