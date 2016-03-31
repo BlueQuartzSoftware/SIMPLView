@@ -120,6 +120,8 @@ void SIMPLViewMenuItems::createActions()
   m_ActionShowToolbox->setCheckable(true);
   m_ActionAddBookmark = new QAction("Add Bookmark", this);
   m_ActionNewFolder = new QAction("New Folder", this);
+  m_ActionUndo = dream3dApp->getUndoStack()->createUndoAction(this);
+  m_ActionRedo = dream3dApp->getUndoStack()->createRedoAction(this);
 
 
 #if defined(Q_OS_WIN)

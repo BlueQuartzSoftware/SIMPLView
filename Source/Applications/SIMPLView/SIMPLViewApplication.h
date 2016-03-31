@@ -40,6 +40,7 @@
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QUndoStack>
 
 #include "SIMPLViewWidgetsLib/UpdateCheck.h"
 
@@ -99,6 +100,9 @@ class SIMPLViewApplication : public QApplication
 
     bool canPasteFilterWidgets();
 
+    void setCurrentPasteType(PasteType pasteType);
+
+    QUndoStack* getUndoStack();
 
   public slots:
 
@@ -187,6 +191,8 @@ class SIMPLViewApplication : public QApplication
     PasteType                                                                 m_CurrentPasteType;
 
     QMenu*                                                                    m_ContextMenu;
+
+    QUndoStack*                                                               m_UndoStack;
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

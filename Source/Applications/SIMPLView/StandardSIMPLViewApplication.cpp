@@ -172,6 +172,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
 
   QMenuBar* menuBar = new QMenuBar();
   QMenu* menuFile = new QMenu("File", menuBar);
+  QMenu* menuEdit = new QMenu("Edit", menuBar);
   QMenu* menuView = new QMenu("View", menuBar);
   QMenu* menuPipeline = new QMenu("Pipeline", menuBar);
   QMenu* menuHelp = new QMenu("Help", menuBar);
@@ -192,6 +193,8 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
+  QAction* actionUndo = menuItems->getActionUndo();
+  QAction* actionRedo = menuItems->getActionRedo();
 
 
   // Create File Menu
@@ -207,6 +210,11 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   menuFile->addAction(actionExit);
   menuRecentFiles->addSeparator();
   menuRecentFiles->addAction(actionClearRecentFiles);
+
+  // Create Edit Menu
+  menuBar->addMenu(menuEdit);
+  menuEdit->addAction(actionUndo);
+  menuEdit->addAction(actionRedo);
 
   // Create View Menu
   menuBar->addMenu(menuView);

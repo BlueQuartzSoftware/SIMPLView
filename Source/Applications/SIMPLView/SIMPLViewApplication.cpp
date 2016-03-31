@@ -70,6 +70,8 @@
 #include "Applications/SIMPLView/DSplashScreen.h"
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
 
+#include "util/CutAndPasteCommand.h"
+#include "util/CopyAndPasteCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -103,7 +105,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   show_splash(true),
   Splash(NULL),
   m_CurrentPasteType(None),
-  m_ContextMenu(new QMenu(NULL))
+  m_ContextMenu(new QMenu(NULL)),
+  m_UndoStack(new QUndoStack(NULL))
 {
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
@@ -1209,37 +1212,19 @@ void SIMPLViewApplication::copyFilterWidgetsToClipboard(QList<PipelineFilterWidg
 void SIMPLViewApplication::pasteFilterWidgets(PipelineViewWidget* destination)
 {
   QList<PipelineFilterWidget*> widgets = m_Clipboard.first;
-  PipelineViewWidget* origin = m_Clipboard.second;
 
-  if (m_CurrentPasteType == Cut || m_CurrentPasteType == Copy)
+  if (m_CurrentPasteType == Cut)
   {
-    QList<PipelineFilterWidget*> copiedWidgets;
-    for (int i = 0; i < widgets.size(); i++)
-    {
-      copiedWidgets.push_back(widgets[i]->deepCopy());
-    }
+    PipelineViewWidget* origin = m_Clipboard.second;
 
-    if (m_CurrentPasteType == Cut)
-    {
-      for (int i = 0; i < widgets.size(); i++)
-      {
-        origin->removeFilterWidget(widgets[i]);
-      }
-
-      m_CurrentPasteType = None;
-      origin->preflightPipeline();
-    }
-
-    widgets = copiedWidgets;
-
-    destination->clearSelectedFilterWidgets();
-    for (int i = 0; i < widgets.size(); i++)
-    {
-      destination->addFilterWidget(widgets[i], -1);
-    }
+    CutAndPasteCommand* cmd = new CutAndPasteCommand(widgets, origin, destination);
+    m_UndoStack->push(cmd);
   }
-
-  destination->preflightPipeline();
+  else if (m_CurrentPasteType == Copy)
+  {
+    CopyAndPasteCommand* cmd = new CopyAndPasteCommand(widgets, destination);
+    m_UndoStack->push(cmd);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1399,6 +1384,22 @@ QMenuBar* SIMPLViewApplication::getSIMPLViewMenuBar()
 {
   // This should never be executed
   return NULL;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::setCurrentPasteType(PasteType pasteType)
+{
+  m_CurrentPasteType = pasteType;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QUndoStack* SIMPLViewApplication::getUndoStack()
+{
+  return m_UndoStack;
 }
 
 

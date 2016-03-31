@@ -67,6 +67,10 @@ class SIMPLViewMenuItems : public QObject
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearRecentFiles)
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionExit)
 
+      // Edit Menu
+      SIMPL_INSTANCE_PROPERTY(QAction*, ActionUndo)
+      SIMPL_INSTANCE_PROPERTY(QAction*, ActionRedo)
+
       // View Menu
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterLibrary)
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterList)
