@@ -105,6 +105,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     QWidget* getBasicInputsWidget();
     QWidget* getCurrentStructureWidget();
 
+    SIMPL_INSTANCE_PROPERTY(Qt::KeyboardModifiers, SelectionModifiers)
+
 
     /**
      * @brief Sets the actions that will be displayed as a context menu
@@ -256,21 +258,21 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     void linkConditionalWidgets(QVector<FilterParameter::Pointer>& filterParameters);
 
   private:
-    QRect                     m_DeleteRect;
-    QPoint                    dragStartPosition;
-    bool                      m_IsSelected;
-    bool                      m_HasPreflightErrors;
-    bool                      m_HasPreflightWarnings;
-    static QString            m_OpenDialogLastDirectory;
-    AbstractFilter::Pointer   m_Filter;
-    QVector<QWidget*>         m_FilterParameterWidgets;
-    QVBoxLayout*              m_VariablesVerticalLayout;
-    QVBoxLayout*              m_CurrStrucVerticalLayout;
-    QWidget*                  m_VariablesWidget;
-    QWidget*                  m_CurrentStructureWidget;
-    IObserver*                m_Observer;
-    QMap<QString, QWidget*>   m_PropertyToWidget;
-    FilterInputWidget*        m_FilterInputWidget;
+    QRect                             m_DeleteRect;
+    QPoint                            dragStartPosition;
+    bool                              m_IsSelected;
+    bool                              m_HasPreflightErrors;
+    bool                              m_HasPreflightWarnings;
+    static QString                    m_OpenDialogLastDirectory;
+    AbstractFilter::Pointer           m_Filter;
+    QVector<QWidget*>                 m_FilterParameterWidgets;
+    QVBoxLayout*                      m_VariablesVerticalLayout;
+    QVBoxLayout*                      m_CurrStrucVerticalLayout;
+    QWidget*                          m_VariablesWidget;
+    QWidget*                          m_CurrentStructureWidget;
+    IObserver*                        m_Observer;
+    QMap<QString, QWidget*>           m_PropertyToWidget;
+    FilterInputWidget*                m_FilterInputWidget;
 
     /**
      * @brief initialize Calls all the necessary initialization code for the widget

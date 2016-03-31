@@ -685,6 +685,7 @@ void PipelineFilterWidget::setHasPreflightWarnings(bool hasWarnings)
 void PipelineFilterWidget::setIsSelected(bool b, Qt::KeyboardModifiers modifiers)
 {
   m_IsSelected = b;
+  m_SelectionModifiers = modifiers;
   changeStyle();
   if(true == b) { emit widgetSelected(this, modifiers); }
 }

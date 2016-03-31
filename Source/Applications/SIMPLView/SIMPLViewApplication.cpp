@@ -1196,7 +1196,7 @@ void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex &current, 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::copyFilterWidgetsToClipboard(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType)
+void SIMPLViewApplication::copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType)
 {
   m_Clipboard.first = filterWidgets;
   m_Clipboard.second = origin;
@@ -1208,12 +1208,12 @@ void SIMPLViewApplication::copyFilterWidgetsToClipboard(QVector<PipelineFilterWi
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::pasteFilterWidgets(PipelineViewWidget* destination)
 {
-  QVector<PipelineFilterWidget*> widgets = m_Clipboard.first;
+  QList<PipelineFilterWidget*> widgets = m_Clipboard.first;
   PipelineViewWidget* origin = m_Clipboard.second;
 
   if (m_CurrentPasteType == Cut || m_CurrentPasteType == Copy)
   {
-    QVector<PipelineFilterWidget*> copiedWidgets;
+    QList<PipelineFilterWidget*> copiedWidgets;
     for (int i = 0; i < widgets.size(); i++)
     {
       copiedWidgets.push_back(widgets[i]->deepCopy());

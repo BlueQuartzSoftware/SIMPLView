@@ -145,11 +145,11 @@ void PipelineViewWidget::setupGui()
 
   m_DropBox = new DropBoxWidget();
 
-  connect(this, SIGNAL(filterWidgetsCut(QVector<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
-    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QVector<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
+  connect(this, SIGNAL(filterWidgetsCut(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
+    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
 
-  connect(this, SIGNAL(filterWidgetsCopied(QVector<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
-    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QVector<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
+  connect(this, SIGNAL(filterWidgetsCopied(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
+    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
 
   connect(this, SIGNAL(filterWidgetsPasted(PipelineViewWidget*)),
     dream3dApp, SLOT(pasteFilterWidgets(PipelineViewWidget*)));
@@ -791,24 +791,41 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
 {
   if (modifiers == Qt::ShiftModifier)
   {
-    clearSelectedFilterWidgets();
+    bool allShiftSelections = true;
+    for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+    {
+      if (m_SelectedFilterWidgets[i]->getSelectionModifiers() == Qt::ControlModifier)
+      {
+        allShiftSelections = false;
+      }
+    }
+
+    if (allShiftSelections == false)
+    {
+      clearSelectedFilterWidgets();
+    }
 
     int begin;
     int end;
     if (m_FilterWidgetLayout->indexOf(w) < m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget))
     {
+      // The filter widget that was just selected is before the "active" widget
       begin = m_FilterWidgetLayout->indexOf(w);
       end = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
     }
     else
     {
+      // The filter widget that was just selected is after the "active" widget
       begin = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
       end = m_FilterWidgetLayout->indexOf(w);
     }
 
     for (int i = begin; i <= end; i++)
     {
-      filterWidgetAt(i)->setIsSelected(true, Qt::ControlModifier);
+      filterWidgetAt(i)->blockSignals(true);
+      filterWidgetAt(i)->setIsSelected(true, modifiers);
+      m_SelectedFilterWidgets.push_back(filterWidgetAt(i));
+      filterWidgetAt(i)->blockSignals(false);
     }
 
     m_OldActiveFilterWidget = m_ActiveFilterWidget;
@@ -831,17 +848,13 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
   }
   else
   {
-    for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
-    {
-      if (m_SelectedFilterWidgets[i] != w)
-      {
-        m_SelectedFilterWidgets[i]->setIsSelected(false);
-        m_SelectedFilterWidgets.remove(i);
-        i--;
-      }
-    }
+    clearSelectedFilterWidgets();
 
+    w->blockSignals(true);
+    w->setIsSelected(true, modifiers);
     m_SelectedFilterWidgets.push_back(w);
+    w->blockSignals(false);
+
     m_OldActiveFilterWidget = m_ActiveFilterWidget;
     m_ActiveFilterWidget = w;
   }

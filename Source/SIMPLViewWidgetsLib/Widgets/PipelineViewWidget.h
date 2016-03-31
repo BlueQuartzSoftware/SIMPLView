@@ -309,8 +309,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
-    void filterWidgetsCut(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
-    void filterWidgetsCopied(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+    void filterWidgetsCut(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+    void filterWidgetsCopied(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
     void filterWidgetsPasted(PipelineViewWidget* destination);
 
   protected:
@@ -328,7 +328,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void pasteFilterWidgets();
 
   private:
-    QVector<PipelineFilterWidget*>      m_SelectedFilterWidgets;
+    QList<PipelineFilterWidget*>        m_SelectedFilterWidgets;
     PipelineFilterWidget*               m_ActiveFilterWidget;
     PipelineFilterWidget*               m_OldActiveFilterWidget;
     QVBoxLayout*                        m_FilterWidgetLayout;

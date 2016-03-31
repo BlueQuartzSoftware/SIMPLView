@@ -161,7 +161,7 @@ class SIMPLViewApplication : public QApplication
     void toPipelineRunningState();
     void toPipelineIdleState();
 
-    void copyFilterWidgetsToClipboard(QVector<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+    void copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
 
     void pasteFilterWidgets(PipelineViewWidget* destination);
 
@@ -183,7 +183,7 @@ class SIMPLViewApplication : public QApplication
     void addFilter(const QString &text);
 
   private:
-    QPair<QVector<PipelineFilterWidget*>, PipelineViewWidget*>                m_Clipboard;
+    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
     PasteType                                                                 m_CurrentPasteType;
 
     QMenu*                                                                    m_ContextMenu;
