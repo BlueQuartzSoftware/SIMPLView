@@ -941,7 +941,7 @@ void PipelineFilterWidget::toIdleState()
 // -----------------------------------------------------------------------------
 PipelineFilterWidget* PipelineFilterWidget::deepCopy()
 {
-  PipelineFilterWidget* newWidget = new PipelineFilterWidget(getFilter(), NULL, dynamic_cast<QWidget*>(parent()));
+  PipelineFilterWidget* newWidget = new PipelineFilterWidget(getFilter()->newFilterInstance(true), NULL, dynamic_cast<QWidget*>(parent()));
   newWidget->m_HasPreflightErrors = m_HasPreflightErrors;
   newWidget->m_HasPreflightWarnings = m_HasPreflightWarnings;
 
