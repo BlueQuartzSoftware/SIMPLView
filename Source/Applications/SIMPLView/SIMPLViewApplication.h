@@ -85,6 +85,7 @@ class SIMPLViewApplication : public QApplication
 
     SIMPLView_UI* getNewSIMPLViewInstance();
 
+    SIMPLView_UI* getActiveWindow();
     void setActiveWindow(SIMPLView_UI* instance);
 
     bool isCurrentlyRunning(SIMPLView_UI* instance);
@@ -130,6 +131,8 @@ class SIMPLViewApplication : public QApplication
 
     QVector<ISIMPLibPlugin*> loadPlugins();
 
+    void copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
+
   protected slots:
     void on_actionCloseToolbox_triggered();
     void on_actionNew_triggered();
@@ -165,9 +168,9 @@ class SIMPLViewApplication : public QApplication
     void toPipelineRunningState();
     void toPipelineIdleState();
 
-    void copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
-
-    void pasteFilterWidgets(PipelineViewWidget* destination);
+    void cutFilterWidgets();
+    void copyFilterWidgets();
+    void pasteFilterWidgets();
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This

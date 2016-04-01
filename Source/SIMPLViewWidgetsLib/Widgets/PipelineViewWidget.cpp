@@ -144,15 +144,6 @@ void PipelineViewWidget::setupGui()
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
   m_DropBox = new DropBoxWidget();
-
-  connect(this, SIGNAL(filterWidgetsCut(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
-    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
-
-  connect(this, SIGNAL(filterWidgetsCopied(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)),
-    dream3dApp, SLOT(copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*>, PipelineViewWidget*, SIMPLViewApplication::PasteType)));
-
-  connect(this, SIGNAL(filterWidgetsPasted(PipelineViewWidget*)),
-    dream3dApp, SLOT(pasteFilterWidgets(PipelineViewWidget*)));
 }
 
 // -----------------------------------------------------------------------------
@@ -591,16 +582,6 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
   connect(pipelineFilterWidget, SIGNAL(parametersChanged()),
           this, SLOT(handleFilterParameterChanged()));
 
-  connect(pipelineFilterWidget, SIGNAL(filterWidgetCut()),
-    this, SLOT(cutFilterWidgets()));
-
-  connect(pipelineFilterWidget, SIGNAL(filterWidgetCopied()),
-    this, SLOT(copyFilterWidgets()));
-
-  connect(pipelineFilterWidget, SIGNAL(filterWidgetPasted()),
-    this, SLOT(pasteFilterWidgets()));
-
-
   // Check to make sure at least the vertical spacer is in the Layout
   if (addSpacer)
   {
@@ -620,30 +601,6 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
 
   // Emit that the pipeline changed
   emit pipelineChanged();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::cutFilterWidgets()
-{
-  emit filterWidgetsCut(m_SelectedFilterWidgets, this, SIMPLViewApplication::Cut);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::copyFilterWidgets()
-{
-  emit filterWidgetsCopied(m_SelectedFilterWidgets, this, SIMPLViewApplication::Copy);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::pasteFilterWidgets()
-{
-  emit filterWidgetsPasted(this);
 }
 
 // -----------------------------------------------------------------------------
@@ -1459,5 +1416,13 @@ void PipelineViewWidget::toIdleState()
 void PipelineViewWidget::showFilterHelp(const QString& className)
 {
 
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QList<PipelineFilterWidget*> PipelineViewWidget::getSelectedFilterWidgets()
+{
+  return m_SelectedFilterWidgets;
 }
 

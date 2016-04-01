@@ -197,6 +197,12 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      */
     bool eventFilter(QObject*, QEvent*);
 
+    /**
+    * @brief getSelectedFilterWidgets
+    * @return
+    */
+    QList<PipelineFilterWidget*> getSelectedFilterWidgets();
+
   public slots:
 
     /**
@@ -295,10 +301,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
   public slots:
     void showFilterHelp(const QString& className);
 
-    void cutFilterWidgets();
-    void copyFilterWidgets();
-    void pasteFilterWidgets();
-
   signals:
     void addPlaceHolderFilter(QPoint p);
     void removePlaceHolderFilter();
@@ -317,10 +319,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void filterInputWidgetEdited();
     void preflightPipelineComplete();
     void preflightFinished(int err);
-
-    void filterWidgetsCut(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
-    void filterWidgetsCopied(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
-    void filterWidgetsPasted(PipelineViewWidget* destination);
 
   protected:
     void setupGui();
