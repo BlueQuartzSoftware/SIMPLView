@@ -137,8 +137,10 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
+void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack* undoStack)
 {
+  Q_UNUSED(undoStack)
+
   if (instance->isActiveWindow())
   {
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
@@ -218,8 +220,6 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStac
 
   // Create Edit Menu
   menuBar->addMenu(menuEdit);
-
-
   menuEdit->addAction(actionUndo);
   menuEdit->addAction(actionRedo);
   menuEdit->addSeparator();

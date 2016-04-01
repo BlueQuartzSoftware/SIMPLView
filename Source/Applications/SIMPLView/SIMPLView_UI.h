@@ -290,7 +290,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     /**
     * @brief dream3dWindowChangedState
     */
-    void dream3dWindowChangedState(SIMPLView_UI* self);
+    void dream3dWindowChangedState(SIMPLView_UI* self, QUndoStack* undoStack);
 
   protected:
 

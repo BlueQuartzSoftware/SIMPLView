@@ -1260,7 +1260,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 {
   if (event->type() == QEvent::ActivationChange)
   {
-    emit dream3dWindowChangedState(this);
+    emit dream3dWindowChangedState(this, m_UndoStack);
   }
 }
 

@@ -71,7 +71,7 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
   /**
   * @brief activeWindowChanged
   */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  virtual void dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack *undoStack);
 
   virtual void toolboxWindowChanged();
 
@@ -83,7 +83,12 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
 
 private:
   // The global menu
-  QMenuBar*                            m_GlobalMenu;
+  QMenuBar*                             m_GlobalMenu;
+  QMenu*                                m_MenuEdit;
+  QAction*                              m_EditSeparator;
+
+  QAction*                              m_ActionUndo;
+  QAction*                              m_ActionRedo;
 
   void createGlobalMenu();
 

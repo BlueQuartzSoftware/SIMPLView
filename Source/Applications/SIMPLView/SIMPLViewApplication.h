@@ -172,7 +172,7 @@ class SIMPLViewApplication : public QApplication
     */
     virtual void updateRecentFileList(const QString& file);
 
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+    virtual void dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack *undoStack);
     virtual void toolboxWindowChanged();
 
     virtual void on_actionClearRecentFiles_triggered();

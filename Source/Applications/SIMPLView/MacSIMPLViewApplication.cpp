@@ -159,11 +159,29 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
+void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack* undoStack)
 {
   if (instance->isActiveWindow())
   {
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+
+    if (NULL != m_ActionUndo)
+    {
+      m_MenuEdit->removeAction(m_ActionUndo);
+      delete m_ActionUndo;
+    }
+
+    if (NULL != m_ActionRedo)
+    {
+      m_MenuEdit->removeAction(m_ActionRedo);
+      delete m_ActionRedo;
+    }
+
+    m_ActionUndo = undoStack->createUndoAction(instance);
+    m_ActionRedo = undoStack->createRedoAction(instance);
+
+    m_MenuEdit->insertAction(m_EditSeparator, m_ActionRedo);
+    m_MenuEdit->insertAction(m_ActionRedo, m_ActionUndo);
 
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
@@ -310,7 +328,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   QMenu* menuFile = new QMenu("File", m_GlobalMenu);
-  QMenu* menuEdit = new QMenu("Edit", m_GlobalMenu);
+  m_MenuEdit = new QMenu("Edit", m_GlobalMenu);
   QMenu* menuView = new QMenu("View", m_GlobalMenu);
   QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu);
   QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu);
@@ -338,8 +356,6 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionShowBookmarks = menuItems->getActionShowBookmarks();
   QAction* actionAddBookmark = menuItems->getActionAddBookmark();
   QAction* actionNewFolder = menuItems->getActionNewFolder();
-  QAction* actionUndo = menuItems->getActionUndo();
-  QAction* actionRedo = menuItems->getActionRedo();
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
@@ -361,13 +377,11 @@ void MacSIMPLViewApplication::createGlobalMenu()
   menuFile->addAction(actionExit);
 
   // Create Edit Menu
-  m_GlobalMenu->addMenu(menuEdit);
-  menuEdit->addAction(actionUndo);
-  menuEdit->addAction(actionRedo);
-  menuEdit->addSeparator();
-  menuEdit->addAction(actionCut);
-  menuEdit->addAction(actionCopy);
-  menuEdit->addAction(actionPaste);
+  m_GlobalMenu->addMenu(m_MenuEdit);
+  m_EditSeparator = m_MenuEdit->addSeparator();
+  m_MenuEdit->addAction(actionCut);
+  m_MenuEdit->addAction(actionCopy);
+  m_MenuEdit->addAction(actionPaste);
 
   // Create View Menu
   m_GlobalMenu->addMenu(menuView);
