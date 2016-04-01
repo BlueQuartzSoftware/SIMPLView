@@ -225,6 +225,10 @@ void MacSIMPLViewApplication::toToolboxMenuState()
     menuItems->getActionAddBookmark()->setDisabled(true);
     menuItems->getActionNewFolder()->setDisabled(true);
   }
+
+  menuItems->getActionCut()->setDisabled(true);
+  menuItems->getActionCopy()->setDisabled(true);
+  menuItems->getActionPaste()->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -252,6 +256,9 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionSave()->setEnabled(true);
   menuItems->getActionSaveAs()->setEnabled(true);
   menuItems->getActionShowIssues()->setEnabled(true);
+  menuItems->getActionCut()->setEnabled(true);
+  menuItems->getActionCopy()->setEnabled(true);
+  menuItems->getActionPaste()->setEnabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -270,6 +277,9 @@ void MacSIMPLViewApplication::toEmptyMenuState()
   menuItems->getActionSaveAs()->setDisabled(true);
   menuItems->getActionShowIssues()->setDisabled(true);
   menuItems->getActionClearPipeline()->setDisabled(true);
+  menuItems->getActionCut()->setDisabled(true);
+  menuItems->getActionCopy()->setDisabled(true);
+  menuItems->getActionPaste()->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -330,6 +340,9 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionNewFolder = menuItems->getActionNewFolder();
   QAction* actionUndo = menuItems->getActionUndo();
   QAction* actionRedo = menuItems->getActionRedo();
+  QAction* actionCut = menuItems->getActionCut();
+  QAction* actionCopy = menuItems->getActionCopy();
+  QAction* actionPaste = menuItems->getActionPaste();
 
   m_GlobalMenu = new QMenuBar(NULL);
 
@@ -351,6 +364,10 @@ void MacSIMPLViewApplication::createGlobalMenu()
   m_GlobalMenu->addMenu(menuEdit);
   menuEdit->addAction(actionUndo);
   menuEdit->addAction(actionRedo);
+  menuEdit->addSeparator();
+  menuEdit->addAction(actionCut);
+  menuEdit->addAction(actionCopy);
+  menuEdit->addAction(actionPaste);
 
   // Create View Menu
   m_GlobalMenu->addMenu(menuView);
