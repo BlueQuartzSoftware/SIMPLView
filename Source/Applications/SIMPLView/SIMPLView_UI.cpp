@@ -92,8 +92,6 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
-#include "Applications/SIMPLView/util/CutCommand.h"
-#include "Applications/SIMPLView/util/PasteCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -926,70 +924,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::cutFilterWidgets()
-{
-  PipelineViewWidget* pipelineView = getPipelineViewWidget();
-  QList<PipelineFilterWidget*> selectedWidgets = pipelineView->getSelectedFilterWidgets();
-
-  QList<PipelineFilterWidget*> copiedWidgets;
-  for (int i = 0; i < selectedWidgets.size(); i++)
-  {
-    copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
-  }
-
-  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
-  clipboard.first = copiedWidgets;
-  clipboard.second = pipelineView;
-
-  standardApp->setClipboard(clipboard);
-
-  CutCommand* cmd = new CutCommand(selectedWidgets, pipelineView);
-  m_UndoStack->push(cmd);
-
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionPaste()->setEnabled(true);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::copyFilterWidgets()
-{
-  PipelineViewWidget* origin = getPipelineViewWidget();
-  QList<PipelineFilterWidget*> selectedWidgets = origin->getSelectedFilterWidgets();
-
-  QList<PipelineFilterWidget*> copiedWidgets;
-  for (int i = 0; i < selectedWidgets.size(); i++)
-  {
-    copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
-  }
-
-  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
-  clipboard.first = copiedWidgets;
-  clipboard.second = origin;
-
-  standardApp->setClipboard(clipboard);
-
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionPaste()->setEnabled(true);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::pasteFilterWidgets()
-{
-  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard = dream3dApp->getClipboard();
-  QList<PipelineFilterWidget*> widgets = clipboard.first;
-  PipelineViewWidget* pipelineView = getPipelineViewWidget();
-
-  PasteCommand* cmd = new PasteCommand(widgets, pipelineView);
-  m_UndoStack->push(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::populateMenus(QObject* plugin)
 {
 
@@ -1277,6 +1211,14 @@ void SIMPLView_UI::preflightDidFinish(int err)
   {
     startPipelineBtn->setEnabled(true);
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addUndoCommand(QUndoCommand* cmd)
+{
+  m_UndoStack->push(cmd);
 }
 
 

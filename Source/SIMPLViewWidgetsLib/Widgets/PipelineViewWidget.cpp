@@ -574,7 +574,7 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
 
   // When the filter is removed from this view
   connect(pipelineFilterWidget, SIGNAL(filterWidgetRemoved(PipelineFilterWidget*)),
-          this, SLOT(removeFilterWidget(PipelineFilterWidget*)) );
+          dream3dApp, SLOT(removeFilterWidget(PipelineFilterWidget*)) );
 
   // When the FilterWidget is selected
   connect(pipelineFilterWidget, SIGNAL(widgetSelected(PipelineFilterWidget*, Qt::KeyboardModifiers)),

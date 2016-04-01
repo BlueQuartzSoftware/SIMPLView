@@ -170,19 +170,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     bool savePipelineAs();
 
     /**
-    * @brief cutFilterWidgets
+    * @brief addUndoCommand
     */
-    void cutFilterWidgets();
-
-    /**
-    * @brief copyFilterWidgets
-    */
-    void copyFilterWidgets();
-
-    /**
-    * @brief pasteFilterWidgets
-    */
-    void pasteFilterWidgets();
+    void addUndoCommand(QUndoCommand* cmd);
 
   public slots:
 

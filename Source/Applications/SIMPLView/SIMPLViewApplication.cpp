@@ -69,6 +69,10 @@
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/DSplashScreen.h"
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
+#include "Applications/SIMPLView/util/CutCommand.h"
+#include "Applications/SIMPLView/util/PasteCommand.h"
+#include "Applications/SIMPLView/util/AddFilterCommand.h"
+#include "Applications/SIMPLView/util/RemoveFilterCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -440,7 +444,20 @@ void SIMPLViewApplication::addFilter(const QString &text)
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->getPipelineViewWidget()->addFilter(text);
+    AddFilterCommand* cmd = new AddFilterCommand(text, m_ActiveWindow->getPipelineViewWidget());
+    m_ActiveWindow->addUndoCommand(cmd);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::removeFilterWidget(PipelineFilterWidget* filterWidget)
+{
+  if (NULL != m_ActiveWindow)
+  {
+    RemoveFilterCommand* cmd = new RemoveFilterCommand(m_ActiveWindow->getPipelineViewWidget()->indexOfFilterWidget(filterWidget), m_ActiveWindow->getPipelineViewWidget());
+    m_ActiveWindow->addUndoCommand(cmd);
   }
 }
 
@@ -887,7 +904,23 @@ void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->cutFilterWidgets();
+    PipelineViewWidget* pipelineView = m_ActiveWindow->getPipelineViewWidget();
+    QList<PipelineFilterWidget*> selectedWidgets = pipelineView->getSelectedFilterWidgets();
+
+    QList<PipelineFilterWidget*> copiedWidgets;
+    for (int i = 0; i < selectedWidgets.size(); i++)
+    {
+      copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
+    }
+
+    m_Clipboard.first = copiedWidgets;
+    m_Clipboard.second = pipelineView;
+
+    CutCommand* cmd = new CutCommand(selectedWidgets, pipelineView);
+    m_ActiveWindow->addUndoCommand(cmd);
+
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+    menuItems->getActionPaste()->setEnabled(true);
   }
 }
 
@@ -898,7 +931,20 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->copyFilterWidgets();
+    PipelineViewWidget* origin = m_ActiveWindow->getPipelineViewWidget();
+    QList<PipelineFilterWidget*> selectedWidgets = origin->getSelectedFilterWidgets();
+
+    QList<PipelineFilterWidget*> copiedWidgets;
+    for (int i = 0; i < selectedWidgets.size(); i++)
+    {
+      copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
+    }
+
+    m_Clipboard.first = copiedWidgets;
+    m_Clipboard.second = origin;
+
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+    menuItems->getActionPaste()->setEnabled(true);
   }
 }
 
@@ -909,7 +955,11 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->pasteFilterWidgets();
+    QList<PipelineFilterWidget*> widgets = m_Clipboard.first;
+    PipelineViewWidget* pipelineView = m_ActiveWindow->getPipelineViewWidget();
+
+    PasteCommand* cmd = new PasteCommand(widgets, pipelineView);
+    m_ActiveWindow->addUndoCommand(cmd);
   }
 }
 

@@ -33,65 +33,32 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "PasteCommand.h"
+#ifndef _addfiltercommand_h_
+#define _addfiltercommand_h_
 
-#include <QtCore/QObject>
+#include <QtWidgets/QUndoCommand>
 
-#include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
-#include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, QUndoCommand* parent) :
-  QUndoCommand(parent),
-  m_Widgets(widgets),
-  m_Destination(destination)
+class AddFilterCommand : public QUndoCommand
 {
-  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(widgets.size()));
-}
+  public:
+    AddFilterCommand(const QString &text, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+    virtual ~AddFilterCommand();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-PasteCommand::~PasteCommand()
-{
+    virtual void undo();
 
-}
+    virtual void redo();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PasteCommand::undo()
-{
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
-  }
+  private:
+    QString                                 m_Text;
+    PipelineViewWidget*                     m_PipelineView;
+    int                                     m_InsertIndex;
 
-  m_CopiedWidgets.clear();
+    AddFilterCommand(const AddFilterCommand&); // Copy Constructor Not Implemented
+    void operator=(const AddFilterCommand&); // Operator '=' Not Implemented
+};
 
-  m_Destination->preflightPipeline();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PasteCommand::redo()
-{
-  for (int i = 0; i < m_Widgets.size(); i++)
-  {
-    m_CopiedWidgets.push_back(m_Widgets[i]->deepCopy());
-  }
-
-  m_Destination->clearSelectedFilterWidgets();
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
-  }
-
-  m_Destination->preflightPipeline();
-}
-
-
+#endif /* _addfiltercommand_h_ */
 

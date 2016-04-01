@@ -181,6 +181,7 @@ class SIMPLViewApplication : public QApplication
     void openRecentFile();
 
     void addFilter(const QString &text);
+    void removeFilterWidget(PipelineFilterWidget* filterWidget);
 
   private:
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;

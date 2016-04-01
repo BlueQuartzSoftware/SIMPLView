@@ -33,7 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "PasteCommand.h"
+#include "AddFilterCommand.h"
 
 #include <QtCore/QObject>
 
@@ -43,18 +43,10 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, QUndoCommand* parent) :
+AddFilterCommand::AddFilterCommand(const QString &text, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_Widgets(widgets),
-  m_Destination(destination)
-{
-  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(widgets.size()));
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-PasteCommand::~PasteCommand()
+  m_Text(text),
+  m_PipelineView(pipelineView)
 {
 
 }
@@ -62,35 +54,44 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PasteCommand::undo()
+AddFilterCommand::~AddFilterCommand()
 {
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
-  }
 
-  m_CopiedWidgets.clear();
-
-  m_Destination->preflightPipeline();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PasteCommand::redo()
+void AddFilterCommand::undo()
 {
-  for (int i = 0; i < m_Widgets.size(); i++)
+  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
+
+  m_PipelineView->removeFilterWidget(filterWidget);
+
+  m_PipelineView->preflightPipeline();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void AddFilterCommand::redo()
+{
+  if (m_PipelineView->filterCount() == 0)
   {
-    m_CopiedWidgets.push_back(m_Widgets[i]->deepCopy());
+    m_InsertIndex = 0;
+  }
+  else
+  {
+    m_InsertIndex = m_PipelineView->filterCount() - 1;
   }
 
-  m_Destination->clearSelectedFilterWidgets();
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
-  }
+  m_PipelineView->addFilter(m_Text);
 
-  m_Destination->preflightPipeline();
+  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
+
+  m_PipelineView->preflightPipeline();
+
+  setText(QObject::tr("\"Add '%1'\"").arg(filterWidget->getFilter()->getHumanLabel()));
 }
 
 

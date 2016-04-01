@@ -47,11 +47,11 @@ CutCommand::CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineVie
   QUndoCommand(parent),
   m_PipelineView(pipelineView)
 {
-  setText(QObject::tr("'Cut %1 Filter Widgets'").arg(selectedWidgets.size()));
+  setText(QObject::tr("\"Cut %1 Filter Widgets\"").arg(selectedWidgets.size()));
 
   for (int i = 0; i < selectedWidgets.size(); i++)
   {
-    m_SelectedWidgets.insert(pipelineView->indexOfFilterWidget(selectedWidgets[i]), selectedWidgets[i]);
+    m_SelectedWidgetIndices.push_back(pipelineView->indexOfFilterWidget(selectedWidgets[i]));
   }
 }
 
@@ -70,12 +70,12 @@ void CutCommand::undo()
 {
   m_PipelineView->clearSelectedFilterWidgets();
 
-  QMapIterator<int, PipelineFilterWidget*> iter(m_SelectedWidgets);
-  while (iter.hasNext())
+  for (int i = 0; i < m_CopiedFilterWidgets.size(); i++)
   {
-    iter.next();
-    m_PipelineView->addFilterWidget(iter.value(), iter.key());
+    m_PipelineView->addFilterWidget(m_CopiedFilterWidgets[i], m_SelectedWidgetIndices[i]);
   }
+
+  m_CopiedFilterWidgets.clear();
 
   m_PipelineView->preflightPipeline();
 }
@@ -85,17 +85,12 @@ void CutCommand::undo()
 // -----------------------------------------------------------------------------
 void CutCommand::redo()
 {
-  QMap<int, PipelineFilterWidget*> copiedWidgets;
-  QMapIterator<int, PipelineFilterWidget*> iter(m_SelectedWidgets);
-  while (iter.hasNext())
+  for (int i = 0; i < m_SelectedWidgetIndices.size(); i++)
   {
-    iter.next();
-
-    copiedWidgets.insert(iter.key(), iter.value()->deepCopy());
-    m_PipelineView->removeFilterWidget(iter.value());
+    PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);
+    m_CopiedFilterWidgets.push_back(filterWidget->deepCopy());
+    m_PipelineView->removeFilterWidget(filterWidget);
   }
-
-  m_SelectedWidgets = copiedWidgets;
 
   m_PipelineView->preflightPipeline();
 }

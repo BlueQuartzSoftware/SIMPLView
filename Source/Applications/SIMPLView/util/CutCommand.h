@@ -54,7 +54,8 @@ class CutCommand : public QUndoCommand
     virtual void redo();
 
   private:
-    QMap<int, PipelineFilterWidget*>                    m_SelectedWidgets;
+    QList<int>                                          m_SelectedWidgetIndices;
+    QList<PipelineFilterWidget*>                        m_CopiedFilterWidgets;
     PipelineViewWidget*                                 m_PipelineView;
 
     CutCommand(const CutCommand&); // Copy Constructor Not Implemented

@@ -33,7 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "PasteCommand.h"
+#include "RemoveFilterCommand.h"
 
 #include <QtCore/QObject>
 
@@ -43,18 +43,20 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, QUndoCommand* parent) :
-  QUndoCommand(parent),
-  m_Widgets(widgets),
-  m_Destination(destination)
+RemoveFilterCommand::RemoveFilterCommand(int removalIndex, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+QUndoCommand(parent),
+m_PipelineView(pipelineView),
+m_RemovalIndex(removalIndex)
 {
-  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(widgets.size()));
+  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_RemovalIndex);
+
+  setText(QObject::tr("\"Remove '%1'\"").arg(filterWidget->getFilter()->getHumanLabel()));
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PasteCommand::~PasteCommand()
+RemoveFilterCommand::~RemoveFilterCommand()
 {
 
 }
@@ -62,35 +64,25 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PasteCommand::undo()
+void RemoveFilterCommand::undo()
 {
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
-  }
+  m_PipelineView->addFilterWidget(m_FilterWidgetCopy, m_RemovalIndex);
 
-  m_CopiedWidgets.clear();
-
-  m_Destination->preflightPipeline();
+  m_PipelineView->preflightPipeline();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PasteCommand::redo()
+void RemoveFilterCommand::redo()
 {
-  for (int i = 0; i < m_Widgets.size(); i++)
-  {
-    m_CopiedWidgets.push_back(m_Widgets[i]->deepCopy());
-  }
+  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_RemovalIndex);
 
-  m_Destination->clearSelectedFilterWidgets();
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
-  }
+  m_FilterWidgetCopy = filterWidget->deepCopy();
 
-  m_Destination->preflightPipeline();
+  m_PipelineView->removeFilterWidget(filterWidget);
+
+  m_PipelineView->preflightPipeline();
 }
 
 
