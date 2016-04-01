@@ -68,8 +68,6 @@ class SIMPLViewMenuItems : public QObject
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionExit)
 
       // Edit Menu
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionUndo)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionRedo)
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionCut)
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionCopy)
       SIMPL_INSTANCE_PROPERTY(QAction*, ActionPaste)

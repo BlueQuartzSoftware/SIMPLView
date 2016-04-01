@@ -112,14 +112,14 @@ PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   setFocusPolicy(Qt::StrongFocus);
 
   connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_pipelineViewContextMenuRequested(const QPoint&)));
-}
+  }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 PipelineViewWidget::~PipelineViewWidget()
 {
-
+  
 }
 
 // -----------------------------------------------------------------------------
@@ -235,6 +235,14 @@ PipelineFilterWidget* PipelineViewWidget::filterWidgetAt(int index)
     fw = qobject_cast<PipelineFilterWidget*>(w);
   }
   return fw;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int PipelineViewWidget::indexOfFilterWidget(PipelineFilterWidget* filterWidget)
+{
+  return m_FilterWidgetLayout->indexOf(filterWidget);
 }
 
 // -----------------------------------------------------------------------------

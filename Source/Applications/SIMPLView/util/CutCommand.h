@@ -33,64 +33,33 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "CopyAndPasteCommand.h"
+#ifndef _cutcommand_h_
+#define _cutcommand_h_
 
-#include <QtCore/QObject>
+#include <QtCore/QMap>
 
-#include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
-#include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
+#include <QtWidgets/QUndoCommand>
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-CopyAndPasteCommand::CopyAndPasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* destination, QUndoCommand* parent) :
-  QUndoCommand(parent),
-  m_SelectedWidgets(selectedWidgets),
-  m_Destination(destination)
+class PipelineFilterWidget;
+class PipelineViewWidget;
+
+class CutCommand : public QUndoCommand
 {
-  setText(QObject::tr("'Copy %1 Filter Widgets'").arg(selectedWidgets.size()));
-}
+  public:
+    CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+    virtual ~CutCommand();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-CopyAndPasteCommand::~CopyAndPasteCommand()
-{
+    virtual void undo();
 
-}
+    virtual void redo();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CopyAndPasteCommand::undo()
-{
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
-  }
+  private:
+    QMap<int, PipelineFilterWidget*>                    m_SelectedWidgets;
+    PipelineViewWidget*                                 m_PipelineView;
 
-  m_Destination->preflightPipeline();
-}
+    CutCommand(const CutCommand&); // Copy Constructor Not Implemented
+    void operator=(const CutCommand&); // Operator '=' Not Implemented
+};
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CopyAndPasteCommand::redo()
-{
-  m_CopiedWidgets.clear();
-  for (int i = 0; i < m_SelectedWidgets.size(); i++)
-  {
-    m_CopiedWidgets.push_back(m_SelectedWidgets[i]->deepCopy());
-  }
-
-  m_Destination->clearSelectedFilterWidgets();
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
-  {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
-  }
-
-  m_Destination->preflightPipeline();
-}
-
-
+#endif /* _cutcommand_h_ */
 

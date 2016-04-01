@@ -121,12 +121,12 @@ void SIMPLViewMenuItems::createActions()
   m_ActionShowToolbox->setCheckable(true);
   m_ActionAddBookmark = new QAction("Add Bookmark", this);
   m_ActionNewFolder = new QAction("New Folder", this);
-  m_ActionUndo = dream3dApp->getUndoStack()->createUndoAction(this);
-  m_ActionRedo = dream3dApp->getUndoStack()->createRedoAction(this);
   m_ActionCut = new QAction("Cut", this);
   m_ActionCopy = new QAction("Copy", this);
   m_ActionPaste = new QAction("Paste", this);
 
+  // Disable the paste item when the program first loads (it will be enabled when the user cuts or copies something)
+  m_ActionPaste->setDisabled(true);
 
 #if defined(Q_OS_WIN)
   m_ActionShowBookmarkInFileSystem->setText("Show in Windows Explorer");
@@ -152,8 +152,6 @@ void SIMPLViewMenuItems::createActions()
   m_ActionSaveAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
   m_ActionAddBookmark->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
   m_ActionNewFolder->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
-  m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-  m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
   m_ActionCut->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
   m_ActionCopy->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
   m_ActionPaste->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
@@ -185,9 +183,9 @@ void SIMPLViewMenuItems::createActions()
   connect(m_ActionShowIssues, SIGNAL(triggered(bool)), dream3dApp, SLOT(on_actionShowIssues_triggered(bool)));
   connect(m_ActionAddBookmark, SIGNAL(triggered()), dream3dApp, SLOT(on_actionAddBookmark_triggered()));
   connect(m_ActionNewFolder, SIGNAL(triggered()), dream3dApp, SLOT(on_actionNewFolder_triggered()));
-  connect(m_ActionCut, SIGNAL(triggered()), dream3dApp, SLOT(cutFilterWidgets()));
-  connect(m_ActionCopy, SIGNAL(triggered()), dream3dApp, SLOT(copyFilterWidgets()));
-  connect(m_ActionPaste, SIGNAL(triggered()), dream3dApp, SLOT(pasteFilterWidgets()));
+  connect(m_ActionCut, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCut_triggered()));
+  connect(m_ActionCopy, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCopy_triggered()));
+  connect(m_ActionPaste, SIGNAL(triggered()), dream3dApp, SLOT(on_actionPaste_triggered()));
 }
 
 

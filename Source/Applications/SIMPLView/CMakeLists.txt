@@ -147,13 +147,13 @@ endif()
 cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}" "${SIMPLView_SRCS}" ${PROJECT_INSTALL_HEADERS})
 
 SET(SIMPLView_Util_HDRS
-  ${SIMPLView_SOURCE_DIR}/util/CutAndPasteCommand.h
-  ${SIMPLView_SOURCE_DIR}/util/CopyAndPasteCommand.h
+  ${SIMPLView_SOURCE_DIR}/util/CutCommand.h
+  ${SIMPLView_SOURCE_DIR}/util/PasteCommand.h
 )
 
 SET(SIMPLView_Util_SRCS
-  ${SIMPLView_SOURCE_DIR}/util/CutAndPasteCommand.cpp
-  ${SIMPLView_SOURCE_DIR}/util/CopyAndPasteCommand.cpp
+  ${SIMPLView_SOURCE_DIR}/util/CutCommand.cpp
+  ${SIMPLView_SOURCE_DIR}/util/PasteCommand.cpp
   )
 
 set(SIMPLView_HDRS

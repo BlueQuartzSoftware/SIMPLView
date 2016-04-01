@@ -33,36 +33,32 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _cutandpastecommand_h_
-#define _cutandpastecommand_h_
+#ifndef _pastecommand_h_
+#define _pastecommand_h_
 
 #include <QtWidgets/QUndoCommand>
 
 class PipelineFilterWidget;
 class PipelineViewWidget;
 
-class CutAndPasteCommand : public QUndoCommand
+class PasteCommand : public QUndoCommand
 {
   public:
-    CutAndPasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* origin, PipelineViewWidget* destination, QUndoCommand* parent = 0);
-    virtual ~CutAndPasteCommand();
+    PasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* destination, QUndoCommand* parent = 0);
+    virtual ~PasteCommand();
 
     virtual void undo();
 
     virtual void redo();
 
   private:
-    QList<PipelineFilterWidget*>                        m_SelectedWidgets;
+    QList<PipelineFilterWidget*>                        m_Widgets;
     QList<PipelineFilterWidget*>                        m_CopiedWidgets;
-    PipelineViewWidget*                                 m_Origin;
     PipelineViewWidget*                                 m_Destination;
 
-    void moveWidgets(QList<PipelineFilterWidget*> &addedList, PipelineViewWidget* addedPipeline,
-      QList<PipelineFilterWidget*> &removedList, PipelineViewWidget* removedPipeline);
-
-    CutAndPasteCommand(const CutAndPasteCommand&); // Copy Constructor Not Implemented
-    void operator=(const CutAndPasteCommand&); // Operator '=' Not Implemented
+    PasteCommand(const PasteCommand&); // Copy Constructor Not Implemented
+    void operator=(const PasteCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _cutandpastecommand_h_ */
+#endif /* _pastecommand_h_ */
 

@@ -33,7 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "CutAndPasteCommand.h"
+#include "PasteCommand.h"
 
 #include <QtCore/QObject>
 
@@ -43,19 +43,18 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CutAndPasteCommand::CutAndPasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* origin, PipelineViewWidget* destination, QUndoCommand* parent) :
+PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_SelectedWidgets(selectedWidgets),
-  m_Origin(origin),
+  m_Widgets(widgets),
   m_Destination(destination)
 {
-  setText(QObject::tr("'Move %1 Filter Widgets'").arg(selectedWidgets.size()));
+  setText(QObject::tr("'Paste %1 Filter Widgets'").arg(widgets.size()));
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CutAndPasteCommand::~CutAndPasteCommand()
+PasteCommand::~PasteCommand()
 {
 
 }
@@ -63,46 +62,35 @@ CutAndPasteCommand::~CutAndPasteCommand()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void CutAndPasteCommand::undo()
+void PasteCommand::undo()
 {
-  moveWidgets(m_SelectedWidgets, m_Origin, m_CopiedWidgets, m_Destination);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CutAndPasteCommand::redo()
-{
-  moveWidgets(m_CopiedWidgets, m_Destination, m_SelectedWidgets, m_Origin);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void CutAndPasteCommand::moveWidgets(QList<PipelineFilterWidget*> &addedList, PipelineViewWidget* addedPipeline,
-  QList<PipelineFilterWidget*> &removedList, PipelineViewWidget* removedPipeline)
-{
-  addedList.clear();
-  for (int i = 0; i < removedList.size(); i++)
+  for (int i = 0; i < m_CopiedWidgets.size(); i++)
   {
-    addedList.push_back(removedList[i]->deepCopy());
+    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
   }
 
-  for (int i = 0; i < removedList.size(); i++)
+  m_CopiedWidgets.clear();
+
+  m_Destination->preflightPipeline();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PasteCommand::redo()
+{
+  for (int i = 0; i < m_Widgets.size(); i++)
   {
-    removedPipeline->removeFilterWidget(removedList[i]);
+    m_CopiedWidgets.push_back(m_Widgets[i]->deepCopy());
   }
 
-  dream3dApp->setCurrentPasteType(SIMPLViewApplication::None);
-  removedPipeline->preflightPipeline();
-
-  addedPipeline->clearSelectedFilterWidgets();
-  for (int i = 0; i < addedList.size(); i++)
+  m_Destination->clearSelectedFilterWidgets();
+  for (int i = 0; i < m_CopiedWidgets.size(); i++)
   {
-    addedPipeline->addFilterWidget(addedList[i], -1);
+    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
   }
 
-  addedPipeline->preflightPipeline();
+  m_Destination->preflightPipeline();
 }
 
 

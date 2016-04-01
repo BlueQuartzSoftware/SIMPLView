@@ -70,9 +70,6 @@
 #include "Applications/SIMPLView/DSplashScreen.h"
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
 
-#include "util/CutAndPasteCommand.h"
-#include "util/CopyAndPasteCommand.h"
-
 #include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -104,9 +101,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_OpenDialogLastDirectory(""),
   show_splash(true),
   Splash(NULL),
-  m_CurrentPasteType(None),
-  m_ContextMenu(new QMenu(NULL)),
-  m_UndoStack(new QUndoStack(NULL))
+  m_ContextMenu(new QMenu(NULL))
 {
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
@@ -888,6 +883,39 @@ void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionCut_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    m_ActiveWindow->cutFilterWidgets();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionCopy_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    m_ActiveWindow->copyFilterWidgets();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionPaste_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    m_ActiveWindow->pasteFilterWidgets();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_pipelineViewContextMenuRequested(const QPoint& pos)
 {
   if (NULL != m_ActiveWindow)
@@ -898,15 +926,6 @@ void SIMPLViewApplication::on_pipelineViewContextMenuRequested(const QPoint& pos
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
     QAction* actionPaste = menuItems->getActionPaste();
-
-    if (m_CurrentPasteType == None)
-    {
-      actionPaste->setDisabled(true);
-    }
-    else
-    {
-      actionPaste->setEnabled(true);
-    }
 
     m_ContextMenu->addAction(actionPaste);
     m_ContextMenu->addSeparator();
@@ -932,15 +951,6 @@ void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QP
     QAction* actionCut = menuItems->getActionCut();
     QAction* actionCopy = menuItems->getActionCopy();
     QAction* actionPaste = menuItems->getActionPaste();
-
-    if (m_CurrentPasteType == None)
-    {
-      actionPaste->setDisabled(true);
-    }
-    else
-    {
-      actionPaste->setEnabled(true);
-    }
 
     m_ContextMenu->addAction(actionCut);
     m_ContextMenu->addAction(actionCopy);
@@ -1191,82 +1201,6 @@ void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex &current, 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType)
-{
-  m_Clipboard.first = filterWidgets;
-  m_Clipboard.second = origin;
-  m_CurrentPasteType = pasteType;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::cutFilterWidgets()
-{
-  if (NULL != m_ActiveWindow)
-  {
-    PipelineViewWidget* origin = m_ActiveWindow->getPipelineViewWidget();
-    QList<PipelineFilterWidget*> selectedWidgets = origin->getSelectedFilterWidgets();
-
-    copyFilterWidgetsToClipboard(selectedWidgets, origin, Cut);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::copyFilterWidgets()
-{
-  if (NULL != m_ActiveWindow)
-  {
-    PipelineViewWidget* origin = m_ActiveWindow->getPipelineViewWidget();
-    QList<PipelineFilterWidget*> selectedWidgets = origin->getSelectedFilterWidgets();
-
-    copyFilterWidgetsToClipboard(selectedWidgets, origin, Copy);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::pasteFilterWidgets()
-{
-  if (NULL != m_ActiveWindow)
-  {
-    PipelineViewWidget* destination = m_ActiveWindow->getPipelineViewWidget();
-    QList<PipelineFilterWidget*> widgets = m_Clipboard.first;
-
-    if (m_CurrentPasteType == Cut)
-    {
-      PipelineViewWidget* origin = m_Clipboard.second;
-
-      CutAndPasteCommand* cmd = new CutAndPasteCommand(widgets, origin, destination);
-      m_UndoStack->push(cmd);
-    }
-    else if (m_CurrentPasteType == Copy)
-    {
-      CopyAndPasteCommand* cmd = new CopyAndPasteCommand(widgets, destination);
-      m_UndoStack->push(cmd);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-bool SIMPLViewApplication::canPasteFilterWidgets()
-{
-  if (m_CurrentPasteType == Cut || m_CurrentPasteType == Copy)
-  {
-    return true;
-  }
-
-  return false;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI *instance)
 {
   // This should never be executed
@@ -1412,26 +1346,24 @@ bool SIMPLViewApplication::isCurrentlyRunning(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* SIMPLViewApplication::getSIMPLViewMenuBar()
+QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> SIMPLViewApplication::getClipboard()
 {
-  // This should never be executed
-  return NULL;
+  return m_Clipboard;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::setCurrentPasteType(PasteType pasteType)
+void SIMPLViewApplication::setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard)
 {
-  m_CurrentPasteType = pasteType;
-}
+  // Properly delete what is currently stored on the clipboard
+  for (int i = 0; i < m_Clipboard.first.size(); i++)
+  {
+    delete m_Clipboard.first[i];
+  }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QUndoStack* SIMPLViewApplication::getUndoStack()
-{
-  return m_UndoStack;
+  // Assign new clipboard values to the clipboard
+  m_Clipboard = clipboard;
 }
 
 

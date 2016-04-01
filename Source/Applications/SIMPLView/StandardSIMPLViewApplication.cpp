@@ -166,7 +166,7 @@ void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* windo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
+QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
@@ -193,11 +193,14 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
-  QAction* actionUndo = menuItems->getActionUndo();
-  QAction* actionRedo = menuItems->getActionRedo();
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
+  QAction* actionUndo = undoStack->createUndoAction(instance);
+  QAction* actionRedo = undoStack->createRedoAction(instance);
+
+  actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+  actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
 
   // Create File Menu
   menuBar->addMenu(menuFile);
@@ -215,6 +218,8 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
 
   // Create Edit Menu
   menuBar->addMenu(menuEdit);
+
+
   menuEdit->addAction(actionUndo);
   menuEdit->addAction(actionRedo);
   menuEdit->addSeparator();

@@ -92,6 +92,8 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
+#include "Applications/SIMPLView/util/CutCommand.h"
+#include "Applications/SIMPLView/util/PasteCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -116,7 +118,8 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   m_InstanceMenuBar(NULL),
 #endif
   m_ShouldRestart(false),
-  m_OpenedFilePath("")
+  m_OpenedFilePath(""),
+  m_UndoStack(new QUndoStack(NULL))
 {
   m_OpenDialogLastDirectory = QDir::homePath();
 
@@ -139,7 +142,8 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
-  m_InstanceMenuBar = dream3dApp->getSIMPLViewMenuBar();
+  m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(m_UndoStack, this);
+
   setMenuBar(m_InstanceMenuBar);
 #endif
   dream3dApp->registerSIMPLViewWindow(this);
@@ -377,28 +381,6 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
   }
 
   event->accept();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::keyPressEvent(QKeyEvent* event)
-{
-  //if (event->modifiers() == Qt::ControlModifier)
-  //{
-  //  if (event->key() == Qt::Key_X)
-  //  {
-  //    getPipelineViewWidget()->cutFilterWidgets();
-  //  }
-  //  else if (event->key() == Qt::Key_C)
-  //  {
-  //    getPipelineViewWidget()->copyFilterWidgets();
-  //  }
-  //  else if (event->key() == Qt::Key_V && dream3dApp->canPasteFilterWidgets() == true)
-  //  {
-  //    getPipelineViewWidget()->pasteFilterWidgets();
-  //  }
-  //}
 }
 
 // -----------------------------------------------------------------------------
@@ -939,6 +921,70 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel");
 
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::cutFilterWidgets()
+{
+  PipelineViewWidget* pipelineView = getPipelineViewWidget();
+  QList<PipelineFilterWidget*> selectedWidgets = pipelineView->getSelectedFilterWidgets();
+
+  QList<PipelineFilterWidget*> copiedWidgets;
+  for (int i = 0; i < selectedWidgets.size(); i++)
+  {
+    copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
+  }
+
+  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
+  clipboard.first = copiedWidgets;
+  clipboard.second = pipelineView;
+
+  standardApp->setClipboard(clipboard);
+
+  CutCommand* cmd = new CutCommand(selectedWidgets, pipelineView);
+  m_UndoStack->push(cmd);
+
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  menuItems->getActionPaste()->setEnabled(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::copyFilterWidgets()
+{
+  PipelineViewWidget* origin = getPipelineViewWidget();
+  QList<PipelineFilterWidget*> selectedWidgets = origin->getSelectedFilterWidgets();
+
+  QList<PipelineFilterWidget*> copiedWidgets;
+  for (int i = 0; i < selectedWidgets.size(); i++)
+  {
+    copiedWidgets.push_back(selectedWidgets[i]->deepCopy());
+  }
+
+  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
+  clipboard.first = copiedWidgets;
+  clipboard.second = origin;
+
+  standardApp->setClipboard(clipboard);
+
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  menuItems->getActionPaste()->setEnabled(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::pasteFilterWidgets()
+{
+  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard = dream3dApp->getClipboard();
+  QList<PipelineFilterWidget*> widgets = clipboard.first;
+  PipelineViewWidget* pipelineView = getPipelineViewWidget();
+
+  PasteCommand* cmd = new PasteCommand(widgets, pipelineView);
+  m_UndoStack->push(cmd);
 }
 
 // -----------------------------------------------------------------------------

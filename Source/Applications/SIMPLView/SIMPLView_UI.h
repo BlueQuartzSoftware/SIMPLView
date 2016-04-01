@@ -169,6 +169,21 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
+    /**
+    * @brief cutFilterWidgets
+    */
+    void cutFilterWidgets();
+
+    /**
+    * @brief copyFilterWidgets
+    */
+    void copyFilterWidgets();
+
+    /**
+    * @brief pasteFilterWidgets
+    */
+    void pasteFilterWidgets();
+
   public slots:
 
     void clearPipeline();
@@ -313,8 +328,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void changeEvent(QEvent* event);
 
-    void keyPressEvent(QKeyEvent* event);
-
     /**
      *
      * @param prefs
@@ -377,6 +390,10 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QString                               m_OpenedFilePath;
     static QString                        m_OpenDialogLastDirectory;
+
+    QUndoStack*                           m_UndoStack;
+    QAction*                              m_ActionUndo;
+    QAction*                              m_ActionRedo;
 
     /**
     * @brief Updates the "first run" variable in the preferences file

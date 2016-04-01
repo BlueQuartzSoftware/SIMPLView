@@ -52,7 +52,7 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
 
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    QMenuBar* getSIMPLViewMenuBar();
+    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
     QMenuBar* getToolboxMenuBar();
 
   protected slots:

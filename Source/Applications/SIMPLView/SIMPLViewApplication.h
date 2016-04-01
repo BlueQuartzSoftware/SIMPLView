@@ -90,8 +90,6 @@ class SIMPLViewApplication : public QApplication
 
     bool isCurrentlyRunning(SIMPLView_UI* instance);
 
-    virtual QMenuBar* getSIMPLViewMenuBar();
-
     /**
      * @brief event
      * @param event
@@ -99,11 +97,8 @@ class SIMPLViewApplication : public QApplication
      */
     bool event(QEvent* event);
 
-    bool canPasteFilterWidgets();
-
-    void setCurrentPasteType(PasteType pasteType);
-
-    QUndoStack* getUndoStack();
+    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> getClipboard();
+    void setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
 
   public slots:
 
@@ -130,8 +125,6 @@ class SIMPLViewApplication : public QApplication
     QVector<QPluginLoader*>                   m_PluginLoaders;
 
     QVector<ISIMPLibPlugin*> loadPlugins();
-
-    void copyFilterWidgetsToClipboard(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* origin, SIMPLViewApplication::PasteType pasteType);
 
   protected slots:
     void on_actionCloseToolbox_triggered();
@@ -168,9 +161,9 @@ class SIMPLViewApplication : public QApplication
     void toPipelineRunningState();
     void toPipelineIdleState();
 
-    void cutFilterWidgets();
-    void copyFilterWidgets();
-    void pasteFilterWidgets();
+    void on_actionCut_triggered();
+    void on_actionCopy_triggered();
+    void on_actionPaste_triggered();
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
@@ -191,11 +184,8 @@ class SIMPLViewApplication : public QApplication
 
   private:
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
-    PasteType                                                                 m_CurrentPasteType;
 
     QMenu*                                                                    m_ContextMenu;
-
-    QUndoStack*                                                               m_UndoStack;
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

@@ -93,6 +93,13 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     PipelineFilterWidget* filterWidgetAt(int index);
 
     /**
+    * @brief indexOfFilterWidget
+    * @param filterWidget
+    * @return
+    */
+    int indexOfFilterWidget(PipelineFilterWidget* filterWidget);
+
+    /**
      * @brief getFilterPipeline
      * @return
      */
@@ -298,7 +305,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     */
     void toIdleState();
 
-  public slots:
     void showFilterHelp(const QString& className);
 
   signals:
