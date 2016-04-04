@@ -626,19 +626,27 @@ void PipelineViewWidget::startDrag(QMouseEvent* event)
     setFilterBeingDragged(m_SelectedFilterWidgets[0]);
   }
 
-    QPixmap pixmap = m_ActiveFilterWidget->grab();
+  QPixmap pixmap = m_ActiveFilterWidget->grab();
 
-    // Create new picture for transparent
-    QPixmap transparent(pixmap.size());
-    // Do transparency
-    transparent.fill(Qt::transparent);
-#if 1
-    QPainter p;
-    p.begin(&transparent);
-    p.setOpacity(0.70);
-    p.drawPixmap(0, 0, pixmap);
-    p.end();
-#endif
+  int pWidth = pixmap.size().width();
+  int pHeight = pixmap.size().height() * m_SelectedFilterWidgets.size() + (3 * (m_SelectedFilterWidgets.size() - 1));
+
+  // Create new picture for transparent
+  QPixmap transparent(pWidth, pHeight);
+  // Do transparency
+  transparent.fill(Qt::transparent);
+
+  QPainter p;
+  p.begin(&transparent);
+  p.setOpacity(0.70);
+  int offset = 0;
+  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  {
+    QPixmap currentPixmap = m_SelectedFilterWidgets[i]->grab();
+    p.drawPixmap(0, offset, currentPixmap);
+    offset = offset + pixmap.size().height() + 3;
+  }
+  p.end();
 
   PipelineViewPtrMimeData* mimeData = new PipelineViewPtrMimeData;
   mimeData->setPipelineViewPtr(this);
