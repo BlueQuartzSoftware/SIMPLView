@@ -47,7 +47,6 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
-#include <QtGui/QDrag>
 
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGroupBox>
@@ -841,45 +840,14 @@ void PipelineFilterWidget::mouseMoveEvent(QMouseEvent* event)
   {
     return;
   }
+
   // The user is dragging the filter widget so we should set it as selected.
-  setIsSelected(true);
-  QPixmap pixmap = grab();
+  if (isSelected() == false)
+  {
+    setIsSelected(true, Qt::ControlModifier);
+  }
 
-  // Create new picture for transparent
-  QPixmap transparent(pixmap.size());
-  // Do transparency
-  transparent.fill(Qt::transparent);
-#if 1
-  QPainter p;
-  p.begin(&transparent);
-  p.setOpacity(0.70);
-  p.drawPixmap(0, 0, pixmap);
-  p.end();
-#endif
-
-  QByteArray itemData;
-  QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-  dataStream << transparent << QPoint(event->pos());
-
-  QMimeData* mimeData = new QMimeData;
-  mimeData->setData("application/x-dnditemdata", itemData);
-
-  QDrag* drag = new QDrag(this);
-  drag->setMimeData(mimeData);
-  drag->setPixmap(transparent);
-  drag->setHotSpot(event->pos());
-
-  emit dragStarted(this);
-
-  //  if(drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
-  //  {
-  //    qDebug() << "Drag should close the widget because it was MOVE" << "\n";
-  //  }
-  //  else
-  //  {
-  //    qDebug() << "Drag should leave Widget alone because it was COPY" << "\n";
-  //  }
-  drag->exec(Qt::MoveAction);
+  emit dragStarted(event);
 }
 
 // -----------------------------------------------------------------------------

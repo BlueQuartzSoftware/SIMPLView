@@ -326,6 +326,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
+    void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, QList<PipelineFilterWidget*> filterWidgets, Qt::KeyboardModifiers modifiers);
+
   protected:
     void setupGui();
     void dragEnterEvent(QDragEnterEvent* event);
@@ -335,6 +337,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
   protected slots:
     void handleFilterParameterChanged();
+    void startDrag(QMouseEvent* event);
 
   private:
     QList<PipelineFilterWidget*>        m_SelectedFilterWidgets;

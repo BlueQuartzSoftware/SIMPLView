@@ -1231,6 +1231,25 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::dropFilterWidgets(PipelineViewWidget* origin, PipelineViewWidget* destination, QList<PipelineFilterWidget*> filterWidgets, Qt::KeyboardModifiers modifiers)
+{
+  QList<PipelineFilterWidget*> copiedWidgets;
+  for (int i = 0; i < filterWidgets.size(); i++)
+  {
+    PipelineFilterWidget* copy = filterWidgets[i]->deepCopy();
+
+    if (modifiers != Qt::AltModifier)
+    {
+      origin->removeFilterWidget(filterWidgets[i]);
+    }
+
+    destination->addFilterWidget(copy);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
   BookmarksModel* model = BookmarksModel::Instance();

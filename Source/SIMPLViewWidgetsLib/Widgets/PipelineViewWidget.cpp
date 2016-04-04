@@ -51,6 +51,7 @@
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDragLeaveEvent>
 #include <QtGui/QDragMoveEvent>
+#include <QtGui/QDrag>
 #include <QtWidgets/QLabel>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QVBoxLayout>
@@ -61,6 +62,7 @@
 #include <QtWidgets/QMessageBox>
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -76,6 +78,7 @@
 #include "QtSupportLib/QDroppableScrollArea.h"
 
 #include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
+#include "SIMPLViewWidgetsLib/PipelineViewPtrMimeData.h"
 
 #include "SIMPLViewWidgetsLib/FilterParameterWidgets/FilterParameterWidgetsDialogs.h"
 
@@ -142,6 +145,8 @@ void PipelineViewWidget::setupGui()
 {
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
+
+  connect(this, SIGNAL(filterWidgetsDropped(PipelineViewWidget*, PipelineViewWidget*, QList<PipelineFilterWidget*>, Qt::KeyboardModifiers)), dream3dApp, SLOT(dropFilterWidgets(PipelineViewWidget*, PipelineViewWidget*, QList<PipelineFilterWidget*>, Qt::KeyboardModifiers)));
 
   m_DropBox = new DropBoxWidget();
 }
@@ -581,8 +586,8 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
           this, SLOT(setSelectedFilterWidget(PipelineFilterWidget*, Qt::KeyboardModifiers)));
 
   // When the filter widget is dragged
-  connect(pipelineFilterWidget, SIGNAL(dragStarted(PipelineFilterWidget*)),
-          this, SLOT(setFilterBeingDragged(PipelineFilterWidget*)) );
+  connect(pipelineFilterWidget, SIGNAL(dragStarted(QMouseEvent*)),
+          this, SLOT(startDrag(QMouseEvent*)));
 
   connect(pipelineFilterWidget, SIGNAL(parametersChanged()),
           this, SLOT(preflightPipeline()));
@@ -609,6 +614,41 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
 
   // Emit that the pipeline changed
   emit pipelineChanged();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::startDrag(QMouseEvent* event)
+{
+  if (m_SelectedFilterWidgets.size() == 1)
+  {
+    setFilterBeingDragged(m_SelectedFilterWidgets[0]);
+  }
+
+    QPixmap pixmap = m_ActiveFilterWidget->grab();
+
+    // Create new picture for transparent
+    QPixmap transparent(pixmap.size());
+    // Do transparency
+    transparent.fill(Qt::transparent);
+#if 1
+    QPainter p;
+    p.begin(&transparent);
+    p.setOpacity(0.70);
+    p.drawPixmap(0, 0, pixmap);
+    p.end();
+#endif
+
+  PipelineViewPtrMimeData* mimeData = new PipelineViewPtrMimeData;
+  mimeData->setPipelineViewPtr(this);
+
+  QDrag* drag = new QDrag(this);
+  drag->setMimeData(mimeData);
+  drag->setPixmap(transparent);
+  drag->setHotSpot(event->pos());
+
+  drag->exec(Qt::MoveAction);
 }
 
 // -----------------------------------------------------------------------------
@@ -939,6 +979,11 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
       m_DropBox->setParent(NULL);
     }
 
+    if (m_SelectedFilterWidgets.size() > 1)
+    {
+      event->ignore();
+    }
+
     bool didInsert = false;
     int count = filterCount();
     for (int i = 0; i < count; ++i)
@@ -1238,6 +1283,13 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
       event->ignore();
     }
   }
+  else if (NULL != qobject_cast<const PipelineViewPtrMimeData*>(mimedata))
+  {
+    const PipelineViewPtrMimeData* pipelineViewMimeData = qobject_cast<const PipelineViewPtrMimeData*>(mimedata);
+    PipelineViewWidget* origin = pipelineViewMimeData->getPipelineViewPtr();
+
+    emit filterWidgetsDropped(origin, this, origin->getSelectedFilterWidgets(), qApp->keyboardModifiers());
+  }
 
   // Stop auto scrolling if widget is dropped
   stopAutoScroll();
@@ -1249,6 +1301,8 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     m_DropBox->setParent(NULL);
     reindexWidgetTitles();
   }
+
+  m_CurrentFilterBeingDragged = NULL;
 }
 
 // -----------------------------------------------------------------------------
