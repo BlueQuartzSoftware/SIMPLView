@@ -166,7 +166,7 @@ SIMPLView_UI::~SIMPLView_UI()
   disconnectSignalsSlots();
 
   writeSettings();
-  clearPipeline();
+  cleanupPipeline();
   dream3dApp->unregisterSIMPLViewWindow(this);
 
   if (dream3dApp->activeWindow() == this)
@@ -1058,7 +1058,7 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::clearPipeline()
+void SIMPLView_UI::cleanupPipeline()
 {
   // Clear the filter input widget
   clearFilterInputWidget();

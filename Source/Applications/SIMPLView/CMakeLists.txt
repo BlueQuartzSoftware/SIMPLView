@@ -151,6 +151,7 @@ SET(SIMPLView_Util_HDRS
   ${SIMPLView_SOURCE_DIR}/util/PasteCommand.h
   ${SIMPLView_SOURCE_DIR}/util/AddFilterCommand.h
   ${SIMPLView_SOURCE_DIR}/util/RemoveFilterCommand.h
+  ${SIMPLView_SOURCE_DIR}/util/ClearFiltersCommand.h
 )
 
 SET(SIMPLView_Util_SRCS
@@ -158,6 +159,7 @@ SET(SIMPLView_Util_SRCS
   ${SIMPLView_SOURCE_DIR}/util/PasteCommand.cpp
   ${SIMPLView_SOURCE_DIR}/util/AddFilterCommand.cpp
   ${SIMPLView_SOURCE_DIR}/util/RemoveFilterCommand.cpp
+  ${SIMPLView_SOURCE_DIR}/util/ClearFiltersCommand.cpp
   )
 
 set(SIMPLView_HDRS

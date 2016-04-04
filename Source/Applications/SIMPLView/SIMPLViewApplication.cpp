@@ -73,6 +73,7 @@
 #include "Applications/SIMPLView/util/PasteCommand.h"
 #include "Applications/SIMPLView/util/AddFilterCommand.h"
 #include "Applications/SIMPLView/util/RemoveFilterCommand.h"
+#include "Applications/SIMPLView/util/ClearFiltersCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -629,7 +630,8 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->clearPipeline();
+    ClearFiltersCommand* cmd = new ClearFiltersCommand(m_ActiveWindow);
+    m_ActiveWindow->addUndoCommand(cmd);
   }
 }
 
