@@ -75,6 +75,8 @@ void ClearFiltersCommand::undo()
   }
 
   m_Instance->setWindowModified(m_Modified);
+
+  m_CopiedFilterWidgets.clear();
 }
 
 // -----------------------------------------------------------------------------
