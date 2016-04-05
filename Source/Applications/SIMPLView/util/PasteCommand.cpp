@@ -70,9 +70,15 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 void PasteCommand::undo()
 {
+  int index = m_StartIndex;
+  if (index == -1)
+  {
+    index = m_Destination->filterCount() - 2;
+  }
   for (int i = 0; i < m_CopiedWidgets.size(); i++)
   {
-    m_Destination->removeFilterWidget(m_CopiedWidgets[i]);
+    m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
+    index--;
   }
 
   m_CopiedWidgets.clear();
