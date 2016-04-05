@@ -180,6 +180,9 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndo
     m_ActionUndo = undoStack->createUndoAction(instance);
     m_ActionRedo = undoStack->createRedoAction(instance);
 
+    m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+    m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
+
     m_MenuEdit->insertAction(m_EditSeparator, m_ActionRedo);
     m_MenuEdit->insertAction(m_ActionRedo, m_ActionUndo);
 
@@ -356,6 +359,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionShowBookmarks = menuItems->getActionShowBookmarks();
   QAction* actionAddBookmark = menuItems->getActionAddBookmark();
   QAction* actionNewFolder = menuItems->getActionNewFolder();
+
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
