@@ -89,6 +89,11 @@ void CutCommand::redo()
   {
     PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);
     m_CopiedFilterWidgets.push_back(filterWidget->deepCopy());
+  }
+
+  for (int i = m_SelectedWidgetIndices.size() - 1; i >= 0; i--)
+  {
+    PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);
     m_PipelineView->removeFilterWidget(filterWidget);
   }
 

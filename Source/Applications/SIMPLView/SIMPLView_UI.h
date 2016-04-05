@@ -169,12 +169,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
+  public slots:
+
     /**
     * @brief addUndoCommand
     */
     void addUndoCommand(QUndoCommand* cmd);
-
-  public slots:
 
     /**
     * @brief setOpenedFilePath
@@ -249,6 +249,10 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief markDocumentAsDirty
     */
     void markDocumentAsDirty();
+
+    void addCutCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView);
+
+    void addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView);
 
     // Our Signals that we can emit custom for this class
   signals:

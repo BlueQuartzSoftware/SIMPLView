@@ -92,6 +92,8 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
+#include "Applications/SIMPLView/util/CutCommand.h"
+#include "Applications/SIMPLView/util/PasteCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -647,6 +649,15 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
+
+  connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
+
+  connect(pipelineViewWidget, SIGNAL(cutCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
+          this, SLOT(addCutCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
+
+  connect(pipelineViewWidget, SIGNAL(pasteCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
+    this, SLOT(addPasteCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -1219,6 +1230,24 @@ void SIMPLView_UI::preflightDidFinish(int err)
 void SIMPLView_UI::addUndoCommand(QUndoCommand* cmd)
 {
   m_UndoStack->push(cmd);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addCutCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView)
+{
+  CutCommand* cmd = new CutCommand(filterWidgets, pipelineView);
+  addUndoCommand(cmd);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView)
+{
+  PasteCommand* cmd = new PasteCommand(filterWidgets, pipelineView);
+  addUndoCommand(cmd);
 }
 
 

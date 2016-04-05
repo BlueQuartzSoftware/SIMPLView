@@ -210,6 +210,24 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     */
     QList<PipelineFilterWidget*> getSelectedFilterWidgets();
 
+    /**
+    * @brief cutFilterWidgets
+    * @return
+    */
+    void cutFilterWidgets();
+
+    /**
+    * @brief copyFilterWidgets
+    * @return
+    */
+    void copyFilterWidgets();
+
+    /**
+    * @brief pasteFilterWidgets
+    * @return
+    */
+    void pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
+
   public slots:
 
     /**
@@ -326,7 +344,12 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
-    void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, QList<PipelineFilterWidget*> filterWidgets, Qt::KeyboardModifiers modifiers);
+    void clipboardChanged(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
+    void pasteAvailabilityChanged(bool enabled);
+    void cutCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
+    void pasteCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
+
+    void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);
 
   protected:
     void setupGui();

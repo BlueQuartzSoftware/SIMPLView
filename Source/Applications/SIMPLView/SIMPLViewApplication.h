@@ -98,12 +98,11 @@ class SIMPLViewApplication : public QApplication
     bool event(QEvent* event);
 
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> getClipboard();
-    void setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
 
   public slots:
-
     void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
+    void setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
 
   protected:
     SIMPLViewToolbox*                           m_Toolbox;
@@ -152,7 +151,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
-    void dropFilterWidgets(PipelineViewWidget* origin, PipelineViewWidget* destination, QList<PipelineFilterWidget*> filterWidgets, Qt::KeyboardModifiers modifiers);
+    void dropFilterWidgets(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);
 
     void on_pipelineViewContextMenuRequested(const QPoint&);
     void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
@@ -166,6 +165,8 @@ class SIMPLViewApplication : public QApplication
     void on_actionCut_triggered();
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
+
+    void setPasteAvailability(bool enabled);
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This

@@ -146,7 +146,11 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
-  connect(this, SIGNAL(filterWidgetsDropped(PipelineViewWidget*, PipelineViewWidget*, QList<PipelineFilterWidget*>, Qt::KeyboardModifiers)), dream3dApp, SLOT(dropFilterWidgets(PipelineViewWidget*, PipelineViewWidget*, QList<PipelineFilterWidget*>, Qt::KeyboardModifiers)));
+  connect(this, SIGNAL(filterWidgetsDropped(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)), dream3dApp, SLOT(dropFilterWidgets(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)));
+
+  connect(this, SIGNAL(clipboardChanged(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>)), dream3dApp, SLOT(setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>)));
+
+  connect(this, SIGNAL(pasteAvailabilityChanged(bool)), dream3dApp, SLOT(setPasteAvailability(bool)));
 
   m_DropBox = new DropBoxWidget();
 }
@@ -1296,7 +1300,7 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     const PipelineViewPtrMimeData* pipelineViewMimeData = qobject_cast<const PipelineViewPtrMimeData*>(mimedata);
     PipelineViewWidget* origin = pipelineViewMimeData->getPipelineViewPtr();
 
-    emit filterWidgetsDropped(origin, this, origin->getSelectedFilterWidgets(), qApp->keyboardModifiers());
+    emit filterWidgetsDropped(origin, this, qApp->keyboardModifiers());
   }
 
   // Stop auto scrolling if widget is dropped
@@ -1438,6 +1442,53 @@ bool PipelineViewWidget::shouldAutoScroll(const QPoint& pos)
     return true;
   }
   return false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::cutFilterWidgets()
+{
+  QList<PipelineFilterWidget*> copiedWidgets;
+  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  {
+    copiedWidgets.push_back(m_SelectedFilterWidgets[i]->deepCopy());
+  }
+
+  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
+  clipboard.first = copiedWidgets;
+  clipboard.second = this;
+
+  emit cutCommandNeeded(m_SelectedFilterWidgets, this);
+  emit clipboardChanged(clipboard);
+  emit pasteAvailabilityChanged(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::copyFilterWidgets()
+{
+  QList<PipelineFilterWidget*> copiedWidgets;
+  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  {
+    copiedWidgets.push_back(m_SelectedFilterWidgets[i]->deepCopy());
+  }
+
+  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
+  clipboard.first = copiedWidgets;
+  clipboard.second = this;
+  
+  emit clipboardChanged(clipboard);
+  emit pasteAvailabilityChanged(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
+{
+  emit pasteCommandNeeded(filterWidgets, this);
 }
 
 // -----------------------------------------------------------------------------
