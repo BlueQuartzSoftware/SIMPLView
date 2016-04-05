@@ -346,8 +346,10 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void clipboardChanged(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
     void pasteAvailabilityChanged(bool enabled);
+
     void cutCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
     void pasteCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
+    void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
     void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);
 

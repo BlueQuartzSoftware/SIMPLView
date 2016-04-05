@@ -1175,17 +1175,14 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     }
     else
     {
-      index = -1;
+      index = filterCount();
     }
 
-    m_FilterWidgetLayout->insertWidget(index, m_CurrentFilterBeingDragged);
-    setSelectedFilterWidget(m_CurrentFilterBeingDragged);
+    emit moveCommandNeeded(m_CurrentFilterBeingDragged, m_FilterOrigPos, index, this);
+
     m_CurrentFilterBeingDragged = NULL;
     m_PreviousFilterBeingDragged = NULL;
 
-    preflightPipeline();
-
-    emit pipelineChanged();
     event->accept();
   }
   else if (mimedata->hasUrls() || mimedata->hasText() || mimedata->hasFormat(SIMPL::DragAndDrop::BookmarkItem) || mimedata->hasFormat(SIMPL::DragAndDrop::FilterItem))

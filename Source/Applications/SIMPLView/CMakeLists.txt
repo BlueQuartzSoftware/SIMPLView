@@ -149,6 +149,7 @@ cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}"
 SET(SIMPLView_Util_HDRS
   ${SIMPLView_SOURCE_DIR}/util/CutCommand.h
   ${SIMPLView_SOURCE_DIR}/util/PasteCommand.h
+  ${SIMPLView_SOURCE_DIR}/util/MoveFilterCommand.h
   ${SIMPLView_SOURCE_DIR}/util/AddFilterCommand.h
   ${SIMPLView_SOURCE_DIR}/util/RemoveFilterCommand.h
   ${SIMPLView_SOURCE_DIR}/util/ClearFiltersCommand.h
@@ -156,6 +157,7 @@ SET(SIMPLView_Util_HDRS
 
 SET(SIMPLView_Util_SRCS
   ${SIMPLView_SOURCE_DIR}/util/CutCommand.cpp
+  ${SIMPLView_SOURCE_DIR}/util/MoveFilterCommand.cpp
   ${SIMPLView_SOURCE_DIR}/util/PasteCommand.cpp
   ${SIMPLView_SOURCE_DIR}/util/AddFilterCommand.cpp
   ${SIMPLView_SOURCE_DIR}/util/RemoveFilterCommand.cpp

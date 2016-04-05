@@ -254,6 +254,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView);
 
+    void addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView);
+
     // Our Signals that we can emit custom for this class
   signals:
 

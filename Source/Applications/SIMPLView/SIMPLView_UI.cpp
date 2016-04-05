@@ -94,6 +94,7 @@
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/util/CutCommand.h"
 #include "Applications/SIMPLView/util/PasteCommand.h"
+#include "Applications/SIMPLView/util/MoveFilterCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -658,6 +659,9 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineViewWidget, SIGNAL(pasteCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
     this, SLOT(addPasteCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
+
+  connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
+    this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -1247,6 +1251,15 @@ void SIMPLView_UI::addCutCommand(QList<PipelineFilterWidget*> filterWidgets, Pip
 void SIMPLView_UI::addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView)
 {
   PasteCommand* cmd = new PasteCommand(filterWidgets, pipelineView);
+  addUndoCommand(cmd);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView)
+{
+  MoveFilterCommand* cmd = new MoveFilterCommand(filterWidget, originIndex, destIndex, pipelineView);
   addUndoCommand(cmd);
 }
 
