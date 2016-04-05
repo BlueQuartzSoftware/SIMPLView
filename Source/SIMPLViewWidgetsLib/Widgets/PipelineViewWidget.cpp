@@ -923,36 +923,42 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
   FilterPipeline::FilterContainerType& filters = pipeline->getFilterContainer();
   int fCount = filters.size();
 
-  // QProgressDialog progress("Opening Pipeline File....", "Cancel", 0, fCount, this);
-  // progress.setWindowModality(Qt::WindowModal);
-  // progress.setMinimumDuration(2000);
-  PipelineFilterWidget* firstWidget = NULL;
-  // Start looping on each filter
+  //PipelineFilterWidget* firstWidget = NULL;
+  //// Start looping on each filter
 
+  //for (int i = 0; i < fCount; i++)
+  //{
+  //  // Create a PipelineFilterWidget using the current AbstractFilter instance to initialize it
+  //  PipelineFilterWidget* w = new PipelineFilterWidget(filters.at(i), NULL, this);
+
+  //  addFilterWidget(w, index);
+  //  if (index == 0)
+  //  {
+  //    firstWidget = w;
+  //  }
+
+  //  index++;
+  //}
+
+  //if (firstWidget)
+  //{
+  //  firstWidget->setIsSelected(true);
+  //}
+
+  //// Now preflight the pipeline for this filter.
+  //preflightPipeline();
+
+  //emit pipelineChanged();
+
+  QList<PipelineFilterWidget*> filterWidgets;
   for (int i = 0; i < fCount; i++)
   {
-    //   progress.setValue(i);
     // Create a PipelineFilterWidget using the current AbstractFilter instance to initialize it
     PipelineFilterWidget* w = new PipelineFilterWidget(filters.at(i), NULL, this);
-
-    addFilterWidget(w, index);
-    if (index == 0)
-    {
-      firstWidget = w;
-    }
-
-    index++;
+    filterWidgets.push_back(w);
   }
 
-  if (firstWidget)
-  {
-    firstWidget->setIsSelected(true);
-  }
-
-  // Now preflight the pipeline for this filter.
-  preflightPipeline();
-
-  emit pipelineChanged();
+  pasteFilterWidgets(filterWidgets, index);
 }
 
 // -----------------------------------------------------------------------------
@@ -1483,9 +1489,9 @@ void PipelineViewWidget::copyFilterWidgets()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
+void PipelineViewWidget::pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, int startIndex)
 {
-  emit pasteCommandNeeded(filterWidgets, this);
+  emit pasteCommandNeeded(filterWidgets, startIndex, this);
 }
 
 // -----------------------------------------------------------------------------

@@ -44,7 +44,7 @@ class PipelineViewWidget;
 class PasteCommand : public QUndoCommand
 {
   public:
-    PasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* destination, QUndoCommand* parent = 0);
+    PasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* destination, int startIndex = -1, QUndoCommand* parent = 0);
     virtual ~PasteCommand();
 
     virtual void undo();
@@ -55,6 +55,7 @@ class PasteCommand : public QUndoCommand
     QList<PipelineFilterWidget*>                        m_Widgets;
     QList<PipelineFilterWidget*>                        m_CopiedWidgets;
     PipelineViewWidget*                                 m_Destination;
+    int                                                 m_StartIndex;
 
     PasteCommand(const PasteCommand&); // Copy Constructor Not Implemented
     void operator=(const PasteCommand&); // Operator '=' Not Implemented

@@ -43,11 +43,17 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, QUndoCommand* parent) :
+PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, int startIndex, QUndoCommand* parent) :
   QUndoCommand(parent),
   m_Widgets(widgets),
-  m_Destination(destination)
+  m_Destination(destination),
+  m_StartIndex(startIndex)
 {
+  if (m_StartIndex < -1)
+  {
+    m_StartIndex = -1;
+  }
+
   setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(widgets.size()));
 }
 
@@ -72,6 +78,7 @@ void PasteCommand::undo()
   m_CopiedWidgets.clear();
 
   m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -85,12 +92,20 @@ void PasteCommand::redo()
   }
 
   m_Destination->clearSelectedFilterWidgets();
+
+  int insertIndex = m_StartIndex;
   for (int i = 0; i < m_CopiedWidgets.size(); i++)
   {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], -1);
+    m_Destination->addFilterWidget(m_CopiedWidgets[i], insertIndex);
+
+    if (insertIndex >= 0)
+    {
+      insertIndex++;
+    }
   }
 
   m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
 }
 
 

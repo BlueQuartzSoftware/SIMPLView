@@ -226,7 +226,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     * @brief pasteFilterWidgets
     * @return
     */
-    void pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
+    void pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, int startIndex = -1);
 
   public slots:
 
@@ -348,7 +348,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void pasteAvailabilityChanged(bool enabled);
 
     void cutCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
-    void pasteCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* viewWidget);
+    void pasteCommandNeeded(QList<PipelineFilterWidget*> filterWidgets, int startIndex, PipelineViewWidget* viewWidget);
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
     void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);

@@ -657,8 +657,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(cutCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
           this, SLOT(addCutCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
 
-  connect(pipelineViewWidget, SIGNAL(pasteCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
-    this, SLOT(addPasteCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
+  connect(pipelineViewWidget, SIGNAL(pasteCommandNeeded(QList<PipelineFilterWidget*>, int, PipelineViewWidget*)),
+    this, SLOT(addPasteCommand(QList<PipelineFilterWidget*>, int, PipelineViewWidget*)));
 
   connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
     this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
@@ -1248,9 +1248,9 @@ void SIMPLView_UI::addCutCommand(QList<PipelineFilterWidget*> filterWidgets, Pip
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView)
+void SIMPLView_UI::addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, int startIndex, PipelineViewWidget* pipelineView)
 {
-  PasteCommand* cmd = new PasteCommand(filterWidgets, pipelineView);
+  PasteCommand* cmd = new PasteCommand(filterWidgets, pipelineView, startIndex);
   addUndoCommand(cmd);
 }
 

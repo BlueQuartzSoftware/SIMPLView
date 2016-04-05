@@ -252,7 +252,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void addCutCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView);
 
-    void addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView);
+    void addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, int startIndex, PipelineViewWidget* pipelineView);
 
     void addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView);
 
