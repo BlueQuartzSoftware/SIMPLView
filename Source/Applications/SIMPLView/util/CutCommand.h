@@ -55,7 +55,7 @@ class CutCommand : public QUndoCommand
 
   private:
     QList<int>                                          m_SelectedWidgetIndices;
-    QList<PipelineFilterWidget*>                        m_CopiedFilterWidgets;
+    QString                                             m_JsonString;
     PipelineViewWidget*                                 m_PipelineView;
 
     CutCommand(const CutCommand&); // Copy Constructor Not Implemented

@@ -186,10 +186,17 @@ class SIMPLViewApplication : public QApplication
     void addFilter(const QString &text);
     void removeFilterWidget(PipelineFilterWidget* filterWidget);
 
+  private slots:
+    void pasteFilterWidgets(const QString &jsonString, int startIndex);
+    void pasteFilterWidgets(const QString &jsonString, PipelineViewWidget* viewWidget, int startIndex);
+
   private:
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
 
     QMenu*                                                                    m_ContextMenu;
+
+    // Helper functions
+    void pasteFilterWidgets(int startIndex);
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

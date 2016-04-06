@@ -39,6 +39,9 @@
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -48,6 +51,8 @@ m_Instance(instance),
 m_PipelineView(instance->getPipelineViewWidget())
 {
   setText(QObject::tr("\"Clear All Filters\""));
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(m_PipelineView->getFilterPipeline(), "Pipeline");
 }
 
 // -----------------------------------------------------------------------------
@@ -63,20 +68,26 @@ ClearFiltersCommand::~ClearFiltersCommand()
 // -----------------------------------------------------------------------------
 void ClearFiltersCommand::undo()
 {
-  int selectionsIndex = 0;
-  for (int i = 0; i < m_CopiedFilterWidgets.size(); i++)
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+  for (int i = 0; i < container.size(); i++)
   {
-    m_PipelineView->addFilterWidget(m_CopiedFilterWidgets[i]);
-    if (m_Selections.contains(i))
-    {
-      m_PipelineView->setSelectedFilterWidget(m_CopiedFilterWidgets[i], m_Selections.value(selectionsIndex, Qt::NoModifier));
-      selectionsIndex++;
-    }
+    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
+    m_PipelineView->addFilterWidget(filterWidget);
+  }
+
+  m_PipelineView->clearSelectedFilterWidgets();
+
+  QMapIterator<int, Qt::KeyboardModifiers> iter(m_Selections);
+  while (iter.hasNext())
+  {
+    iter.next();
+
+    int index = iter.key();
+    m_PipelineView->setSelectedFilterWidget(m_PipelineView->filterWidgetAt(index), iter.value());
   }
 
   m_Instance->setWindowModified(m_Modified);
-
-  m_CopiedFilterWidgets.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -84,12 +95,6 @@ void ClearFiltersCommand::undo()
 // -----------------------------------------------------------------------------
 void ClearFiltersCommand::redo()
 {
-  int filterCount = m_PipelineView->filterCount() - 1;
-  for (int i = 0; i < filterCount; i++)
-  {
-    m_CopiedFilterWidgets.push_back(m_PipelineView->filterWidgetAt(i)->deepCopy());
-  }
-
   QList<PipelineFilterWidget*> selected = m_PipelineView->getSelectedFilterWidgets();
   for (int i = 0; i < selected.size(); i++)
   {
@@ -101,7 +106,7 @@ void ClearFiltersCommand::redo()
   // Clear the filter input widget
   m_Instance->clearFilterInputWidget();
 
-  m_Instance->getPipelineViewWidget()->clearWidgets();
+  m_PipelineView->clearWidgets();
   m_Instance->setWindowModified(true);
 }
 

@@ -35,6 +35,11 @@
 
 #include "SIMPLViewMenuItems.h"
 
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonParseError>
+
+#include <QtGui/QClipboard>
+
 #include <QtWidgets/QApplication>
 
 #include "Applications/SIMPLView/SIMPLViewApplication.h"
@@ -156,6 +161,9 @@ void SIMPLViewMenuItems::createActions()
   m_ActionCopy->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
   m_ActionPaste->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
 
+  QClipboard* clipboard = QApplication::clipboard();
+  connect(clipboard, SIGNAL(dataChanged()), this, SLOT(on_clipboard_dataChanged()));
+
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
 
   // Connections
@@ -186,6 +194,26 @@ void SIMPLViewMenuItems::createActions()
   connect(m_ActionCut, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCut_triggered()));
   connect(m_ActionCopy, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCopy_triggered()));
   connect(m_ActionPaste, SIGNAL(triggered()), dream3dApp, SLOT(on_actionPaste_triggered()));
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------s
+void SIMPLViewMenuItems::on_clipboard_dataChanged()
+{
+  QClipboard* clipboard = QApplication::clipboard();
+  QString text = clipboard->text();
+
+  QJsonParseError parseError;
+  QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(text.toStdString()), &parseError);
+  if (parseError.error != QJsonParseError::NoError)
+  {
+    m_ActionPaste->setDisabled(true);
+  }
+  else
+  {
+    m_ActionPaste->setEnabled(true);
+  }
 }
 
 

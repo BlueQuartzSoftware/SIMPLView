@@ -47,9 +47,11 @@
 
 #include <QtGui/QDesktopServices>
 #include <QtGui/QBitmap>
+#include <QtGui/QClipboard>
 
 #include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/Utilities/QMetaObjectUtilities.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 
 #include "QtSupportLib/QRecentFileList.h"
 #include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
@@ -906,7 +908,10 @@ void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->getPipelineViewWidget()->cutFilterWidgets();
+    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+
+    CutCommand* cmd = new CutCommand(filterWidgets, m_ActiveWindow->getPipelineViewWidget());
+    m_ActiveWindow->addUndoCommand(cmd);
   }
 }
 
@@ -917,7 +922,16 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->getPipelineViewWidget()->copyFilterWidgets();
+    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+    for (int i = 0; i < filterWidgets.size(); i++)
+    {
+      pipeline->pushBack(filterWidgets[i]->getFilter());
+    }
+
+    QString json = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Copy - Pipeline");
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(json);
   }
 }
 
@@ -926,9 +940,37 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
+  // We want to append the filter widgets to the end of the pipeline
+  pasteFilterWidgets(-1);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::pasteFilterWidgets(int startIndex)
+{
+  QString jsonString = QApplication::clipboard()->text();
+
+  pasteFilterWidgets(jsonString, startIndex);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, int startIndex)
+{
+  pasteFilterWidgets(jsonString, m_ActiveWindow->getPipelineViewWidget(), startIndex);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, PipelineViewWidget* viewWidget, int startIndex)
+{
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->getPipelineViewWidget()->pasteFilterWidgets(m_Clipboard.first);
+    PasteCommand* cmd = new PasteCommand(jsonString, viewWidget, startIndex);
+    m_ActiveWindow->addUndoCommand(cmd);
   }
 }
 
@@ -1202,14 +1244,14 @@ void SIMPLViewApplication::dropFilterWidgets(PipelineViewWidget* origin, Pipelin
 {
   if (modifiers != Qt::AltModifier)
   {
-    origin->cutFilterWidgets();
+    on_actionCut_triggered();
   }
   else
   {
-    origin->copyFilterWidgets();
+    on_actionCopy_triggered();
   }
 
-  destination->pasteFilterWidgets(m_Clipboard.first);
+  //destination->pasteFilterWidgets(m_Clipboard.first);
 }
 
 // -----------------------------------------------------------------------------

@@ -57,8 +57,8 @@ public:
 private:
   SIMPLView_UI*                                                 m_Instance;
   PipelineViewWidget*                                           m_PipelineView;
-  QList<PipelineFilterWidget*>                                  m_CopiedFilterWidgets;
   QMap<int, Qt::KeyboardModifiers>                              m_Selections;
+  QString                                                       m_JsonString;
   bool                                                          m_Modified;
 
   ClearFiltersCommand(const ClearFiltersCommand&); // Copy Constructor Not Implemented

@@ -40,12 +40,14 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWidget* destination, int startIndex, QUndoCommand* parent) :
+PasteCommand::PasteCommand(const QString &jsonString, PipelineViewWidget* destination, int startIndex, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_Widgets(widgets),
+  m_JsonString(jsonString),
   m_Destination(destination),
   m_StartIndex(startIndex)
 {
@@ -53,8 +55,6 @@ PasteCommand::PasteCommand(QList<PipelineFilterWidget*> widgets, PipelineViewWid
   {
     m_StartIndex = -1;
   }
-
-  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(widgets.size()));
 }
 
 // -----------------------------------------------------------------------------
@@ -70,18 +70,12 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 void PasteCommand::undo()
 {
-  int index = m_StartIndex;
-  if (index == -1)
-  {
-    index = m_Destination->filterCount() - 2;
-  }
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
+  int index = m_StartIndex + m_FilterCount - 1;
+  for (int i = 0; i < m_FilterCount; i++)
   {
     m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
     index--;
   }
-
-  m_CopiedWidgets.clear();
 
   m_Destination->preflightPipeline();
   emit m_Destination->pipelineChanged();
@@ -92,21 +86,48 @@ void PasteCommand::undo()
 // -----------------------------------------------------------------------------
 void PasteCommand::redo()
 {
-  for (int i = 0; i < m_Widgets.size(); i++)
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+
+  m_FilterCount = container.size();
+  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(m_FilterCount));
+
+  // Record current selections
+  QList<PipelineFilterWidget*> selected = m_Destination->getSelectedFilterWidgets();
+  for (int i = 0; i < selected.size(); i++)
   {
-    m_CopiedWidgets.push_back(m_Widgets[i]->deepCopy());
+    m_Selections.insert(m_Destination->indexOfFilterWidget(selected[i]), selected[i]->getSelectionModifiers());
   }
 
-  m_Destination->clearSelectedFilterWidgets();
-
+  // Paste the filter widgets
   int insertIndex = m_StartIndex;
-  for (int i = 0; i < m_CopiedWidgets.size(); i++)
+  for (int i = 0; i < m_FilterCount; i++)
   {
-    m_Destination->addFilterWidget(m_CopiedWidgets[i], insertIndex);
+    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
+    m_Destination->addFilterWidget(filterWidget, insertIndex);
 
     if (insertIndex >= 0)
     {
       insertIndex++;
+    }
+  }
+
+  // Clear the selected filter widgets
+  m_Destination->clearSelectedFilterWidgets();
+
+  // Re-select the previously recorded filter widgets
+  if (m_Selections.size() <= 0 && m_Destination->filterCount() > 0)
+  {
+    m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(0), Qt::NoModifier);
+  }
+  else
+  {
+    QMapIterator<int, Qt::KeyboardModifiers> iter(m_Selections);
+    while (iter.hasNext())
+    {
+      iter.next();
+
+      m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(iter.key()), iter.value());
     }
   }
 

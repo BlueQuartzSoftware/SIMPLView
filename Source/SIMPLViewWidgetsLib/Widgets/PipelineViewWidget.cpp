@@ -52,6 +52,7 @@
 #include <QtGui/QDragLeaveEvent>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDrag>
+#include <QtGui/QClipboard>
 #include <QtWidgets/QLabel>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QVBoxLayout>
@@ -148,9 +149,7 @@ void PipelineViewWidget::setupGui()
 
   connect(this, SIGNAL(filterWidgetsDropped(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)), dream3dApp, SLOT(dropFilterWidgets(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)));
 
-  connect(this, SIGNAL(clipboardChanged(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>)), dream3dApp, SLOT(setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>)));
-
-  connect(this, SIGNAL(pasteAvailabilityChanged(bool)), dream3dApp, SLOT(setPasteAvailability(bool)));
+  connect(this, SIGNAL(filterWidgetsPasted(const QString &, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, int)));
 
   m_DropBox = new DropBoxWidget();
 }
@@ -227,7 +226,7 @@ int PipelineViewWidget::filterCount()
   int count = 0;
   if (NULL != m_FilterWidgetLayout)
   {
-    count = m_FilterWidgetLayout->count();
+    count = m_FilterWidgetLayout->count() - 1;
   }
   return count;
 }
@@ -519,8 +518,7 @@ void PipelineViewWidget::addFilter(const QString& filterClassName, int index)
 
   if (index < 0) // If the programmer wants to add it to the end of the list
   {
-    index = filterCount() - 1; // filterCount will come back with the vertical spacer, and if index is still
-    // -1 then the spacer is not there and it will get added so the next time through. this should work
+    index = filterCount();
   }
 
   // Create a FilterWidget object
@@ -571,7 +569,7 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
 
   if(index == -1)
   {
-    index = filterCount() - 1;
+    index = filterCount();
   }
 
   // The layout will take control of the PipelineFilterWidget 'w' instance
@@ -919,10 +917,6 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
 {
   if (NULL == pipeline.get()) { clearWidgets(); return; }
 
-  // get a reference to the filters which are in some type of container object.
-  FilterPipeline::FilterContainerType& filters = pipeline->getFilterContainer();
-  int fCount = filters.size();
-
   //PipelineFilterWidget* firstWidget = NULL;
   //// Start looping on each filter
 
@@ -950,15 +944,9 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
 
   //emit pipelineChanged();
 
-  QList<PipelineFilterWidget*> filterWidgets;
-  for (int i = 0; i < fCount; i++)
-  {
-    // Create a PipelineFilterWidget using the current AbstractFilter instance to initialize it
-    PipelineFilterWidget* w = new PipelineFilterWidget(filters.at(i), NULL, this);
-    filterWidgets.push_back(w);
-  }
+  QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 
-  pasteFilterWidgets(filterWidgets, index);
+  emit filterWidgetsPasted(jsonString, index);
 }
 
 // -----------------------------------------------------------------------------
@@ -1445,53 +1433,6 @@ bool PipelineViewWidget::shouldAutoScroll(const QPoint& pos)
     return true;
   }
   return false;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::cutFilterWidgets()
-{
-  QList<PipelineFilterWidget*> copiedWidgets;
-  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
-  {
-    copiedWidgets.push_back(m_SelectedFilterWidgets[i]->deepCopy());
-  }
-
-  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
-  clipboard.first = copiedWidgets;
-  clipboard.second = this;
-
-  emit cutCommandNeeded(m_SelectedFilterWidgets, this);
-  emit clipboardChanged(clipboard);
-  emit pasteAvailabilityChanged(true);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::copyFilterWidgets()
-{
-  QList<PipelineFilterWidget*> copiedWidgets;
-  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
-  {
-    copiedWidgets.push_back(m_SelectedFilterWidgets[i]->deepCopy());
-  }
-
-  QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard;
-  clipboard.first = copiedWidgets;
-  clipboard.second = this;
-  
-  emit clipboardChanged(clipboard);
-  emit pasteAvailabilityChanged(true);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineViewWidget::pasteFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, int startIndex)
-{
-  emit pasteCommandNeeded(filterWidgets, startIndex, this);
 }
 
 // -----------------------------------------------------------------------------

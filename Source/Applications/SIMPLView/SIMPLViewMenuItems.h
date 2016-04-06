@@ -55,6 +55,9 @@ class SIMPLViewMenuItems : public QObject
   protected:
     SIMPLViewMenuItems(QObject* parent = 0);
 
+  protected slots:
+    void on_clipboard_dataChanged();
+
   private:
     static SIMPLViewMenuItems* self;
 

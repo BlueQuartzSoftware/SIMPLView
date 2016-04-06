@@ -654,12 +654,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
 
-  connect(pipelineViewWidget, SIGNAL(cutCommandNeeded(QList<PipelineFilterWidget*>, PipelineViewWidget*)),
-          this, SLOT(addCutCommand(QList<PipelineFilterWidget*>, PipelineViewWidget*)));
-
-  connect(pipelineViewWidget, SIGNAL(pasteCommandNeeded(QList<PipelineFilterWidget*>, int, PipelineViewWidget*)),
-    this, SLOT(addPasteCommand(QList<PipelineFilterWidget*>, int, PipelineViewWidget*)));
-
   connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
     this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
 
@@ -1234,24 +1228,6 @@ void SIMPLView_UI::preflightDidFinish(int err)
 void SIMPLView_UI::addUndoCommand(QUndoCommand* cmd)
 {
   m_UndoStack->push(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addCutCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView)
-{
-  CutCommand* cmd = new CutCommand(filterWidgets, pipelineView);
-  addUndoCommand(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addPasteCommand(QList<PipelineFilterWidget*> filterWidgets, int startIndex, PipelineViewWidget* pipelineView)
-{
-  PasteCommand* cmd = new PasteCommand(filterWidgets, pipelineView, startIndex);
-  addUndoCommand(cmd);
 }
 
 // -----------------------------------------------------------------------------

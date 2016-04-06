@@ -36,6 +36,8 @@
 #ifndef _pastecommand_h_
 #define _pastecommand_h_
 
+#include <QtCore/QMap>
+
 #include <QtWidgets/QUndoCommand>
 
 class PipelineFilterWidget;
@@ -44,7 +46,7 @@ class PipelineViewWidget;
 class PasteCommand : public QUndoCommand
 {
   public:
-    PasteCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* destination, int startIndex = -1, QUndoCommand* parent = 0);
+    PasteCommand(const QString &jsonString, PipelineViewWidget* destination, int startIndex = -1, QUndoCommand* parent = 0);
     virtual ~PasteCommand();
 
     virtual void undo();
@@ -52,10 +54,11 @@ class PasteCommand : public QUndoCommand
     virtual void redo();
 
   private:
-    QList<PipelineFilterWidget*>                        m_Widgets;
-    QList<PipelineFilterWidget*>                        m_CopiedWidgets;
+    QString                                             m_JsonString;
     PipelineViewWidget*                                 m_Destination;
+    QMap<int, Qt::KeyboardModifiers>                    m_Selections;
     int                                                 m_StartIndex;
+    int                                                 m_FilterCount;
 
     PasteCommand(const PasteCommand&); // Copy Constructor Not Implemented
     void operator=(const PasteCommand&); // Operator '=' Not Implemented

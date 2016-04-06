@@ -37,8 +37,13 @@
 
 #include <QtCore/QObject>
 
+#include <QtGui/QClipboard>
+
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
+
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 
 // -----------------------------------------------------------------------------
 //
@@ -49,10 +54,14 @@ CutCommand::CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineVie
 {
   setText(QObject::tr("\"Cut %1 Filter Widgets\"").arg(selectedWidgets.size()));
 
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
   for (int i = 0; i < selectedWidgets.size(); i++)
   {
     m_SelectedWidgetIndices.push_back(pipelineView->indexOfFilterWidget(selectedWidgets[i]));
+    pipeline->pushBack(selectedWidgets[i]->getFilter());
   }
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Cut - Pipeline");
 }
 
 // -----------------------------------------------------------------------------
@@ -68,14 +77,13 @@ CutCommand::~CutCommand()
 // -----------------------------------------------------------------------------
 void CutCommand::undo()
 {
-  m_PipelineView->clearSelectedFilterWidgets();
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-  for (int i = 0; i < m_CopiedFilterWidgets.size(); i++)
+  for (int i = 0; i < container.size(); i++)
   {
-    m_PipelineView->addFilterWidget(m_CopiedFilterWidgets[i], m_SelectedWidgetIndices[i]);
+    m_PipelineView->addFilter(container[i]->getNameOfClass(), m_SelectedWidgetIndices[i]);
   }
-
-  m_CopiedFilterWidgets.clear();
 
   m_PipelineView->preflightPipeline();
 }
@@ -85,11 +93,8 @@ void CutCommand::undo()
 // -----------------------------------------------------------------------------
 void CutCommand::redo()
 {
-  for (int i = 0; i < m_SelectedWidgetIndices.size(); i++)
-  {
-    PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);
-    m_CopiedFilterWidgets.push_back(filterWidget->deepCopy());
-  }
+  QClipboard* clipboard = QApplication::clipboard();
+  clipboard->setText(m_JsonString);
 
   for (int i = m_SelectedWidgetIndices.size() - 1; i >= 0; i--)
   {
