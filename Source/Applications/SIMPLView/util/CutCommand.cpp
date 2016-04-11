@@ -48,20 +48,17 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CutCommand::CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+CutCommand::CutCommand(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_PipelineView(pipelineView)
+  m_PipelineView(pipelineView),
+  m_JsonString(jsonString)
 {
   setText(QObject::tr("\"Cut %1 Filter Widgets\"").arg(selectedWidgets.size()));
 
-  FilterPipeline::Pointer pipeline = FilterPipeline::New();
   for (int i = 0; i < selectedWidgets.size(); i++)
   {
     m_SelectedWidgetIndices.push_back(pipelineView->indexOfFilterWidget(selectedWidgets[i]));
-    pipeline->pushBack(selectedWidgets[i]->getFilter());
   }
-
-  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Cut - Pipeline");
 }
 
 // -----------------------------------------------------------------------------
@@ -93,9 +90,6 @@ void CutCommand::undo()
 // -----------------------------------------------------------------------------
 void CutCommand::redo()
 {
-  QClipboard* clipboard = QApplication::clipboard();
-  clipboard->setText(m_JsonString);
-
   for (int i = m_SelectedWidgetIndices.size() - 1; i >= 0; i--)
   {
     PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);

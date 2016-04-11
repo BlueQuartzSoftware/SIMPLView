@@ -196,6 +196,8 @@ class SIMPLViewApplication : public QApplication
     QMenu*                                                                    m_ContextMenu;
 
     // Helper functions
+    void cutFilterWidgets(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, SIMPLView_UI* instance);
+
     void pasteFilterWidgets(int startIndex);
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented

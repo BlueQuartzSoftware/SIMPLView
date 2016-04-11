@@ -910,9 +910,28 @@ void SIMPLViewApplication::on_actionCut_triggered()
   {
     QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
 
-    CutCommand* cmd = new CutCommand(filterWidgets, m_ActiveWindow->getPipelineViewWidget());
-    m_ActiveWindow->addUndoCommand(cmd);
+    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+    for (int i = 0; i < filterWidgets.size(); i++)
+    {
+      pipeline->pushBack(filterWidgets[i]->getFilter());
+    }
+
+    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Cut - Pipeline");
+
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(jsonString);
+
+    cutFilterWidgets(jsonString, filterWidgets, m_ActiveWindow);
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::cutFilterWidgets(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, SIMPLView_UI* instance)
+{
+  CutCommand* cmd = new CutCommand(jsonString, selectedWidgets, instance->getPipelineViewWidget());
+  instance->addUndoCommand(cmd);
 }
 
 // -----------------------------------------------------------------------------
@@ -1242,19 +1261,25 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, Qt::KeyboardModifiers modifiers)
 {
-  QClipboard* clipboard = QApplication::clipboard();
-
-  if (modifiers != Qt::AltModifier)
+  if (NULL != m_ActiveWindow)
   {
-    on_actionCut_triggered();
-  }
-  else
-  {
-    on_actionCopy_triggered();
-  }
+    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
 
-  QString json = clipboard->text();
-  pasteFilterWidgets(json, destination, -1);
+    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+    for (int i = 0; i < filterWidgets.size(); i++)
+    {
+      pipeline->pushBack(filterWidgets[i]->getFilter());
+    }
+
+    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+
+    if (modifiers != Qt::AltModifier)
+    {
+      cutFilterWidgets(jsonString, filterWidgets, m_ActiveWindow);
+    }
+
+    pasteFilterWidgets(jsonString, destination, -1);
+  }
 }
 
 // -----------------------------------------------------------------------------

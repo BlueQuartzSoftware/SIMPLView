@@ -46,7 +46,7 @@ class PipelineViewWidget;
 class CutCommand : public QUndoCommand
 {
   public:
-    CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+    CutCommand(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
     virtual ~CutCommand();
 
     virtual void undo();

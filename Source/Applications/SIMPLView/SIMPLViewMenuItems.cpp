@@ -164,6 +164,9 @@ void SIMPLViewMenuItems::createActions()
   QClipboard* clipboard = QApplication::clipboard();
   connect(clipboard, SIGNAL(dataChanged()), this, SLOT(on_clipboard_dataChanged()));
 
+  // Run this once, so that the Paste button is updated for what is currently on the system clipboard
+  on_clipboard_dataChanged();
+
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
 
   // Connections
