@@ -330,7 +330,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void filterWidgetsPasted(const QString &jsonString, int startIndex);
 
-    void filterWidgetsDropped(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);
+    void filterWidgetsDropped(Qt::KeyboardModifiers modifiers);
 
   protected:
     void setupGui();

@@ -147,8 +147,6 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
-  connect(this, SIGNAL(filterWidgetsDropped(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)), dream3dApp, SLOT(dropFilterWidgets(PipelineViewWidget*, PipelineViewWidget*, Qt::KeyboardModifiers)));
-
   connect(this, SIGNAL(filterWidgetsPasted(const QString &, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, int)));
 
   m_DropBox = new DropBoxWidget();
@@ -650,8 +648,8 @@ void PipelineViewWidget::startDrag(QMouseEvent* event)
   }
   p.end();
 
-  PipelineViewPtrMimeData* mimeData = new PipelineViewPtrMimeData;
-  mimeData->setPipelineViewPtr(this);
+  QMimeData* mimeData = new QMimeData();
+  mimeData->setData(SIMPL::DragAndDrop::FilterWidgets, QByteArray());
 
   QDrag* drag = new QDrag(this);
   drag->setMimeData(mimeData);
@@ -1286,12 +1284,9 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
       event->ignore();
     }
   }
-  else if (NULL != qobject_cast<const PipelineViewPtrMimeData*>(mimedata))
+  else if (mimedata->hasFormat(SIMPL::DragAndDrop::FilterWidgets))
   {
-    const PipelineViewPtrMimeData* pipelineViewMimeData = qobject_cast<const PipelineViewPtrMimeData*>(mimedata);
-    PipelineViewWidget* origin = pipelineViewMimeData->getPipelineViewPtr();
-
-    emit filterWidgetsDropped(origin, this, qApp->keyboardModifiers());
+    emit filterWidgetsDropped(qApp->keyboardModifiers());
   }
 
   // Stop auto scrolling if widget is dropped

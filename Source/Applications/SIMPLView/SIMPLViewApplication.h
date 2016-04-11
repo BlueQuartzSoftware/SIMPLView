@@ -151,7 +151,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
-    void dropFilterWidgets(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers);
+    void dropFilterWidgets(SIMPLView_UI* destination, Qt::KeyboardModifiers modifiers);
 
     void on_pipelineViewContextMenuRequested(const QPoint&);
     void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
@@ -188,7 +188,7 @@ class SIMPLViewApplication : public QApplication
 
   private slots:
     void pasteFilterWidgets(const QString &jsonString, int startIndex);
-    void pasteFilterWidgets(const QString &jsonString, PipelineViewWidget* viewWidget, int startIndex);
+    void pasteFilterWidgets(const QString &jsonString, SIMPLView_UI* instance, int startIndex);
 
   private:
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;

@@ -959,19 +959,19 @@ void SIMPLViewApplication::pasteFilterWidgets(int startIndex)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, int startIndex)
 {
-  pasteFilterWidgets(jsonString, m_ActiveWindow->getPipelineViewWidget(), startIndex);
+  if (NULL != m_ActiveWindow)
+  {
+    pasteFilterWidgets(jsonString, m_ActiveWindow, startIndex);
+  }
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, PipelineViewWidget* viewWidget, int startIndex)
+void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, SIMPLView_UI* instance, int startIndex)
 {
-  if (NULL != m_ActiveWindow)
-  {
-    PasteCommand* cmd = new PasteCommand(jsonString, viewWidget, startIndex);
-    m_ActiveWindow->addUndoCommand(cmd);
-  }
+  PasteCommand* cmd = new PasteCommand(jsonString, instance->getPipelineViewWidget(), startIndex);
+  instance->addUndoCommand(cmd);
 }
 
 // -----------------------------------------------------------------------------
@@ -1240,8 +1240,10 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::dropFilterWidgets(PipelineViewWidget* origin, PipelineViewWidget* destination, Qt::KeyboardModifiers modifiers)
+void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, Qt::KeyboardModifiers modifiers)
 {
+  QClipboard* clipboard = QApplication::clipboard();
+
   if (modifiers != Qt::AltModifier)
   {
     on_actionCut_triggered();
@@ -1251,7 +1253,8 @@ void SIMPLViewApplication::dropFilterWidgets(PipelineViewWidget* origin, Pipelin
     on_actionCopy_triggered();
   }
 
-  //destination->pasteFilterWidgets(m_Clipboard.first);
+  QString json = clipboard->text();
+  pasteFilterWidgets(json, destination, -1);
 }
 
 // -----------------------------------------------------------------------------

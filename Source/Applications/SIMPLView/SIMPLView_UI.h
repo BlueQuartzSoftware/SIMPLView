@@ -252,6 +252,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView);
 
+    void dropFilterWidgets(Qt::KeyboardModifiers modifiers);
+
     // Our Signals that we can emit custom for this class
   signals:
 
@@ -281,6 +283,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief dream3dWindowChangedState
     */
     void dream3dWindowChangedState(SIMPLView_UI* self, QUndoStack* undoStack);
+
+    /**
+    * @brief filterWidgetsDropped
+    */
+    void filterWidgetsDropped(SIMPLView_UI* destination, Qt::KeyboardModifiers modifiers);
 
   protected:
 
