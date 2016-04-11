@@ -70,7 +70,16 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 void PasteCommand::undo()
 {
-  int index = m_StartIndex + m_FilterCount - 1;
+  int index;
+  if (m_StartIndex != -1)
+  {
+    index = m_StartIndex + m_FilterCount - 1;
+  }
+  else
+  {
+    index = m_FilterCount - 1;
+  }
+
   for (int i = 0; i < m_FilterCount; i++)
   {
     m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
