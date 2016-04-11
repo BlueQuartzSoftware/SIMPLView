@@ -58,7 +58,7 @@ class PasteCommand : public QUndoCommand
     PipelineViewWidget*                                 m_Destination;
     QMap<int, Qt::KeyboardModifiers>                    m_Selections;
     int                                                 m_StartIndex;
-    int                                                 m_FilterCount;
+    int                                                 m_TotalFiltersPasted;
 
     PasteCommand(const PasteCommand&); // Copy Constructor Not Implemented
     void operator=(const PasteCommand&); // Operator '=' Not Implemented

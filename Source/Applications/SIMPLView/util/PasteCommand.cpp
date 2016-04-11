@@ -73,14 +73,14 @@ void PasteCommand::undo()
   int index;
   if (m_StartIndex != -1)
   {
-    index = m_StartIndex + m_FilterCount - 1;
+    index = m_StartIndex + m_TotalFiltersPasted - 1;
   }
   else
   {
-    index = m_FilterCount - 1;
+    index = m_Destination->filterCount() - 1;
   }
 
-  for (int i = 0; i < m_FilterCount; i++)
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
     m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
     index--;
@@ -98,8 +98,8 @@ void PasteCommand::redo()
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
   FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-  m_FilterCount = container.size();
-  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(m_FilterCount));
+  m_TotalFiltersPasted = container.size();
+  setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(m_TotalFiltersPasted));
 
   // Record current selections
   QList<PipelineFilterWidget*> selected = m_Destination->getSelectedFilterWidgets();
@@ -110,7 +110,7 @@ void PasteCommand::redo()
 
   // Paste the filter widgets
   int insertIndex = m_StartIndex;
-  for (int i = 0; i < m_FilterCount; i++)
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
     m_Destination->addFilterWidget(filterWidget, insertIndex);
