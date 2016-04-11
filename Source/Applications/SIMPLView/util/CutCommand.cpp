@@ -82,7 +82,7 @@ void CutCommand::undo()
 
   for (int i = 0; i < container.size(); i++)
   {
-    m_PipelineView->addFilter(container[i]->getNameOfClass(), m_SelectedWidgetIndices[i]);
+    m_PipelineView->addFilterWidget(new PipelineFilterWidget(container[i], NULL, m_PipelineView), m_SelectedWidgetIndices[i]);
   }
 
   m_PipelineView->preflightPipeline();
