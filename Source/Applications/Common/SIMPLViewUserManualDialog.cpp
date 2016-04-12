@@ -55,7 +55,8 @@ SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::self = NULL;
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewUserManualDialog::SIMPLViewUserManualDialog()
+SIMPLViewUserManualDialog::SIMPLViewUserManualDialog(QWidget* parent) :
+  QDialog(parent)
 {
   Q_ASSERT_X(!self, "SIMPLViewUserManualDialog", "There should be only one SIMPLViewUserManualDialog object");
 
@@ -93,11 +94,11 @@ SIMPLViewUserManualDialog::~SIMPLViewUserManualDialog() {}
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::Instance()
+SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::Instance(QWidget* parent)
 {
   if (self == NULL)
   {
-    self = new SIMPLViewUserManualDialog();
+    self = new SIMPLViewUserManualDialog(parent);
   }
   return self;
 }

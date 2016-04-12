@@ -120,6 +120,10 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 // -----------------------------------------------------------------------------
 SIMPLViewApplication::~SIMPLViewApplication()
 {
+  // We need to delete the help dialog if it's been used
+  SIMPLViewUserManualDialog* dialog = SIMPLViewUserManualDialog::Instance();
+  delete dialog;
+
   delete this->Splash;
   this->Splash = NULL;
 
