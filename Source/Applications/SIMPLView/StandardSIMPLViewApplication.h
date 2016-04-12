@@ -74,6 +74,11 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
     */
     virtual void toolboxWindowChanged();
 
+    /**
+    * @brief toolboxWindowChanged
+    */
+    virtual void toolboxWindowChanged();
+
     // SIMPLView_UI slots
     virtual void on_actionClearRecentFiles_triggered();
 

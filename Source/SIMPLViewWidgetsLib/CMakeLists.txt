@@ -179,12 +179,7 @@ endif()
 add_library(SIMPLViewWidgetsLib ${LIB_TYPE} ${Project_SRCS})
 
 set(D3D_LINK_LIBRARIES
-                      # Qt5::Core
                       QtSupportLib
-                      #Qt5::Gui
-                      #Qt5::Widgets
-
-                      #SIMPLib
                       )
 
 target_link_libraries(SIMPLViewWidgetsLib ${D3D_LINK_LIBRARIES} )

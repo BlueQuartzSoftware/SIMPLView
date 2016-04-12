@@ -77,6 +77,7 @@ void IssuesDockWidget::setupGui()
   errorTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   errorTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
   errorTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+  errorTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   errorTableWidget->setVisible(true);
 }
 
@@ -192,8 +193,6 @@ void IssuesDockWidget::displayCachedMessages()
           QString msgDesc = (msg.getText());
           int msgCode = msg.getCode();
 
-
-
           QTableWidgetItem* filterNameWidgetItem = new QTableWidgetItem(msgName);
           filterNameWidgetItem->setTextAlignment(Qt::AlignCenter);
           QTableWidgetItem* descriptionWidgetItem = new QTableWidgetItem(msgDesc);
@@ -217,6 +216,7 @@ void IssuesDockWidget::displayCachedMessages()
         }
         row++;
         break;
+
 
       default:
         break;
