@@ -156,6 +156,17 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void StandardSIMPLViewApplication::toolboxWindowChanged()
+{
+  if (m_Toolbox->isActiveWindow())
+  {
+    m_ActiveWindow = NULL;
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);

@@ -69,6 +69,11 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
     */
     virtual void dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack *undoStack);
 
+    /**
+    * @brief toolboxWindowChanged
+    */
+    virtual void toolboxWindowChanged();
+
     // SIMPLView_UI slots
     virtual void on_actionClearRecentFiles_triggered();
 
