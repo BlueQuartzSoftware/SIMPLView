@@ -54,10 +54,12 @@ class MoveFilterCommand : public QUndoCommand
   private:
     PipelineViewWidget*                     m_PipelineView;
     PipelineFilterWidget*                   m_FilterWidget;
-    PipelineFilterWidget*                   m_FilterWidgetCopy;
+    QString                                 m_JsonString;
     int                                     m_OriginIndex;
     int                                     m_DestinationIndex;
     bool                                    m_WindowIsModified;
+
+    void moveFilter(int origin, int destination);
 
     MoveFilterCommand(const MoveFilterCommand&); // Copy Constructor Not Implemented
     void operator=(const MoveFilterCommand&); // Operator '=' Not Implemented

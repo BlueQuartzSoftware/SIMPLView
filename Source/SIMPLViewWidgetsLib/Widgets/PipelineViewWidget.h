@@ -93,6 +93,13 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     PipelineFilterWidget* filterWidgetAt(int index);
 
     /**
+    * @brief containsFilterWidget
+    * @param filterWidget
+    * @return
+    */
+    bool containsFilterWidget(PipelineFilterWidget* filterWidget);
+
+    /**
     * @brief indexOfFilterWidget
     * @param filterWidget
     * @return
@@ -330,7 +337,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void filterWidgetsPasted(const QString &jsonString, int startIndex);
 
-    void filterWidgetsDropped(Qt::KeyboardModifiers modifiers);
+    void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
 
   protected:
     void setupGui();

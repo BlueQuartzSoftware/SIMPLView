@@ -1259,7 +1259,7 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, Qt::KeyboardModifiers modifiers)
+void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers)
 {
   if (NULL != m_ActiveWindow)
   {
@@ -1278,7 +1278,7 @@ void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, Qt::Keyb
       cutFilterWidgets(jsonString, filterWidgets, m_ActiveWindow);
     }
 
-    pasteFilterWidgets(jsonString, destination, -1);
+    pasteFilterWidgets(jsonString, destination, insertIndex);
   }
 }
 

@@ -654,14 +654,14 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
 
-  connect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(Qt::KeyboardModifiers)), 
-          this, SLOT(dropFilterWidgets(Qt::KeyboardModifiers)));
+  connect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(int, Qt::KeyboardModifiers)), 
+          this, SLOT(dropFilterWidgets(int, Qt::KeyboardModifiers)));
 
   connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
           this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
 
-  connect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, Qt::KeyboardModifiers)),
-          dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, Qt::KeyboardModifiers)));
+  connect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, int, Qt::KeyboardModifiers)),
+          dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, int, Qt::KeyboardModifiers)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -734,9 +734,9 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineHasNoErrors()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::dropFilterWidgets(Qt::KeyboardModifiers modifiers)
+void SIMPLView_UI::dropFilterWidgets(int insertIndex, Qt::KeyboardModifiers modifiers)
 {
-  emit filterWidgetsDropped(this, modifiers);
+  emit filterWidgetsDropped(this, insertIndex, modifiers);
 }
 
 // -----------------------------------------------------------------------------

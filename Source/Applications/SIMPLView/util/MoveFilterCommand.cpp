@@ -40,6 +40,9 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -50,7 +53,10 @@ MoveFilterCommand::MoveFilterCommand(PipelineFilterWidget* filterWidget, int ori
   m_OriginIndex(originIndex),
   m_DestinationIndex(destIndex)
 {
-  m_FilterWidgetCopy = m_FilterWidget->deepCopy();
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  pipeline->pushBack(filterWidget->getFilter());
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 
   setText(QObject::tr("\"Move '%1'\"").arg(m_FilterWidget->getFilter()->getHumanLabel()));
 }
@@ -68,16 +74,7 @@ MoveFilterCommand::~MoveFilterCommand()
 // -----------------------------------------------------------------------------
 void MoveFilterCommand::undo()
 {
-  m_FilterWidget = m_PipelineView->filterWidgetAt(m_DestinationIndex);
-
-  m_FilterWidgetCopy = m_FilterWidget->deepCopy();
-
-  m_PipelineView->addFilterWidget(m_FilterWidget, m_OriginIndex);
-  m_PipelineView->setSelectedFilterWidget(m_FilterWidget);
-
-  m_PipelineView->preflightPipeline();
-
-  emit m_PipelineView->pipelineChanged();
+  moveFilter(m_DestinationIndex, m_OriginIndex);
 }
 
 // -----------------------------------------------------------------------------
@@ -85,10 +82,28 @@ void MoveFilterCommand::undo()
 // -----------------------------------------------------------------------------
 void MoveFilterCommand::redo()
 {
-  m_PipelineView->removeFilterWidget(m_FilterWidget);
+  moveFilter(m_OriginIndex, m_DestinationIndex);
+}
 
-  m_PipelineView->addFilterWidget(m_FilterWidgetCopy, m_DestinationIndex);
-  m_PipelineView->setSelectedFilterWidget(m_FilterWidgetCopy);
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void MoveFilterCommand::moveFilter(int origin, int destination)
+{
+  if (NULL == m_FilterWidget)
+  {
+    m_PipelineView->removeFilterWidget(m_PipelineView->filterWidgetAt(origin));
+  }
+  else
+  {
+    m_FilterWidget = NULL;
+  }
+
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  PipelineFilterWidget* filterWidget = new PipelineFilterWidget(pipeline->getFilterContainer().at(0), NULL, m_PipelineView);
+
+  m_PipelineView->addFilterWidget(filterWidget, destination);
+  m_PipelineView->setSelectedFilterWidget(filterWidget);
 
   m_PipelineView->preflightPipeline();
 
