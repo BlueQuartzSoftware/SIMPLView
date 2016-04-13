@@ -61,13 +61,15 @@
 #include "Applications/Common/SIMPLViewUserManualDialog.h"
 #endif
 #include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
+#include "SIMPLViewWidgetsLib/Widgets/AboutPlugins.h"
+#include "SIMPLViewWidgetsLib/Widgets/DSplashScreen.h"
+
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
-#include "Applications/SIMPLView/AboutPlugins.h"
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
-#include "Applications/SIMPLView/DSplashScreen.h"
+
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
 
 

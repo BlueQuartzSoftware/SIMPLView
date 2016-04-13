@@ -72,34 +72,27 @@ void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  for (int i = 0; i < m_SIMPLViewInstances.size(); i++)
+  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
+  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
+
+  // Clear the Recent Items Menu
+  recentFilesMenu->clear();
+
+  // Get the list from the static object
+  QStringList files = QRecentFileList::instance()->fileList();
+  foreach(QString file, files)
   {
-    SIMPLView_UI* window = m_SIMPLViewInstances[i];
-
-    if (NULL != window)
-    {
-      QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-      QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
-
-      // Clear the Recent Items Menu
-      recentFilesMenu->clear();
-
-      // Get the list from the static object
-      QStringList files = QRecentFileList::instance()->fileList();
-      foreach(QString file, files)
-      {
-        QAction* action = new QAction(recentFilesMenu);
-        action->setText(QRecentFileList::instance()->parentAndFileName(file));
-        action->setData(file);
-        action->setVisible(true);
-        recentFilesMenu->addAction(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
-      }
-
-      recentFilesMenu->addSeparator();
-      recentFilesMenu->addAction(clearRecentFilesAction);
-    }
+    QAction* action = new QAction(recentFilesMenu);
+    action->setText(QRecentFileList::instance()->parentAndFileName(file));
+    action->setData(file);
+    action->setVisible(true);
+    recentFilesMenu->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
+
+  recentFilesMenu->addSeparator();
+  recentFilesMenu->addAction(clearRecentFilesAction);
+
 }
 
 // -----------------------------------------------------------------------------
@@ -109,29 +102,22 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  for (int i = 0; i < m_SIMPLViewInstances.size(); i++)
-  {
-    SIMPLView_UI* window = m_SIMPLViewInstances[i];
+  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
+  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
 
-    if (NULL != window)
-    {
-      QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-      QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
+  // Clear the Recent Items Menu
+  recentFilesMenu->clear();
+  recentFilesMenu->addSeparator();
+  recentFilesMenu->addAction(clearRecentFilesAction);
 
-      // Clear the Recent Items Menu
-      recentFilesMenu->clear();
-      recentFilesMenu->addSeparator();
-      recentFilesMenu->addAction(clearRecentFilesAction);
+  // Clear the actual list
+  QRecentFileList* recents = QRecentFileList::instance();
+  recents->clear();
 
-      // Clear the actual list
-      QRecentFileList* recents = QRecentFileList::instance();
-      recents->clear();
-
-      // Write out the empty list
-      QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
-      recents->writeList(prefs.data());
-    }
-  }
+  // Write out the empty list
+  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  recents->writeList(prefs.data());
+ 
 }
 
 // -----------------------------------------------------------------------------
