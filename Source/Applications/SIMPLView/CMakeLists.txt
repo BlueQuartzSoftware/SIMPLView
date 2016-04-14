@@ -152,8 +152,6 @@ cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
 # and finally any resource files
 SET(SIMPLView_RCS
-  # These are generic Icons for the Application
-  ${PROJECT_RESOURCES_DIR}/icons/images/Icons.qrc
   # this is the SIMPLView specific branding icons
   ${BrandedSIMPLView_DIR}/branded_files.qrc
 )

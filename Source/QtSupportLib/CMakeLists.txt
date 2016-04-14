@@ -3,7 +3,7 @@
 #  All rights reserved.
 #  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #///////////////////////////////////////////////////////////////////////////////
-project(QtSupportLib VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR})
+project(QtSupportLib VERSION 2.0)
 
 
 if(NOT PROJECT_RESOURCES_DIR)
@@ -43,7 +43,7 @@ set(QtSupportLib_INSTALL_FILES 0)
 # project.
 #-------------------------------------------------------------------------------
 if(NOT DEFINED SIMPLViewProj_BINARY_DIR)
-  set(CMP_HEADER_DIR ${QtSupportLib_BINARY_DIR}/QtSupportLib)
+  set(CMP_HEADER_DIR ${QtSupportLib_BINARY_DIR})
 else()
   set(CMP_HEADER_DIR ${QtSupportLib_BINARY_DIR}/QtSupportLib)
 endif()
@@ -83,7 +83,9 @@ cmp_IDE_GENERATED_PROPERTIES("Generated" "${QtSupportLib_CMP_Generated_SRCS}" ""
 # Setup the Include Directories
 include_directories(${PROJECT_CODE_DIR}
                     ${QtSupportLib_BINARY_DIR}
+                    ${QtSupportLib_BINARY_DIR}/..
                     ${QtSupportLib_SOURCE_DIR}/..
+                    ${QtSupportLib_SOURCE_DIR}
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
   )
@@ -206,9 +208,7 @@ set(Project_SRCS ${Project_SRCS}
   ${QtSupportLib_Generated_MOC_SRCS}
 )
 
-include_directories(${QtSupportLib_SOURCE_DIR}/..)
-include_directories(${QtSupportLib_BINARY_DIR})
-include_directories(${QtSupportLib_BINARY_DIR}/..)
+
 add_definitions(-DQT_CORE_LIB)
 
 if(UNIX AND NOT APPLE)
