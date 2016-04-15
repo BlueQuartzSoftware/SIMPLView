@@ -189,6 +189,7 @@ void MacSIMPLViewApplication::toolboxWindowChanged()
   if (m_Toolbox->isActiveWindow())
   {
     toToolboxMenuState();
+    m_ActiveWindow = NULL;
   }
   else if (m_SIMPLViewInstances.size() <= 0)
   {
