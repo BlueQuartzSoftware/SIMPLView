@@ -140,6 +140,9 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   // using the QDesigner program
   setupUi(this);
 
+  m_ActionUndo = m_UndoStack->createUndoAction(this);
+  m_ActionRedo = m_UndoStack->createRedoAction(this);
+
   // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
@@ -560,9 +563,6 @@ void SIMPLView_UI::setupGui()
   checkForUpdatesAtStartup();
 
   pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
-
-  m_ActionUndo = m_UndoStack->createUndoAction(this);
-  m_ActionRedo = m_UndoStack->createRedoAction(this);
 
   m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
   m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));

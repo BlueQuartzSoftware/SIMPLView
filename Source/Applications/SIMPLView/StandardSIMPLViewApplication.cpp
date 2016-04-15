@@ -219,8 +219,8 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStac
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
-  QAction* actionUndo = undoStack->createUndoAction(instance);
-  QAction* actionRedo = undoStack->createRedoAction(instance);
+  QAction* actionUndo = instance->getActionUndo();
+  QAction* actionRedo = instance->getActionRedo();
 
   actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
   actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
