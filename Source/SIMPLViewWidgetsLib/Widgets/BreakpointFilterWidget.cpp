@@ -43,20 +43,27 @@
 //
 // -----------------------------------------------------------------------------
 BreakpointFilterWidget::BreakpointFilterWidget(QWidget* parent) :
-  PipelineFilterWidget(parent)
+  PipelineFilterWidget(parent),
+  m_Filter(NULL)
 {
-  m_PauseBtn = new QPushButton("Resume");
-
-  getHorizontalLayout()->addWidget(m_PauseBtn);
+  setupGui();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 BreakpointFilterWidget::BreakpointFilterWidget(AbstractFilter::Pointer filter, IObserver* observer, QWidget* parent) :
-  PipelineFilterWidget(filter, observer, parent)
+  PipelineFilterWidget(filter, observer, parent),
+  m_Filter(NULL)
 {
-  
+  m_Filter = std::dynamic_pointer_cast<Breakpoint>(PipelineFilterWidget::getFilter());
+
+  if (NULL != m_Filter)
+  {
+    connect(m_Filter.get(), SIGNAL(pipelineHasPaused()), this, SLOT(showResumeBtn()));
+  }
+
+  setupGui();
 }
 
 // -----------------------------------------------------------------------------
@@ -70,9 +77,39 @@ BreakpointFilterWidget::~BreakpointFilterWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void BreakpointFilterWidget::setupGui()
+{
+  m_ResumeBtn = new QPushButton("Resume");
+  m_ResumeBtn->hide();
+
+  connect(m_ResumeBtn, SIGNAL(pressed()), this, SLOT(resumeBtnPressed()));
+
+  getHorizontalLayout()->addWidget(m_ResumeBtn);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BreakpointFilterWidget::resumeBtnPressed()
+{
+  m_Filter->resumePipeline();
+  m_ResumeBtn->hide();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BreakpointFilterWidget::showResumeBtn()
+{
+  m_ResumeBtn->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 Breakpoint::Pointer BreakpointFilterWidget::getBreakpointFilter()
 {
-  return std::dynamic_pointer_cast<Breakpoint>(PipelineFilterWidget::getFilter());
+  return m_Filter;
 }
 
 
