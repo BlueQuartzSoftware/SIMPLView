@@ -115,6 +115,7 @@ class SIMPLViewApplication : public QApplication
 
     // The currently active SIMPLView instance
     SIMPLView_UI*                               m_ActiveWindow;
+    SIMPLView_UI*                               m_PreviousActiveWindow;
 
     QString                                   m_OpenDialogLastDirectory;
 
