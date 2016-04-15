@@ -61,6 +61,7 @@ BreakpointFilterWidget::BreakpointFilterWidget(AbstractFilter::Pointer filter, I
   if (NULL != m_Filter)
   {
     connect(m_Filter.get(), SIGNAL(pipelineHasPaused()), this, SLOT(showResumeBtn()));
+    connect(m_Filter.get(), SIGNAL(pipelineHasResumed()), this, SLOT(hideResumeBtn()));
   }
 
   setupGui();
@@ -93,7 +94,6 @@ void BreakpointFilterWidget::setupGui()
 void BreakpointFilterWidget::resumeBtnPressed()
 {
   m_Filter->resumePipeline();
-  m_ResumeBtn->hide();
 }
 
 // -----------------------------------------------------------------------------
@@ -102,6 +102,14 @@ void BreakpointFilterWidget::resumeBtnPressed()
 void BreakpointFilterWidget::showResumeBtn()
 {
   m_ResumeBtn->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BreakpointFilterWidget::hideResumeBtn()
+{
+  m_ResumeBtn->hide();
 }
 
 // -----------------------------------------------------------------------------
