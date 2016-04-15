@@ -32,6 +32,19 @@ foreach(FPW ${SIMPLView_WIDGETS})
     )
 endforeach()
 
+set(SIMPLView_WIDGETS_NO_UI
+    BreakpointFilterWidget
+)
+
+foreach(FPW ${SIMPLView_WIDGETS_NO_UI})
+  set(SIMPLViewWidgetsLib_Widgets_MOC_HDRS ${SIMPLViewWidgetsLib_Widgets_MOC_HDRS}
+    ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/${FPW}.h
+    )
+  set(SIMPLViewWidgetsLib_Widgets_SRCS ${SIMPLViewWidgetsLib_Widgets_SRCS}
+    ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/${FPW}.cpp
+    )
+endforeach()
+
 # Add in the remaining sources that are actually widgets but are completely Custom and do NOT use private
 # inheritance through a .ui file
 set(SIMPLViewWidgetsLib_Widgets_MOC_HDRS
