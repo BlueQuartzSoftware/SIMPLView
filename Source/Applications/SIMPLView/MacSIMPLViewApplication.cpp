@@ -165,26 +165,8 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndo
   {
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-    if (NULL != m_ActionUndo)
-    {
-      m_MenuEdit->removeAction(m_ActionUndo);
-      delete m_ActionUndo;
-    }
-
-    if (NULL != m_ActionRedo)
-    {
-      m_MenuEdit->removeAction(m_ActionRedo);
-      delete m_ActionRedo;
-    }
-
-    m_ActionUndo = undoStack->createUndoAction(instance);
-    m_ActionRedo = undoStack->createRedoAction(instance);
-
-    m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-    m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
-
-    m_MenuEdit->insertAction(m_EditSeparator, m_ActionRedo);
-    m_MenuEdit->insertAction(m_ActionRedo, m_ActionUndo);
+    m_MenuEdit->insertAction(m_EditSeparator, instance->getActionRedo());
+    m_MenuEdit->insertAction(instance->getActionRedo(), instance->getActionUndo());
 
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
@@ -203,6 +185,8 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndo
   }
   else
   {
+    m_MenuEdit->removeAction(instance->getActionRedo());
+    m_MenuEdit->removeAction(instance->getActionUndo());
     m_PreviousActiveWindow = instance;
   }
 }

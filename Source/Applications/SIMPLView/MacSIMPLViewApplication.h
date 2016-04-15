@@ -87,9 +87,6 @@ private:
   QMenu*                                m_MenuEdit;
   QAction*                              m_EditSeparator;
 
-  QAction*                              m_ActionUndo;
-  QAction*                              m_ActionRedo;
-
   void createGlobalMenu();
 
   QMenu* createCustomDockMenu();

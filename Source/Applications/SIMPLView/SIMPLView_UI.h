@@ -169,6 +169,16 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
+    /**
+     * @brief getActionRedo
+     */
+    QAction* getActionRedo();
+
+    /**
+     * @brief getActionUndo
+     */
+    QAction* getActionUndo();
+
   public slots:
 
     /**

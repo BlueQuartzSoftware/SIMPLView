@@ -561,6 +561,12 @@ void SIMPLView_UI::setupGui()
 
   pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
 
+  m_ActionUndo = m_UndoStack->createUndoAction(this);
+  m_ActionRedo = m_UndoStack->createRedoAction(this);
+
+  m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+  m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
+
   // Stretch Factors
   splitter->setStretchFactor(0, 0);
   splitter->setStretchFactor(1, 1);
@@ -1251,6 +1257,22 @@ void SIMPLView_UI::addMoveCommand(PipelineFilterWidget* filterWidget, int origin
 {
   MoveFilterCommand* cmd = new MoveFilterCommand(filterWidget, originIndex, destIndex, pipelineView);
   addUndoCommand(cmd);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QAction* SIMPLView_UI::getActionRedo()
+{
+  return m_ActionRedo;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QAction* SIMPLView_UI::getActionUndo()
+{
+  return m_ActionUndo;
 }
 
 
