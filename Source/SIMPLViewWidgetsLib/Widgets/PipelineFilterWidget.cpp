@@ -962,3 +962,11 @@ void PipelineFilterWidget::toIdleState()
   m_FilterInputWidget->getVariablesTabContentsWidget()->setEnabled(true);
   deleteBtn->setEnabled(true);
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QHBoxLayout* PipelineFilterWidget::getHorizontalLayout()
+{
+  return horizontalLayout;
+}

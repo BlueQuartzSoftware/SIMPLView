@@ -68,6 +68,7 @@
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/Common/IFilterFactory.hpp"
 #include "SIMPLib/Common/FilterFactory.hpp"
+#include "SIMPLib/CoreFilters/Breakpoint.h"
 #include "SIMPLib/FilterParameters/QFilterParametersReader.h"
 #include "SIMPLib/FilterParameters/QFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
@@ -76,6 +77,7 @@
 #include "QtSupportLib/QDroppableScrollArea.h"
 
 #include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
+#include "SIMPLViewWidgetsLib/Widgets/BreakpointFilterWidget.h"
 
 #include "SIMPLViewWidgetsLib/FilterParameterWidgets/FilterParameterWidgetsDialogs.h"
 
@@ -505,11 +507,19 @@ void PipelineViewWidget::addFilter(const QString& filterClassName, int index)
     // -1 then the spacer is not there and it will get added so the next time through. this should work
   }
 
-  // Create a FilterWidget object
-  PipelineFilterWidget* w = new PipelineFilterWidget(filter, NULL, this);
+  Breakpoint::Pointer breakpoint = std::dynamic_pointer_cast<Breakpoint>(filter);
 
-  // Add the filter widget to this view widget
-  addFilterWidget(w, index);
+  // Create a FilterWidget object
+  if (NULL != breakpoint)
+  {
+    BreakpointFilterWidget* w = new BreakpointFilterWidget(filter, NULL, this);
+    addFilterWidget(w, index);
+  }
+  else
+  {
+    PipelineFilterWidget* w = new PipelineFilterWidget(filter, NULL, this);
+    addFilterWidget(w, index);
+  }
 
   // Clear the pipeline Issues table first so we can collect all the error messages
   emit pipelineIssuesCleared();
