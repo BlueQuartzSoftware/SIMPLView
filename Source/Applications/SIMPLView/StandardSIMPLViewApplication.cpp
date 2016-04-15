@@ -135,6 +135,10 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
     menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
   }
+  else
+  {
+    m_PreviousActiveWindow = instance;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -154,6 +158,12 @@ void StandardSIMPLViewApplication::toolboxWindowChanged()
 void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
+
+  if (m_PreviousActiveWindow == window)
+  {
+    m_PreviousActiveWindow = NULL;
+  }
+
   if (m_SIMPLViewInstances.size() <= 0)
   {
     quit();

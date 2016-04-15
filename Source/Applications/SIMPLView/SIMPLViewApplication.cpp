@@ -101,6 +101,7 @@ namespace Detail {
 SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   QApplication(argc, argv),
   m_ActiveWindow(NULL),
+  m_PreviousActiveWindow(NULL),
   m_OpenDialogLastDirectory(""),
   show_splash(true),
   Splash(NULL)
@@ -1240,6 +1241,10 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   if (NULL != m_ActiveWindow)
   {
     newInstance->move(m_ActiveWindow->x() + 45, m_ActiveWindow->y() + 45);
+  }
+  else if (NULL != m_PreviousActiveWindow)
+  {
+    newInstance->move(m_PreviousActiveWindow->x() + 45, m_PreviousActiveWindow->y() + 45);
   }
 
   m_ActiveWindow = newInstance;

@@ -150,9 +150,9 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
 
-  if (m_SIMPLViewInstances.size() <= 0)
+  if (m_PreviousActiveWindow == window)
   {
-    m_ActiveWindow = NULL;
+    m_PreviousActiveWindow = NULL;
   }
 }
 
@@ -177,7 +177,12 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     /* If the inactive signal got fired and there are no more windows,
      * this means that the last window has been closed. */
     m_ActiveWindow = NULL;
+    m_PreviousActiveWindow = NULL;
     toEmptyMenuState();
+  }
+  else
+  {
+    m_PreviousActiveWindow = instance;
   }
 }
 
