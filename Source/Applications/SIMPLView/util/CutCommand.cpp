@@ -50,8 +50,8 @@
 // -----------------------------------------------------------------------------
 CutCommand::CutCommand(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_PipelineView(pipelineView),
-  m_JsonString(jsonString)
+  m_JsonString(jsonString),
+  m_PipelineView(pipelineView)
 {
   setText(QObject::tr("\"Cut %1 Filter Widgets\"").arg(selectedWidgets.size()));
 
