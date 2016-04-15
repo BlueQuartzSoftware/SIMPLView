@@ -62,8 +62,15 @@ class SIMPLViewWidgetsLib_EXPORT BreakpointFilterWidget : public PipelineFilterW
 
     virtual Breakpoint::Pointer getBreakpointFilter();
 
+    void setupGui();
+
+  protected slots:
+    void resumeBtnPressed();
+    void showResumeBtn();
+
   private:
-    QPushButton*                                            m_PauseBtn;
+    Breakpoint::Pointer                                     m_Filter;
+    QPushButton*                                            m_ResumeBtn;
 
     BreakpointFilterWidget(const BreakpointFilterWidget&); // Copy Constructor Not Implemented
     void operator=(const BreakpointFilterWidget&); // Operator '=' Not Implemented
