@@ -331,6 +331,12 @@ FilterPipeline::Pointer PipelineViewWidget::getFilterPipeline()
     if (fw)
     {
       AbstractFilter::Pointer filter = fw->getFilter();
+      Breakpoint::Pointer breakpoint = std::dynamic_pointer_cast<Breakpoint>(filter);
+      if (NULL != breakpoint)
+      {
+        connect(pipeline.get(), SIGNAL(pipelineCanceled()), breakpoint.get(), SLOT(resumePipeline()));
+      }
+
       pipeline->pushBack(filter);
     }
 

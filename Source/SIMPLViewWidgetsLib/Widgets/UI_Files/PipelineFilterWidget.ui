@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>30</height>
+    <height>37</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -93,7 +93,7 @@ color: rgb(255, 255, 255);
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../../../Resources/icons/images/Icons.qrc">
+      <iconset resource="../../icons/images/Icons.qrc">
        <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
      </property>
      <property name="iconSize">
@@ -138,7 +138,7 @@ color: rgb(255, 255, 255);
   </layout>
  </widget>
  <resources>
-  <include location="../../../../Resources/icons/images/Icons.qrc"/>
+  <include location="../../icons/images/Icons.qrc"/>
  </resources>
  <connections/>
 </ui>

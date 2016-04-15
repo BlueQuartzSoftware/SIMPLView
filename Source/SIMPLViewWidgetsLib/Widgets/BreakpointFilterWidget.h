@@ -67,6 +67,7 @@ class SIMPLViewWidgetsLib_EXPORT BreakpointFilterWidget : public PipelineFilterW
   protected slots:
     void resumeBtnPressed();
     void showResumeBtn();
+    void hideResumeBtn();
 
   private:
     Breakpoint::Pointer                                     m_Filter;
