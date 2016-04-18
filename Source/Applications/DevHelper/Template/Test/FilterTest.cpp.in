@@ -18,12 +18,12 @@
 
 #include "@PluginName@TestFileLocations.h"
 
-class @FilterName@Test
+class @ClassName@
 {
 
   public:
-    @FilterName@Test() {}
-    virtual ~@FilterName@Test() {}
+    @ClassName@() {}
+    virtual ~@ClassName@() {}
 
 
   // -----------------------------------------------------------------------------
@@ -32,8 +32,8 @@ class @FilterName@Test
   void RemoveTestFiles()
   {
   #if REMOVE_TEST_FILES
-    QFile::remove(UnitTest::@FilterName@Test::TestFile1);
-    QFile::remove(UnitTest::@FilterName@Test::TestFile2);
+    QFile::remove(UnitTest::@ClassName@::TestFile1);
+    QFile::remove(UnitTest::@ClassName@::TestFile2);
   #endif
   }
 
@@ -42,14 +42,14 @@ class @FilterName@Test
   // -----------------------------------------------------------------------------
   int TestFilterAvailability()
   {
-    // Now instantiate the @FilterName@ Filter from the FilterManager
+    // Now instantiate the @ClassName@ Filter from the FilterManager
     QString filtName = "@FilterName@";
     FilterManager* fm = FilterManager::Instance();
     IFilterFactory::Pointer filterFactory = fm->getFactoryForFilter(filtName);
     if (NULL == filterFactory.get())
     {
       std::stringstream ss;
-      ss << "The @FilterName@Test Requires the use of the " << filtName.toStdString() << " filter which is found in the @PluginName@ Plugin";
+      ss << "The @PluginName@ Requires the use of the " << filtName.toStdString() << " filter which is found in the @PluginName@ Plugin";
       DREAM3D_TEST_THROW_EXCEPTION(ss.str())
     }
     return 0;
@@ -58,14 +58,14 @@ class @FilterName@Test
   // -----------------------------------------------------------------------------
   //
   // -----------------------------------------------------------------------------
-  int Test@FilterName@()
+  int Test@ClassName@()
   {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   /* Please write @FilterName@ test code here.
+   /* Please write @ClassName@ test code here.
     *
     * Your IO test files are:
-    * UnitTest::@FilterName@Test::TestFile1
-    * UnitTest::@FilterName@Test::TestFile2
+    * UnitTest::@ClassName@::TestFile1
+    * UnitTest::@ClassName@::TestFile2
     *
     * SIMPLib provides some macros that will throw exceptions when a test fails
     * and thus report that during testing. These macros are located in the
@@ -94,14 +94,14 @@ class @FilterName@Test
 
     DREAM3D_REGISTER_TEST( TestFilterAvailability() );
 
-    DREAM3D_REGISTER_TEST( Test@FilterName@() )
+    DREAM3D_REGISTER_TEST( Test@ClassName@() )
 
     DREAM3D_REGISTER_TEST( RemoveTestFiles() )
   }
 
   private:
-    @FilterName@Test(const @FilterName@Test&); // Copy Constructor Not Implemented
-    void operator=(const @FilterName@Test&); // Operator '=' Not Implemented
+    @ClassName@(const @ClassName@&); // Copy Constructor Not Implemented
+    void operator=(const @ClassName@&); // Operator '=' Not Implemented
 
 
 };
