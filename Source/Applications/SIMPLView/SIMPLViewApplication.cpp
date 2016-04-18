@@ -123,11 +123,6 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 // -----------------------------------------------------------------------------
 SIMPLViewApplication::~SIMPLViewApplication()
 {
-#ifdef SIMPLView_USE_QtWebEngine
-  // We need to delete the help dialog if it's been used
-  SIMPLViewUserManualDialog* dialog = SIMPLViewUserManualDialog::Instance();
-  delete dialog;
-#endif
   delete this->Splash;
   this->Splash = NULL;
 
