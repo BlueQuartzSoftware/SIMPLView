@@ -701,22 +701,15 @@ void FilterMaker::updateTestList()
 
 
   QFile source(testPath);
-  source.open(QFile::ReadWrite);
+  source.open(QFile::ReadOnly);
 
-  bool hasInsert = false;
+  QString text = source.readAll();
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "Test\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "Test\n");
+  source.remove();
 
-  while (hasInsert == false && source.atEnd() == false)
-  {
-    QString line = source.readLine();
-    if (line == "set(TEST_NAMES")
-    {
-      //QString insertStr = filterName + std::endl;
-      source.write(filterName.toStdString().c_str());
-      hasInsert = true;
-    }
-  }
-
-  source.close();
+  source.open(QFile::WriteOnly);
+  source.write(text.toStdString().c_str());
 }
 
 // -----------------------------------------------------------------------------
