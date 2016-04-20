@@ -43,6 +43,12 @@
 int main(int argc, char* argv[])
 {
 
+#if !defined (Q_OS_MAC)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+#endif
+
   QApplication app(argc, argv);
 
   QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
