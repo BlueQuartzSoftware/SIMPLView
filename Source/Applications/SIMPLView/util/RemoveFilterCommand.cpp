@@ -77,7 +77,7 @@ void RemoveFilterCommand::undo()
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
   QList<AbstractFilter::Pointer> container = pipeline->getFilterContainer();
 
-  PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[0]);
+  PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[0], NULL, m_PipelineView);
   m_PipelineView->addFilterWidget(filterWidget, m_RemovalIndex);
 
   m_PipelineView->preflightPipeline();
