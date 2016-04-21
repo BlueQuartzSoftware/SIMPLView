@@ -656,7 +656,7 @@ void PipelineViewWidget::startDrag(QMouseEvent* event)
   drag->setPixmap(transparent);
   drag->setHotSpot(event->pos());
 
-  drag->exec(Qt::MoveAction);
+  drag->exec(Qt::CopyAction);
 }
 
 // -----------------------------------------------------------------------------
@@ -1127,11 +1127,11 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
       // Check to see if we are trying to move it to the end
       if (false == didInsert && count > 0)
       {
-        PipelineFilterWidget* w = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(count - 2)->widget());
+        PipelineFilterWidget* w = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(count - 1)->widget());
         if (NULL != w && event->pos().y() >= w->geometry().y() + w->geometry().height() / 2)
         {
           m_DropBox->setLabel("    [" + QString::number(count) + "] " + humanName);
-          m_FilterWidgetLayout->insertWidget(count - 1, m_DropBox);
+          m_FilterWidgetLayout->insertWidget(count, m_DropBox);
           reindexWidgetTitles();
         }
       }
@@ -1167,11 +1167,11 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
       // Check to see if we are trying to move it to the end
       if (false == didInsert && count > 0)
       {
-        PipelineFilterWidget* w = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(count - 2)->widget());
+        PipelineFilterWidget* w = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(count - 1)->widget());
         if (NULL != w && event->pos().y() >= w->geometry().y() + w->geometry().height() / 2)
         {
           m_DropBox->setLabel("Place '" + pipelineName + "' Here");
-          m_FilterWidgetLayout->insertWidget(count - 1, m_DropBox);
+          m_FilterWidgetLayout->insertWidget(count, m_DropBox);
           reindexWidgetTitles();
         }
       }

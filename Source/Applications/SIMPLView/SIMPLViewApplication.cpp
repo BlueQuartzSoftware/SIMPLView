@@ -983,6 +983,10 @@ void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, int sta
   {
     pasteFilterWidgets(jsonString, m_ActiveWindow, startIndex);
   }
+  else if (NULL != m_PreviousActiveWindow)
+  {
+    pasteFilterWidgets(jsonString, m_PreviousActiveWindow, startIndex);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1056,7 +1060,7 @@ void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QP
 void SIMPLViewApplication::on_bookmarksDockContextMenuRequested(const QPoint& pos)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  BookmarksTreeView* bookmarksTreeView = m_ActiveWindow->getBookmarksToolboxWidget()->getBookmarksTreeView();
+  BookmarksTreeView* bookmarksTreeView = m_PreviousActiveWindow->getBookmarksToolboxWidget()->getBookmarksTreeView();
 
   QModelIndex index = bookmarksTreeView->indexAt(pos);
 
