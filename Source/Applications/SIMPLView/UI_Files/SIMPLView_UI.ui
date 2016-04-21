@@ -148,7 +148,7 @@ sss</string>
              <x>0</x>
              <y>0</y>
              <width>1095</width>
-             <height>520</height>
+             <height>562</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -262,6 +262,15 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
+  </widget>
+  <widget class="StandardOutputDockWidget" name="stdOutDockWidget">
+   <property name="windowTitle">
+    <string>[*]Standard Output</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
   </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
@@ -467,6 +476,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>SIMPLViewSplitter</class>
    <extends>QSplitter</extends>
    <header location="global">QtSupportLib/SIMPLViewSplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StandardOutputDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header location="global">StandardOutputDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
