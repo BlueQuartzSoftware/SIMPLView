@@ -53,7 +53,7 @@ public:
 
 private:
   PipelineViewWidget*                     m_PipelineView;
-  PipelineFilterWidget*                   m_FilterWidgetCopy;
+  QString                                 m_JsonString;
   int                                     m_RemovalIndex;
 
   RemoveFilterCommand(const RemoveFilterCommand&); // Copy Constructor Not Implemented

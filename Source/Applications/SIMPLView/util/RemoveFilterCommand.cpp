@@ -40,6 +40,9 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -51,6 +54,11 @@ m_RemovalIndex(removalIndex)
   PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_RemovalIndex);
 
   setText(QObject::tr("\"Remove '%1'\"").arg(filterWidget->getFilter()->getHumanLabel()));
+
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  pipeline->pushBack(filterWidget->getFilter());
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 }
 
 // -----------------------------------------------------------------------------
@@ -66,7 +74,11 @@ RemoveFilterCommand::~RemoveFilterCommand()
 // -----------------------------------------------------------------------------
 void RemoveFilterCommand::undo()
 {
-  m_PipelineView->addFilterWidget(m_FilterWidgetCopy, m_RemovalIndex);
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  QList<AbstractFilter::Pointer> container = pipeline->getFilterContainer();
+
+  PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[0]);
+  m_PipelineView->addFilterWidget(filterWidget, m_RemovalIndex);
 
   m_PipelineView->preflightPipeline();
 }
@@ -77,9 +89,6 @@ void RemoveFilterCommand::undo()
 void RemoveFilterCommand::redo()
 {
   PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_RemovalIndex);
-
-  m_FilterWidgetCopy = filterWidget->deepCopy();
-
   m_PipelineView->removeFilterWidget(filterWidget);
 
   m_PipelineView->preflightPipeline();
