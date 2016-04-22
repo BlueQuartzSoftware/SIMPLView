@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1104</width>
-    <height>659</height>
+    <width>1084</width>
+    <height>623</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -147,8 +147,8 @@ sss</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1095</width>
-             <height>562</height>
+             <width>1075</width>
+             <height>350</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -270,7 +270,29 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents"/>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
