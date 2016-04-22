@@ -811,11 +811,16 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     return;
   }
 
-//  for (int i=0; i<tabWidget->count(); i++)
-//  {
-//    QWidget* widget = tabWidget->widget(i);
-//    tabWidget->removeTab(i);
-//  }
+  QMap<QWidget*,QTextEdit*>::iterator iter;
+  for (iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); iter++)
+  {
+    QWidget* widget = iter.key();
+    QTextEdit* textEdit = iter.value();
+    delete textEdit;
+    delete widget;
+    //tabWidget->removeTab(i);
+  }
+  m_StdOutputTabMap.clear();
 
   m_ProgressBar->show();
 
@@ -978,7 +983,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       if (tabWidget->tabText(i) == tabTitle)
       {
         matched = true;
-        QTextEdit* textEdit = dynamic_cast<QTextEdit*>(tabWidget->widget(i));
+        QTextEdit* textEdit = m_StdOutputTabMap.value(tabWidget->widget(i));
         if (NULL != textEdit)
         {
           textEdit->append(text);
@@ -993,9 +998,11 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       gridLayout->setContentsMargins(0, 0, 0, 0);
       QTextEdit* textEdit = new QTextEdit(tab);
       textEdit->append(text);
+      textEdit->setReadOnly(true);
       gridLayout->addWidget(textEdit, 0, 0, 1, 1);
       tabWidget->addTab(tab, tabTitle);
       tabWidget->setCurrentWidget(tab);
+      m_StdOutputTabMap.insert(tab, textEdit);
     }
   }
 }
