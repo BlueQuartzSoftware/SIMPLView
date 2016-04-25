@@ -260,7 +260,7 @@ void PipelineViewWidget::resetLayout()
   if (filterCount() <= 0)
   {
     // Emit a signal to tell SIMPLView_UI to erase the Filter Input Widget.
-    emit noFilterWidgetsInPipeline();
+    emit filterInputWidgetNeedsCleared();
 
     // Remove the current Layout
     QLayout* l = layout();
@@ -871,7 +871,7 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
   }
   else
   {
-    emit noFilterWidgetsInPipeline();
+    emit filterInputWidgetNeedsCleared();
   }
 }
 
@@ -1471,6 +1471,18 @@ bool PipelineViewWidget::shouldAutoScroll(const QPoint& pos)
     return true;
   }
   return false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::mousePressEvent(QMouseEvent* event)
+{
+  if (event->button() == Qt::LeftButton)
+  {
+    clearSelectedFilterWidgets();
+    emit filterInputWidgetNeedsCleared();
+  }
 }
 
 // -----------------------------------------------------------------------------

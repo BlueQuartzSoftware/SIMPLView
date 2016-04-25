@@ -614,7 +614,7 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)),
           this, SLOT(setFilterInputWidget(FilterInputWidget*)));
 
-  disconnect(pipelineViewWidget, SIGNAL(noFilterWidgetsInPipeline()),
+  disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()),
           this, SLOT(clearFilterInputWidget()));
 
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
@@ -648,7 +648,7 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)),
           this, SLOT(setFilterInputWidget(FilterInputWidget*)));
 
-  connect(pipelineViewWidget, SIGNAL(noFilterWidgetsInPipeline()),
+  connect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()),
           this, SLOT(clearFilterInputWidget()));
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),

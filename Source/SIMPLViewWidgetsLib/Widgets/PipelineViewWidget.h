@@ -327,7 +327,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void pipelineChanged();
 
     void filterInputWidgetChanged(FilterInputWidget* widget);
-    void noFilterWidgetsInPipeline();
+    void filterInputWidgetNeedsCleared();
 
     void filterInputWidgetEdited();
     void preflightPipelineComplete();
@@ -345,6 +345,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void dragLeaveEvent(QDragLeaveEvent* event);
     void dragMoveEvent(QDragMoveEvent* event);
     void dropEvent(QDropEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 
   protected slots:
     void handleFilterParameterChanged();
