@@ -187,6 +187,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndo
   {
     m_MenuEdit->removeAction(instance->getActionRedo());
     m_MenuEdit->removeAction(instance->getActionUndo());
+
     m_PreviousActiveWindow = instance;
   }
 }
@@ -269,7 +270,6 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionShowIssues()->setEnabled(true);
   menuItems->getActionCut()->setEnabled(true);
   menuItems->getActionCopy()->setEnabled(true);
-  menuItems->getActionPaste()->setEnabled(true);
 }
 
 // -----------------------------------------------------------------------------

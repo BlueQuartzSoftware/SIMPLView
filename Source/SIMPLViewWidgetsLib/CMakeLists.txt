@@ -10,7 +10,7 @@
 #// This code was partly written under US Air Force Contract FA8650-07-D-5800
 #///////////////////////////////////////////////////////////////////////////////
 
-project(SIMPLViewWidgetsLib VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR})
+project(SIMPLViewWidgetsLib VERSION 2.0)
 
 
 set(SIMPLViewWidgetsLib_BUILT_AS_DYNAMIC_LIB)
@@ -105,7 +105,7 @@ set_source_files_properties( ${SIMPLViewWidgetsLib_Generated_MOC_SRCS} PROPERTIE
 
 
 # -- Run MOC and UIC on the necessary files
-QT5_ADD_RESOURCES( SIMPLViewWidgetsLib_Generated_RC_SRCS "${SIMPLViewProj_SOURCE_DIR}/Resources/icons/images/Icons.qrc"  )
+QT5_ADD_RESOURCES( SIMPLViewWidgetsLib_Generated_RC_SRCS "${SIMPLViewWidgetsLib_SOURCE_DIR}/icons/images/Icons.qrc"  )
 
 # --------------------------------------------------------------------
 # Continue on with our Qt4 section
@@ -161,7 +161,8 @@ set(Project_SRCS
 # Set some Include directories
 include_directories(${PROJECT_CODE_DIR}
                     ${PROJECT_CODE_DIR}/QtSupportLib
-                    ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
+                    ${QtSupportLib_BINARY_DIR}
+                    ${QtSupportLib_SOURCE_DIR}
                     ${SIMPLViewWidgetsLib_SOURCE_DIR}/..
                     ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets
                     ${SIMPLViewWidgetsLib_SOURCE_DIR}/FilterParameterWidgets

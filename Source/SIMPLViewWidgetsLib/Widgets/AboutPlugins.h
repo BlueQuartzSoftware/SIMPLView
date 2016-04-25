@@ -46,11 +46,12 @@
 #include <SIMPLib/Plugin/ISIMPLibPlugin.h>
 #include <SIMPLib/Plugin/SIMPLibPlugin.h>
 
+#include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
 
 //-- UIC generated Header
 #include "ui_AboutPlugins.h"
 
-class AboutPlugins : public QDialog, private Ui::AboutPlugins
+class SIMPLViewWidgetsLib_EXPORT AboutPlugins : public QDialog, private Ui::AboutPlugins
 {
     Q_OBJECT
 

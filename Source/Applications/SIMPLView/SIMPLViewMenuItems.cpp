@@ -46,6 +46,8 @@
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
 #include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -130,9 +132,6 @@ void SIMPLViewMenuItems::createActions()
   m_ActionCopy = new QAction("Copy", this);
   m_ActionPaste = new QAction("Paste", this);
 
-  // Disable the paste item when the program first loads (it will be enabled when the user cuts or copies something)
-  m_ActionPaste->setDisabled(true);
-
 #if defined(Q_OS_WIN)
   m_ActionShowBookmarkInFileSystem->setText("Show in Windows Explorer");
 #elif defined(Q_OS_MAC)
@@ -160,12 +159,6 @@ void SIMPLViewMenuItems::createActions()
   m_ActionCut->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
   m_ActionCopy->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
   m_ActionPaste->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
-
-  QClipboard* clipboard = QApplication::clipboard();
-  connect(clipboard, SIGNAL(dataChanged()), this, SLOT(on_clipboard_dataChanged()));
-
-  // Run this once, so that the Paste button is updated for what is currently on the system clipboard
-  on_clipboard_dataChanged();
 
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
 
@@ -197,6 +190,12 @@ void SIMPLViewMenuItems::createActions()
   connect(m_ActionCut, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCut_triggered()));
   connect(m_ActionCopy, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCopy_triggered()));
   connect(m_ActionPaste, SIGNAL(triggered()), dream3dApp, SLOT(on_actionPaste_triggered()));
+
+  QClipboard* clipboard = QApplication::clipboard();
+  connect(clipboard, SIGNAL(dataChanged()), this, SLOT(on_clipboard_dataChanged()));
+
+  // Run this once, so that the Paste button availability is updated for what is currently on the system clipboard
+  on_clipboard_dataChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -207,9 +206,8 @@ void SIMPLViewMenuItems::on_clipboard_dataChanged()
   QClipboard* clipboard = QApplication::clipboard();
   QString text = clipboard->text();
 
-  QJsonParseError parseError;
-  QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(text.toStdString()), &parseError);
-  if (parseError.error != QJsonParseError::NoError)
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(text);
+  if (FilterPipeline::NullPointer() == pipeline)
   {
     m_ActionPaste->setDisabled(true);
   }

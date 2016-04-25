@@ -408,7 +408,7 @@ void PluginMaker::setupGui()
   testgen->setDoesGenerateOutput(true);
   testgen->setNameChangeable(true);
   testgen->setDisplaySuffix("FilterTest.cpp");
-  //testgen->setDisplaySuffix("FilterTest.cpp");
+
   connect(m_PluginName, SIGNAL(textChanged(const QString&)),
           testgen, SLOT(pluginNameChanged(const QString&)));
   connect(m_OutputDir, SIGNAL(textChanged(const QString&)),
@@ -922,9 +922,16 @@ void PluginMaker::on_addFilterBtn_clicked()
                                                    resourceTemplate,
                                                    filt2test,
                                                    this);
+    filt2test->setFileGenPtr(testgen);
+    testgen->setDoesGenerateOutput(true);
+    testgen->setNameChangeable(true);
+    testgen->setDisplaySuffix("FilterTest.cpp");
+    testgen->setFilterName(filterTitle);
+
+    tempPluginName = testgen->cleanName(m_PluginName->text());
+    testgen->setPluginName(tempPluginName);
 
     m_TestFileLocationNames.insert(filterTitle);    // This name needs to be used in the TestFileLocations.h.in file
-    filt2test->setFileGenPtr(testgen);
     connect(m_PluginName, SIGNAL(textChanged(const QString&)),
             testgen, SLOT(pluginNameChanged(const QString&)));
     connect(m_OutputDir, SIGNAL(textChanged(const QString&)),
@@ -934,10 +941,8 @@ void PluginMaker::on_addFilterBtn_clicked()
             testgen, SLOT(generateOutput()));
     connect(testgen, SIGNAL(outputError(const QString&)),
             this, SLOT(generationError(const QString&)));
-    htmlgen->setNameChangeable(false);
-    testgen->setDoesGenerateOutput(true);
-    tempPluginName = testgen->cleanName(m_PluginName->text());
-    testgen->setPluginName(tempPluginName);
+
+    //htmlgen->setNameChangeable(false);
     filt2test->setFileGenPtr(testgen);
 
 

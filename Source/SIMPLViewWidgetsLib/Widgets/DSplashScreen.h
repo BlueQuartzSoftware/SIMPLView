@@ -48,6 +48,7 @@
 #include <QtWidgets/QWidget>
 #include <QtGui/QPixmap>
 
+#include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
 
 
 
@@ -58,7 +59,7 @@ class QMouseEvent;
 /**
 * @brief This class displays a splash screen when a SIMPL based application launches
 */
-class DSplashScreen : public QWidget
+class SIMPLViewWidgetsLib_EXPORT DSplashScreen : public QWidget
 {
     Q_OBJECT
   public:

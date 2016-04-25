@@ -99,10 +99,8 @@ include_directories(${SIMPLView_BINARY_DIR}/__/Common)
 set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/main.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLView_UI.cpp
-  ${SIMPLView_SOURCE_DIR}/DSplashScreen.cpp
+ 
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
-  ${SIMPLView_SOURCE_DIR}/AboutPlugins.cpp
-  ${SIMPLView_SOURCE_DIR}/PluginDetails.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
@@ -127,10 +125,7 @@ set(SIMPLView_HDRS
 # Headers that do need to have moc run on them, i.e., QObject based headers
 SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/SIMPLView_UI.h
-  ${SIMPLView_SOURCE_DIR}/DSplashScreen.h
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
-  ${SIMPLView_SOURCE_DIR}/AboutPlugins.h
-  ${SIMPLView_SOURCE_DIR}/PluginDetails.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
@@ -176,8 +171,6 @@ source_group("${SIMPLView_SOURCE_DIR} util" FILES ${HEADERS} ${SOURCES})
 SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/AboutPlugins.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/PluginDetails.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewv6Wizard.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewToolbox.ui
 )
@@ -185,8 +178,6 @@ cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
 # and finally any resource files
 SET(SIMPLView_RCS
-  # These are generic Icons for the Application
-  ${PROJECT_RESOURCES_DIR}/icons/images/Icons.qrc
   # this is the SIMPLView specific branding icons
   ${BrandedSIMPLView_DIR}/branded_files.qrc
 )

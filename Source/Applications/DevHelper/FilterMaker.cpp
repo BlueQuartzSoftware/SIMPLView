@@ -702,31 +702,14 @@ void FilterMaker::updateTestList()
 
   QFile source(testPath);
   source.open(QFile::ReadOnly);
-  QString contents = source.readAll();
-  source.close();
 
-
-  QString testCMakeCode;
-  QTextStream out(&testCMakeCode);
-  out << "AddSIMPLViewUnitTest(TESTNAME " << filterName << "Test";
-  // Check to make sure we don't already have this filter in the namespace
-  if (contents.contains(testCMakeCode) == true)
-  {
-    return;
-  }
-
-  out << " SOURCES ${${PLUGIN_NAME}Test_SOURCE_DIR}/" << filterName << "Test.cpp FOLDER \"${PLUGIN_NAME}Plugin/Test\" LINK_LIBRARIES ${${PLUGIN_NAME}_Link_Libs})\n\n";
-
-  QStringList list = contents.split(QRegExp("\\n"));
-  list.push_back(testCMakeCode);
-
+  QString text = source.readAll();
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "Test\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "Test\n");
   source.remove();
-  if (source.open(QIODevice::WriteOnly))
-  {
-    source.write(list.join("\n").toLatin1().data());
-    source.close();
-  }
 
+  source.open(QFile::WriteOnly);
+  source.write(text.toStdString().c_str());
 }
 
 // -----------------------------------------------------------------------------

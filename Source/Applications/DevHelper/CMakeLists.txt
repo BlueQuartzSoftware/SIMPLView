@@ -162,8 +162,7 @@ SET(DevHelper_UIS
 cmp_IDE_GENERATED_PROPERTIES("DevHelper/UI_Files" "${DevHelper_UIS}" "")
 
 # and finally any resource files
-# SET(DevHelper_RCS ${DevHelper_SOURCE_DIR}/Templates.qrc)
-SET(DevHelper_RCS ${PROJECT_RESOURCES_DIR}/icons/images/Icons.qrc)
+
 
 # -- Run MOC and UIC on the necessary files
 QT5_ADD_RESOURCES( DevHelper_Generated_RC_SRCS ${DevHelper_RCS} ${QRC_LICENSE_FILES})
