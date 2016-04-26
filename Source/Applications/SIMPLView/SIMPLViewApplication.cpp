@@ -1003,23 +1003,17 @@ void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, SIMPLVi
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineViewContextMenuRequested(const QPoint& pos)
+void SIMPLViewApplication::on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos)
 {
-  if (NULL != m_ActiveWindow)
-  {
-    m_ContextMenu->clear();
+  m_ContextMenu->clear();
 
-    PipelineViewWidget* pipelineView = m_ActiveWindow->getPipelineViewWidget();
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-    QAction* actionPaste = menuItems->getActionPaste();
+  m_ContextMenu->addAction(menuItems->getActionPaste());
+  m_ContextMenu->addSeparator();
+  m_ContextMenu->addAction(menuItems->getActionClearPipeline());
 
-    m_ContextMenu->addAction(actionPaste);
-    m_ContextMenu->addSeparator();
-    m_ContextMenu->addAction(menuItems->getActionClearPipeline());
-
-    m_ContextMenu->exec(pipelineView->mapToGlobal(pos));
-  }
+  m_ContextMenu->exec(widget->mapToGlobal(pos));
 }
 
 // -----------------------------------------------------------------------------

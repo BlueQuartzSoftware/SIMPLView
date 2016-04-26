@@ -154,7 +154,7 @@ class SIMPLViewApplication : public QApplication
 
     void dropFilterWidgets(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers);
 
-    void on_pipelineViewContextMenuRequested(const QPoint&);
+    void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
     void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
 
