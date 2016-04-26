@@ -270,6 +270,7 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionShowIssues()->setEnabled(true);
   menuItems->getActionCut()->setEnabled(true);
   menuItems->getActionCopy()->setEnabled(true);
+  menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
 }
 
 // -----------------------------------------------------------------------------

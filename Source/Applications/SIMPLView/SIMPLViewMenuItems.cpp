@@ -192,16 +192,16 @@ void SIMPLViewMenuItems::createActions()
   connect(m_ActionPaste, SIGNAL(triggered()), dream3dApp, SLOT(on_actionPaste_triggered()));
 
   QClipboard* clipboard = QApplication::clipboard();
-  connect(clipboard, SIGNAL(dataChanged()), this, SLOT(on_clipboard_dataChanged()));
+  connect(clipboard, SIGNAL(dataChanged()), this, SLOT(updatePasteAvailability()));
 
   // Run this once, so that the Paste button availability is updated for what is currently on the system clipboard
-  on_clipboard_dataChanged();
+  updatePasteAvailability();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------s
-void SIMPLViewMenuItems::on_clipboard_dataChanged()
+void SIMPLViewMenuItems::updatePasteAvailability()
 {
   QClipboard* clipboard = QApplication::clipboard();
   QString text = clipboard->text();
@@ -210,10 +210,12 @@ void SIMPLViewMenuItems::on_clipboard_dataChanged()
   if (FilterPipeline::NullPointer() == pipeline)
   {
     m_ActionPaste->setDisabled(true);
+    m_CanPaste = false;
   }
   else
   {
     m_ActionPaste->setEnabled(true);
+    m_CanPaste = true;
   }
 }
 
