@@ -115,7 +115,6 @@ PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   setContextMenuPolicy(Qt::CustomContextMenu);
   setFocusPolicy(Qt::StrongFocus);
 
-  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(requestContextMenu(const QPoint&)));
   connect(this, SIGNAL(contextMenuRequested(PipelineViewWidget*, const QPoint&)), dream3dApp, SLOT(on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget*, const QPoint&)));
   }
 
