@@ -82,7 +82,7 @@ void AddFilterCommand::redo()
   }
   else
   {
-    m_InsertIndex = m_PipelineView->filterCount() - 1;
+    m_InsertIndex = m_PipelineView->filterCount();
   }
 
   m_PipelineView->addFilter(m_Text);
