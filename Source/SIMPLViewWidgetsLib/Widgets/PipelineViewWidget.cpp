@@ -115,6 +115,7 @@ PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   setContextMenuPolicy(Qt::CustomContextMenu);
   setFocusPolicy(Qt::StrongFocus);
 
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(requestContextMenu(const QPoint&)));
   connect(this, SIGNAL(contextMenuRequested(PipelineViewWidget*, const QPoint&)), dream3dApp, SLOT(on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget*, const QPoint&)));
   }
 
@@ -1483,11 +1484,6 @@ void PipelineViewWidget::mousePressEvent(QMouseEvent* event)
     clearSelectedFilterWidgets();
     emit filterInputWidgetNeedsCleared();
   }
-  else if (event->button() == Qt::RightButton)
-  {
-    activateWindow();
-    requestContextMenu(event->pos());
-  }
 
   QFrame::mousePressEvent(event);
 }
@@ -1497,6 +1493,7 @@ void PipelineViewWidget::mousePressEvent(QMouseEvent* event)
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::requestContextMenu(const QPoint& pos)
 {
+  activateWindow();
   emit contextMenuRequested(this, pos);
 }
 
