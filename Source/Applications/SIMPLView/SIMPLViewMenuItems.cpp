@@ -209,12 +209,10 @@ void SIMPLViewMenuItems::updatePasteAvailability()
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(text);
   if (FilterPipeline::NullPointer() == pipeline)
   {
-    m_ActionPaste->setDisabled(true);
     m_CanPaste = false;
   }
   else
   {
-    m_ActionPaste->setEnabled(true);
     m_CanPaste = true;
   }
 }
