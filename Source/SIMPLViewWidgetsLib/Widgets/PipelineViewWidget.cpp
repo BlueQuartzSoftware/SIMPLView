@@ -971,6 +971,13 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
 {
   m_LastDragPoint = event->pos();
 
+  // Remove the drop box, if it exists
+  if (NULL != m_FilterWidgetLayout && m_FilterWidgetLayout->indexOf(m_DropBox) != -1)
+  {
+    m_FilterWidgetLayout->removeWidget(m_DropBox);
+    m_DropBox->setParent(NULL);
+  }
+
   // If cursor is within margin boundaries, start scrolling
   if (shouldAutoScroll(event->pos()))
   {
@@ -985,20 +992,13 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
   const QMimeData* mimedata = event->mimeData();
   if (NULL != dynamic_cast<const PipelineViewPtrMimeData*>(mimedata))
   {
-    // Remove the drop box
-    if (NULL != m_FilterWidgetLayout && m_FilterWidgetLayout->indexOf(m_DropBox) != -1)
-    {
-      m_FilterWidgetLayout->removeWidget(m_DropBox);
-      m_DropBox->setParent(NULL);
-    }
-
     // The user is moving existing filter widgets, either within the same pipeline view or between pipeline views
     PipelineViewWidget* origin = dynamic_cast<const PipelineViewPtrMimeData*>(mimedata)->getPipelineViewPtr();
     QList<PipelineFilterWidget*> draggedWidgets = origin->getSelectedFilterWidgets();
 
     if (origin == this)
     {
-      if (draggedWidgets.size() > 1)
+      if (draggedWidgets.size() > 1 && QApplication::keyboardModifiers() != Qt::AltModifier)
       {
         event->ignore();
         return;
@@ -1106,11 +1106,6 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
 
       bool didInsert = false;
       // This path is taken if a filter is dragged from the list of filters
-      if (NULL != m_FilterWidgetLayout && m_FilterWidgetLayout->indexOf(m_DropBox) != -1)
-      {
-        m_FilterWidgetLayout->removeWidget(m_DropBox);
-        m_DropBox->setParent(NULL);
-      }
 
       int count = filterCount();
       for (int i = 0; i < count; ++i)
@@ -1146,11 +1141,6 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
 
       bool didInsert = false;
       // This path is taken if a filter is dragged from the list of filters
-      if (NULL != m_FilterWidgetLayout && m_FilterWidgetLayout->indexOf(m_DropBox) != -1)
-      {
-        m_FilterWidgetLayout->removeWidget(m_DropBox);
-        m_DropBox->setParent(NULL);
-      }
 
       int count = filterCount();
       for (int i = 0; i < count; ++i)
@@ -1315,7 +1305,7 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
       index = filterCount();
     }
 
-    if (origin != this)
+    if (origin != this || (origin == this && qApp->keyboardModifiers() == Qt::AltModifier))
     {
       emit filterWidgetsDropped(index, qApp->keyboardModifiers());
       origin->m_CurrentFilterBeingDragged = NULL;
