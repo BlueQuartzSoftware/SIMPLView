@@ -58,6 +58,9 @@ class SIMPLViewMenuItems : public QObject
   protected:
     SIMPLViewMenuItems(QObject* parent = 0);
 
+  signals:
+    void clipboardHasChanged(bool canPaste);
+
   private:
     static SIMPLViewMenuItems*          self;
 

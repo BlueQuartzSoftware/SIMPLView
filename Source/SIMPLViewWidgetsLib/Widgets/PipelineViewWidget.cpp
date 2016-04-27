@@ -606,10 +606,9 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
   // Make sure the widget titles are all correct
   reindexWidgetTitles();
   
+  // Finally, set this new filter widget as selected
   pipelineFilterWidget->setIsSelected(true, pipelineFilterWidget->getSelectionModifiers());
 
-  // Finally, set this new filter widget as selected in order to show the input parameters right away
-  //pipelineFilterWidget->setIsSelected(true);
   // Get the filter to ignore Scroll Wheel Events
   pipelineFilterWidget->installEventFilter( this);
 
@@ -916,36 +915,18 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
 {
   if (NULL == pipeline.get()) { clearWidgets(); return; }
 
-  //PipelineFilterWidget* firstWidget = NULL;
-  //// Start looping on each filter
-
-  //for (int i = 0; i < fCount; i++)
-  //{
-  //  // Create a PipelineFilterWidget using the current AbstractFilter instance to initialize it
-  //  PipelineFilterWidget* w = new PipelineFilterWidget(filters.at(i), NULL, this);
-
-  //  addFilterWidget(w, index);
-  //  if (index == 0)
-  //  {
-  //    firstWidget = w;
-  //  }
-
-  //  index++;
-  //}
-
-  //if (firstWidget)
-  //{
-  //  firstWidget->setIsSelected(true);
-  //}
-
-  //// Now preflight the pipeline for this filter.
-  //preflightPipeline();
-
-  //emit pipelineChanged();
-
   QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 
   emit filterWidgetsPasted(jsonString, index);
+
+  if (filterCount() > 0)
+  {
+    PipelineFilterWidget* fw = dynamic_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(0)->widget());
+    if (fw)
+    {
+      setSelectedFilterWidget(fw);
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -998,20 +979,23 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
 
     if (origin == this)
     {
-      if (draggedWidgets.size() > 1 && qApp->queryKeyboardModifiers() != Qt::AltModifier)
+      if (qApp->queryKeyboardModifiers() != Qt::AltModifier)
       {
-        event->ignore();
-        return;
-      }
-      else if (draggedWidgets.size() == 1)
-      {
-        // Remove the filter widget
-        if (NULL != m_FilterWidgetLayout && origin->containsFilterWidget(draggedWidgets[0]))
+        if (draggedWidgets.size() > 1)
         {
-          PipelineFilterWidget* draggedWidget = draggedWidgets[0];
-          m_FilterOrigPos = origin->indexOfFilterWidget(draggedWidget);
-          m_FilterWidgetLayout->removeWidget(draggedWidget);
-          draggedWidget->setParent(NULL);
+          event->ignore();
+          return;
+        }
+        else if (draggedWidgets.size() == 1)
+        {
+          // Remove the filter widget
+          if (NULL != m_FilterWidgetLayout && origin->containsFilterWidget(draggedWidgets[0]))
+          {
+            PipelineFilterWidget* draggedWidget = draggedWidgets[0];
+            m_FilterOrigPos = origin->indexOfFilterWidget(draggedWidget);
+            m_FilterWidgetLayout->removeWidget(draggedWidget);
+            draggedWidget->setParent(NULL);
+          }
         }
       }
     }

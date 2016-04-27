@@ -69,7 +69,8 @@ BookmarksTreeView::BookmarksTreeView(QWidget* parent) :
 
   connect(this, SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), dream3dApp, SLOT(bookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
 
-  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_bookmarksDockContextMenuRequested(const QPoint&)));
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(requestContextMenu(const QPoint&)));
+  connect(this, SIGNAL(contextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_bookmarksDockContextMenuRequested(const QPoint&)));
 
   connect(this, SIGNAL(collapsed(const QModelIndex&)), SLOT(collapseIndex(const QModelIndex&)));
   connect(this, SIGNAL(expanded(const QModelIndex&)), SLOT(expandIndex(const QModelIndex&)));
@@ -137,6 +138,15 @@ void BookmarksTreeView::mouseMoveEvent(QMouseEvent* event)
       performDrag();
     }
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BookmarksTreeView::requestContextMenu(const QPoint& pos)
+{
+  activateWindow();
+  emit contextMenuRequested(pos);
 }
 
 // -----------------------------------------------------------------------------

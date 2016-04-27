@@ -215,6 +215,8 @@ void SIMPLViewMenuItems::updatePasteAvailability()
   {
     m_CanPaste = true;
   }
+
+  emit clipboardHasChanged(m_CanPaste);
 }
 
 

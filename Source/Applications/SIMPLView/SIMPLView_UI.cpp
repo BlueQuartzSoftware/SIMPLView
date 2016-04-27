@@ -179,10 +179,6 @@ SIMPLView_UI::~SIMPLView_UI()
   {
     dream3dApp->setActiveWindow(NULL);
   }
-
-#if defined (Q_OS_MAC)
-    macApp->toEmptyMenuState();
-#endif
 }
 
 // -----------------------------------------------------------------------------

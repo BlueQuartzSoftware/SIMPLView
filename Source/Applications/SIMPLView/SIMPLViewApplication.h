@@ -167,7 +167,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
 
-    void setPasteAvailability(bool enabled);
+    void updatePasteState(bool canPaste);
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This

@@ -119,6 +119,9 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 
   connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
 
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  connect(menuItems, SIGNAL(clipboardHasChanged(bool)), this, SLOT(updatePasteState(bool)));
+
   // Connection to update the recent files list on all windows when it changes
   QRecentFileList* recentsList = QRecentFileList::instance();
   connect(recentsList, SIGNAL(fileListChanged(const QString&)),
@@ -1480,10 +1483,18 @@ void SIMPLViewApplication::setClipboard(QPair<QList<PipelineFilterWidget*>, Pipe
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::setPasteAvailability(bool enabled)
+void SIMPLViewApplication::updatePasteState(bool canPaste)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionPaste()->setEnabled(enabled);
+
+  if (NULL != m_ActiveWindow)
+  {
+    menuItems->getActionPaste()->setEnabled(canPaste);
+  }
+  else
+  {
+    menuItems->getActionPaste()->setDisabled(true);
+  }
 }
 
 
