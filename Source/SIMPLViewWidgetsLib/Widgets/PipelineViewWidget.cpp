@@ -998,7 +998,7 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
 
     if (origin == this)
     {
-      if (draggedWidgets.size() > 1 && QApplication::keyboardModifiers() != Qt::AltModifier)
+      if (draggedWidgets.size() > 1 && qApp->queryKeyboardModifiers() != Qt::AltModifier)
       {
         event->ignore();
         return;
@@ -1299,15 +1299,17 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     if (NULL != m_FilterWidgetLayout && m_FilterWidgetLayout->indexOf(m_DropBox) != -1)
     {
       index = m_FilterWidgetLayout->indexOf(m_DropBox);
+      m_FilterWidgetLayout->removeWidget(m_DropBox);
+      m_DropBox->setParent(NULL);
     }
     else
     {
       index = filterCount();
     }
 
-    if (origin != this || (origin == this && qApp->keyboardModifiers() == Qt::AltModifier))
+    if (origin != this || (origin == this && qApp->queryKeyboardModifiers() == Qt::AltModifier))
     {
-      emit filterWidgetsDropped(index, qApp->keyboardModifiers());
+      emit filterWidgetsDropped(index, qApp->queryKeyboardModifiers());
       origin->m_CurrentFilterBeingDragged = NULL;
       origin->m_PreviousFilterBeingDragged = NULL;
       event->accept();

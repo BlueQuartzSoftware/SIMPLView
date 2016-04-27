@@ -822,7 +822,7 @@ void PipelineFilterWidget::mouseReleaseEvent(QMouseEvent* event)
   }
   else
   {
-    setIsSelected(true, qApp->keyboardModifiers());
+    setIsSelected(true, qApp->queryKeyboardModifiers());
     event->accept();
   }
 }
