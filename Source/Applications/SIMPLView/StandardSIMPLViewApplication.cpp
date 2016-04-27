@@ -136,6 +136,8 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, 
     // Update the issues menu item with the correct value
     QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
     menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
+
+    menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   }
   else
   {
