@@ -248,6 +248,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void on_pipelineViewWidget_pipelineIssuesCleared();
     void on_pipelineViewWidget_pipelineHasNoErrors();
     void on_pipelineViewWidget_pipelineOpened(QString& file, const bool& setOpenedFilePath, const bool& changeTitle);
+    void on_pipelineViewWidget_filterWidgetsPasted(const QString &jsonString, int index);
 
     /**
     * @brief setFilterInputWidget
@@ -298,6 +299,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief filterWidgetsDropped
     */
     void filterWidgetsDropped(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers);
+
+    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
 
   protected:
 

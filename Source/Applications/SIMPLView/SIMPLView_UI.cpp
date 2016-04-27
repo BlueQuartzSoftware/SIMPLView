@@ -619,6 +619,22 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
 
+  disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
+
+  disconnect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(int, Qt::KeyboardModifiers)),
+          this, SLOT(dropFilterWidgets(int, Qt::KeyboardModifiers)));
+
+  disconnect(pipelineViewWidget, SIGNAL(filterWidgetsPasted(const QString &, int)), this, SLOT(on_pipelineViewWidget_filterWidgetsPasted(const QString &, int)));
+
+  disconnect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
+          this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
+
+  disconnect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, int, Qt::KeyboardModifiers)),
+          dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, int, Qt::KeyboardModifiers)));
+
+  disconnect(this, SIGNAL(filterWidgetsPasted(const QString &, SIMPLView_UI*, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, SIMPLView_UI*, int)));
+
   disconnect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
 }
@@ -664,6 +680,8 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, int, Qt::KeyboardModifiers)),
           dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, int, Qt::KeyboardModifiers)));
+
+  connect(this, SIGNAL(filterWidgetsPasted(const QString &, SIMPLView_UI*, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, SIMPLView_UI*, int)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -731,6 +749,14 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineIssuesCleared()
 void SIMPLView_UI::on_pipelineViewWidget_pipelineHasNoErrors()
 {
 
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::on_pipelineViewWidget_filterWidgetsPasted(const QString &jsonString, int index)
+{
+  emit filterWidgetsPasted(jsonString, this, index);
 }
 
 // -----------------------------------------------------------------------------

@@ -148,8 +148,6 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
-  connect(this, SIGNAL(filterWidgetsPasted(const QString &, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, int)));
-
   connect(this, SIGNAL(filterWidgetsRemoved(QList<PipelineFilterWidget*>)), dream3dApp, SLOT(removeFilterWidgets(QList<PipelineFilterWidget*>)));
 
   m_DropBox = new DropBoxWidget();
@@ -1358,7 +1356,7 @@ void PipelineViewWidget::dragLeaveEvent(QDragLeaveEvent* event)
   }
 
   // Put filter widget back to original position
-  if (NULL != m_CurrentFilterBeingDragged)
+  if (NULL != m_CurrentFilterBeingDragged && qApp->queryKeyboardModifiers() != Qt::AltModifier)
   {
     m_FilterWidgetLayout->insertWidget(m_FilterOrigPos, m_CurrentFilterBeingDragged);
     setSelectedFilterWidget(m_CurrentFilterBeingDragged);
