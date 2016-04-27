@@ -44,7 +44,7 @@ class PipelineViewWidget;
 class RemoveFilterCommand : public QUndoCommand
 {
 public:
-  RemoveFilterCommand(int removalIndex, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+  RemoveFilterCommand(QList<int> removalIndices, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
   virtual ~RemoveFilterCommand();
 
   virtual void undo();
@@ -54,7 +54,7 @@ public:
 private:
   PipelineViewWidget*                     m_PipelineView;
   QString                                 m_JsonString;
-  int                                     m_RemovalIndex;
+  QList<int>                              m_RemovalIndices;
 
   RemoveFilterCommand(const RemoveFilterCommand&); // Copy Constructor Not Implemented
   void operator=(const RemoveFilterCommand&); // Operator '=' Not Implemented

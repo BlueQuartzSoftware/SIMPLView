@@ -336,8 +336,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
     void filterWidgetsPasted(const QString &jsonString, int startIndex);
-
     void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
+    void filterWidgetsRemoved(QList<PipelineFilterWidget*> filterWidgets);
 
     void contextMenuRequested(PipelineViewWidget* widget, const QPoint &pos);
 
@@ -348,6 +348,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void dragMoveEvent(QDragMoveEvent* event);
     void dropEvent(QDropEvent* event);
     void mousePressEvent(QMouseEvent* event);
+    void keyPressEvent(QKeyEvent *event);
 
   protected slots:
     void handleFilterParameterChanged();

@@ -186,6 +186,7 @@ class SIMPLViewApplication : public QApplication
 
     void addFilter(const QString &text);
     void removeFilterWidget(PipelineFilterWidget* filterWidget);
+    void removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
 
   private slots:
     void pasteFilterWidgets(const QString &jsonString, int startIndex);

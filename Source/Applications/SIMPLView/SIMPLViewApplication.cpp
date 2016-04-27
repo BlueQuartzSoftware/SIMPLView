@@ -463,9 +463,24 @@ void SIMPLViewApplication::addFilter(const QString &text)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::removeFilterWidget(PipelineFilterWidget* filterWidget)
 {
+  QList<PipelineFilterWidget*> filterWidgets;
+  filterWidgets.push_back(filterWidget);
+  removeFilterWidgets(filterWidgets);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
+{
   if (NULL != m_ActiveWindow)
   {
-    RemoveFilterCommand* cmd = new RemoveFilterCommand(m_ActiveWindow->getPipelineViewWidget()->indexOfFilterWidget(filterWidget), m_ActiveWindow->getPipelineViewWidget());
+    QList<int> indices;
+    for (int i=0; i<filterWidgets.size(); i++)
+    {
+      indices.push_back(m_ActiveWindow->getPipelineViewWidget()->indexOfFilterWidget(filterWidgets[i]));
+    }
+    RemoveFilterCommand* cmd = new RemoveFilterCommand(indices, m_ActiveWindow->getPipelineViewWidget());
     m_ActiveWindow->addUndoCommand(cmd);
   }
 }

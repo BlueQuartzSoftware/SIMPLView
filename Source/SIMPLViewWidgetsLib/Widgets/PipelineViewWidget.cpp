@@ -150,6 +150,8 @@ void PipelineViewWidget::setupGui()
 
   connect(this, SIGNAL(filterWidgetsPasted(const QString &, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, int)));
 
+  connect(this, SIGNAL(filterWidgetsRemoved(QList<PipelineFilterWidget*>)), dream3dApp, SLOT(removeFilterWidgets(QList<PipelineFilterWidget*>)));
+
   m_DropBox = new DropBoxWidget();
 }
 
@@ -925,6 +927,20 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
     if (fw)
     {
       setSelectedFilterWidget(fw);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+  {
+    if (m_SelectedFilterWidgets.size() > 0)
+    {
+      emit filterWidgetsRemoved(m_SelectedFilterWidgets);
     }
   }
 }
