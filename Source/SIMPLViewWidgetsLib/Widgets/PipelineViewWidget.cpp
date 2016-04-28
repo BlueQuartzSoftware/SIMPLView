@@ -979,6 +979,11 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
     }
 
     int count = filterCount();
+    if (count == 0)
+    {
+      return;
+    }
+
     for (int i = 0; i <= count; ++i)
     {
       PipelineFilterWidget* w;
@@ -996,15 +1001,17 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
       }
       if (w != NULL)
       {
+        std::cout << "event->pos().y(): " << event->pos().y() << "\tw->geometry().y() + w->geometry().height() / 2:" << w->geometry().y() + w->geometry().height() / 2 << std::endl;
         if ((i == count && event->pos().y() >= w->geometry().y() + w->geometry().height() / 2) || (event->pos().y() <= w->geometry().y() + w->geometry().height() / 2))
         {
-          if (m_DraggedFilterWidgets.size() > 1)
+          QList<PipelineFilterWidget*> draggedWidgets = origin->getDraggedFilterWidgets();
+          if (draggedWidgets.size() > 1)
           {
-            m_DropBox->setLabel("Place " + QString::number(m_DraggedFilterWidgets.size()) + " Filters Here");
+            m_DropBox->setLabel("Place " + QString::number(draggedWidgets.size()) + " Filters Here");
           }
-          else if (m_DraggedFilterWidgets.size() == 1)
+          else if (draggedWidgets.size() == 1)
           {
-            m_DropBox->setLabel("    [" + QString::number(i + 1) + "] " + m_DraggedFilterWidgets[0]->getHumanLabel());
+            m_DropBox->setLabel("    [" + QString::number(i + 1) + "] " + draggedWidgets[0]->getHumanLabel());
           }
           else
           {
@@ -1017,6 +1024,8 @@ void PipelineViewWidget::dragMoveEvent(QDragMoveEvent* event)
         }
       }
     }
+
+    event->accept();
   }
   else if (mimedata->hasUrls() || mimedata->hasFormat(SIMPL::DragAndDrop::BookmarkItem) || mimedata->hasFormat(SIMPL::DragAndDrop::FilterItem))
   {
