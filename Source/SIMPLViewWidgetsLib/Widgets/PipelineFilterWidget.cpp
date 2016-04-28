@@ -839,13 +839,7 @@ void PipelineFilterWidget::mouseMoveEvent(QMouseEvent* event)
     return;
   }
 
-  // The user is dragging the filter widget so we should set it as selected.
-  if (isSelected() == false)
-  {
-    setIsSelected(true, Qt::ControlModifier);
-  }
-
-  emit dragStarted(event);
+  emit dragStarted(event, this);
 }
 
 // -----------------------------------------------------------------------------

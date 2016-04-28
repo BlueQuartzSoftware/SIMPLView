@@ -353,7 +353,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
   protected slots:
     void handleFilterParameterChanged();
-    void startDrag(QMouseEvent* event);
+    void startDrag(QMouseEvent* event, PipelineFilterWidget *fw);
 
     void requestContextMenu(const QPoint& pos);
 

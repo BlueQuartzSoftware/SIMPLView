@@ -191,7 +191,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     /**
      * @brief dragStarted
      */
-    void dragStarted(QMouseEvent* event);
+    void dragStarted(QMouseEvent* event, PipelineFilterWidget* fw);
 
     /**
      * @brief parametersChanged

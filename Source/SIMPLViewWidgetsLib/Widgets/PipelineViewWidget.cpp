@@ -582,8 +582,8 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index)
           this, SLOT(setSelectedFilterWidget(PipelineFilterWidget*, Qt::KeyboardModifiers)));
 
   // When the filter widget is dragged
-  connect(fw, SIGNAL(dragStarted(QMouseEvent*)),
-          this, SLOT(startDrag(QMouseEvent*)));
+  connect(fw, SIGNAL(dragStarted(QMouseEvent*, PipelineFilterWidget*)),
+          this, SLOT(startDrag(QMouseEvent*, PipelineFilterWidget*)));
 
   connect(fw, SIGNAL(parametersChanged()),
           this, SLOT(preflightPipeline()));
@@ -614,8 +614,14 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::startDrag(QMouseEvent* event)
+void PipelineViewWidget::startDrag(QMouseEvent* event, PipelineFilterWidget* fw)
 {
+  // The user is dragging the filter widget so we should set it as selected.
+  if (fw->isSelected() == false)
+  {
+    setSelectedFilterWidget(fw, Qt::ControlModifier);
+  }
+
   QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
   m_DraggedFilterWidgets = selectedWidgets;
 
