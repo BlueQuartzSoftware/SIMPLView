@@ -93,7 +93,7 @@
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 #include "Applications/SIMPLView/util/CutCommand.h"
-#include "Applications/SIMPLView/util/PasteCommand.h"
+#include "Applications/SIMPLView/util/AddFiltersCommand.h"
 #include "Applications/SIMPLView/util/MoveFilterCommand.h"
 
 #include "BrandedStrings.h"
@@ -675,6 +675,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(int, Qt::KeyboardModifiers)), 
           this, SLOT(dropFilterWidgets(int, Qt::KeyboardModifiers)));
 
+  connect(this, SIGNAL(filterWidgetsAdded(const QString&, SIMPLView_UI*, int)), dream3dApp, SLOT(addFilters(const QString&, SIMPLView_UI*, int)));
+
   connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
           this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
 
@@ -749,6 +751,14 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineIssuesCleared()
 void SIMPLView_UI::on_pipelineViewWidget_pipelineHasNoErrors()
 {
 
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::on_pipelineViewWidget_filterWidgetsAdded(const QString &jsonString, int index)
+{
+  emit filterWidgetsAdded(jsonString, this, index);
 }
 
 // -----------------------------------------------------------------------------

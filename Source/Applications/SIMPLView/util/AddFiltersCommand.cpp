@@ -33,32 +33,35 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "AddFilterCommand.h"
+#include "AddFiltersCommand.h"
 
 #include <QtCore/QObject>
 
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AddFilterCommand::AddFilterCommand(const QString &text, int index, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+AddFiltersCommand::AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_Text(text),
-  m_PipelineView(pipelineView),
-  m_InsertIndex(index)
+  m_JsonString(jsonString),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
 {
-  if (m_InsertIndex < 0)
+  if (m_StartIndex < -1)
   {
-    m_InsertIndex = m_PipelineView->filterCount();
+    m_StartIndex = -1;
   }
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AddFilterCommand::~AddFilterCommand()
+AddFiltersCommand::~AddFiltersCommand()
 {
 
 }
@@ -66,26 +69,58 @@ AddFilterCommand::~AddFilterCommand()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AddFilterCommand::undo()
+void AddFiltersCommand::undo()
 {
-  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
+  int index = m_StartIndex + m_TotalFiltersPasted - 1;
 
-  m_PipelineView->removeFilterWidget(filterWidget);
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
+  {
+    m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
+    index--;
+  }
 
-  m_PipelineView->preflightPipeline();
+  m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AddFilterCommand::redo()
+void AddFiltersCommand::redo()
 {
-  m_PipelineView->addFilter(m_Text, m_InsertIndex);
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-  m_PipelineView->preflightPipeline();
+  m_TotalFiltersPasted = container.size();
 
-  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
-  setText(QObject::tr("\"Add '%1'\"").arg(filterWidget->getFilter()->getHumanLabel()));
+  if (m_TotalFiltersPasted == 1)
+  {
+    setText(QObject::tr("\"%1 '%2'\"").arg(m_ActionText).arg(container[0]->getHumanLabel()));
+  }
+  else
+  {
+    setText(QObject::tr("\"%1 %2 Filter Widgets\"").arg(m_ActionText).arg(m_TotalFiltersPasted));
+  }
+
+  // Paste the filter widgets
+  if (m_StartIndex < 0)
+  {
+    m_StartIndex = m_Destination->filterCount();
+  }
+
+  int insertIndex = m_StartIndex;
+
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
+  {
+    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
+    m_Destination->addFilterWidget(filterWidget, insertIndex);
+    insertIndex++;
+  }
+
+  m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(m_StartIndex), Qt::NoModifier);
+
+  m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
 }
 
 

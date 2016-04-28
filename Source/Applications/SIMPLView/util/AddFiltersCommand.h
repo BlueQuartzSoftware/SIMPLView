@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _pastecommand_h_
-#define _pastecommand_h_
+#ifndef _addfilterscommand_h_
+#define _addfilterscommand_h_
 
 #include <QtCore/QMap>
 
@@ -43,11 +43,11 @@
 class PipelineFilterWidget;
 class PipelineViewWidget;
 
-class PasteCommand : public QUndoCommand
+class AddFiltersCommand : public QUndoCommand
 {
   public:
-    PasteCommand(const QString &jsonString, PipelineViewWidget* destination, int startIndex = -1, QUndoCommand* parent = 0);
-    virtual ~PasteCommand();
+    AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    virtual ~AddFiltersCommand();
 
     virtual void undo();
 
@@ -55,14 +55,15 @@ class PasteCommand : public QUndoCommand
 
   private:
     QString                                             m_JsonString;
+    QString                                             m_ActionText;
     PipelineViewWidget*                                 m_Destination;
     QMap<int, Qt::KeyboardModifiers>                    m_Selections;
     int                                                 m_StartIndex;
     int                                                 m_TotalFiltersPasted;
 
-    PasteCommand(const PasteCommand&); // Copy Constructor Not Implemented
-    void operator=(const PasteCommand&); // Operator '=' Not Implemented
+    AddFiltersCommand(const AddFiltersCommand&); // Copy Constructor Not Implemented
+    void operator=(const AddFiltersCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _pastecommand_h_ */
+#endif /* _addfilterscommand_h_ */
 

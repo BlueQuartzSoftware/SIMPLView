@@ -145,7 +145,6 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
-  connect(this, SIGNAL(filterWidgetAdded(const QString&, int)), dream3dApp, SLOT(addFilter(const QString&, int)));
   connect(this, SIGNAL(filterWidgetsRemoved(QList<PipelineFilterWidget*>)), dream3dApp, SLOT(removeFilterWidgets(QList<PipelineFilterWidget*>)));
 
   m_DropBox = new DropBoxWidget();
@@ -858,9 +857,12 @@ void PipelineViewWidget::addSIMPLViewReaderFilter(const QString& filePath, int i
   DataContainerReader::Pointer reader = DataContainerReader::New();
   reader->setInputFile(filePath);
 
-  // Create a PipelineFilterWidget using the current AbstractFilter instance to initialize it
-  PipelineFilterWidget* w = new PipelineFilterWidget(reader, NULL, this);
-  addFilterWidget(w, index);
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  pipeline->pushBack(reader);
+
+  QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+
+  emit filterWidgetsAdded(jsonString, index);
 }
 
 // -----------------------------------------------------------------------------
@@ -1196,8 +1198,14 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
         index = -1;
       }
 
+      AbstractFilter::Pointer filter = wf->create();
+      FilterPipeline::Pointer pipeline = FilterPipeline::New();
+      pipeline->pushBack(filter);
+
+      QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+
       // Now that we have an index, insert the filter.
-      emit filterWidgetAdded(data, index);
+      emit filterWidgetsAdded(jsonString, index);
 
       emit pipelineChanged();
       event->accept();
