@@ -217,6 +217,12 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     */
     QList<PipelineFilterWidget*> getSelectedFilterWidgets();
 
+    /**
+    * @brief getDraggedFilterWidgets
+    * @return
+    */
+    QList<PipelineFilterWidget*> getDraggedFilterWidgets();
+
   public slots:
 
     /**
@@ -246,12 +252,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @param modifiers
      */
     void setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers);
-
-    /**
-     * @brief setFilterBeingDragged
-     * @param w
-     */
-    void setFilterBeingDragged(PipelineFilterWidget* w);
 
     /**
      * @brief setStatusBar
@@ -358,9 +358,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
   private:
     PipelineFilterWidget*               m_ShiftStart;
+    QList<PipelineFilterWidget*>        m_DraggedFilterWidgets;
     QVBoxLayout*                        m_FilterWidgetLayout;
-    PipelineFilterWidget*               m_CurrentFilterBeingDragged;
-    PipelineFilterWidget*               m_PreviousFilterBeingDragged;
     int                                 m_FilterOrigPos;
     DropBoxWidget*                      m_DropBox;
     int                                 m_DropIndex;

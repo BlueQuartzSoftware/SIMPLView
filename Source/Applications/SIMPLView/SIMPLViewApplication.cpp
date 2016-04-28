@@ -1282,7 +1282,7 @@ void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, int inse
 {
   if (NULL != m_ActiveWindow)
   {
-    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getDraggedFilterWidgets();
 
     FilterPipeline::Pointer pipeline = FilterPipeline::New();
     for (int i = 0; i < filterWidgets.size(); i++)

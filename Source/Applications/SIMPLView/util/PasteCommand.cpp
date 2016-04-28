@@ -70,15 +70,7 @@ PasteCommand::~PasteCommand()
 // -----------------------------------------------------------------------------
 void PasteCommand::undo()
 {
-  int index;
-  if (m_StartIndex != -1)
-  {
-    index = m_StartIndex + m_TotalFiltersPasted - 1;
-  }
-  else
-  {
-    index = m_Destination->filterCount() - 1;
-  }
+  int index = m_StartIndex + m_TotalFiltersPasted - 1;
 
   for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
@@ -101,51 +93,22 @@ void PasteCommand::redo()
   m_TotalFiltersPasted = container.size();
   setText(QObject::tr("\"Paste %1 Filter Widgets\"").arg(m_TotalFiltersPasted));
 
-//  // Record current selections
-//  QList<PipelineFilterWidget*> selected = m_Destination->getSelectedFilterWidgets();
-//  for (int i = 0; i < selected.size(); i++)
-//  {
-//    m_Selections.insert(m_Destination->indexOfFilterWidget(selected[i]), selected[i]->getSelectionModifiers());
-//  }
-
   // Paste the filter widgets
+  if (m_StartIndex < 0)
+  {
+    m_StartIndex = m_Destination->filterCount();
+  }
+
   int insertIndex = m_StartIndex;
+
   for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
     m_Destination->addFilterWidget(filterWidget, insertIndex);
-    m_Destination->setSelectedFilterWidget(filterWidget, Qt::NoModifier);
-
-    if (insertIndex >= 0)
-    {
-      insertIndex++;
-    }
+    insertIndex++;
   }
 
-//  // Clear the selected filter widgets
-//  m_Destination->clearSelectedFilterWidgets();
-
-//  // Re-select the previously recorded filter widgets
-//  if (m_Selections.size() <= 0 && m_Destination->filterCount() > 0)
-//  {
-//    m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(0), Qt::NoModifier);
-//  }
-//  else
-//  {
-//    QMapIterator<int, Qt::KeyboardModifiers> iter(m_Selections);
-//    if (iter.hasNext())
-//    {
-//      iter.next();
-
-//      m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(iter.key()), Qt::NoModifier);
-//    }
-//    while (iter.hasNext())
-//    {
-//      iter.next();
-
-//      m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(iter.key()), Qt::ShiftModifier);
-//    }
-//  }
+  m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(m_StartIndex), Qt::NoModifier);
 
   m_Destination->preflightPipeline();
   emit m_Destination->pipelineChanged();
