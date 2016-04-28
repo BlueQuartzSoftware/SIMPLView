@@ -43,12 +43,16 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AddFilterCommand::AddFilterCommand(const QString &text, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+AddFilterCommand::AddFilterCommand(const QString &text, int index, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
   QUndoCommand(parent),
   m_Text(text),
-  m_PipelineView(pipelineView)
+  m_PipelineView(pipelineView),
+  m_InsertIndex(index)
 {
-
+  if (m_InsertIndex < 0)
+  {
+    m_InsertIndex = m_PipelineView->filterCount();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -76,21 +80,11 @@ void AddFilterCommand::undo()
 // -----------------------------------------------------------------------------
 void AddFilterCommand::redo()
 {
-  if (m_PipelineView->filterCount() == 0)
-  {
-    m_InsertIndex = 0;
-  }
-  else
-  {
-    m_InsertIndex = m_PipelineView->filterCount();
-  }
-
-  m_PipelineView->addFilter(m_Text);
-
-  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
+  m_PipelineView->addFilter(m_Text, m_InsertIndex);
 
   m_PipelineView->preflightPipeline();
 
+  PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_InsertIndex);
   setText(QObject::tr("\"Add '%1'\"").arg(filterWidget->getFilter()->getHumanLabel()));
 }
 

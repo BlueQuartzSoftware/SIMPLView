@@ -184,7 +184,7 @@ class SIMPLViewApplication : public QApplication
     // SIMPLView_UI slots
     void openRecentFile();
 
-    void addFilter(const QString &text);
+    void addFilter(const QString &text, int index);
     void removeFilterWidget(PipelineFilterWidget* filterWidget);
     void removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
 

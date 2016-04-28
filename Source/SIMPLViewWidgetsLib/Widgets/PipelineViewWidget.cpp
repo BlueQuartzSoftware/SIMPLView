@@ -145,6 +145,7 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
+  connect(this, SIGNAL(filterWidgetAdded(const QString&, int)), dream3dApp, SLOT(addFilter(const QString&, int)));
   connect(this, SIGNAL(filterWidgetsRemoved(QList<PipelineFilterWidget*>)), dream3dApp, SLOT(removeFilterWidgets(QList<PipelineFilterWidget*>)));
 
   m_DropBox = new DropBoxWidget();
@@ -1196,7 +1197,7 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
       }
 
       // Now that we have an index, insert the filter.
-      addFilter(data, index);
+      emit filterWidgetAdded(data, index);
 
       emit pipelineChanged();
       event->accept();

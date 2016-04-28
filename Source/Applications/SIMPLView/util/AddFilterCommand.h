@@ -44,7 +44,7 @@ class PipelineViewWidget;
 class AddFilterCommand : public QUndoCommand
 {
   public:
-    AddFilterCommand(const QString &text, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+    AddFilterCommand(const QString &text, int index, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
     virtual ~AddFilterCommand();
 
     virtual void undo();

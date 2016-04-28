@@ -449,11 +449,11 @@ void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::addFilter(const QString &text)
+void SIMPLViewApplication::addFilter(const QString &text, int index)
 {
   if (NULL != m_PreviousActiveWindow)
   {
-    AddFilterCommand* cmd = new AddFilterCommand(text, m_PreviousActiveWindow->getPipelineViewWidget());
+    AddFilterCommand* cmd = new AddFilterCommand(text, index, m_PreviousActiveWindow->getPipelineViewWidget());
     m_PreviousActiveWindow->addUndoCommand(cmd);
   }
 }

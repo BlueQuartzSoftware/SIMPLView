@@ -335,6 +335,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
+    void filterWidgetAdded(const QString& text, int index);
     void filterWidgetsPasted(const QString &jsonString, int startIndex);
     void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
     void filterWidgetsRemoved(QList<PipelineFilterWidget*> filterWidgets);
