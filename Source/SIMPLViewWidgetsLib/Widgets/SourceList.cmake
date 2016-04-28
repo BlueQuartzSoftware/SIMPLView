@@ -37,10 +37,11 @@ endforeach()
 # inheritance through a .ui file
 set(SIMPLViewWidgetsLib_Widgets_MOC_HDRS
   ${SIMPLViewWidgetsLib_Widgets_MOC_HDRS}
-    ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/DSplashScreen.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/DSplashScreen.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/PipelineViewWidget.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/FilterListWidget.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/FilterLibraryTreeWidget.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/DREAM3DListWidget.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksModel.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksTreeView.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksItemDelegate.h
@@ -57,6 +58,7 @@ set(SIMPLViewWidgetsLib_Widgets_SRCS
   ${SIMPLViewWidgetsLib_Widgets_SRCS}
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/DSplashScreen.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/PipelineViewWidget.cpp
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/DREAM3DListWidget.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/FilterListWidget.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/FilterLibraryTreeWidget.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksItem.cpp
