@@ -357,9 +357,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void requestContextMenu(const QPoint& pos);
 
   private:
-    QList<PipelineFilterWidget*>        m_SelectedFilterWidgets;
-    PipelineFilterWidget*               m_ActiveFilterWidget;
-    PipelineFilterWidget*               m_OldActiveFilterWidget;
+    PipelineFilterWidget*               m_ShiftStart;
     QVBoxLayout*                        m_FilterWidgetLayout;
     PipelineFilterWidget*               m_CurrentFilterBeingDragged;
     PipelineFilterWidget*               m_PreviousFilterBeingDragged;

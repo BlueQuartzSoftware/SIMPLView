@@ -820,6 +820,10 @@ void PipelineFilterWidget::mouseReleaseEvent(QMouseEvent* event)
   {
     QFrame::mouseReleaseEvent(event);
   }
+  else if (qApp->queryKeyboardModifiers() == Qt::ControlModifier && isSelected() == true)
+  {
+    setIsSelected(false);
+  }
   else
   {
     setIsSelected(true, qApp->queryKeyboardModifiers());

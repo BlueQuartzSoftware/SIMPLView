@@ -91,8 +91,7 @@
 // -----------------------------------------------------------------------------
 PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   QFrame(parent),
-  m_ActiveFilterWidget(NULL),
-  m_OldActiveFilterWidget(NULL),
+  m_ShiftStart(NULL),
   m_FilterWidgetLayout(NULL),
   m_CurrentFilterBeingDragged(NULL),
   m_PreviousFilterBeingDragged(NULL),
@@ -306,9 +305,7 @@ void PipelineViewWidget::clearWidgets()
       m_FilterWidgetLayout->removeItem(spacer);
     }
   }
-  m_SelectedFilterWidgets.clear();
   resetLayout();
-
 }
 
 // -----------------------------------------------------------------------------
@@ -621,15 +618,17 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::startDrag(QMouseEvent* event)
 {
-  if (m_SelectedFilterWidgets.size() == 1)
+  QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
+
+  if (selectedWidgets.size() == 1)
   {
-    setFilterBeingDragged(m_SelectedFilterWidgets[0]);
+    setFilterBeingDragged(selectedWidgets[0]);
   }
 
-  QPixmap pixmap = m_ActiveFilterWidget->grab();
+  QPixmap pixmap = m_ShiftStart->grab();
 
   int pWidth = pixmap.size().width();
-  int pHeight = pixmap.size().height() * m_SelectedFilterWidgets.size() + (3 * (m_SelectedFilterWidgets.size() - 1));
+  int pHeight = pixmap.size().height() * selectedWidgets.size() + (3 * (selectedWidgets.size() - 1));
 
   // Create new picture for transparent
   QPixmap transparent(pWidth, pHeight);
@@ -640,9 +639,9 @@ void PipelineViewWidget::startDrag(QMouseEvent* event)
   p.begin(&transparent);
   p.setOpacity(0.70);
   int offset = 0;
-  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  for (int i = 0; i < selectedWidgets.size(); i++)
   {
-    QPixmap currentPixmap = m_SelectedFilterWidgets[i]->grab();
+    QPixmap currentPixmap = selectedWidgets[i]->grab();
     p.drawPixmap(0, offset, currentPixmap);
     offset = offset + pixmap.size().height() + 3;
   }
@@ -728,18 +727,19 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
 {
   if (whoSent)
   {
+    QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
     QWidget* w = qobject_cast<QWidget*>(whoSent);
 
-    if (m_SelectedFilterWidgets.contains(dynamic_cast<PipelineFilterWidget*>(w)))
+    if (selectedWidgets.contains(dynamic_cast<PipelineFilterWidget*>(w)))
     {
       int index = m_FilterWidgetLayout->indexOf(w);
-      if (NULL != m_FilterWidgetLayout->itemAt(index - 1) && m_SelectedFilterWidgets.count() > 1)
+      if (NULL != m_FilterWidgetLayout->itemAt(index - 1) && selectedWidgets.count() > 1)
       {
         PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index - 1)->widget());
         setSelectedFilterWidget(widget);
         widget->setIsSelected(true);
       }
-      else if (NULL != m_FilterWidgetLayout->itemAt(index + 1) && m_SelectedFilterWidgets.count() > 1)
+      else if (NULL != m_FilterWidgetLayout->itemAt(index + 1) && selectedWidgets.count() > 1)
       {
         PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index + 1)->widget());
         if (NULL != widget)
@@ -747,14 +747,6 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
           setSelectedFilterWidget(widget);
           widget->setIsSelected(true);
         }
-        else
-        {
-          m_SelectedFilterWidgets.clear();
-        }
-      }
-      else
-      {
-        m_SelectedFilterWidgets.clear();
       }
     }
 
@@ -797,32 +789,20 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
 {
   if (modifiers == Qt::ShiftModifier)
   {
-    bool allShiftSelections = true;
-    for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
-    {
-      if (m_SelectedFilterWidgets[i]->getSelectionModifiers() != Qt::ShiftModifier)
-      {
-        allShiftSelections = false;
-      }
-    }
-
-    if (allShiftSelections == false)
-    {
-      clearSelectedFilterWidgets();
-    }
+    clearSelectedFilterWidgets();
 
     int begin;
     int end;
-    if (m_FilterWidgetLayout->indexOf(w) < m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget))
+    if (m_FilterWidgetLayout->indexOf(w) < m_FilterWidgetLayout->indexOf(m_ShiftStart))
     {
       // The filter widget that was just selected is before the "active" widget
       begin = m_FilterWidgetLayout->indexOf(w);
-      end = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
+      end = m_FilterWidgetLayout->indexOf(m_ShiftStart);
     }
     else
     {
       // The filter widget that was just selected is after the "active" widget
-      begin = m_FilterWidgetLayout->indexOf(m_ActiveFilterWidget);
+      begin = m_FilterWidgetLayout->indexOf(m_ShiftStart);
       end = m_FilterWidgetLayout->indexOf(w);
     }
 
@@ -830,44 +810,29 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
     {
       filterWidgetAt(i)->blockSignals(true);
       filterWidgetAt(i)->setIsSelected(true, modifiers);
-      m_SelectedFilterWidgets.push_back(filterWidgetAt(i));
       filterWidgetAt(i)->blockSignals(false);
     }
-
-    m_OldActiveFilterWidget = m_ActiveFilterWidget;
-    m_ActiveFilterWidget = w;
   }
   else if (modifiers == Qt::ControlModifier)
   {
-    if (m_SelectedFilterWidgets.contains(w))
-    {
-      w->setIsSelected(false);
-      m_SelectedFilterWidgets.removeAll(w);
-      m_ActiveFilterWidget = m_OldActiveFilterWidget;
-    }
-    else
-    {
-      m_SelectedFilterWidgets.push_back(w);
-      m_OldActiveFilterWidget = m_ActiveFilterWidget;
-      m_ActiveFilterWidget = w;
-    }
+    m_ShiftStart = w;
   }
   else
   {
+    m_ShiftStart = w;
+
     clearSelectedFilterWidgets();
 
     w->blockSignals(true);
     w->setIsSelected(true, modifiers);
-    m_SelectedFilterWidgets.push_back(w);
     w->blockSignals(false);
-
-    m_OldActiveFilterWidget = m_ActiveFilterWidget;
-    m_ActiveFilterWidget = w;
   }
 
-  if (m_SelectedFilterWidgets.size() == 1)
+  QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
+
+  if (selectedWidgets.size() == 1)
   {
-    emit filterInputWidgetChanged(m_SelectedFilterWidgets[0]->getFilterInputWidget());
+    emit filterInputWidgetChanged(selectedWidgets[0]->getFilterInputWidget());
   }
   else
   {
@@ -880,11 +845,11 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::clearSelectedFilterWidgets()
 {
-  for (int i = 0; i < m_SelectedFilterWidgets.size(); i++)
+  for (int i=0; i<filterCount(); i++)
   {
-    m_SelectedFilterWidgets[i]->setIsSelected(false);
+    PipelineFilterWidget* fw = dynamic_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(i)->widget());
+    fw->setIsSelected(false);
   }
-  m_SelectedFilterWidgets.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -936,9 +901,11 @@ void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
   {
-    if (m_SelectedFilterWidgets.size() > 0)
+    QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
+
+    if (selectedWidgets.size() > 0)
     {
-      emit filterWidgetsRemoved(m_SelectedFilterWidgets);
+      emit filterWidgetsRemoved(selectedWidgets);
     }
   }
 }
@@ -1540,6 +1507,22 @@ void PipelineViewWidget::showFilterHelp(const QString& className)
 // -----------------------------------------------------------------------------
 QList<PipelineFilterWidget*> PipelineViewWidget::getSelectedFilterWidgets()
 {
-  return m_SelectedFilterWidgets;
+  QList<PipelineFilterWidget*> filterWidgets;
+  for (int i=0; i<filterCount(); i++)
+  {
+    if (NULL != dynamic_cast<DropBoxWidget*>(m_FilterWidgetLayout->itemAt(i)->widget()))
+    {
+      continue;
+    }
+    else
+    {
+      PipelineFilterWidget* fw = dynamic_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(i)->widget());
+      if (fw->isSelected() == true)
+      {
+        filterWidgets.push_back(fw);
+      }
+    }
+  }
+  return filterWidgets;
 }
 
