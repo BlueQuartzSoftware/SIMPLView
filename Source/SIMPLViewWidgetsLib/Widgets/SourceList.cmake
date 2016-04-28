@@ -15,6 +15,7 @@ set(SIMPLView_WIDGETS
     FilterLibraryToolboxWidget
     FilterListToolboxWidget
     IssuesDockWidget
+    StandardOutputDockWidget
     PipelineFilterWidget
     AboutPlugins
     PluginDetails
