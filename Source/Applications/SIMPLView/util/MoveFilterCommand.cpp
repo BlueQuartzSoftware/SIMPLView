@@ -103,7 +103,7 @@ void MoveFilterCommand::moveFilter(int origin, int destination)
   PipelineFilterWidget* filterWidget = new PipelineFilterWidget(pipeline->getFilterContainer().at(0), NULL, m_PipelineView);
 
   m_PipelineView->addFilterWidget(filterWidget, destination);
-  m_PipelineView->setSelectedFilterWidget(filterWidget);
+  m_PipelineView->setSelectedFilterWidget(filterWidget, Qt::NoModifier);
 
   m_PipelineView->preflightPipeline();
 

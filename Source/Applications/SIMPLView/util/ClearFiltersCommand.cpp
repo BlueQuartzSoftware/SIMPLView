@@ -78,13 +78,9 @@ void ClearFiltersCommand::undo()
 
   m_PipelineView->clearSelectedFilterWidgets();
 
-  QMapIterator<int, Qt::KeyboardModifiers> iter(m_Selections);
-  while (iter.hasNext())
+  if (m_PipelineView->filterCount() > 0)
   {
-    iter.next();
-
-    int index = iter.key();
-    m_PipelineView->setSelectedFilterWidget(m_PipelineView->filterWidgetAt(index), iter.value());
+    m_PipelineView->setSelectedFilterWidget(m_PipelineView->filterWidgetAt(0), Qt::NoModifier);
   }
 
   m_Instance->setWindowModified(m_Modified);
@@ -95,12 +91,6 @@ void ClearFiltersCommand::undo()
 // -----------------------------------------------------------------------------
 void ClearFiltersCommand::redo()
 {
-  QList<PipelineFilterWidget*> selected = m_PipelineView->getSelectedFilterWidgets();
-  for (int i = 0; i < selected.size(); i++)
-  {
-    m_Selections.insert(m_PipelineView->indexOfFilterWidget(selected[i]), selected[i]->getSelectionModifiers());
-  }
-
   m_Modified = m_Instance->isWindowModified();
 
   // Clear the filter input widget

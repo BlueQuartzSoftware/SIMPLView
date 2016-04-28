@@ -114,6 +114,7 @@ void PasteCommand::redo()
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
     m_Destination->addFilterWidget(filterWidget, insertIndex);
+    m_Destination->setSelectedFilterWidget(filterWidget, Qt::NoModifier);
 
     if (insertIndex >= 0)
     {

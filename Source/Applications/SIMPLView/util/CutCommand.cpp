@@ -79,7 +79,9 @@ void CutCommand::undo()
 
   for (int i = 0; i < container.size(); i++)
   {
-    m_PipelineView->addFilterWidget(new PipelineFilterWidget(container[i], NULL, m_PipelineView), m_SelectedWidgetIndices[i]);
+    PipelineFilterWidget* fw = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
+    m_PipelineView->addFilterWidget(fw, m_SelectedWidgetIndices[i]);
+    m_PipelineView->setSelectedFilterWidget(fw, Qt::NoModifier);
   }
 
   m_PipelineView->preflightPipeline();

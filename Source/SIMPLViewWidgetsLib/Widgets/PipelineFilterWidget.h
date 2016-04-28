@@ -183,13 +183,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
   signals:
 
     /**
-     * @brief widgetSelected
-     * @param w
-     * @param modifiers
-     */
-    void widgetSelected(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers);
-
-    /**
      * @brief filterWidgetRemoved
      * @param widget
      */
@@ -204,6 +197,11 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
      * @brief parametersChanged
      */
     void parametersChanged();
+
+    /**
+     * @brief filterWidgetPressed
+     */
+    void filterWidgetPressed(PipelineFilterWidget* fw, Qt::KeyboardModifiers modifiers);
 
     /**
     * @brief filterWidgetCut

@@ -686,7 +686,6 @@ void PipelineFilterWidget::setIsSelected(bool b, Qt::KeyboardModifiers modifiers
   m_IsSelected = b;
   m_SelectionModifiers = modifiers;
   changeStyle();
-  if(true == b) { emit widgetSelected(this, modifiers); }
 }
 
 // -----------------------------------------------------------------------------
@@ -820,14 +819,9 @@ void PipelineFilterWidget::mouseReleaseEvent(QMouseEvent* event)
   {
     QFrame::mouseReleaseEvent(event);
   }
-  else if (qApp->queryKeyboardModifiers() == Qt::ControlModifier && isSelected() == true)
-  {
-    setIsSelected(false);
-  }
   else
   {
-    setIsSelected(true, qApp->queryKeyboardModifiers());
-    event->accept();
+    emit filterWidgetPressed(this, qApp->queryKeyboardModifiers());
   }
 }
 

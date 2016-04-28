@@ -245,7 +245,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @param w
      * @param modifiers
      */
-    void setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers);
 
     /**
      * @brief setFilterBeingDragged

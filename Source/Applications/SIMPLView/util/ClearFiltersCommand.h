@@ -57,7 +57,6 @@ public:
 private:
   SIMPLView_UI*                                                 m_Instance;
   PipelineViewWidget*                                           m_PipelineView;
-  QMap<int, Qt::KeyboardModifiers>                              m_Selections;
   QString                                                       m_JsonString;
   bool                                                          m_Modified;
 

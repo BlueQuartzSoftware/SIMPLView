@@ -86,10 +86,13 @@ void RemoveFilterCommand::undo()
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
   QList<AbstractFilter::Pointer> container = pipeline->getFilterContainer();
 
+  m_PipelineView->clearSelectedFilterWidgets();
+
   for (int i=0; i<container.size(); i++)
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
     m_PipelineView->addFilterWidget(filterWidget, m_RemovalIndices[i]);
+    m_PipelineView->setSelectedFilterWidget(filterWidget, Qt::ShiftModifier);
   }
 
   m_PipelineView->preflightPipeline();

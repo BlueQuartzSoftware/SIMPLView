@@ -533,7 +533,7 @@ void PipelineViewWidget::addFilter(const QString& filterClassName, int index)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index)
+void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index)
 {
   bool addSpacer = false;
   if (filterCount() <= 0)
@@ -569,28 +569,28 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
   }
 
   // The layout will take control of the PipelineFilterWidget 'w' instance
-  m_FilterWidgetLayout->insertWidget(index, pipelineFilterWidget);
+  m_FilterWidgetLayout->insertWidget(index, fw);
   // Set the Parent
-  pipelineFilterWidget->setParent(this);
+  fw->setParent(this);
 
   /// Now setup all the connections between the various widgets
 
   // When the filter is removed from this view
-  connect(pipelineFilterWidget, SIGNAL(filterWidgetRemoved(PipelineFilterWidget*)),
+  connect(fw, SIGNAL(filterWidgetRemoved(PipelineFilterWidget*)),
           dream3dApp, SLOT(removeFilterWidget(PipelineFilterWidget*)) );
 
   // When the FilterWidget is selected
-  connect(pipelineFilterWidget, SIGNAL(widgetSelected(PipelineFilterWidget*, Qt::KeyboardModifiers)),
+  connect(fw, SIGNAL(filterWidgetPressed(PipelineFilterWidget*, Qt::KeyboardModifiers)),
           this, SLOT(setSelectedFilterWidget(PipelineFilterWidget*, Qt::KeyboardModifiers)));
 
   // When the filter widget is dragged
-  connect(pipelineFilterWidget, SIGNAL(dragStarted(QMouseEvent*)),
+  connect(fw, SIGNAL(dragStarted(QMouseEvent*)),
           this, SLOT(startDrag(QMouseEvent*)));
 
-  connect(pipelineFilterWidget, SIGNAL(parametersChanged()),
+  connect(fw, SIGNAL(parametersChanged()),
           this, SLOT(preflightPipeline()));
 
-  connect(pipelineFilterWidget, SIGNAL(parametersChanged()),
+  connect(fw, SIGNAL(parametersChanged()),
           this, SLOT(handleFilterParameterChanged()));
 
   // Check to make sure at least the vertical spacer is in the Layout
@@ -604,10 +604,10 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* pipelineFilterWid
   reindexWidgetTitles();
   
   // Finally, set this new filter widget as selected
-  pipelineFilterWidget->setIsSelected(true, pipelineFilterWidget->getSelectionModifiers());
+  setSelectedFilterWidget(fw, Qt::NoModifier);
 
   // Get the filter to ignore Scroll Wheel Events
-  pipelineFilterWidget->installEventFilter( this);
+  fw->installEventFilter( this);
 
   // Emit that the pipeline changed
   emit pipelineChanged();
@@ -727,29 +727,7 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
 {
   if (whoSent)
   {
-    QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
     QWidget* w = qobject_cast<QWidget*>(whoSent);
-
-    if (selectedWidgets.contains(dynamic_cast<PipelineFilterWidget*>(w)))
-    {
-      int index = m_FilterWidgetLayout->indexOf(w);
-      if (NULL != m_FilterWidgetLayout->itemAt(index - 1) && selectedWidgets.count() > 1)
-      {
-        PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index - 1)->widget());
-        setSelectedFilterWidget(widget);
-        widget->setIsSelected(true);
-      }
-      else if (NULL != m_FilterWidgetLayout->itemAt(index + 1) && selectedWidgets.count() > 1)
-      {
-        PipelineFilterWidget* widget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(index + 1)->widget());
-        if (NULL != widget)
-        {
-          setSelectedFilterWidget(widget);
-          widget->setIsSelected(true);
-        }
-      }
-    }
-
     m_FilterWidgetLayout->removeWidget(w);
 
     if (w)
@@ -759,6 +737,11 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* whoSent)
 
       w->deleteLater();
     }
+  }
+
+  if (getSelectedFilterWidgets().isEmpty())
+  {
+    m_ShiftStart = NULL;
   }
 
   QSpacerItem* spacer = m_FilterWidgetLayout->itemAt(0)->spacerItem();
@@ -791,6 +774,11 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
   {
     clearSelectedFilterWidgets();
 
+    if (NULL == m_ShiftStart)
+    {
+      m_ShiftStart = w;
+    }
+
     int begin;
     int end;
     if (m_FilterWidgetLayout->indexOf(w) < m_FilterWidgetLayout->indexOf(m_ShiftStart))
@@ -808,24 +796,32 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
 
     for (int i = begin; i <= end; i++)
     {
-      filterWidgetAt(i)->blockSignals(true);
       filterWidgetAt(i)->setIsSelected(true, modifiers);
-      filterWidgetAt(i)->blockSignals(false);
     }
   }
   else if (modifiers == Qt::ControlModifier)
   {
     m_ShiftStart = w;
+
+    if (w->isSelected())
+    {
+      w->setIsSelected(false, modifiers);
+      if (getSelectedFilterWidgets().isEmpty())
+      {
+        m_ShiftStart = NULL;
+      }
+    }
+    else
+    {
+      w->setIsSelected(true, modifiers);
+    }
   }
   else
   {
-    m_ShiftStart = w;
-
     clearSelectedFilterWidgets();
 
-    w->blockSignals(true);
+    m_ShiftStart = w;
     w->setIsSelected(true, modifiers);
-    w->blockSignals(false);
   }
 
   QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
@@ -889,7 +885,7 @@ void PipelineViewWidget::populatePipelineView(FilterPipeline::Pointer pipeline, 
     PipelineFilterWidget* fw = dynamic_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(0)->widget());
     if (fw)
     {
-      setSelectedFilterWidget(fw);
+      setSelectedFilterWidget(fw, Qt::NoModifier);
     }
   }
 }
@@ -1326,7 +1322,7 @@ void PipelineViewWidget::dragLeaveEvent(QDragLeaveEvent* event)
   if (NULL != m_CurrentFilterBeingDragged && qApp->queryKeyboardModifiers() != Qt::AltModifier)
   {
     m_FilterWidgetLayout->insertWidget(m_FilterOrigPos, m_CurrentFilterBeingDragged);
-    setSelectedFilterWidget(m_CurrentFilterBeingDragged);
+    setSelectedFilterWidget(m_CurrentFilterBeingDragged, Qt::NoModifier);
   }
 
   reindexWidgetTitles();
@@ -1439,6 +1435,7 @@ void PipelineViewWidget::mousePressEvent(QMouseEvent* event)
   if (event->button() == Qt::LeftButton)
   {
     clearSelectedFilterWidgets();
+    m_ShiftStart = NULL;
     emit filterInputWidgetNeedsCleared();
   }
 
