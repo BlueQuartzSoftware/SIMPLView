@@ -40,7 +40,97 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
+
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+AddFiltersCommand::AddFiltersCommand(AbstractFilter::Pointer filter, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
+  QUndoCommand(parent),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
+{
+  if (m_StartIndex < -1)
+  {
+    m_StartIndex = -1;
+  }
+
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  pipeline->pushBack(filter);
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+AddFiltersCommand::AddFiltersCommand(QList<AbstractFilter::Pointer> filters, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
+  QUndoCommand(parent),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
+{
+  if (m_StartIndex < -1)
+  {
+    m_StartIndex = -1;
+  }
+
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  for (int i=0; i<filters.size(); i++)
+  {
+    pipeline->pushBack(filters[i]);
+  }
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+AddFiltersCommand::AddFiltersCommand(PipelineFilterWidget* filterWidget, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
+  QUndoCommand(parent),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
+{
+  if (m_StartIndex < -1)
+  {
+    m_StartIndex = -1;
+  }
+
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  pipeline->pushBack(filterWidget->getFilter());
+  delete filterWidget;
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+AddFiltersCommand::AddFiltersCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
+  QUndoCommand(parent),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
+{
+  if (m_StartIndex < -1)
+  {
+    m_StartIndex = -1;
+  }
+
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
+  for (int i=0; i<filterWidgets.size(); i++)
+  {
+    pipeline->pushBack(filterWidgets[i]->getFilter());
+    delete filterWidgets[i];
+  }
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+}
 
 // -----------------------------------------------------------------------------
 //
@@ -113,14 +203,13 @@ void AddFiltersCommand::redo()
   for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
-    m_Destination->addFilterWidget(filterWidget, insertIndex);
+    m_Destination->addFilterWidget(filterWidget, insertIndex, false);
     insertIndex++;
   }
 
   m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(m_StartIndex), Qt::NoModifier);
 
   m_Destination->preflightPipeline();
-  emit m_Destination->pipelineChanged();
 }
 
 

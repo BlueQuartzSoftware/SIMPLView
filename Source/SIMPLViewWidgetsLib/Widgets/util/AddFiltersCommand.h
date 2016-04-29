@@ -40,12 +40,18 @@
 
 #include <QtWidgets/QUndoCommand>
 
+#include <SIMPLib/Common/AbstractFilter.h>
+
 class PipelineFilterWidget;
 class PipelineViewWidget;
 
 class AddFiltersCommand : public QUndoCommand
 {
   public:
+    AddFiltersCommand(AbstractFilter::Pointer filter, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(QList<AbstractFilter::Pointer> filters, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(PipelineFilterWidget* filterWidget, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
     AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
     virtual ~AddFiltersCommand();
 

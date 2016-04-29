@@ -44,7 +44,8 @@ class PipelineViewWidget;
 class RemoveFilterCommand : public QUndoCommand
 {
 public:
-  RemoveFilterCommand(QList<int> removalIndices, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+  RemoveFilterCommand(PipelineFilterWidget* fw, PipelineViewWidget* pipelineView, QString actionText, QUndoCommand* parent = 0);
+  RemoveFilterCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView, QString actionText, QUndoCommand* parent = 0);
   virtual ~RemoveFilterCommand();
 
   virtual void undo();

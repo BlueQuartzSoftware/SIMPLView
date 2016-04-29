@@ -66,9 +66,7 @@
 #include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 #include "SIMPLViewWidgetsLib/Widgets/AboutPlugins.h"
 #include "SIMPLViewWidgetsLib/Widgets/DSplashScreen.h"
-#include "SIMPLViewWidgetsLib/Widgets/util/AddFiltersCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/CutCommand.h"
-#include "SIMPLViewWidgetsLib/Widgets/util/ClearFiltersCommand.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
@@ -450,23 +448,10 @@ void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::addFilter(const QString &className, int index)
 {
-  FilterManager* fm = FilterManager::Instance();
-  if(NULL == fm) { return; }
-  IFilterFactory::Pointer wf = fm->getFactoryForFilter(className);
-  if (NULL == wf.get()) { return; }
-
-  // Create an instance of the filter. Since we are dealing with the AbstractFilter interface we can not
-  // actually use the concrete filter class. We are going to have to rely on QProperties or Signals/Slots
-  // to communicate changes back to the filter.
-  AbstractFilter::Pointer filter = wf->create();
-
-  FilterPipeline::Pointer pipeline = FilterPipeline::New();
-  pipeline->pushBack(filter);
-
-  QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-
-  AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", index);
-  m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(cmd);
+  if (NULL != m_PreviousActiveWindow)
+  {
+    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(className, index, true);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -639,8 +624,7 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
   {
     PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
 
-    ClearFiltersCommand* cmd = new ClearFiltersCommand(widget);
-    widget->addUndoCommand(cmd);
+    widget->clearWidgets(true);
   }
 }
 
@@ -929,8 +913,7 @@ void SIMPLViewApplication::on_actionCut_triggered()
     QClipboard* clipboard = QApplication::clipboard();
     clipboard->setText(jsonString);
 
-    CutCommand* cmd = new CutCommand(jsonString, filterWidgets, widget);
-    widget->addUndoCommand(cmd);
+    widget->cutFilterWidgets(filterWidgets);
   }
 }
 
@@ -964,8 +947,10 @@ void SIMPLViewApplication::on_actionPaste_triggered()
     QClipboard* clipboard = QApplication::clipboard();
     QString jsonString = clipboard->text();
 
-    AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, m_ActiveWindow->getPipelineViewWidget(), "Paste", -1);
-    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(cmd);
+    FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
+    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+
+    m_ActiveWindow->getPipelineViewWidget()->addFilters(container, -1, true);
   }
 }
 

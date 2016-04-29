@@ -242,10 +242,43 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     /**
      * @brief addFilter
+     * @param filter
+     * @param index
+     * @param allowUndo
+     */
+    void addFilter(AbstractFilter::Pointer filter, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilter
      * @param filterClassName
      * @param index
+     * param allowUndo
      */
-    void addFilter(const QString& filterClassName, int index = -1);
+    void addFilter(const QString& filterClassName, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilter
+     * @param filter
+     * @param index
+     * @param allowUndo
+     */
+    void addFilters(QList<AbstractFilter::Pointer> filters, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilterWidget
+     * @param fw
+     * @param index
+     * @param allowUndo
+     */
+    void addFilterWidget(PipelineFilterWidget* fw, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilterWidget
+     * @param fw
+     * @param index
+     * @param allowUndo
+     */
+    void addFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, int index = -1, bool allowUndo = true);
 
     /**
      * @brief addFilterWidget
@@ -253,13 +286,21 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @param filter
      * @param index
      */
-    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1);
+    void cutFilterWidgets(QList<PipelineFilterWidget*> selectedWidgets);
 
     /**
      * @brief removeFilterWidget
-     * @param whoSent
+     * @param filterWidget
+     * @param allowUndo
      */
     void removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo = true);
+
+    /**
+     * @brief removeFilterWidget
+     * @param filterWidgets
+     * @param allowUndo
+     */
+    void removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, bool allowUndo = true);
 
     /**
      * @brief setSelectedFilterWidget
@@ -315,7 +356,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     /**
     * @brief clearWidgets
     */
-    void clearWidgets();
+    void clearWidgets(bool allowUndo = false);
 
     /**
     * @brief toRunningState

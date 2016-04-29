@@ -72,7 +72,7 @@ void ClearFiltersCommand::undo()
   for (int i = 0; i < container.size(); i++)
   {
     PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
-    m_PipelineView->addFilterWidget(filterWidget);
+    m_PipelineView->addFilterWidget(filterWidget, false);
   }
 
   m_PipelineView->clearSelectedFilterWidgets();

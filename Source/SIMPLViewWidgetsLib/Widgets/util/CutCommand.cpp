@@ -48,17 +48,20 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CutCommand::CutCommand(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+CutCommand::CutCommand(QList<PipelineFilterWidget*> selectedWidgets, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_JsonString(jsonString),
   m_PipelineView(pipelineView)
 {
   setText(QObject::tr("\"Cut %1 Filter Widgets\"").arg(selectedWidgets.size()));
 
+  FilterPipeline::Pointer pipeline = FilterPipeline::New();
   for (int i = 0; i < selectedWidgets.size(); i++)
   {
+    pipeline->pushBack(selectedWidgets[i]->getFilter());
     m_SelectedWidgetIndices.push_back(pipelineView->indexOfFilterWidget(selectedWidgets[i]));
   }
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 }
 
 // -----------------------------------------------------------------------------
@@ -80,7 +83,7 @@ void CutCommand::undo()
   for (int i = 0; i < container.size(); i++)
   {
     PipelineFilterWidget* fw = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
-    m_PipelineView->addFilterWidget(fw, m_SelectedWidgetIndices[i]);
+    m_PipelineView->addFilterWidget(fw, m_SelectedWidgetIndices[i], false);
     m_PipelineView->setSelectedFilterWidget(fw, Qt::NoModifier);
   }
 
