@@ -171,6 +171,10 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     // Update the issues menu item with the correct value
     QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
     menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
+
+    // Update the standard output menu item with the correct value
+    QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
+    menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
   }
   else if (m_SIMPLViewInstances.size() <= 0)
   {
@@ -327,6 +331,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
+  QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
   QAction* actionShowFilterLibrary = menuItems->getActionShowFilterLibrary();
   QAction* actionShowFilterList = menuItems->getActionShowFilterList();
@@ -359,6 +364,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   menuToolbox->addAction(actionShowBookmarks);
   menuView->addSeparator();
   menuView->addAction(actionShowIssues);
+  menuView->addAction(actionShowStdOutput);
 
   // Create Bookmarks Menu
   m_GlobalMenu->addMenu(menuBookmarks);

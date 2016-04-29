@@ -392,9 +392,15 @@ void SIMPLView_UI::readSettings()
 
   // Read dock widget settings
   prefs->beginGroup("DockWidgetSettings");
+
   prefs->beginGroup("Issues Dock Widget");
   issuesDockWidget->readSettings(this, prefs.data());
   prefs->endGroup();
+
+  prefs->beginGroup("Standard Output Dock Widget");
+  stdOutDockWidget->readSettings(this, prefs.data());
+  prefs->endGroup();
+
   prefs->endGroup();
 
   QRecentFileList::instance()->readList(prefs.data());
@@ -467,6 +473,10 @@ void SIMPLView_UI::writeSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   issuesDockWidget->writeSettings(prefs.data());
+  prefs->endGroup();
+
+  prefs->beginGroup("Standard Output Dock Widget");
+  stdOutDockWidget->writeSettings(prefs.data());
   prefs->endGroup();
 
   prefs->endGroup();
@@ -1168,6 +1178,14 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 IssuesDockWidget* SIMPLView_UI::getIssuesDockWidget()
 {
   return issuesDockWidget;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+StandardOutputDockWidget* SIMPLView_UI::getStandardOutputDockWidget()
+{
+  return stdOutDockWidget;
 }
 
 // -----------------------------------------------------------------------------

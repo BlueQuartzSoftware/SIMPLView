@@ -134,6 +134,10 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     // Update the issues menu item with the correct value
     QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
     menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
+
+    // Update the standard output menu item with the correct value
+    QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
+    menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
   }
   else
   {
@@ -198,6 +202,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
+  QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
 
 
@@ -218,6 +223,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   // Create View Menu
   menuBar->addMenu(menuView);
   menuView->addAction(actionShowIssues);
+  menuView->addAction(actionShowStdOutput);
   menuView->addAction(actionShowToolbox);
 
   // Create Pipeline Menu

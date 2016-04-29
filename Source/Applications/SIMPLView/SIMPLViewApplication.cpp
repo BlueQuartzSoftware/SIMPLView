@@ -611,6 +611,23 @@ void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
+{
+  if (NULL != m_ActiveWindow)
+  {
+    QAction* actionShowStdOutput = qobject_cast<QAction*>(sender());
+    StandardOutputDockWidget* stdOutputDockWidget = m_ActiveWindow->getStandardOutputDockWidget();
+
+    if (NULL != actionShowStdOutput && NULL != stdOutputDockWidget)
+    {
+      m_ActiveWindow->updateAndSyncDockWidget(actionShowStdOutput, stdOutputDockWidget, visible);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if (NULL != m_ActiveWindow)

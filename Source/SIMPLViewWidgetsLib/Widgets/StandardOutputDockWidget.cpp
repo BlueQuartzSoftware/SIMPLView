@@ -74,13 +74,7 @@ void StandardOutputDockWidget::setupGui()
 // -----------------------------------------------------------------------------
 void StandardOutputDockWidget::writeSettings(SIMPLViewSettings* prefs)
 {
-  prefs->beginGroup("DockWidgetSettings");
-  prefs->beginGroup("Standard Output Dock Widget");
-
   prefs->setValue(objectName(), isHidden());
-
-  prefs->endGroup();
-  prefs->endGroup();
 }
 
 // -----------------------------------------------------------------------------
@@ -88,14 +82,8 @@ void StandardOutputDockWidget::writeSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 void StandardOutputDockWidget::readSettings(QMainWindow* main, SIMPLViewSettings* prefs)
 {
-  prefs->beginGroup("DockWidgetSettings");
-  prefs->beginGroup("Standard Output Dock Widget");
-
   main->restoreDockWidget(this);
 
   bool b = prefs->value(objectName(), QVariant(true)).toBool();
   setHidden(b);
-
-  prefs->endGroup();
-  prefs->endGroup();
 }
