@@ -284,20 +284,36 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @brief addFilterWidget
      * @param filterWidgets
      */
-    void cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
+    void cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, bool allowUndo = true);
+
+    /**
+     * @brief moveFilterWidget
+     * @param fw
+     * @param origin
+     * @param destination
+     */
+    void moveFilterWidget(PipelineFilterWidget* fw, int origin, int destination/*, bool allowUndo = true*/);
 
     /**
      * @brief pasteFilters
      * @param filters
      */
-    void pasteFilters(QList<AbstractFilter::Pointer> filters);
+    void pasteFilters(QList<AbstractFilter::Pointer> filters, bool allowUndo = true);
+
+    /**
+     * @brief pasteFilterWidgets
+     * @param jsonString
+     * @param index
+     * @param allowUndo
+     */
+    void pasteFilterWidgets(const QString &jsonString, int index, bool allowUndo = true);
 
     /**
      * @brief removeFilterWidget
      * @param filterWidget
      * @param allowUndo
      */
-    void removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo = true);
+    void removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo = true, bool deleteWidget = true);
 
     /**
      * @brief removeFilterWidget

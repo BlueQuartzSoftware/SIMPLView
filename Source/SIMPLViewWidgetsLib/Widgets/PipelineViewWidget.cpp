@@ -685,29 +685,86 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index, bo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
+void PipelineViewWidget::cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, bool allowUndo)
 {
   if (filterWidgets.isEmpty())
   {
     return;
   }
 
-  RemoveFilterCommand* cmd = new RemoveFilterCommand(filterWidgets, this, "Cut");
-  addUndoCommand(cmd);
+  if (allowUndo == true)
+  {
+    RemoveFilterCommand* cmd = new RemoveFilterCommand(filterWidgets, this, "Cut");
+    addUndoCommand(cmd);
+  }
+  else
+  {
+    removeFilterWidgets(filterWidgets, false);
+  }
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::pasteFilters(QList<AbstractFilter::Pointer> filters)
+void PipelineViewWidget::moveFilterWidget(PipelineFilterWidget* fw, int origin, int destination/*, bool allowUndo*/)
+{
+  if (NULL == fw)
+  {
+    return;
+  }
+
+  MoveFilterCommand* cmd = new MoveFilterCommand(fw, origin, destination, this);
+  addUndoCommand(cmd);
+
+//  if (allowUndo == true)
+//  {
+//    MoveFilterCommand* cmd = new MoveFilterCommand(fw, origin, destination, this);
+//    addUndoCommand(cmd);
+//  }
+//  else
+//  {
+//    removeFilterWidget(fw, false, false);
+//    addFilterWidget(fw, destination, false);
+//  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::pasteFilters(QList<AbstractFilter::Pointer> filters, bool allowUndo)
 {
   if (filters.isEmpty())
   {
     return;
   }
 
-  AddFiltersCommand* cmd = new AddFiltersCommand(filters, this, "Paste");
-  addUndoCommand(cmd);
+  if (allowUndo == true)
+  {
+    AddFiltersCommand* cmd = new AddFiltersCommand(filters, this, "Paste", -1);
+    addUndoCommand(cmd);
+  }
+  else
+  {
+    addFilters(filters, -1, false);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::pasteFilterWidgets(const QString &jsonString, int index, bool allowUndo)
+{
+  if (allowUndo == true)
+  {
+    AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, this, "Paste", index);
+    addUndoCommand(cmd);
+  }
+  else
+  {
+    FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
+    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+    addFilters(container, index, false);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -821,7 +878,7 @@ void PipelineViewWidget::preflightPipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo)
+void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo, bool deleteWidget)
 {
   if (filterWidget)
   {
@@ -840,7 +897,10 @@ void PipelineViewWidget::removeFilterWidget(PipelineFilterWidget* filterWidget, 
         filterWidget->getFilter()->setPreviousFilter(AbstractFilter::NullPointer());
         filterWidget->getFilter()->setNextFilter(AbstractFilter::NullPointer());
 
-        w->deleteLater();
+        if (deleteWidget == true)
+        {
+          w->deleteLater();
+        }
       }
 
       if (getSelectedFilterWidgets().isEmpty())
@@ -1408,8 +1468,14 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     {
       QList<PipelineFilterWidget*> filterWidgets = origin->getDraggedFilterWidgets();
 
-      AddFiltersCommand* cmd = new AddFiltersCommand(filterWidgets, this, "Paste", index);
-      addUndoCommand(cmd);
+      FilterPipeline::Pointer pipeline = FilterPipeline::New();
+      for (int i=0; i<filterWidgets.size(); i++)
+      {
+        pipeline->pushBack(filterWidgets[i]->getFilter());
+      }
+
+      QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+      pasteFilterWidgets(jsonString, index, true);
 
       if (qApp->queryKeyboardModifiers() != Qt::AltModifier)
       {
@@ -1421,8 +1487,7 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
     }
     else if (m_DraggedFilterWidgets.size() == 1)
     {
-      MoveFilterCommand* cmd = new MoveFilterCommand(m_DraggedFilterWidgets[0], m_FilterOrigPos, index, this);
-      addUndoCommand(cmd);
+      moveFilterWidget(m_DraggedFilterWidgets[0], m_FilterOrigPos, index);
       m_DraggedFilterWidgets.clear();
       event->accept();
     }
