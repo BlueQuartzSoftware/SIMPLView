@@ -1095,11 +1095,16 @@ void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
   {
-    QList<PipelineFilterWidget*> selectedWidgets = getSelectedFilterWidgets();
+    emit deleteKeyPressed();
+  }
+  else if (event->key() == Qt::Key_A && qApp->queryKeyboardModifiers() == Qt::ControlModifier)
+  {
+    clearSelectedFilterWidgets();
 
-    if (selectedWidgets.size() > 0)
+    for (int i=0; i<filterCount(); i++)
     {
-      removeFilterWidgets(selectedWidgets, true);
+      PipelineFilterWidget* filterWidget = qobject_cast<PipelineFilterWidget*>(m_FilterWidgetLayout->itemAt(i)->widget());
+      setSelectedFilterWidget(filterWidget, Qt::ControlModifier);
     }
   }
 }

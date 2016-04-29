@@ -409,6 +409,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
+    void deleteKeyPressed();
+
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
     void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
