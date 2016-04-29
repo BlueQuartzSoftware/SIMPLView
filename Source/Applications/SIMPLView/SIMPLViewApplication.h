@@ -153,6 +153,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
+    void on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget);
     void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
     void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
@@ -189,6 +190,11 @@ class SIMPLViewApplication : public QApplication
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
 
     QMenu*                                                                    m_ContextMenu;
+
+    bool                                                                      m_ShowFilterWidgetDeleteDialog;
+
+    void readSettings();
+    void writeSettings();
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

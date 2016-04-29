@@ -409,7 +409,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void preflightPipelineComplete();
     void preflightFinished(int err);
 
-    void deleteKeyPressed();
+    void deleteKeyPressed(PipelineViewWidget* viewWidget);
 
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 

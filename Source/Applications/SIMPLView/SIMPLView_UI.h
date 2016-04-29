@@ -385,6 +385,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
+    bool                                  m_ShowFilterWidgetDeleteDialog;
+
     /**
     * @brief Updates the "first run" variable in the preferences file
     */

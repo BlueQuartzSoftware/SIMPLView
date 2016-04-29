@@ -53,7 +53,7 @@
 #include <QtGui/QDesktopServices>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QScrollBar>
-
+#include <QtWidgets/QCheckBox>
 
 #include "Applications/SIMPLView/SIMPLView.h"
 
@@ -400,6 +400,8 @@ void SIMPLView_UI::readSettings()
 
   prefs->endGroup();
 
+  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
+
   QRecentFileList::instance()->readList(prefs.data());
 }
 
@@ -477,6 +479,8 @@ void SIMPLView_UI::writeSettings()
   prefs->endGroup();
 
   prefs->endGroup();
+
+  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
 
   QRecentFileList::instance()->writeList(prefs.data());
 }

@@ -132,6 +132,8 @@ SIMPLViewApplication::~SIMPLViewApplication()
   delete this->Splash;
   this->Splash = NULL;
 
+  writeSettings();
+
   SIMPLViewSettings prefs;
   if (prefs.value("Program Mode", QString("")) == "Clear Cache")
   {
@@ -160,6 +162,8 @@ void delay(int seconds)
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
+
+  readSettings();
 
   // Create and show the splash screen as the main window is being created.
   QPixmap pixmap(QLatin1String(":/splash/branded_splash.png"));
@@ -991,6 +995,44 @@ void SIMPLViewApplication::on_pipelineViewWidget_contextMenuRequested(PipelineVi
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget)
+{
+  if (m_ActiveWindow)
+  {
+    QList<PipelineFilterWidget*> selectedWidgets = widget->getSelectedFilterWidgets();
+    if (selectedWidgets.size() > 0)
+    {
+      if (m_ShowFilterWidgetDeleteDialog == true)
+      {
+        QMessageBox msgBox;
+        msgBox.setParent(m_ActiveWindow);
+        msgBox.setWindowModality(Qt::WindowModal);
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setText("Are you sure that you want to delete these filters?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        QCheckBox* chkBox = new QCheckBox("Do not show me this again");
+        msgBox.setCheckBox(chkBox);
+        int ret = msgBox.exec();
+
+        m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
+
+        if (ret == QMessageBox::Yes)
+        {
+          widget->removeFilterWidgets(selectedWidgets, true);
+        }
+      }
+      else
+      {
+        widget->removeFilterWidgets(selectedWidgets, true);
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos)
 {
   PipelineFilterWidget* filterWidget = dynamic_cast<PipelineFilterWidget*>(sender());
@@ -1438,6 +1480,34 @@ void SIMPLViewApplication::updatePasteState(bool canPaste)
   {
     menuItems->getActionPaste()->setDisabled(true);
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::writeSettings()
+{
+  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+
+  prefs->beginGroup("Application Settings");
+
+  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
+
+  prefs->endGroup();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::readSettings()
+{
+  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+
+  prefs->beginGroup("Application Settings");
+
+  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
+
+  prefs->endGroup();
 }
 
 

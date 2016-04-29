@@ -156,6 +156,8 @@ void PipelineViewWidget::setupGui()
   newEmptyPipelineViewLayout();
   connect(&m_autoScrollTimer, SIGNAL(timeout()), this, SLOT(doAutoScroll()));
 
+  connect(this, SIGNAL(deleteKeyPressed(PipelineViewWidget*)), dream3dApp, SLOT(on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget*)));
+
   m_DropBox = new DropBoxWidget();
 }
 
@@ -1095,7 +1097,7 @@ void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
   {
-    emit deleteKeyPressed();
+    emit deleteKeyPressed(this);
   }
   else if (event->key() == Qt::Key_A && qApp->queryKeyboardModifiers() == Qt::ControlModifier)
   {
