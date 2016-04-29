@@ -800,7 +800,6 @@ QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::on_startPipelineBtn_clicked()
 {
-
   if (startPipelineBtn->text().compare("Cancel") == 0)
   {
     qDebug() << "canceling from GUI...." << "\n";
@@ -814,6 +813,17 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     return;
   }
+
+  QMap<QWidget*,QTextEdit*>::iterator iter;
+  for (iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); iter++)
+  {
+    QWidget* widget = iter.key();
+    QTextEdit* textEdit = iter.value();
+    delete textEdit;
+    delete widget;
+    //tabWidget->removeTab(i);
+  }
+  m_StdOutputTabMap.clear();
 
   m_ProgressBar->show();
 
@@ -936,33 +946,68 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
-  switch(msg.getType())
+  if (msg.getType() == PipelineMessage::ProgressValue)
   {
-    case PipelineMessage::ProgressValue:
-      this->m_ProgressBar->setValue(msg.getProgressValue());
-      break;
-    case PipelineMessage::StatusMessage:
-      if(NULL != this->statusBar())
-      {
-        QString s = (msg.getPrefix());
-        s = s.append(" ").append(msg.getText().toLatin1().data());
-        this->statusBar()->showMessage(s);
-      }
-      break;
-    case PipelineMessage::StatusMessageAndProgressValue:
-      this->m_ProgressBar->setValue(msg.getProgressValue());
-      if(NULL != this->statusBar())
-      {
-        QString s = (msg.getPrefix());
-        s = s.append(" ").append(msg.getText().toLatin1().data());
-        this->statusBar()->showMessage(s);
-      }
-      break;
-
-    default:
-      return;
+    this->m_ProgressBar->setValue(msg.getProgressValue());
   }
+  else if (msg.getType() == PipelineMessage::StatusMessage)
+  {
+    if(NULL != this->statusBar())
+    {
+      QString s = (msg.getPrefix());
+      s = s.append(" ").append(msg.getText().toLatin1().data());
+      this->statusBar()->showMessage(s);
+    }
+  }
+  else if (msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
+  {
+    this->m_ProgressBar->setValue(msg.getProgressValue());
+    if(NULL != this->statusBar())
+    {
+      QString s = (msg.getPrefix());
+      s = s.append(" ").append(msg.getText().toLatin1().data());
+      this->statusBar()->showMessage(s);
+    }
+  }
+  else if (msg.getType() == PipelineMessage::StandardOutputMessage)
+  {
+    if (stdOutDockWidget->isVisible() == false)
+    {
+      stdOutDockWidget->setVisible(true);
+    }
 
+    int pipelineIndex = msg.getPipelineIndex();
+    QString humanLabel = msg.getFilterHumanLabel();
+    QString text = msg.getText();
+    QString tabTitle = tr("[%1] %2").arg(QString::number(pipelineIndex)).arg(humanLabel);
+    bool matched = false;
+    for (int i=0; i<tabWidget->count(); i++)
+    {
+      if (tabWidget->tabText(i) == tabTitle)
+      {
+        matched = true;
+        QTextEdit* textEdit = m_StdOutputTabMap.value(tabWidget->widget(i));
+        if (NULL != textEdit)
+        {
+          textEdit->append(text);
+        }
+      }
+    }
+
+    if (matched == false)
+    {
+      QWidget* tab = new QWidget();
+      QGridLayout* gridLayout = new QGridLayout(tab);
+      gridLayout->setContentsMargins(0, 0, 0, 0);
+      QTextEdit* textEdit = new QTextEdit(tab);
+      textEdit->append(text);
+      textEdit->setReadOnly(true);
+      gridLayout->addWidget(textEdit, 0, 0, 1, 1);
+      tabWidget->addTab(tab, tabTitle);
+      tabWidget->setCurrentWidget(tab);
+      m_StdOutputTabMap.insert(tab, textEdit);
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------

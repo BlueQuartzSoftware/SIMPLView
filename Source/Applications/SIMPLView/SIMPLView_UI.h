@@ -377,6 +377,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QString                               m_OpenedFilePath;
     static QString                        m_OpenDialogLastDirectory;
 
+    QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
+
     /**
     * @brief Updates the "first run" variable in the preferences file
     */
