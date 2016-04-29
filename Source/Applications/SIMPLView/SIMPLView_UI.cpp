@@ -987,6 +987,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
         if (NULL != textEdit)
         {
           textEdit->append(text);
+          textEdit->ensureCursorVisible();
         }
       }
     }
@@ -997,8 +998,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       QGridLayout* gridLayout = new QGridLayout(tab);
       gridLayout->setContentsMargins(0, 0, 0, 0);
       QTextEdit* textEdit = new QTextEdit(tab);
-      textEdit->append(text);
       textEdit->setReadOnly(true);
+      textEdit->append(text);
+      textEdit->ensureCursorVisible();
       gridLayout->addWidget(textEdit, 0, 0, 1, 1);
       tabWidget->addTab(tab, tabTitle);
       tabWidget->setCurrentWidget(tab);
