@@ -982,6 +982,11 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if (stdOutDockWidget->isVisible() == false)
     {
       stdOutDockWidget->setVisible(true);
+
+      // Update the standard output menu item with the correct value
+      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+      QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
+      menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
     }
 
     int pipelineIndex = msg.getPipelineIndex();
