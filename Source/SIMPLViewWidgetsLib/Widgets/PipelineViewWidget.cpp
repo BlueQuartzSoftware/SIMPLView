@@ -71,6 +71,7 @@
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/Common/IFilterFactory.hpp"
 #include "SIMPLib/Common/FilterFactory.hpp"
+#include "SIMPLib/CoreFilters/Breakpoint.h"
 #include "SIMPLib/FilterParameters/QFilterParametersReader.h"
 #include "SIMPLib/FilterParameters/QFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
@@ -80,7 +81,7 @@
 
 #include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
 #include "SIMPLViewWidgetsLib/PipelineViewPtrMimeData.h"
-
+#include "SIMPLViewWidgetsLib/Widgets/BreakpointFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/AddFiltersCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/MoveFilterCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/RemoveFilterCommand.h"
@@ -356,6 +357,12 @@ FilterPipeline::Pointer PipelineViewWidget::getFilterPipeline()
     if (fw)
     {
       AbstractFilter::Pointer filter = fw->getFilter();
+      Breakpoint::Pointer breakpoint = std::dynamic_pointer_cast<Breakpoint>(filter);
+      if (NULL != breakpoint)
+      {
+        connect(pipeline.get(), SIGNAL(pipelineCanceled()), breakpoint.get(), SLOT(resumePipeline()));
+      }
+
       pipeline->pushBack(filter);
     }
 
@@ -559,11 +566,19 @@ void PipelineViewWidget::addFilter(AbstractFilter::Pointer filter, int index, bo
     index = filterCount();
   }
 
-  // Create a FilterWidget object
-  PipelineFilterWidget* w = new PipelineFilterWidget(filter, NULL, this);
+  Breakpoint::Pointer breakpoint = std::dynamic_pointer_cast<Breakpoint>(filter);
 
-  // Add the filter widget to this view widget
-  addFilterWidget(w, index, allowUndo);
+  // Create a FilterWidget object
+  if (NULL != breakpoint)
+  {
+    BreakpointFilterWidget* w = new BreakpointFilterWidget(filter, NULL, this);
+    addFilterWidget(w, index, allowUndo);
+  }
+  else
+  {
+    PipelineFilterWidget* w = new PipelineFilterWidget(filter, NULL, this);
+    addFilterWidget(w, index, allowUndo);
+  }
 
   // Clear the pipeline Issues table first so we can collect all the error messages
   emit pipelineIssuesCleared();

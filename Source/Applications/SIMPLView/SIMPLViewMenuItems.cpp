@@ -124,6 +124,8 @@ void SIMPLViewMenuItems::createActions()
   m_ActionShowBookmarks->setCheckable(true);
   m_ActionShowIssues = new QAction("Show Warnings/Errors", this);
   m_ActionShowIssues->setCheckable(true);
+  m_ActionShowStdOutput = new QAction("Show Standard Output", this);
+  m_ActionShowStdOutput->setCheckable(true);
   m_ActionShowToolbox = new QAction("Show Toolbox", this);
   m_ActionShowToolbox->setCheckable(true);
   m_ActionAddBookmark = new QAction("Add Bookmark", this);
@@ -185,6 +187,7 @@ void SIMPLViewMenuItems::createActions()
   connect(m_ActionShowBookmarks, SIGNAL(triggered(bool)), toolbox, SLOT(actionShowBookmarks_triggered(bool)));
   connect(m_ActionShowToolbox, SIGNAL(triggered(bool)), dream3dApp, SLOT(on_actionShowToolbox_triggered(bool)));
   connect(m_ActionShowIssues, SIGNAL(triggered(bool)), dream3dApp, SLOT(on_actionShowIssues_triggered(bool)));
+  connect(m_ActionShowStdOutput, SIGNAL(triggered(bool)), dream3dApp, SLOT(on_actionShowStdOutput_triggered(bool)));
   connect(m_ActionAddBookmark, SIGNAL(triggered()), dream3dApp, SLOT(on_actionAddBookmark_triggered()));
   connect(m_ActionNewFolder, SIGNAL(triggered()), dream3dApp, SLOT(on_actionNewFolder_triggered()));
   connect(m_ActionCut, SIGNAL(triggered()), dream3dApp, SLOT(on_actionCut_triggered()));

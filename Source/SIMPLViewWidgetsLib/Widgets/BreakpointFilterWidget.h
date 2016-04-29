@@ -33,57 +33,49 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+#ifndef _breakpointfilterwidget_h_
+#define _breakpointfilterwidget_h_
 
-#include "StandardOutputDockWidget.h"
+#include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
+#include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 
-#include <iostream>
+#include "SIMPLib/CoreFilters/Breakpoint.h"
 
-#include "QtSupportLib/SIMPLViewSettings.h"
-
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
-#include "moc_StandardOutputDockWidget.cpp"
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-StandardOutputDockWidget::StandardOutputDockWidget(QWidget* parent) :
-  QDockWidget(parent)
+/**
+ * @class BreakpointFilterWidget BreakpointFilterWidget.h FilterWidgets/BreakpointFilterWidget.h
+ * @brief  This class is a subclass of the QGroupBox class and is used to display
+ * Filter Options that the user can set. This class is capable of constructing a
+ * default GUI widget set for each type of Filter Option that is available. If
+ * the programmer needs more specialized widgets then they can simply subclass
+ * this class and over ride or implement their custom code.
+ *
+ * @date Jan 6, 2012
+ * @version 1.0
+ */
+class SIMPLViewWidgetsLib_EXPORT BreakpointFilterWidget : public PipelineFilterWidget
 {
-  setupUi(this);
-  setupGui();
-}
+    Q_OBJECT
+  public:
+    BreakpointFilterWidget(QWidget* parent = NULL);
+    BreakpointFilterWidget(AbstractFilter::Pointer filter, IObserver* observer = NULL, QWidget* parent = NULL);
+    virtual ~BreakpointFilterWidget();
 
+    virtual Breakpoint::Pointer getBreakpointFilter();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-StandardOutputDockWidget::~StandardOutputDockWidget()
-{
-}
+    void setupGui();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void StandardOutputDockWidget::setupGui()
-{
-  stdOutTextEdit->setVisible(true);
-}
+  protected slots:
+    void resumeBtnPressed();
+    void showResumeBtn();
+    void hideResumeBtn();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void StandardOutputDockWidget::writeSettings(SIMPLViewSettings* prefs)
-{
-  prefs->setValue(objectName(), isHidden());
-}
+  private:
+    Breakpoint::Pointer                                     m_Filter;
+    QPushButton*                                            m_ResumeBtn;
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void StandardOutputDockWidget::readSettings(QMainWindow* main, SIMPLViewSettings* prefs)
-{
-  main->restoreDockWidget(this);
+    BreakpointFilterWidget(const BreakpointFilterWidget&); // Copy Constructor Not Implemented
+    void operator=(const BreakpointFilterWidget&); // Operator '=' Not Implemented
+};
 
-  bool b = prefs->value(objectName(), QVariant(true)).toBool();
-  setHidden(b);
-}
+#endif /* _breakpointfilterwidget_h_ */
+

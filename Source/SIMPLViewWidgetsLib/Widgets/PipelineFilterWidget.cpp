@@ -907,3 +907,11 @@ PipelineFilterWidget* PipelineFilterWidget::deepCopy()
 
   return newWidget;
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QHBoxLayout* PipelineFilterWidget::getHorizontalLayout()
+{
+  return horizontalLayout;
+}

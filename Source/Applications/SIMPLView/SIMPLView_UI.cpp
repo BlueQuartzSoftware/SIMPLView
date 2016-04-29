@@ -389,9 +389,15 @@ void SIMPLView_UI::readSettings()
 
   // Read dock widget settings
   prefs->beginGroup("DockWidgetSettings");
+
   prefs->beginGroup("Issues Dock Widget");
   issuesDockWidget->readSettings(this, prefs.data());
   prefs->endGroup();
+
+  prefs->beginGroup("Standard Output Dock Widget");
+  stdOutDockWidget->readSettings(this, prefs.data());
+  prefs->endGroup();
+
   prefs->endGroup();
 
   QRecentFileList::instance()->readList(prefs.data());
@@ -464,6 +470,10 @@ void SIMPLView_UI::writeSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   issuesDockWidget->writeSettings(prefs.data());
+  prefs->endGroup();
+
+  prefs->beginGroup("Standard Output Dock Widget");
+  stdOutDockWidget->writeSettings(prefs.data());
   prefs->endGroup();
 
   prefs->endGroup();
@@ -843,7 +853,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   issuesDockWidget->clearIssues();
 
   // Ask the PipelineViewWidget to create a FilterPipeline Object
-  m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
+  //m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
+  m_PipelineInFlight = pipelineViewWidget->getFilterPipeline();
 
   // Give the pipeline one last chance to preflight and get all the latest values from the GUI
   int err = m_PipelineInFlight->preflightPipeline();
@@ -974,6 +985,11 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if (stdOutDockWidget->isVisible() == false)
     {
       stdOutDockWidget->setVisible(true);
+
+      // Update the standard output menu item with the correct value
+      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+      QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
+      menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
     }
 
     int pipelineIndex = msg.getPipelineIndex();
@@ -990,6 +1006,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
         if (NULL != textEdit)
         {
           textEdit->append(text);
+          textEdit->ensureCursorVisible();
         }
       }
     }
@@ -1000,8 +1017,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       QGridLayout* gridLayout = new QGridLayout(tab);
       gridLayout->setContentsMargins(0, 0, 0, 0);
       QTextEdit* textEdit = new QTextEdit(tab);
-      textEdit->append(text);
       textEdit->setReadOnly(true);
+      textEdit->append(text);
+      textEdit->ensureCursorVisible();
       gridLayout->addWidget(textEdit, 0, 0, 1, 1);
       tabWidget->addTab(tab, tabTitle);
       tabWidget->setCurrentWidget(tab);
@@ -1169,6 +1187,14 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 IssuesDockWidget* SIMPLView_UI::getIssuesDockWidget()
 {
   return issuesDockWidget;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+StandardOutputDockWidget* SIMPLView_UI::getStandardOutputDockWidget()
+{
+  return stdOutDockWidget;
 }
 
 // -----------------------------------------------------------------------------

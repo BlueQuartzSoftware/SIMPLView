@@ -130,6 +130,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     IssuesDockWidget* getIssuesDockWidget();
 
     /**
+    * @brief getStandardOutputDockWidget
+    * @param
+    */
+    StandardOutputDockWidget* getStandardOutputDockWidget();
+
+    /**
     * @brief setOpenedFilePath
     * @param path
     */

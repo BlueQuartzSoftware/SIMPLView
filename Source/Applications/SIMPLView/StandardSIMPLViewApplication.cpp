@@ -135,6 +135,10 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
     menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
 
+    // Update the standard output menu item with the correct value
+    QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
+    menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+
     menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   }
   else
@@ -201,6 +205,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStac
   QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
+  QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
@@ -237,6 +242,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStac
   // Create View Menu
   menuBar->addMenu(menuView);
   menuView->addAction(actionShowIssues);
+  menuView->addAction(actionShowStdOutput);
   menuView->addAction(actionShowToolbox);
 
   // Create Pipeline Menu

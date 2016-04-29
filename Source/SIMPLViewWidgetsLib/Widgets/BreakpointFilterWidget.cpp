@@ -34,56 +34,90 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#include "StandardOutputDockWidget.h"
-
-#include <iostream>
-
-#include "QtSupportLib/SIMPLViewSettings.h"
+#include "BreakpointFilterWidget.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
-#include "moc_StandardOutputDockWidget.cpp"
+#include "moc_BreakpointFilterWidget.cpp"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-StandardOutputDockWidget::StandardOutputDockWidget(QWidget* parent) :
-  QDockWidget(parent)
+BreakpointFilterWidget::BreakpointFilterWidget(QWidget* parent) :
+  PipelineFilterWidget(parent),
+  m_Filter(NULL)
 {
-  setupUi(this);
   setupGui();
 }
 
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-StandardOutputDockWidget::~StandardOutputDockWidget()
+BreakpointFilterWidget::BreakpointFilterWidget(AbstractFilter::Pointer filter, IObserver* observer, QWidget* parent) :
+  PipelineFilterWidget(filter, observer, parent),
+  m_Filter(NULL)
 {
+  m_Filter = std::dynamic_pointer_cast<Breakpoint>(PipelineFilterWidget::getFilter());
+
+  if (NULL != m_Filter)
+  {
+    connect(m_Filter.get(), SIGNAL(pipelineHasPaused()), this, SLOT(showResumeBtn()));
+    connect(m_Filter.get(), SIGNAL(pipelineHasResumed()), this, SLOT(hideResumeBtn()));
+  }
+
+  setupGui();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardOutputDockWidget::setupGui()
+BreakpointFilterWidget::~BreakpointFilterWidget()
 {
-  stdOutTextEdit->setVisible(true);
+
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardOutputDockWidget::writeSettings(SIMPLViewSettings* prefs)
+void BreakpointFilterWidget::setupGui()
 {
-  prefs->setValue(objectName(), isHidden());
+  m_ResumeBtn = new QPushButton("Resume");
+  m_ResumeBtn->hide();
+
+  connect(m_ResumeBtn, SIGNAL(pressed()), this, SLOT(resumeBtnPressed()));
+
+  getHorizontalLayout()->addWidget(m_ResumeBtn);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardOutputDockWidget::readSettings(QMainWindow* main, SIMPLViewSettings* prefs)
+void BreakpointFilterWidget::resumeBtnPressed()
 {
-  main->restoreDockWidget(this);
-
-  bool b = prefs->value(objectName(), QVariant(true)).toBool();
-  setHidden(b);
+  m_Filter->resumePipeline();
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BreakpointFilterWidget::showResumeBtn()
+{
+  m_ResumeBtn->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void BreakpointFilterWidget::hideResumeBtn()
+{
+  m_ResumeBtn->hide();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+Breakpoint::Pointer BreakpointFilterWidget::getBreakpointFilter()
+{
+  return m_Filter;
+}
+
+

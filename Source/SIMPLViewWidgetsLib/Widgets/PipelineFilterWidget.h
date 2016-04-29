@@ -254,6 +254,11 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
      */
     void linkConditionalWidgets(QVector<FilterParameter::Pointer>& filterParameters);
 
+    /**
+    * @brief getHorizontalLayout
+    */
+    QHBoxLayout* getHorizontalLayout();
+
   private:
     QRect                             m_DeleteRect;
     QPoint                            dragStartPosition;
