@@ -152,8 +152,6 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
-    void dropFilterWidgets(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers);
-
     void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
     void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
@@ -176,7 +174,7 @@ class SIMPLViewApplication : public QApplication
     */
     virtual void updateRecentFileList(const QString& file);
 
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack *undoStack);
+    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
     virtual void toolboxWindowChanged();
 
     virtual void on_actionClearRecentFiles_triggered();
@@ -185,23 +183,11 @@ class SIMPLViewApplication : public QApplication
     void openRecentFile();
 
     void addFilter(const QString &className, int index);
-    void addFilters(const QString &jsonString, SIMPLView_UI* instance, int index);
-    void removeFilterWidget(PipelineFilterWidget* filterWidget);
-    void removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
-
-  private slots:
-    void pasteFilterWidgets(const QString &jsonString, int startIndex);
-    void pasteFilterWidgets(const QString &jsonString, SIMPLView_UI* instance, int startIndex);
 
   private:
     QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
 
     QMenu*                                                                    m_ContextMenu;
-
-    // Helper functions
-    void cutFilterWidgets(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, SIMPLView_UI* instance);
-
-    void pasteFilterWidgets(int startIndex);
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

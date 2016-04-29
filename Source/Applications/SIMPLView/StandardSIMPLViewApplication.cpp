@@ -123,10 +123,8 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack* undoStack)
+void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
-  Q_UNUSED(undoStack)
-
   if (instance->isActiveWindow())
   {
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
@@ -207,8 +205,8 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStac
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
-  QAction* actionUndo = instance->getActionUndo();
-  QAction* actionRedo = instance->getActionRedo();
+  QAction* actionUndo = instance->getPipelineViewWidget()->getActionUndo();
+  QAction* actionRedo = instance->getPipelineViewWidget()->getActionRedo();
 
   actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
   actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));

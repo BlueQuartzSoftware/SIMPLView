@@ -95,7 +95,7 @@ void CutCommand::redo()
   for (int i = m_SelectedWidgetIndices.size() - 1; i >= 0; i--)
   {
     PipelineFilterWidget* filterWidget = m_PipelineView->filterWidgetAt(m_SelectedWidgetIndices[i]);
-    m_PipelineView->removeFilterWidget(filterWidget);
+    m_PipelineView->removeFilterWidget(filterWidget, false);
   }
 
   m_PipelineView->preflightPipeline();

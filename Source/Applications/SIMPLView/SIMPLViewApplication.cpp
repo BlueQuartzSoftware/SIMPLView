@@ -52,6 +52,7 @@
 #include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/Utilities/QMetaObjectUtilities.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 
 #include "QtSupportLib/QRecentFileList.h"
 #include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
@@ -65,6 +66,9 @@
 #include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 #include "SIMPLViewWidgetsLib/Widgets/AboutPlugins.h"
 #include "SIMPLViewWidgetsLib/Widgets/DSplashScreen.h"
+#include "SIMPLViewWidgetsLib/Widgets/util/AddFiltersCommand.h"
+#include "SIMPLViewWidgetsLib/Widgets/util/CutCommand.h"
+#include "SIMPLViewWidgetsLib/Widgets/util/ClearFiltersCommand.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
@@ -73,10 +77,6 @@
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
-#include "Applications/SIMPLView/util/CutCommand.h"
-#include "Applications/SIMPLView/util/AddFiltersCommand.h"
-#include "Applications/SIMPLView/util/RemoveFilterCommand.h"
-#include "Applications/SIMPLView/util/ClearFiltersCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -464,43 +464,9 @@ void SIMPLViewApplication::addFilter(const QString &className, int index)
   pipeline->pushBack(filter);
 
   QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-  addFilters(jsonString, m_PreviousActiveWindow, index);
-}
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::addFilters(const QString &jsonString, SIMPLView_UI* instance, int index)
-{
-  AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, instance->getPipelineViewWidget(), "Add", index);
-  instance->addUndoCommand(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::removeFilterWidget(PipelineFilterWidget* filterWidget)
-{
-  QList<PipelineFilterWidget*> filterWidgets;
-  filterWidgets.push_back(filterWidget);
-  removeFilterWidgets(filterWidgets);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
-{
-  if (NULL != m_ActiveWindow)
-  {
-    QList<int> indices;
-    for (int i=0; i<filterWidgets.size(); i++)
-    {
-      indices.push_back(m_ActiveWindow->getPipelineViewWidget()->indexOfFilterWidget(filterWidgets[i]));
-    }
-    RemoveFilterCommand* cmd = new RemoveFilterCommand(indices, m_ActiveWindow->getPipelineViewWidget());
-    m_ActiveWindow->addUndoCommand(cmd);
-  }
+  AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", index);
+  m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(cmd);
 }
 
 // -----------------------------------------------------------------------------
@@ -671,8 +637,10 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    ClearFiltersCommand* cmd = new ClearFiltersCommand(m_ActiveWindow);
-    m_ActiveWindow->addUndoCommand(cmd);
+    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
+
+    ClearFiltersCommand* cmd = new ClearFiltersCommand(widget);
+    widget->addUndoCommand(cmd);
   }
 }
 
@@ -947,7 +915,8 @@ void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
+    QList<PipelineFilterWidget*> filterWidgets = widget->getSelectedFilterWidgets();
 
     FilterPipeline::Pointer pipeline = FilterPipeline::New();
     for (int i = 0; i < filterWidgets.size(); i++)
@@ -955,22 +924,14 @@ void SIMPLViewApplication::on_actionCut_triggered()
       pipeline->pushBack(filterWidgets[i]->getFilter());
     }
 
-    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Cut - Pipeline");
+    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
 
     QClipboard* clipboard = QApplication::clipboard();
     clipboard->setText(jsonString);
 
-    cutFilterWidgets(jsonString, filterWidgets, m_ActiveWindow);
+    CutCommand* cmd = new CutCommand(jsonString, filterWidgets, widget);
+    widget->addUndoCommand(cmd);
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::cutFilterWidgets(QString jsonString, QList<PipelineFilterWidget*> selectedWidgets, SIMPLView_UI* instance)
-{
-  CutCommand* cmd = new CutCommand(jsonString, selectedWidgets, instance->getPipelineViewWidget());
-  instance->addUndoCommand(cmd);
 }
 
 // -----------------------------------------------------------------------------
@@ -998,42 +959,14 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
-  // We want to append the filter widgets to the end of the pipeline
-  pasteFilterWidgets(-1);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::pasteFilterWidgets(int startIndex)
-{
-  QString jsonString = QApplication::clipboard()->text();
-
-  pasteFilterWidgets(jsonString, startIndex);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, int startIndex)
-{
   if (NULL != m_ActiveWindow)
   {
-    pasteFilterWidgets(jsonString, m_ActiveWindow, startIndex);
-  }
-  else if (NULL != m_PreviousActiveWindow)
-  {
-    pasteFilterWidgets(jsonString, m_PreviousActiveWindow, startIndex);
-  }
-}
+    QClipboard* clipboard = QApplication::clipboard();
+    QString jsonString = clipboard->text();
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::pasteFilterWidgets(const QString &jsonString, SIMPLView_UI* instance, int startIndex)
-{
-  AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, instance->getPipelineViewWidget(), "Paste", startIndex);
-  instance->addUndoCommand(cmd);
+    AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, m_ActiveWindow->getPipelineViewWidget(), "Paste", -1);
+    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(cmd);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1296,32 +1229,6 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::dropFilterWidgets(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers)
-{
-  if (NULL != m_ActiveWindow)
-  {
-    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getDraggedFilterWidgets();
-
-    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    for (int i = 0; i < filterWidgets.size(); i++)
-    {
-      pipeline->pushBack(filterWidgets[i]->getFilter());
-    }
-
-    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-
-    if (modifiers != Qt::AltModifier)
-    {
-      cutFilterWidgets(jsonString, filterWidgets, m_ActiveWindow);
-    }
-
-    pasteFilterWidgets(jsonString, destination, insertIndex);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous)
 {
   BookmarksModel* model = BookmarksModel::Instance();
@@ -1344,7 +1251,7 @@ void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex &current, 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI *instance, QUndoStack *undoStack)
+void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI *instance)
 {
   // This should never be executed
   return;
@@ -1466,7 +1373,7 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
 
   m_ActiveWindow = newInstance;
 
-  connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*, QUndoStack*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*, QUndoStack*)));
+  connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*)));
 
   // Check if this is the first run of SIMPLView
   newInstance->checkFirstRun();

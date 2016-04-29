@@ -92,9 +92,6 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
-#include "Applications/SIMPLView/util/CutCommand.h"
-#include "Applications/SIMPLView/util/AddFiltersCommand.h"
-#include "Applications/SIMPLView/util/MoveFilterCommand.h"
 
 #include "BrandedStrings.h"
 
@@ -119,8 +116,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   m_InstanceMenuBar(NULL),
 #endif
   m_ShouldRestart(false),
-  m_OpenedFilePath(""),
-  m_UndoStack(new QUndoStack(NULL))
+  m_OpenedFilePath("")
 {
   m_OpenDialogLastDirectory = QDir::homePath();
 
@@ -139,9 +135,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   // Calls the Parent Class to do all the Widget Initialization that were created
   // using the QDesigner program
   setupUi(this);
-
-  m_ActionUndo = m_UndoStack->createUndoAction(this);
-  m_ActionRedo = m_UndoStack->createRedoAction(this);
 
   // Set up the menu
 #if !defined(Q_OS_MAC)
@@ -560,9 +553,6 @@ void SIMPLView_UI::setupGui()
 
   pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
 
-  m_ActionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-  m_ActionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
-
   // Stretch Factors
   splitter->setStretchFactor(0, 0);
   splitter->setStretchFactor(1, 1);
@@ -622,19 +612,6 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
 
-  disconnect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(int, Qt::KeyboardModifiers)),
-          this, SLOT(dropFilterWidgets(int, Qt::KeyboardModifiers)));
-
-  disconnect(pipelineViewWidget, SIGNAL(filterWidgetsPasted(const QString &, int)), this, SLOT(on_pipelineViewWidget_filterWidgetsPasted(const QString &, int)));
-
-  disconnect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
-          this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
-
-  disconnect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, int, Qt::KeyboardModifiers)),
-          dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, int, Qt::KeyboardModifiers)));
-
-  disconnect(this, SIGNAL(filterWidgetsPasted(const QString &, SIMPLView_UI*, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, SIMPLView_UI*, int)));
-
   disconnect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
 }
@@ -671,19 +648,6 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
-
-  connect(pipelineViewWidget, SIGNAL(filterWidgetsDropped(int, Qt::KeyboardModifiers)), 
-          this, SLOT(dropFilterWidgets(int, Qt::KeyboardModifiers)));
-
-  connect(this, SIGNAL(filterWidgetsAdded(const QString&, SIMPLView_UI*, int)), dream3dApp, SLOT(addFilters(const QString&, SIMPLView_UI*, int)));
-
-  connect(pipelineViewWidget, SIGNAL(moveCommandNeeded(PipelineFilterWidget*, int, int, PipelineViewWidget*)),
-          this, SLOT(addMoveCommand(PipelineFilterWidget*, int, int, PipelineViewWidget*)));
-
-  connect(this, SIGNAL(filterWidgetsDropped(SIMPLView_UI*, int, Qt::KeyboardModifiers)),
-          dream3dApp, SLOT(dropFilterWidgets(SIMPLView_UI*, int, Qt::KeyboardModifiers)));
-
-  connect(this, SIGNAL(filterWidgetsPasted(const QString &, SIMPLView_UI*, int)), dream3dApp, SLOT(pasteFilterWidgets(const QString &, SIMPLView_UI*, int)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)),
           this, SLOT(setStatusBarMessage(const QString&)));
@@ -751,30 +715,6 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineIssuesCleared()
 void SIMPLView_UI::on_pipelineViewWidget_pipelineHasNoErrors()
 {
 
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::on_pipelineViewWidget_filterWidgetsAdded(const QString &jsonString, int index)
-{
-  emit filterWidgetsAdded(jsonString, this, index);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::on_pipelineViewWidget_filterWidgetsPasted(const QString &jsonString, int index)
-{
-  emit filterWidgetsPasted(jsonString, this, index);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::dropFilterWidgets(int insertIndex, Qt::KeyboardModifiers modifiers)
-{
-  emit filterWidgetsDropped(this, insertIndex, modifiers);
 }
 
 // -----------------------------------------------------------------------------
@@ -1255,7 +1195,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 {
   if (event->type() == QEvent::ActivationChange)
   {
-    emit dream3dWindowChangedState(this, m_UndoStack);
+    emit dream3dWindowChangedState(this);
   }
 }
 
@@ -1272,39 +1212,6 @@ void SIMPLView_UI::preflightDidFinish(int err)
   {
     startPipelineBtn->setEnabled(true);
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addUndoCommand(QUndoCommand* cmd)
-{
-  m_UndoStack->push(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView)
-{
-  MoveFilterCommand* cmd = new MoveFilterCommand(filterWidget, originIndex, destIndex, pipelineView);
-  addUndoCommand(cmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QAction* SIMPLView_UI::getActionRedo()
-{
-  return m_ActionRedo;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QAction* SIMPLView_UI::getActionUndo()
-{
-  return m_ActionUndo;
 }
 
 

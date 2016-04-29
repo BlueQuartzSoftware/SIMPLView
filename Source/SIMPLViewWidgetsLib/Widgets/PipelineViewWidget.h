@@ -223,7 +223,22 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     */
     QList<PipelineFilterWidget*> getDraggedFilterWidgets();
 
+    /**
+     * @brief getActionRedo
+     */
+    QAction* getActionRedo();
+
+    /**
+     * @brief getActionUndo
+     */
+    QAction* getActionUndo();
+
   public slots:
+
+    /**
+    * @brief addUndoCommand
+    */
+    void addUndoCommand(QUndoCommand* cmd);
 
     /**
      * @brief addFilter
@@ -244,7 +259,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @brief removeFilterWidget
      * @param whoSent
      */
-    void removeFilterWidget(PipelineFilterWidget* whoSent);
+    void removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo = true);
 
     /**
      * @brief setSelectedFilterWidget
@@ -335,10 +350,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
 
-    void filterWidgetsAdded(const QString& text, int index);
-    void filterWidgetsPasted(const QString &jsonString, int startIndex);
     void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
-    void filterWidgetsRemoved(QList<PipelineFilterWidget*> filterWidgets);
 
     void contextMenuRequested(PipelineViewWidget* widget, const QPoint &pos);
 
@@ -376,6 +388,9 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     QMenu                               m_Menu;
     QStatusBar*                         m_StatusBar;
     QList<QAction*>                     m_MenuActions;
+    QUndoStack*                         m_UndoStack;
+    QAction*                            m_ActionUndo;
+    QAction*                            m_ActionRedo;
 
     PipelineViewWidget(const PipelineViewWidget&); // Copy Constructor Not Implemented
     void operator=(const PipelineViewWidget&); // Operator '=' Not Implemented

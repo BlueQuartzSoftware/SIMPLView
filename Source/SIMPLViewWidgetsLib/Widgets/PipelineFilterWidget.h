@@ -186,7 +186,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
      * @brief filterWidgetRemoved
      * @param widget
      */
-    void filterWidgetRemoved(PipelineFilterWidget* widget);
+    void filterWidgetRemoved(PipelineFilterWidget* widget, bool allowUndo);
 
     /**
      * @brief dragStarted

@@ -33,35 +33,31 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "AddFiltersCommand.h"
+#include "ClearFiltersCommand.h"
 
 #include <QtCore/QObject>
 
-#include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
-#include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
+#include "PipelineViewWidget.h"
 
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AddFiltersCommand::AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
-  QUndoCommand(parent),
-  m_JsonString(jsonString),
-  m_ActionText(actionText),
-  m_Destination(destination),
-  m_StartIndex(startIndex)
+ClearFiltersCommand::ClearFiltersCommand(PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+QUndoCommand(parent),
+m_PipelineView(pipelineView)
 {
-  if (m_StartIndex < -1)
-  {
-    m_StartIndex = -1;
-  }
+  setText(QObject::tr("\"Clear All Filters\""));
+
+  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(m_PipelineView->getFilterPipeline(), "Pipeline");
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AddFiltersCommand::~AddFiltersCommand()
+ClearFiltersCommand::~ClearFiltersCommand()
 {
 
 }
@@ -69,58 +65,33 @@ AddFiltersCommand::~AddFiltersCommand()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AddFiltersCommand::undo()
-{
-  int index = m_StartIndex + m_TotalFiltersPasted - 1;
-
-  for (int i = 0; i < m_TotalFiltersPasted; i++)
-  {
-    m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index));
-    index--;
-  }
-
-  m_Destination->preflightPipeline();
-  emit m_Destination->pipelineChanged();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void AddFiltersCommand::redo()
+void ClearFiltersCommand::undo()
 {
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
   FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
-
-  m_TotalFiltersPasted = container.size();
-
-  if (m_TotalFiltersPasted == 1)
+  for (int i = 0; i < container.size(); i++)
   {
-    setText(QObject::tr("\"%1 '%2'\"").arg(m_ActionText).arg(container[0]->getHumanLabel()));
-  }
-  else
-  {
-    setText(QObject::tr("\"%1 %2 Filter Widgets\"").arg(m_ActionText).arg(m_TotalFiltersPasted));
+    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_PipelineView);
+    m_PipelineView->addFilterWidget(filterWidget);
   }
 
-  // Paste the filter widgets
-  if (m_StartIndex < 0)
+  m_PipelineView->clearSelectedFilterWidgets();
+
+  if (m_PipelineView->filterCount() > 0)
   {
-    m_StartIndex = m_Destination->filterCount();
+    m_PipelineView->setSelectedFilterWidget(m_PipelineView->filterWidgetAt(0), Qt::NoModifier);
   }
+}
 
-  int insertIndex = m_StartIndex;
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void ClearFiltersCommand::redo()
+{
+  // Clear the filter input widget
+  emit m_PipelineView->filterInputWidgetNeedsCleared();
 
-  for (int i = 0; i < m_TotalFiltersPasted; i++)
-  {
-    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
-    m_Destination->addFilterWidget(filterWidget, insertIndex);
-    insertIndex++;
-  }
-
-  m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(m_StartIndex), Qt::NoModifier);
-
-  m_Destination->preflightPipeline();
-  emit m_Destination->pipelineChanged();
+  m_PipelineView->clearWidgets();
 }
 
 

@@ -855,7 +855,7 @@ void PipelineFilterWidget::getGuiParametersFromFilter(AbstractFilter* filt)
 // -----------------------------------------------------------------------------
 void PipelineFilterWidget::on_deleteBtn_clicked()
 {
-  emit filterWidgetRemoved(this);
+  emit filterWidgetRemoved(this, true);
 }
 
 // -----------------------------------------------------------------------------

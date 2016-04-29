@@ -71,7 +71,7 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
   /**
   * @brief activeWindowChanged
   */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack *undoStack);
+  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
   virtual void toolboxWindowChanged();
 

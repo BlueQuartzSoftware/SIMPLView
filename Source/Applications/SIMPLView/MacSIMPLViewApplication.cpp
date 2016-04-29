@@ -159,14 +159,16 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndoStack* undoStack)
+void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
+  PipelineViewWidget* viewWidget = instance->getPipelineViewWidget();
+
   if (instance->isActiveWindow())
   {
     SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-    m_MenuEdit->insertAction(m_EditSeparator, instance->getActionRedo());
-    m_MenuEdit->insertAction(instance->getActionRedo(), instance->getActionUndo());
+    m_MenuEdit->insertAction(m_EditSeparator, viewWidget->getActionRedo());
+    m_MenuEdit->insertAction(viewWidget->getActionRedo(), viewWidget->getActionUndo());
 
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
@@ -185,8 +187,8 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance, QUndo
   }
   else
   {
-    m_MenuEdit->removeAction(instance->getActionRedo());
-    m_MenuEdit->removeAction(instance->getActionUndo());
+    m_MenuEdit->removeAction(viewWidget->getActionRedo());
+    m_MenuEdit->removeAction(viewWidget->getActionUndo());
 
     m_PreviousActiveWindow = instance;
   }

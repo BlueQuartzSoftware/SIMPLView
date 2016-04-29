@@ -42,12 +42,11 @@
 
 class PipelineFilterWidget;
 class PipelineViewWidget;
-class SIMPLView_UI;
 
 class ClearFiltersCommand : public QUndoCommand
 {
 public:
-  ClearFiltersCommand(SIMPLView_UI* instance, QUndoCommand* parent = 0);
+  ClearFiltersCommand(PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
   virtual ~ClearFiltersCommand();
 
   virtual void undo();
@@ -55,10 +54,8 @@ public:
   virtual void redo();
 
 private:
-  SIMPLView_UI*                                                 m_Instance;
   PipelineViewWidget*                                           m_PipelineView;
   QString                                                       m_JsonString;
-  bool                                                          m_Modified;
 
   ClearFiltersCommand(const ClearFiltersCommand&); // Copy Constructor Not Implemented
   void operator=(const ClearFiltersCommand&); // Operator '=' Not Implemented

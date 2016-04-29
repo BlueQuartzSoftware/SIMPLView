@@ -169,22 +169,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
-    /**
-     * @brief getActionRedo
-     */
-    QAction* getActionRedo();
-
-    /**
-     * @brief getActionUndo
-     */
-    QAction* getActionUndo();
-
   public slots:
-
-    /**
-    * @brief addUndoCommand
-    */
-    void addUndoCommand(QUndoCommand* cmd);
 
     /**
     * @brief setOpenedFilePath
@@ -248,8 +233,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void on_pipelineViewWidget_pipelineIssuesCleared();
     void on_pipelineViewWidget_pipelineHasNoErrors();
     void on_pipelineViewWidget_pipelineOpened(QString& file, const bool& setOpenedFilePath, const bool& changeTitle);
-    void on_pipelineViewWidget_filterWidgetsPasted(const QString &jsonString, int index);
-    void on_pipelineViewWidget_filterWidgetsAdded(const QString& jsonString, int index);
 
     /**
     * @brief setFilterInputWidget
@@ -261,10 +244,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief markDocumentAsDirty
     */
     void markDocumentAsDirty();
-
-    void addMoveCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView);
-
-    void dropFilterWidgets(int insertIndex, Qt::KeyboardModifiers modifiers);
 
     // Our Signals that we can emit custom for this class
   signals:
@@ -294,12 +273,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     /**
     * @brief dream3dWindowChangedState
     */
-    void dream3dWindowChangedState(SIMPLView_UI* self, QUndoStack* undoStack);
-
-    /**
-    * @brief filterWidgetsDropped
-    */
-    void filterWidgetsDropped(SIMPLView_UI* destination, int insertIndex, Qt::KeyboardModifiers modifiers);
+    void dream3dWindowChangedState(SIMPLView_UI* self);
 
     void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
     void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
@@ -402,10 +376,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QString                               m_OpenedFilePath;
     static QString                        m_OpenDialogLastDirectory;
-
-    QUndoStack*                           m_UndoStack;
-    QAction*                              m_ActionUndo;
-    QAction*                              m_ActionRedo;
 
     /**
     * @brief Updates the "first run" variable in the preferences file

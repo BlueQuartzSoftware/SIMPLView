@@ -33,81 +33,94 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "MoveFilterCommand.h"
+#include "AddFiltersCommand.h"
 
 #include <QtCore/QObject>
 
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
-#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MoveFilterCommand::MoveFilterCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView, QUndoCommand* parent) :
+AddFiltersCommand::AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex, QUndoCommand* parent) :
   QUndoCommand(parent),
-  m_PipelineView(pipelineView),
-  m_FilterWidget(filterWidget),
-  m_OriginIndex(originIndex),
-  m_DestinationIndex(destIndex)
+  m_JsonString(jsonString),
+  m_ActionText(actionText),
+  m_Destination(destination),
+  m_StartIndex(startIndex)
 {
-  FilterPipeline::Pointer pipeline = FilterPipeline::New();
-  pipeline->pushBack(filterWidget->getFilter());
-
-  m_JsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-
-  setText(QObject::tr("\"Move '%1'\"").arg(m_FilterWidget->getFilter()->getHumanLabel()));
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-MoveFilterCommand::~MoveFilterCommand()
-{
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MoveFilterCommand::undo()
-{
-  moveFilter(m_DestinationIndex, m_OriginIndex);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MoveFilterCommand::redo()
-{
-  moveFilter(m_OriginIndex, m_DestinationIndex);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MoveFilterCommand::moveFilter(int origin, int destination)
-{
-  if (NULL == m_FilterWidget)
+  if (m_StartIndex < -1)
   {
-    m_PipelineView->removeFilterWidget(m_PipelineView->filterWidgetAt(origin));
+    m_StartIndex = -1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+AddFiltersCommand::~AddFiltersCommand()
+{
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void AddFiltersCommand::undo()
+{
+  int index = m_StartIndex + m_TotalFiltersPasted - 1;
+
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
+  {
+    m_Destination->removeFilterWidget(m_Destination->filterWidgetAt(index), false);
+    index--;
+  }
+
+  m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void AddFiltersCommand::redo()
+{
+  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
+  FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+
+  m_TotalFiltersPasted = container.size();
+
+  if (m_TotalFiltersPasted == 1)
+  {
+    setText(QObject::tr("\"%1 '%2'\"").arg(m_ActionText).arg(container[0]->getHumanLabel()));
   }
   else
   {
-    m_FilterWidget = NULL;
+    setText(QObject::tr("\"%1 %2 Filter Widgets\"").arg(m_ActionText).arg(m_TotalFiltersPasted));
   }
 
-  FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(m_JsonString);
-  PipelineFilterWidget* filterWidget = new PipelineFilterWidget(pipeline->getFilterContainer().at(0), NULL, m_PipelineView);
+  // Paste the filter widgets
+  if (m_StartIndex < 0)
+  {
+    m_StartIndex = m_Destination->filterCount();
+  }
 
-  m_PipelineView->addFilterWidget(filterWidget, destination);
-  m_PipelineView->setSelectedFilterWidget(filterWidget, Qt::NoModifier);
+  int insertIndex = m_StartIndex;
 
-  m_PipelineView->preflightPipeline();
+  for (int i = 0; i < m_TotalFiltersPasted; i++)
+  {
+    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
+    m_Destination->addFilterWidget(filterWidget, insertIndex);
+    insertIndex++;
+  }
 
-  emit m_PipelineView->pipelineChanged();
+  m_Destination->setSelectedFilterWidget(m_Destination->filterWidgetAt(m_StartIndex), Qt::NoModifier);
+
+  m_Destination->preflightPipeline();
+  emit m_Destination->pipelineChanged();
 }
 
 
