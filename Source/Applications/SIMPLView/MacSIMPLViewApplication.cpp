@@ -163,20 +163,10 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
   {
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
-
-    // Update the issues menu item with the correct value
-    QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
-    menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
-
-    // Update the standard output menu item with the correct value
-    QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
-    menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
   }
-  else if (m_SIMPLViewInstances.size() <= 0)
+  else if (m_SIMPLViewInstances.size() == 1 && m_Toolbox->isHidden() == true)
   {
     /* If the inactive signal got fired and there are no more windows,
      * this means that the last window has been closed. */
@@ -219,6 +209,9 @@ void MacSIMPLViewApplication::toToolboxMenuState()
   menuItems->getActionSave()->setDisabled(true);
   menuItems->getActionSaveAs()->setDisabled(true);
   menuItems->getActionShowIssues()->setDisabled(true);
+  menuItems->getActionShowIssues()->setChecked(false);
+  menuItems->getActionShowStdOutput()->setDisabled(true);
+  menuItems->getActionShowStdOutput()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
 
   menuItems->getActionShowFilterList()->setEnabled(true);
@@ -262,6 +255,15 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionSave()->setEnabled(true);
   menuItems->getActionSaveAs()->setEnabled(true);
   menuItems->getActionShowIssues()->setEnabled(true);
+  menuItems->getActionShowStdOutput()->setEnabled(true);
+
+  // Update the issues menu item with the correct value
+  QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
+  menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
+
+  // Update the standard output menu item with the correct value
+  QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
+  menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
 }
 
 // -----------------------------------------------------------------------------
@@ -279,6 +281,9 @@ void MacSIMPLViewApplication::toEmptyMenuState()
   menuItems->getActionSave()->setDisabled(true);
   menuItems->getActionSaveAs()->setDisabled(true);
   menuItems->getActionShowIssues()->setDisabled(true);
+  menuItems->getActionShowIssues()->setChecked(false);
+  menuItems->getActionShowStdOutput()->setDisabled(true);
+  menuItems->getActionShowStdOutput()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
 }
 
