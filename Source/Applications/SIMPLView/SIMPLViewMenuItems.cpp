@@ -207,7 +207,7 @@ void SIMPLViewMenuItems::updatePasteAvailability()
   QString text = clipboard->text();
 
   FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(text);
-  if (FilterPipeline::NullPointer() == pipeline)
+  if (text.isEmpty() || FilterPipeline::NullPointer() == pipeline)
   {
     m_CanPaste = false;
   }

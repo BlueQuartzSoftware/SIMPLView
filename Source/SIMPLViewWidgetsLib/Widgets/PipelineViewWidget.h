@@ -282,11 +282,15 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
 
     /**
      * @brief addFilterWidget
-     * @param w
-     * @param filter
-     * @param index
+     * @param filterWidgets
      */
-    void cutFilterWidgets(QList<PipelineFilterWidget*> selectedWidgets);
+    void cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets);
+
+    /**
+     * @brief pasteFilters
+     * @param filters
+     */
+    void pasteFilters(QList<AbstractFilter::Pointer> filters);
 
     /**
      * @brief removeFilterWidget

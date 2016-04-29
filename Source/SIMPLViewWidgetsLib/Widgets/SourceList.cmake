@@ -65,7 +65,6 @@ set(SIMPLViewWidgetsLib_Widgets_SRCS
   )
 
 SET(SIMPLViewWidgetsLib_Widgets_Util_HDRS
-  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/CutCommand.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/MoveFilterCommand.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/AddFiltersCommand.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/RemoveFilterCommand.h
@@ -73,7 +72,6 @@ SET(SIMPLViewWidgetsLib_Widgets_Util_HDRS
 )
 
 SET(SIMPLViewWidgetsLib_Widgets_Util_SRCS
-  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/CutCommand.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/MoveFilterCommand.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/AddFiltersCommand.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/RemoveFilterCommand.cpp

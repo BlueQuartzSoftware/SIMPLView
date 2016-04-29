@@ -66,7 +66,6 @@
 #include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
 #include "SIMPLViewWidgetsLib/Widgets/AboutPlugins.h"
 #include "SIMPLViewWidgetsLib/Widgets/DSplashScreen.h"
-#include "SIMPLViewWidgetsLib/Widgets/util/CutCommand.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
@@ -944,13 +943,15 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
+    PipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+
     QClipboard* clipboard = QApplication::clipboard();
     QString jsonString = clipboard->text();
 
     FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
     FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-    m_ActiveWindow->getPipelineViewWidget()->addFilters(container, -1, true);
+    viewWidget->pasteFilters(container);
   }
 }
 

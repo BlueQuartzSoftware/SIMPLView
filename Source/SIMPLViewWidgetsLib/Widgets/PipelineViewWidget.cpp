@@ -81,7 +81,6 @@
 #include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
 #include "SIMPLViewWidgetsLib/PipelineViewPtrMimeData.h"
 
-#include "SIMPLViewWidgetsLib/Widgets/util/CutCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/AddFiltersCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/MoveFilterCommand.h"
 #include "SIMPLViewWidgetsLib/Widgets/util/RemoveFilterCommand.h"
@@ -686,9 +685,28 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index, bo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineViewWidget::cutFilterWidgets(QList<PipelineFilterWidget*> selectedWidgets)
+void PipelineViewWidget::cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets)
 {
-  CutCommand* cmd = new CutCommand(selectedWidgets, this);
+  if (filterWidgets.isEmpty())
+  {
+    return;
+  }
+
+  RemoveFilterCommand* cmd = new RemoveFilterCommand(filterWidgets, this, "Cut");
+  addUndoCommand(cmd);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::pasteFilters(QList<AbstractFilter::Pointer> filters)
+{
+  if (filters.isEmpty())
+  {
+    return;
+  }
+
+  AddFiltersCommand* cmd = new AddFiltersCommand(filters, this, "Paste");
   addUndoCommand(cmd);
 }
 
