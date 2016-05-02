@@ -144,7 +144,7 @@ class SIMPLViewWidgetsLib_EXPORT FilterListToolboxWidget : public QWidget, priva
      * @brief filterItemDoubleClicked
      * @param filterName
      */
-    void filterItemDoubleClicked(const QString& filterName);
+    void filterItemDoubleClicked(const QString& filterName, int index);
 
   protected:
 

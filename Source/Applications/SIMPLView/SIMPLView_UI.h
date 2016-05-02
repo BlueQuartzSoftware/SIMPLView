@@ -177,8 +177,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
   public slots:
 
-    void clearPipeline();
-
     /**
     * @brief setOpenedFilePath
     * @param filePath
@@ -207,6 +205,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @param url
      */
     void showFilterHelpUrl(const QUrl& url);
+
+    /**
+    * @brief clearFilterInputWidget
+    */
+    void clearFilterInputWidget();
 
   protected slots:
 
@@ -244,11 +247,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void setFilterInputWidget(FilterInputWidget* widget);
 
     /**
-    * @brief clearFilterInputWidget
-    */
-    void clearFilterInputWidget();
-
-    /**
     * @brief markDocumentAsDirty
     */
     void markDocumentAsDirty();
@@ -282,6 +280,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief dream3dWindowChangedState
     */
     void dream3dWindowChangedState(SIMPLView_UI* self);
+
+    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
+    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
 
   protected:
 
@@ -384,10 +385,14 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
+    bool                                  m_ShowFilterWidgetDeleteDialog;
+
     /**
     * @brief Updates the "first run" variable in the preferences file
     */
     void updateFirstRun();
+
+    void cleanupPipeline();
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented

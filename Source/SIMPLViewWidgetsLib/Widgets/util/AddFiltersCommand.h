@@ -33,55 +33,43 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _addfilterscommand_h_
+#define _addfilterscommand_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtCore/QMap>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+#include <QtWidgets/QUndoCommand>
 
-class SIMPLViewToolboxMenu;
+#include <SIMPLib/Common/AbstractFilter.h>
 
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class PipelineFilterWidget;
+class PipelineViewWidget;
+
+class AddFiltersCommand : public QUndoCommand
 {
-    Q_OBJECT
-
   public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+    AddFiltersCommand(AbstractFilter::Pointer filter, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(QList<AbstractFilter::Pointer> filters, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(PipelineFilterWidget* filterWidget, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    AddFiltersCommand(const QString &jsonString, PipelineViewWidget* destination, QString actionText, int startIndex = -1, QUndoCommand* parent = 0);
+    virtual ~AddFiltersCommand();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+    virtual void undo();
 
-    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
-    QMenuBar* getToolboxMenuBar();
-
-  protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
-
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
+    virtual void redo();
 
   private:
+    QString                                             m_JsonString;
+    QString                                             m_ActionText;
+    PipelineViewWidget*                                 m_Destination;
+    QMap<int, Qt::KeyboardModifiers>                    m_Selections;
+    int                                                 m_StartIndex;
+    int                                                 m_TotalFiltersPasted;
 
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+    AddFiltersCommand(const AddFiltersCommand&); // Copy Constructor Not Implemented
+    void operator=(const AddFiltersCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
+#endif /* _addfilterscommand_h_ */
 

@@ -52,52 +52,65 @@ class SIMPLViewMenuItems : public QObject
 
     static SIMPLViewMenuItems* Instance();
 
+  public slots:
+    void updatePasteAvailability();
+
   protected:
     SIMPLViewMenuItems(QObject* parent = 0);
 
+  signals:
+    void clipboardHasChanged(bool canPaste);
+
   private:
-    static SIMPLViewMenuItems* self;
+    static SIMPLViewMenuItems*          self;
+
+    SIMPL_INSTANCE_PROPERTY(bool, CanPaste)
 
     // File Menu
-      SIMPL_INSTANCE_PROPERTY(QMenu*, MenuRecentFiles)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionNew)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionOpen)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionSave)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionSaveAs)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearRecentFiles)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionExit)
+    SIMPL_INSTANCE_PROPERTY(QMenu*, MenuRecentFiles)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionNew)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionOpen)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionSave)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionSaveAs)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearRecentFiles)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionExit)
 
-      // View Menu
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterLibrary)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterList)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowBookmarks)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowStdOutput)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowIssues)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowToolbox)
+    // Edit Menu
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionCut)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionCopy)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionPaste)
 
-      // Bookmarks Menu
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionAddBookmark)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionNewFolder)
+    // View Menu
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterLibrary)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowFilterList)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowBookmarks)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowStdOutput)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowIssues)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowToolbox)
 
-      // Pipeline Menu
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearPipeline)
+    // Bookmarks Menu
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionAddBookmark)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionNewFolder)
 
-      // Help Menu
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearCache)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearBookmarks)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowSIMPLViewHelp)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionCheckForUpdates)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionAboutSIMPLView)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionPluginInformation)
+    // Pipeline Menu
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearPipeline)
 
-      // Contextual Menus
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionRenameBookmark)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionRemoveBookmark)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionLocateFile)
-      SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowBookmarkInFileSystem)
+    // Help Menu
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearCache)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionClearBookmarks)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowSIMPLViewHelp)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionCheckForUpdates)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionAboutSIMPLView)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionPluginInformation)
 
-      void createMenus();
-      void createActions();
+    // Contextual Menus
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionRenameBookmark)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionRemoveBookmark)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionLocateFile)
+    SIMPL_INSTANCE_PROPERTY(QAction*, ActionShowBookmarkInFileSystem)
+
+    void createMenus();
+    void createActions();
 
     SIMPLViewMenuItems(const SIMPLViewMenuItems&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewMenuItems&); // Operator '=' Not Implemented

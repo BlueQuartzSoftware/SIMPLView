@@ -33,55 +33,33 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _removefiltercommand_h_
+#define _removefiltercommand_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtWidgets/QUndoCommand>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
-class SIMPLViewToolboxMenu;
-
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class RemoveFilterCommand : public QUndoCommand
 {
-    Q_OBJECT
+public:
+  RemoveFilterCommand(PipelineFilterWidget* fw, PipelineViewWidget* pipelineView, QString actionText, QUndoCommand* parent = 0);
+  RemoveFilterCommand(QList<PipelineFilterWidget*> filterWidgets, PipelineViewWidget* pipelineView, QString actionText, QUndoCommand* parent = 0);
+  virtual ~RemoveFilterCommand();
 
-  public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+  virtual void undo();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+  virtual void redo();
 
-    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
-    QMenuBar* getToolboxMenuBar();
+private:
+  PipelineViewWidget*                     m_PipelineView;
+  QString                                 m_JsonString;
+  QList<int>                              m_RemovalIndices;
 
-  protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
-
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
-
-  private:
-
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+  RemoveFilterCommand(const RemoveFilterCommand&); // Copy Constructor Not Implemented
+  void operator=(const RemoveFilterCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
+#endif /* _removefiltercommand_h_ */
 

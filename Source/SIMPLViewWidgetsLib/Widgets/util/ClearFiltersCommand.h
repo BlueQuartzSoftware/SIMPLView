@@ -33,55 +33,33 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _clearfilterscommand_h_
+#define _clearfilterscommand_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtCore/QMap>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+#include <QtWidgets/QUndoCommand>
 
-class SIMPLViewToolboxMenu;
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class ClearFiltersCommand : public QUndoCommand
 {
-    Q_OBJECT
+public:
+  ClearFiltersCommand(PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+  virtual ~ClearFiltersCommand();
 
-  public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+  virtual void undo();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+  virtual void redo();
 
-    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
-    QMenuBar* getToolboxMenuBar();
+private:
+  PipelineViewWidget*                                           m_PipelineView;
+  QString                                                       m_JsonString;
 
-  protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
-
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
-
-  private:
-
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+  ClearFiltersCommand(const ClearFiltersCommand&); // Copy Constructor Not Implemented
+  void operator=(const ClearFiltersCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
+#endif /* _clearfilterscommand_h_ */
 

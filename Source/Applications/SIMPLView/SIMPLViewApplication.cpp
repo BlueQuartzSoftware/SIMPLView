@@ -47,9 +47,12 @@
 
 #include <QtGui/QDesktopServices>
 #include <QtGui/QBitmap>
+#include <QtGui/QClipboard>
 
 #include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/Utilities/QMetaObjectUtilities.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+#include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 
 #include "QtSupportLib/QRecentFileList.h"
 #include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
@@ -71,7 +74,6 @@
 #include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 
 #include "Applications/SIMPLView/SIMPLViewVersion.h"
-
 
 #include "BrandedStrings.h"
 
@@ -104,13 +106,17 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_PreviousActiveWindow(NULL),
   m_OpenDialogLastDirectory(""),
   show_splash(true),
-  Splash(NULL)
+  Splash(NULL),
+  m_ContextMenu(new QMenu(NULL))
 {
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
   m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
 
   connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
+
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  connect(menuItems, SIGNAL(clipboardHasChanged(bool)), this, SLOT(updatePasteState(bool)));
 
   // Connection to update the recent files list on all windows when it changes
   QRecentFileList* recentsList = QRecentFileList::instance();
@@ -125,6 +131,8 @@ SIMPLViewApplication::~SIMPLViewApplication()
 {
   delete this->Splash;
   this->Splash = NULL;
+
+  writeSettings();
 
   SIMPLViewSettings prefs;
   if (prefs.value("Program Mode", QString("")) == "Clear Cache")
@@ -154,6 +162,8 @@ void delay(int seconds)
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
+
+  readSettings();
 
   // Create and show the splash screen as the main window is being created.
   QPixmap pixmap(QLatin1String(":/splash/branded_splash.png"));
@@ -439,11 +449,11 @@ void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::addFilter(const QString &text)
+void SIMPLViewApplication::addFilter(const QString &className, int index)
 {
   if (NULL != m_PreviousActiveWindow)
   {
-    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(text);
+    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(className, index, true);
   }
 }
 
@@ -632,7 +642,9 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    m_ActiveWindow->clearPipeline();
+    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
+
+    widget->clearWidgets(true);
   }
 }
 
@@ -903,16 +915,152 @@ void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineViewContextMenuRequested(const QPoint& pos)
+void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    PipelineViewWidget* pipelineView = m_ActiveWindow->getPipelineViewWidget();
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-    QMenu menu;
+    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
+    QList<PipelineFilterWidget*> filterWidgets = widget->getSelectedFilterWidgets();
 
-    menu.addAction(menuItems->getActionClearPipeline());
-    menu.exec(pipelineView->mapToGlobal(pos));
+    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+    for (int i = 0; i < filterWidgets.size(); i++)
+    {
+      pipeline->pushBack(filterWidgets[i]->getFilter());
+    }
+
+    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(jsonString);
+
+    widget->cutFilterWidgets(filterWidgets);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionCopy_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+    for (int i = 0; i < filterWidgets.size(); i++)
+    {
+      pipeline->pushBack(filterWidgets[i]->getFilter());
+    }
+
+    QString json = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Copy - Pipeline");
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(json);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionPaste_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    PipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+
+    QClipboard* clipboard = QApplication::clipboard();
+    QString jsonString = clipboard->text();
+
+    FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
+    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+
+    viewWidget->pasteFilters(container);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos)
+{
+  m_ContextMenu->clear();
+
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+
+  m_ContextMenu->addAction(menuItems->getActionPaste());
+  m_ContextMenu->addSeparator();
+  m_ContextMenu->addAction(menuItems->getActionClearPipeline());
+
+  m_ContextMenu->exec(widget->mapToGlobal(pos));
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget)
+{
+  if (m_ActiveWindow)
+  {
+    QList<PipelineFilterWidget*> selectedWidgets = widget->getSelectedFilterWidgets();
+    if (selectedWidgets.size() > 0)
+    {
+      if (m_ShowFilterWidgetDeleteDialog == true)
+      {
+        QMessageBox msgBox;
+        msgBox.setParent(m_ActiveWindow);
+        msgBox.setWindowModality(Qt::WindowModal);
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setText("Are you sure that you want to delete these filters?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        QCheckBox* chkBox = new QCheckBox("Do not show me this again");
+        msgBox.setCheckBox(chkBox);
+        int ret = msgBox.exec();
+
+        m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
+
+        if (ret == QMessageBox::Yes)
+        {
+          widget->removeFilterWidgets(selectedWidgets, true);
+        }
+      }
+      else
+      {
+        widget->removeFilterWidgets(selectedWidgets, true);
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos)
+{
+  PipelineFilterWidget* filterWidget = dynamic_cast<PipelineFilterWidget*>(sender());
+
+  if (NULL != filterWidget && NULL != filterWidget->getFilter())
+  {
+    m_ContextMenu->clear();
+
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+
+    QAction* actionCut = menuItems->getActionCut();
+    QAction* actionCopy = menuItems->getActionCopy();
+    QAction* actionPaste = menuItems->getActionPaste();
+
+    m_ContextMenu->addAction(actionCut);
+    m_ContextMenu->addAction(actionCopy);
+    m_ContextMenu->addAction(actionPaste);
+
+    m_ContextMenu->addSeparator();
+
+    QAction* actionLaunchHelp = new QAction(m_ContextMenu);
+    actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
+    actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
+    connect(actionLaunchHelp, SIGNAL(triggered()),
+      filterWidget, SLOT(launchHelpForItem()));
+
+    m_ContextMenu->addAction(actionLaunchHelp);
+    m_ContextMenu->exec(QCursor::pos());
   }
 }
 
@@ -922,7 +1070,7 @@ void SIMPLViewApplication::on_pipelineViewContextMenuRequested(const QPoint& pos
 void SIMPLViewApplication::on_bookmarksDockContextMenuRequested(const QPoint& pos)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  BookmarksTreeView* bookmarksTreeView = m_ActiveWindow->getBookmarksToolboxWidget()->getBookmarksTreeView();
+  BookmarksTreeView* bookmarksTreeView = m_PreviousActiveWindow->getBookmarksToolboxWidget()->getBookmarksTreeView();
 
   QModelIndex index = bookmarksTreeView->indexAt(pos);
 
@@ -1166,6 +1314,14 @@ void SIMPLViewApplication::toolboxWindowChanged()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+SIMPLView_UI* SIMPLViewApplication::getActiveWindow()
+{
+  return m_ActiveWindow;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 QList<SIMPLView_UI*> SIMPLViewApplication::getSIMPLViewInstances()
 {
   return m_SIMPLViewInstances;
@@ -1289,10 +1445,69 @@ bool SIMPLViewApplication::isCurrentlyRunning(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* SIMPLViewApplication::getSIMPLViewMenuBar()
+QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> SIMPLViewApplication::getClipboard()
 {
-  // This should never be executed
-  return NULL;
+  return m_Clipboard;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard)
+{
+  // Properly delete what is currently stored on the clipboard
+  for (int i = 0; i < m_Clipboard.first.size(); i++)
+  {
+    delete m_Clipboard.first[i];
+  }
+
+  // Assign new clipboard values to the clipboard
+  m_Clipboard = clipboard;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::updatePasteState(bool canPaste)
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+
+  if (NULL != m_ActiveWindow)
+  {
+    menuItems->getActionPaste()->setEnabled(canPaste);
+  }
+  else
+  {
+    menuItems->getActionPaste()->setDisabled(true);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::writeSettings()
+{
+  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+
+  prefs->beginGroup("Application Settings");
+
+  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
+
+  prefs->endGroup();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::readSettings()
+{
+  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+
+  prefs->beginGroup("Application Settings");
+
+  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
+
+  prefs->endGroup();
 }
 
 

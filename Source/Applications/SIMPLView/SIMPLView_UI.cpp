@@ -53,7 +53,7 @@
 #include <QtGui/QDesktopServices>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QScrollBar>
-
+#include <QtWidgets/QCheckBox>
 
 #include "Applications/SIMPLView/SIMPLView.h"
 
@@ -139,7 +139,8 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
-  m_InstanceMenuBar = dream3dApp->getSIMPLViewMenuBar();
+  m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(m_UndoStack, this);
+
   setMenuBar(m_InstanceMenuBar);
 #endif
   dream3dApp->registerSIMPLViewWindow(this);
@@ -164,7 +165,7 @@ SIMPLView_UI::~SIMPLView_UI()
   disconnectSignalsSlots();
 
   writeSettings();
-  clearPipeline();
+  cleanupPipeline();
   dream3dApp->unregisterSIMPLViewWindow(this);
 
   if (dream3dApp->activeWindow() == this)
@@ -399,6 +400,8 @@ void SIMPLView_UI::readSettings()
 
   prefs->endGroup();
 
+  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
+
   QRecentFileList::instance()->readList(prefs.data());
 }
 
@@ -476,6 +479,8 @@ void SIMPLView_UI::writeSettings()
   prefs->endGroup();
 
   prefs->endGroup();
+
+  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
 
   QRecentFileList::instance()->writeList(prefs.data());
 }
@@ -609,11 +614,14 @@ void SIMPLView_UI::disconnectSignalsSlots()
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)),
           this, SLOT(setFilterInputWidget(FilterInputWidget*)));
 
-  disconnect(pipelineViewWidget, SIGNAL(noFilterWidgetsInPipeline()),
+  disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()),
           this, SLOT(clearFilterInputWidget()));
 
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
+
+  disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
 
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
@@ -643,11 +651,14 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)),
           this, SLOT(setFilterInputWidget(FilterInputWidget*)));
 
-  connect(pipelineViewWidget, SIGNAL(noFilterWidgetsInPipeline()),
+  connect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()),
           this, SLOT(clearFilterInputWidget()));
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()),
           this, SLOT(markDocumentAsDirty()));
+
+  connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
+          this, SLOT(preflightDidFinish(int)));
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)),
           this, SLOT(preflightDidFinish(int)));
@@ -1115,7 +1126,7 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::clearPipeline()
+void SIMPLView_UI::cleanupPipeline()
 {
   // Clear the filter input widget
   clearFilterInputWidget();

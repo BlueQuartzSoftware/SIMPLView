@@ -84,6 +84,7 @@ set(SIMPLViewWidgetsLib_HDRS
 set(SIMPLViewWidgetsLib_MOC_HDRS
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/UpdateCheck.h
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/UpdateCheckData.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/PipelineViewPtrMimeData.h
 )
 
 set(SIMPLViewWidgetsLib_SRCS
@@ -91,6 +92,7 @@ set(SIMPLViewWidgetsLib_SRCS
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/IFilterWidgetFactory.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/UpdateCheck.cpp
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/UpdateCheckData.cpp
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/PipelineViewPtrMimeData.cpp
 )
 
 cmp_IDE_SOURCE_PROPERTIES( "SIMPLViewWidgetsLib" "${SIMPLViewWidgetsLib_HDRS};${SIMPLViewWidgetsLib_MOC_HDRS}" "${SIMPLViewWidgetsLib_SRCS}" "0")

@@ -33,55 +33,30 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _pipelineviewptrmimedata_h_
+#define _pipelineviewptrmimedata_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtCore/QMimeData>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+#include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
-class SIMPLViewToolboxMenu;
+#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class PipelineViewPtrMimeData : public QMimeData
 {
     Q_OBJECT
 
   public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+    PipelineViewPtrMimeData();
+    virtual ~PipelineViewPtrMimeData();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
-
-    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
-    QMenuBar* getToolboxMenuBar();
-
-  protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
-
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
+    SIMPL_INSTANCE_PROPERTY(PipelineViewWidget*, PipelineViewPtr)
 
   private:
 
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+    PipelineViewPtrMimeData(const PipelineViewPtrMimeData&); // Copy Constructor Not Implemented
+    void operator=(const PipelineViewPtrMimeData&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
+#endif /* _pipelineviewptrmimedata_h_ */
 

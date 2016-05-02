@@ -161,8 +161,13 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
+  PipelineViewWidget* viewWidget = instance->getPipelineViewWidget();
+
   if (instance->isActiveWindow())
   {
+    m_MenuEdit->insertAction(m_EditSeparator, viewWidget->getActionRedo());
+    m_MenuEdit->insertAction(viewWidget->getActionRedo(), viewWidget->getActionUndo());
+
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
   }
@@ -176,6 +181,9 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   }
   else
   {
+    m_MenuEdit->removeAction(viewWidget->getActionRedo());
+    m_MenuEdit->removeAction(viewWidget->getActionUndo());
+
     m_PreviousActiveWindow = instance;
   }
 }
@@ -228,6 +236,10 @@ void MacSIMPLViewApplication::toToolboxMenuState()
     menuItems->getActionAddBookmark()->setDisabled(true);
     menuItems->getActionNewFolder()->setDisabled(true);
   }
+
+  menuItems->getActionCut()->setDisabled(true);
+  menuItems->getActionCopy()->setDisabled(true);
+  menuItems->getActionPaste()->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -255,6 +267,9 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionSave()->setEnabled(true);
   menuItems->getActionSaveAs()->setEnabled(true);
   menuItems->getActionShowIssues()->setEnabled(true);
+  menuItems->getActionCut()->setEnabled(true);
+  menuItems->getActionCopy()->setEnabled(true);
+  menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   menuItems->getActionShowStdOutput()->setEnabled(true);
 
   // Update the issues menu item with the correct value
@@ -285,6 +300,9 @@ void MacSIMPLViewApplication::toEmptyMenuState()
   menuItems->getActionShowStdOutput()->setDisabled(true);
   menuItems->getActionShowStdOutput()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
+  menuItems->getActionCut()->setDisabled(true);
+  menuItems->getActionCopy()->setDisabled(true);
+  menuItems->getActionPaste()->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -315,6 +333,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   QMenu* menuFile = new QMenu("File", m_GlobalMenu);
+  m_MenuEdit = new QMenu("Edit", m_GlobalMenu);
   QMenu* menuView = new QMenu("View", m_GlobalMenu);
   QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu);
   QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu);
@@ -344,6 +363,10 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionAddBookmark = menuItems->getActionAddBookmark();
   QAction* actionNewFolder = menuItems->getActionNewFolder();
 
+  QAction* actionCut = menuItems->getActionCut();
+  QAction* actionCopy = menuItems->getActionCopy();
+  QAction* actionPaste = menuItems->getActionPaste();
+
   m_GlobalMenu = new QMenuBar(NULL);
 
   // Create File Menu
@@ -359,6 +382,13 @@ void MacSIMPLViewApplication::createGlobalMenu()
   menuRecentFiles->addAction(actionClearRecentFiles);
   menuFile->addSeparator();
   menuFile->addAction(actionExit);
+
+  // Create Edit Menu
+  m_GlobalMenu->addMenu(m_MenuEdit);
+  m_EditSeparator = m_MenuEdit->addSeparator();
+  m_MenuEdit->addAction(actionCut);
+  m_MenuEdit->addAction(actionCopy);
+  m_MenuEdit->addAction(actionPaste);
 
   // Create View Menu
   m_GlobalMenu->addMenu(menuView);

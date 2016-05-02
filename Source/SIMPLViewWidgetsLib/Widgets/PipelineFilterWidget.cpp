@@ -47,7 +47,6 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
-#include <QtGui/QDrag>
 
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGroupBox>
@@ -72,6 +71,7 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/DataContainerArrayWidget.h"
 
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
 
 #define PADDING 5
 #define BORDER 2
@@ -101,7 +101,6 @@ PipelineFilterWidget::PipelineFilterWidget(QWidget* parent) :
   m_VariablesWidget(NULL),
   m_CurrentStructureWidget(NULL),
   m_Observer(NULL),
-  m_ContextMenu(NULL),
   m_FilterInputWidget(NULL)
 {
   initialize(AbstractFilter::NullPointer());
@@ -117,7 +116,6 @@ PipelineFilterWidget::PipelineFilterWidget(AbstractFilter::Pointer filter, IObse
   m_HasPreflightWarnings(false),
   m_VariablesWidget(NULL),
   m_Observer(observer),
-  m_ContextMenu(new QMenu(this)),
   m_FilterInputWidget(NULL)
 {
   initialize(filter);
@@ -133,7 +131,7 @@ void PipelineFilterWidget::initialize(AbstractFilter::Pointer filter)
 
   setContextMenuPolicy(Qt::CustomContextMenu);
 
-  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenuForWidget(const QPoint&)));
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_pipelineFilterWidget_contextMenuRequested(const QPoint&)));
 
   setupUi(this);
 
@@ -683,11 +681,11 @@ void PipelineFilterWidget::setHasPreflightWarnings(bool hasWarnings)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PipelineFilterWidget::setIsSelected(bool b)
+void PipelineFilterWidget::setIsSelected(bool b, Qt::KeyboardModifiers modifiers)
 {
   m_IsSelected = b;
+  m_SelectionModifiers = modifiers;
   changeStyle();
-  if(true == b) { emit widgetSelected(this); }
 }
 
 // -----------------------------------------------------------------------------
@@ -823,8 +821,7 @@ void PipelineFilterWidget::mouseReleaseEvent(QMouseEvent* event)
   }
   else
   {
-    setIsSelected(true);
-    event->accept();
+    emit filterWidgetPressed(this, qApp->queryKeyboardModifiers());
   }
 }
 
@@ -841,45 +838,8 @@ void PipelineFilterWidget::mouseMoveEvent(QMouseEvent* event)
   {
     return;
   }
-  // The user is dragging the filter widget so we should set it as selected.
-  setIsSelected(true);
-  QPixmap pixmap = grab();
 
-  // Create new picture for transparent
-  QPixmap transparent(pixmap.size());
-  // Do transparency
-  transparent.fill(Qt::transparent);
-#if 1
-  QPainter p;
-  p.begin(&transparent);
-  p.setOpacity(0.70);
-  p.drawPixmap(0, 0, pixmap);
-  p.end();
-#endif
-
-  QByteArray itemData;
-  QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-  dataStream << transparent << QPoint(event->pos());
-
-  QMimeData* mimeData = new QMimeData;
-  mimeData->setData("application/x-dnditemdata", itemData);
-
-  QDrag* drag = new QDrag(this);
-  drag->setMimeData(mimeData);
-  drag->setPixmap(transparent);
-  drag->setHotSpot(event->pos());
-
-  emit dragStarted(this);
-
-  //  if(drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
-  //  {
-  //    qDebug() << "Drag should close the widget because it was MOVE" << "\n";
-  //  }
-  //  else
-  //  {
-  //    qDebug() << "Drag should leave Widget alone because it was COPY" << "\n";
-  //  }
-  drag->exec(Qt::MoveAction);
+  emit dragStarted(event, this);
 }
 
 // -----------------------------------------------------------------------------
@@ -895,34 +855,7 @@ void PipelineFilterWidget::getGuiParametersFromFilter(AbstractFilter* filt)
 // -----------------------------------------------------------------------------
 void PipelineFilterWidget::on_deleteBtn_clicked()
 {
-  emit filterWidgetRemoved(this);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PipelineFilterWidget::showContextMenuForWidget(const QPoint& pos)
-{
-  if (NULL != getFilter())
-  {
-    // Clear the existing context menu
-    m_ContextMenu->clear();
-
-    QAction* actionLaunchHelp = new QAction(m_ContextMenu);
-    actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
-    actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
-    connect(actionLaunchHelp, SIGNAL(triggered()),
-            this, SLOT(launchHelpForItem()));
-
-    //QAction* actionLaunchHelp = new QAction(m_ContextMenu);
-    //actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
-    //actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
-    //connect(actionLaunchHelp, SIGNAL(triggered()),
-    //  this, SLOT(launchHelpForItem()));
-
-    m_ContextMenu->addAction(actionLaunchHelp);
-    m_ContextMenu->exec(QCursor::pos());
-  }
+  emit filterWidgetRemoved(this, true);
 }
 
 // -----------------------------------------------------------------------------
@@ -961,6 +894,18 @@ void PipelineFilterWidget::toIdleState()
 {
   m_FilterInputWidget->getVariablesTabContentsWidget()->setEnabled(true);
   deleteBtn->setEnabled(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+PipelineFilterWidget* PipelineFilterWidget::deepCopy()
+{
+  PipelineFilterWidget* newWidget = new PipelineFilterWidget(getFilter()->newFilterInstance(true), NULL, dynamic_cast<QWidget*>(parent()));
+  newWidget->m_HasPreflightErrors = m_HasPreflightErrors;
+  newWidget->m_HasPreflightWarnings = m_HasPreflightWarnings;
+
+  return newWidget;
 }
 
 // -----------------------------------------------------------------------------

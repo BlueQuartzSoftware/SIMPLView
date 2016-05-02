@@ -33,55 +33,37 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _movefiltercommand_h_
+#define _movefiltercommand_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtWidgets/QUndoCommand>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
-class SIMPLViewToolboxMenu;
-
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class MoveFilterCommand : public QUndoCommand
 {
-    Q_OBJECT
-
   public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+    MoveFilterCommand(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* pipelineView, QUndoCommand* parent = 0);
+    virtual ~MoveFilterCommand();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+    virtual void undo();
 
-    QMenuBar* getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance);
-    QMenuBar* getToolboxMenuBar();
-
-  protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
-
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
+    virtual void redo();
 
   private:
+    PipelineViewWidget*                     m_PipelineView;
+    PipelineFilterWidget*                   m_FilterWidget;
+    QString                                 m_JsonString;
+    int                                     m_OriginIndex;
+    int                                     m_DestinationIndex;
+    bool                                    m_WindowIsModified;
 
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+    void moveFilter(int origin, int destination);
+
+    MoveFilterCommand(const MoveFilterCommand&); // Copy Constructor Not Implemented
+    void operator=(const MoveFilterCommand&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
+#endif /* _movefiltercommand_h_ */
 

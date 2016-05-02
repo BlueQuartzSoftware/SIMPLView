@@ -138,6 +138,8 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     // Update the standard output menu item with the correct value
     QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
     menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+
+    menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   }
   else
   {
@@ -177,12 +179,13 @@ void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* windo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
+QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   QMenuBar* menuBar = new QMenuBar();
   QMenu* menuFile = new QMenu("File", menuBar);
+  QMenu* menuEdit = new QMenu("Edit", menuBar);
   QMenu* menuView = new QMenu("View", menuBar);
   QMenu* menuPipeline = new QMenu("Pipeline", menuBar);
   QMenu* menuHelp = new QMenu("Help", menuBar);
@@ -204,7 +207,14 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   QAction* actionShowIssues = menuItems->getActionShowIssues();
   QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
+  QAction* actionCut = menuItems->getActionCut();
+  QAction* actionCopy = menuItems->getActionCopy();
+  QAction* actionPaste = menuItems->getActionPaste();
+  QAction* actionUndo = instance->getPipelineViewWidget()->getActionUndo();
+  QAction* actionRedo = instance->getPipelineViewWidget()->getActionRedo();
 
+  actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+  actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
 
   // Create File Menu
   menuBar->addMenu(menuFile);
@@ -219,6 +229,15 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar()
   menuFile->addAction(actionExit);
   menuRecentFiles->addSeparator();
   menuRecentFiles->addAction(actionClearRecentFiles);
+
+  // Create Edit Menu
+  menuBar->addMenu(menuEdit);
+  menuEdit->addAction(actionUndo);
+  menuEdit->addAction(actionRedo);
+  menuEdit->addSeparator();
+  menuEdit->addAction(actionCut);
+  menuEdit->addAction(actionCopy);
+  menuEdit->addAction(actionPaste);
 
   // Create View Menu
   menuBar->addMenu(menuView);

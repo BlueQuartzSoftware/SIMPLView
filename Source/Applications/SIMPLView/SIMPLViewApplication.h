@@ -40,6 +40,7 @@
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QUndoStack>
 
 #include "SIMPLViewWidgetsLib/UpdateCheck.h"
 
@@ -50,6 +51,8 @@ class SIMPLView_UI;
 class QPluginLoader;
 class ISIMPLibPlugin;
 class SIMPLViewToolbox;
+class PipelineFilterWidget;
+class PipelineViewWidget;
 
 class SIMPLViewApplication : public QApplication
 {
@@ -58,6 +61,13 @@ class SIMPLViewApplication : public QApplication
   public:
     SIMPLViewApplication(int& argc, char** argv);
     ~SIMPLViewApplication();
+
+    enum PasteType
+    {
+      None,
+      Cut,
+      Copy
+    };
 
      /**
      * @brief fillVersionData
@@ -75,11 +85,10 @@ class SIMPLViewApplication : public QApplication
 
     SIMPLView_UI* getNewSIMPLViewInstance();
 
+    SIMPLView_UI* getActiveWindow();
     void setActiveWindow(SIMPLView_UI* instance);
 
     bool isCurrentlyRunning(SIMPLView_UI* instance);
-
-    virtual QMenuBar* getSIMPLViewMenuBar();
 
     /**
      * @brief event
@@ -88,11 +97,12 @@ class SIMPLViewApplication : public QApplication
      */
     bool event(QEvent* event);
 
+    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> getClipboard();
 
   public slots:
-
     void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
+    void setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
 
   protected:
     SIMPLViewToolbox*                           m_Toolbox;
@@ -143,13 +153,21 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
-    void on_pipelineViewContextMenuRequested(const QPoint&);
+    void on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget);
+    void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
+    void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
 
     void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void toPipelineRunningState();
     void toPipelineIdleState();
+
+    void on_actionCut_triggered();
+    void on_actionCopy_triggered();
+    void on_actionPaste_triggered();
+
+    void updatePasteState(bool canPaste);
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
@@ -166,9 +184,17 @@ class SIMPLViewApplication : public QApplication
     // SIMPLView_UI slots
     void openRecentFile();
 
-    void addFilter(const QString &text);
+    void addFilter(const QString &className, int index);
 
   private:
+    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
+
+    QMenu*                                                                    m_ContextMenu;
+
+    bool                                                                      m_ShowFilterWidgetDeleteDialog;
+
+    void readSettings();
+    void writeSettings();
 
     SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented

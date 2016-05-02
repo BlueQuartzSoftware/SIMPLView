@@ -59,6 +59,8 @@
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/DropBoxWidget.h"
 
+#include "Applications/SIMPLView/SIMPLViewApplication.h"
+
 #include "QtSupportLib/FileDragMessageBox.h"
 
 class QScrollArea;
@@ -89,6 +91,20 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      * @return
      */
     PipelineFilterWidget* filterWidgetAt(int index);
+
+    /**
+    * @brief containsFilterWidget
+    * @param filterWidget
+    * @return
+    */
+    bool containsFilterWidget(PipelineFilterWidget* filterWidget);
+
+    /**
+    * @brief indexOfFilterWidget
+    * @param filterWidget
+    * @return
+    */
+    int indexOfFilterWidget(PipelineFilterWidget* filterWidget);
 
     /**
      * @brief getFilterPipeline
@@ -167,6 +183,11 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void resetLayout();
 
     /**
+    * @brief clearSelectedFilterWidgets
+    */
+    void clearSelectedFilterWidgets();
+
+    /**
      * @brief setPipelineMessageObserver
      * @param pipelineMessageObserver
      */
@@ -190,40 +211,123 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
      */
     bool eventFilter(QObject*, QEvent*);
 
+    /**
+    * @brief getSelectedFilterWidgets
+    * @return
+    */
+    QList<PipelineFilterWidget*> getSelectedFilterWidgets();
+
+    /**
+    * @brief getDraggedFilterWidgets
+    * @return
+    */
+    QList<PipelineFilterWidget*> getDraggedFilterWidgets();
+
+    /**
+     * @brief getActionRedo
+     */
+    QAction* getActionRedo();
+
+    /**
+     * @brief getActionUndo
+     */
+    QAction* getActionUndo();
+
   public slots:
+
+    /**
+    * @brief addUndoCommand
+    */
+    void addUndoCommand(QUndoCommand* cmd);
+
+    /**
+     * @brief addFilter
+     * @param filter
+     * @param index
+     * @param allowUndo
+     */
+    void addFilter(AbstractFilter::Pointer filter, int index = -1, bool allowUndo = true);
 
     /**
      * @brief addFilter
      * @param filterClassName
      * @param index
+     * param allowUndo
      */
-    void addFilter(const QString& filterClassName, int index = -1);
+    void addFilter(const QString& filterClassName, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilter
+     * @param filter
+     * @param index
+     * @param allowUndo
+     */
+    void addFilters(QList<AbstractFilter::Pointer> filters, int index = -1, bool allowUndo = true);
 
     /**
      * @brief addFilterWidget
-     * @param w
-     * @param filter
+     * @param fw
      * @param index
+     * @param allowUndo
      */
-    void addFilterWidget(PipelineFilterWidget* pipelineFilterWidget, int index = -1);
+    void addFilterWidget(PipelineFilterWidget* fw, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilterWidget
+     * @param fw
+     * @param index
+     * @param allowUndo
+     */
+    void addFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, int index = -1, bool allowUndo = true);
+
+    /**
+     * @brief addFilterWidget
+     * @param filterWidgets
+     */
+    void cutFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, bool allowUndo = true);
+
+    /**
+     * @brief moveFilterWidget
+     * @param fw
+     * @param origin
+     * @param destination
+     */
+    void moveFilterWidget(PipelineFilterWidget* fw, int origin, int destination/*, bool allowUndo = true*/);
+
+    /**
+     * @brief pasteFilters
+     * @param filters
+     */
+    void pasteFilters(QList<AbstractFilter::Pointer> filters, bool allowUndo = true);
+
+    /**
+     * @brief pasteFilterWidgets
+     * @param jsonString
+     * @param index
+     * @param allowUndo
+     */
+    void pasteFilterWidgets(const QString &jsonString, int index, bool allowUndo = true);
 
     /**
      * @brief removeFilterWidget
-     * @param whoSent
+     * @param filterWidget
+     * @param allowUndo
      */
-    void removeFilterWidget(PipelineFilterWidget* whoSent);
+    void removeFilterWidget(PipelineFilterWidget* filterWidget, bool allowUndo = true, bool deleteWidget = true);
+
+    /**
+     * @brief removeFilterWidget
+     * @param filterWidgets
+     * @param allowUndo
+     */
+    void removeFilterWidgets(QList<PipelineFilterWidget*> filterWidgets, bool allowUndo = true);
 
     /**
      * @brief setSelectedFilterWidget
      * @param w
+     * @param modifiers
      */
-    void setSelectedFilterWidget(PipelineFilterWidget* w);
-
-    /**
-     * @brief setFilterBeingDragged
-     * @param w
-     */
-    void setFilterBeingDragged(PipelineFilterWidget* w);
+    void setSelectedFilterWidget(PipelineFilterWidget* w, Qt::KeyboardModifiers modifiers);
 
     /**
      * @brief setStatusBar
@@ -272,7 +376,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     /**
     * @brief clearWidgets
     */
-    void clearWidgets();
+    void clearWidgets(bool allowUndo = false);
 
     /**
     * @brief toRunningState
@@ -284,7 +388,6 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     */
     void toIdleState();
 
-  public slots:
     void showFilterHelp(const QString& className);
 
   signals:
@@ -300,11 +403,19 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void pipelineChanged();
 
     void filterInputWidgetChanged(FilterInputWidget* widget);
-    void noFilterWidgetsInPipeline();
+    void filterInputWidgetNeedsCleared();
 
     void filterInputWidgetEdited();
     void preflightPipelineComplete();
     void preflightFinished(int err);
+
+    void deleteKeyPressed(PipelineViewWidget* viewWidget);
+
+    void moveCommandNeeded(PipelineFilterWidget* filterWidget, int originIndex, int destIndex, PipelineViewWidget* viewWidget);
+
+    void filterWidgetsDropped(int insertIndex, Qt::KeyboardModifiers modifiers);
+
+    void contextMenuRequested(PipelineViewWidget* widget, const QPoint &pos);
 
   protected:
     void setupGui();
@@ -312,30 +423,37 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void dragLeaveEvent(QDragLeaveEvent* event);
     void dragMoveEvent(QDragMoveEvent* event);
     void dropEvent(QDropEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void keyPressEvent(QKeyEvent *event);
 
   protected slots:
     void handleFilterParameterChanged();
+    void startDrag(QMouseEvent* event, PipelineFilterWidget *fw);
+
+    void requestContextMenu(const QPoint& pos);
 
   private:
-    PipelineFilterWidget*     m_SelectedFilterWidget;
-    QVBoxLayout*              m_FilterWidgetLayout;
-    PipelineFilterWidget*     m_CurrentFilterBeingDragged;
-    PipelineFilterWidget*     m_PreviousFilterBeingDragged;
-    int                       m_FilterOrigPos;
-    DropBoxWidget*            m_DropBox;
-    int                       m_DropIndex;
-    QLabel*                   m_EmptyPipelineLabel;
-    QPoint                    m_LastDragPoint;
-    QScrollArea*              m_ScrollArea;
-    QTimer                    m_autoScrollTimer;
-    bool                      m_AutoScroll;
-    int                       m_AutoScrollMargin;
-    int                       m_autoScrollCount;
-    QWidget*                  m_InputParametersWidget;
-    QObject*                  m_PipelineMessageObserver;
-    QMenu                     m_Menu;
-    QStatusBar*               m_StatusBar;
-    QList<QAction*>           m_MenuActions;
+    PipelineFilterWidget*               m_ShiftStart;
+    QList<PipelineFilterWidget*>        m_DraggedFilterWidgets;
+    QVBoxLayout*                        m_FilterWidgetLayout;
+    int                                 m_FilterOrigPos;
+    DropBoxWidget*                      m_DropBox;
+    int                                 m_DropIndex;
+    QLabel*                             m_EmptyPipelineLabel;
+    QPoint                              m_LastDragPoint;
+    QScrollArea*                        m_ScrollArea;
+    QTimer                              m_autoScrollTimer;
+    bool                                m_AutoScroll;
+    int                                 m_AutoScrollMargin;
+    int                                 m_autoScrollCount;
+    QWidget*                            m_InputParametersWidget;
+    QObject*                            m_PipelineMessageObserver;
+    QMenu                               m_Menu;
+    QStatusBar*                         m_StatusBar;
+    QList<QAction*>                     m_MenuActions;
+    QUndoStack*                         m_UndoStack;
+    QAction*                            m_ActionUndo;
+    QAction*                            m_ActionRedo;
 
     PipelineViewWidget(const PipelineViewWidget&); // Copy Constructor Not Implemented
     void operator=(const PipelineViewWidget&); // Operator '=' Not Implemented

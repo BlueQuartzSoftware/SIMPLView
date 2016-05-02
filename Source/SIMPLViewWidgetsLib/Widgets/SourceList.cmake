@@ -60,9 +60,6 @@ set(SIMPLViewWidgetsLib_Widgets_MOC_HDRS
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksItemDelegate.h
 )
 
-
-
-
 set(SIMPLViewWidgetsLib_Widgets_HDRS
     ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksItem.h
 )
@@ -80,7 +77,22 @@ set(SIMPLViewWidgetsLib_Widgets_SRCS
   ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/BookmarksItemDelegate.cpp
   )
 
+SET(SIMPLViewWidgetsLib_Widgets_Util_HDRS
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/MoveFilterCommand.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/AddFiltersCommand.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/RemoveFilterCommand.h
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/ClearFiltersCommand.h
+)
 
+SET(SIMPLViewWidgetsLib_Widgets_Util_SRCS
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/MoveFilterCommand.cpp
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/AddFiltersCommand.cpp
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/RemoveFilterCommand.cpp
+  ${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets/util/ClearFiltersCommand.cpp
+  )
+
+cmp_IDE_SOURCE_PROPERTIES( "Widgets/util" "${SIMPLViewWidgetsLib_Widgets_Util_HDRS}" "${SIMPLViewWidgetsLib_Widgets_SRCS}" "${PROJECT_INSTALL_HEADERS}")
+source_group("${SIMPLViewWidgetsLib_SOURCE_DIR}/Widgets util" FILES ${HEADERS} ${SOURCES})
 
 cmp_IDE_SOURCE_PROPERTIES( "SIMPLViewWidgetsLib/Widgets" "${SIMPLViewWidgetsLib_Widgets_MOC_HDRS};${SIMPLViewWidgetsLib_Widgets_HDRS}" "${SIMPLViewWidgetsLib_Widgets_SRCS}" "0")
 
@@ -94,6 +106,7 @@ set_source_files_properties( ${SIMPLViewWidgetsLib_Widgets_Generated_MOC_SRCS} P
 
 
 set(SIMPLViewWidgetsLib_Widgets_SRCS
+  ${SIMPLViewWidgetsLib_Widgets_Util_SRCS}
   ${SIMPLViewWidgetsLib_Widgets_SRCS}
   ${SIMPLViewWidgetsLib_Widgets_Generated_MOC_SRCS}
 )
