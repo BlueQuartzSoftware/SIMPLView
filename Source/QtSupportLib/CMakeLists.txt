@@ -94,13 +94,11 @@ set(Project_SRCS "")
 set(Project_HDRS "")
 
 set(QtSupportLib_SRCS
-    ${QtSupportLib_SOURCE_DIR}/AIMImageGraphicsDelegate.cpp
     ${QtSupportLib_SOURCE_DIR}/ApplicationAboutBoxDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/ApplicationFileInfo.cpp
     ${QtSupportLib_SOURCE_DIR}/BookmarkMissingDialog.cpp
     ${QtSupportLib_SOURCE_DIR}/ColorComboPicker.cpp
     ${QtSupportLib_SOURCE_DIR}/DistributionTypeWidget.cpp
-    ${QtSupportLib_SOURCE_DIR}/SIMPLViewGraphicsView.cpp
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewHelpUrlGenerator.cpp
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewSettings.cpp
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitter.cpp
@@ -122,11 +120,9 @@ set(QtSupportLib_SRCS
 )
 
 set(QtSupportLib_Moc_HDRS
-    ${QtSupportLib_SOURCE_DIR}/AIMImageGraphicsDelegate.h
     ${QtSupportLib_SOURCE_DIR}/ApplicationAboutBoxDialog.h
     ${QtSupportLib_SOURCE_DIR}/BookmarkMissingDialog.h
     ${QtSupportLib_SOURCE_DIR}/ColorComboPicker.h
-    ${QtSupportLib_SOURCE_DIR}/SIMPLViewGraphicsView.h
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewSettings.h
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitter.h
     ${QtSupportLib_SOURCE_DIR}/SIMPLViewSplitterHandle.h
