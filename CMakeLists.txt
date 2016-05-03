@@ -400,15 +400,12 @@ if("${FilterWidgetsLib_BINARY_DIR}" STREQUAL "")
   set(FilterWidgetsLib_BINARY_DIR ${SIMPLViewProj_BINARY_DIR}/FilterWidgetsLib)
 endif()
 
-# Build the static QtSupportLib library - which MUST be a static library or the linking
-# will not work due to signals/slots mechanism.
-add_subdirectory(${SIMPLViewProj_SOURCE_DIR}/Source/QtSupportLib ${PROJECT_BINARY_DIR}/QtSupportLib)
 
 # --------------------------------------------------------------------
-# Build the SIMPLViewWidgetsLib Library which holds all the SIMPLView Specific Widgets such
+# Build the SVWidgetsLib Library which holds all the SIMPLView Specific Widgets such
 # as the Filter Parameter Widgets and various building block widgets for the SIMPLView app
 # The plugins are also going to depend on these being built
-add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SIMPLViewWidgetsLib ${PROJECT_BINARY_DIR}/SIMPLViewWidgetsLib)
+add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib ${PROJECT_BINARY_DIR}/SVWidgetsLib)
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application

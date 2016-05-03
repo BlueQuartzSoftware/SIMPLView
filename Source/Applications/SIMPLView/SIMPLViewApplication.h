@@ -42,7 +42,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QUndoStack>
 
-#include "SIMPLViewWidgetsLib/UpdateCheck.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 
 #define dream3dApp (static_cast<SIMPLViewApplication *>(qApp))
 
@@ -171,7 +171,7 @@ class SIMPLViewApplication : public QApplication
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
+    * should be connected to the Signal QtSRecentFileList->fileListChanged
     * @param file The newly added file.
     */
     virtual void updateRecentFileList(const QString& file);

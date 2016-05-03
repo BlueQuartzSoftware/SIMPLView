@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="1" column="0">
-    <widget class="SIMPLViewSplitter" name="splitter">
+    <widget class="QtSSplitter" name="splitter">
      <property name="styleSheet">
       <string notr="true">QSplitter::handle {
     
@@ -201,7 +201,7 @@
           <number>8</number>
          </property>
          <item>
-          <widget class="QFSDropLabel" name="errorString">
+          <widget class="QtSFSDropLabel" name="errorString">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -342,14 +342,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QFSDropLabel</class>
+   <class>QtSFSDropLabel</class>
    <extends>QLabel</extends>
-   <header>QFSDropLabel.h</header>
+   <header>QtSFSDropLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>SIMPLViewSplitter</class>
+   <class>QtSSplitter</class>
    <extends>QSplitter</extends>
-   <header location="global">SIMPLViewSplitter.h</header>
+   <header location="global">QtSSplitter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

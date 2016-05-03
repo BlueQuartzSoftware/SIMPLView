@@ -39,7 +39,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QWidget>
 
-#include "QtSupportLib/SIMPLViewSettings.h"
+#include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 #include "ui_DevHelper.h"
 
@@ -68,8 +68,8 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
     void closeEvent(QCloseEvent* event);
     void writeSettings();
     void readSettings();
-    void readWindowSettings(SIMPLViewSettings& prefs);
-    void writeWindowSettings(SIMPLViewSettings& prefs);
+    void readWindowSettings(QtSSettings& prefs);
+    void writeWindowSettings(QtSSettings& prefs);
 
     DevHelper(const DevHelper&);    // Copy Constructor Not Implemented
     void operator=(const DevHelper&);  // Operator '=' Not Implemented

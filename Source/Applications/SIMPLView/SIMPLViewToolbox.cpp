@@ -97,7 +97,7 @@ void SIMPLViewToolbox::setupGui()
 // -----------------------------------------------------------------------------
 void SIMPLViewToolbox::readSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   prefs->beginGroup("ToolboxSettings");
@@ -152,7 +152,7 @@ void SIMPLViewToolbox::readSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewToolbox::readWindowSettings(SIMPLViewSettings* prefs)
+void SIMPLViewToolbox::readWindowSettings(QtSSettings* prefs)
 {
   bool ok = false;
   prefs->beginGroup("WindowSettings");
@@ -202,7 +202,7 @@ void SIMPLViewToolbox::readWindowSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 void SIMPLViewToolbox::writeSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
   prefs->beginGroup("ToolboxSettings");
@@ -255,7 +255,7 @@ void SIMPLViewToolbox::closeEvent(QCloseEvent* event)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewToolbox::writeWindowSettings(SIMPLViewSettings* prefs)
+void SIMPLViewToolbox::writeWindowSettings(QtSSettings* prefs)
 {
   prefs->beginGroup("WindowSettings");
 

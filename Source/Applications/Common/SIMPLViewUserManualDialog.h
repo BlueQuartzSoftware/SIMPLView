@@ -36,7 +36,7 @@
 #ifndef _simplviewusermanualdialog_h_
 #define _simplviewusermanualdialog_h_
 
-#include "SIMPLViewWidgetsLib/SIMPLViewWidgetsLib.h"
+#include "SVWidgetsLib/SVWidgetsLib.h"
 
 #include <QtWidgets/QDialog>
 

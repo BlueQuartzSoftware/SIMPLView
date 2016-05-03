@@ -48,7 +48,7 @@
 #include "DevHelper/CodeGenerators/CodeGenFactory.h"
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-#include "QtSupportLib/ApplicationFileInfo.h"
+#include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_FilterMaker.cpp"
@@ -84,7 +84,7 @@ void FilterMaker::setupGui()
   // Setup error string
   errorString->setTextFormat(Qt::PlainText);
   errorString->setTextInteractionFlags(Qt::NoTextInteraction);
-  errorString->changeStyleSheet(QFSDropLabel::FS_DOESNOTEXIST_STYLE);
+  errorString->changeStyleSheet(QtSFSDropLabel::FS_DOESNOTEXIST_STYLE);
   errorString->setText("");
 
   // Stretch Factors
@@ -329,7 +329,7 @@ void FilterMaker::updateFilterFileGenerators()
 
   // Filter.cpp file
   QString pathTemplate = "@PluginName@Filters/";
-  QString resourceTemplate = ApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.cpp.in");
+  QString resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.cpp.in");
 
   if (NULL != cppGenerator)
   {
@@ -368,7 +368,7 @@ void FilterMaker::updateFilterFileGenerators()
 
   // Filter.h file
   pathTemplate = "@PluginName@Filters/";
-  resourceTemplate = ApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.h.in");
+  resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.h.in");
 
   if (NULL != hGenerator)
   {
@@ -402,7 +402,7 @@ void FilterMaker::updateFilterFileGenerators()
 
   // Documentation.md file
   pathTemplate = "Documentation/@PluginName@Filters/";
-  resourceTemplate = ApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
+  resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
 
   if (NULL != htmlGenerator)
   {
@@ -424,7 +424,7 @@ void FilterMaker::updateFilterFileGenerators()
 
   // FilterTest.cpp file
   pathTemplate = "Test";
-  resourceTemplate = ApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
+  resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
   if (NULL != testGenerator)
   {
@@ -815,7 +815,7 @@ QString FilterMaker::getDefaultSetupFPContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/SetupFilterParameters.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/SetupFilterParameters.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -833,7 +833,7 @@ QString FilterMaker::getDefaultReadFPContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/ReadFilterParameters.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/ReadFilterParameters.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -851,7 +851,7 @@ QString FilterMaker::getDefaultWriteFPContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/WriteFilterParameters.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/WriteFilterParameters.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -869,7 +869,7 @@ QString FilterMaker::getDefaultDataCheckContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/DataCheck.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/DataCheck.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -887,7 +887,7 @@ QString FilterMaker::getDefaultFPContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/Q_PROPERTY_FILTER_PARAMETER.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/Q_PROPERTY_FILTER_PARAMETER.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -905,7 +905,7 @@ QString FilterMaker::getDefaultInitListContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/InitList.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/InitList.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -923,7 +923,7 @@ QString FilterMaker::getDefaultFilterHIncludesContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterHIncludes.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterHIncludes.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
@@ -941,7 +941,7 @@ QString FilterMaker::getDefaultFilterCPPIncludesContents()
   QString contents = "";
 
   //Open file
-  QFile file(ApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterCPPIncludes.in"));
+  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterCPPIncludes.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);

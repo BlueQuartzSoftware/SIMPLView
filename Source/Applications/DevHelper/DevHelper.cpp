@@ -40,7 +40,7 @@
 #include <QtCore/QtDebug>
 #include <QtWidgets/QDesktopWidget>
 
-#include "QtSupportLib/ApplicationAboutBoxDialog.h"
+#include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 
 #include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
@@ -135,7 +135,7 @@ void DevHelper::closeEvent(QCloseEvent* event)
 // -----------------------------------------------------------------------------
 void DevHelper::writeSettings()
 {
-  SIMPLViewSettings prefs;
+  QtSSettings prefs;
 
   prefs.beginGroup("DevHelper");
 
@@ -172,7 +172,7 @@ void DevHelper::writeSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DevHelper::writeWindowSettings(SIMPLViewSettings& prefs)
+void DevHelper::writeWindowSettings(QtSSettings& prefs)
 {
   prefs.beginGroup("WindowSettings");
   QByteArray geo_data = saveGeometry();
@@ -187,7 +187,7 @@ void DevHelper::writeWindowSettings(SIMPLViewSettings& prefs)
 // -----------------------------------------------------------------------------
 void DevHelper::readSettings()
 {
-  SIMPLViewSettings prefs;
+  QtSSettings prefs;
 
   prefs.beginGroup("DevHelper");
 
@@ -227,7 +227,7 @@ void DevHelper::readSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DevHelper::readWindowSettings(SIMPLViewSettings& prefs)
+void DevHelper::readWindowSettings(QtSSettings& prefs)
 {
   bool ok = false;
   prefs.beginGroup("WindowSettings");
@@ -263,7 +263,7 @@ void DevHelper::on_actionShowUserManual_triggered()
 // -----------------------------------------------------------------------------
 void DevHelper::on_actionAbout_triggered()
 {
-  ApplicationAboutBoxDialog about(PluginMakerProj::LicenseList, this);
+  QtSApplicationAboutBoxDialog about(PluginMakerProj::LicenseList, this);
   about.setApplicationInfo("DevHelper", "1.0.0");
   about.exec();
 }

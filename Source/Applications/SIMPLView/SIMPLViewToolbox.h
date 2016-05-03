@@ -65,10 +65,10 @@ class SIMPLViewToolbox : public QMainWindow, private Ui::SIMPLViewToolbox
     FilterLibraryToolboxWidget* getFilterLibraryWidget();
 
     void readSettings();
-    void readWindowSettings(SIMPLViewSettings* prefs);
+    void readWindowSettings(QtSSettings* prefs);
 
     void writeSettings();
-    void writeWindowSettings(SIMPLViewSettings* prefs);
+    void writeWindowSettings(QtSSettings* prefs);
 
     void setCurrentTab(ToolboxTabs tab);
 

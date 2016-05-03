@@ -65,7 +65,7 @@ sss</string>
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="SIMPLViewSplitter" name="splitter">
+     <widget class="QtSSplitter" name="splitter">
       <property name="styleSheet">
        <string notr="true">QSplitter::handle {
     
@@ -495,9 +495,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SIMPLViewSplitter</class>
+   <class>QtSSplitter</class>
    <extends>QSplitter</extends>
-   <header location="global">QtSupportLib/SIMPLViewSplitter.h</header>
+   <header location="global">SVWidgetsLib/QtSupport/QtSSplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

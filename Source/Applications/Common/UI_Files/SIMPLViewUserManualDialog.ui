@@ -38,7 +38,7 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="HoverButton" name="backBtn">
+      <widget class="QtSHoverButton" name="backBtn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -76,7 +76,7 @@
       </widget>
      </item>
      <item>
-      <widget class="HoverButton" name="forwardBtn">
+      <widget class="QtSHoverButton" name="forwardBtn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -114,7 +114,7 @@
       </widget>
      </item>
      <item>
-      <widget class="HoverButton" name="refreshBtn">
+      <widget class="QtSHoverButton" name="refreshBtn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -185,9 +185,9 @@ rgb(162, 162, 162);
  </widget>
  <customwidgets>
   <customwidget>
-   <class>HoverButton</class>
+   <class>QtSHoverButton</class>
    <extends>QPushButton</extends>
-   <header location="global">HoverButton.h</header>
+   <header location="global">QtSHoverButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

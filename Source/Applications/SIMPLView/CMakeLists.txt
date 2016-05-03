@@ -36,15 +36,26 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${SIMPLView_SOURCE_DIR}
                     ${SIMPLView_BINARY_DIR}
                     ${PROJECT_CODE_DIR}
-                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib
-                    ${PROJECT_CODE_DIR}/SIMPLViewWidgetsLib/Widgets
-                    ${PROJECT_CODE_DIR}/Plugins
-                    ${PROJECT_CODE_DIR}/QtSupportLib
-                    ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
                     ${SIMPLViewProj_BINARY_DIR}/Applications
-                    ${SIMPLViewProj_BINARY_DIR}/SIMPLViewWidgetsLib/
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
+                    
+                    ${SIMPLViewProj_SOURCE_DIR}/Source
+										${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Workspace
+
+										${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Core
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Widgets
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Workspace
                     )
 
 # --------------------------------------------------------------------
@@ -222,7 +233,7 @@ BuildQtAppBundle(
     VERSION_MINOR ${SIMPLView_VER_MINOR}
     VERSION_PATCH ${SIMPLView_VER_PATCH}
     BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
-    LINK_LIBRARIES H5Support SIMPLib QtSupportLib SIMPLViewWidgetsLib
+    LINK_LIBRARIES SVWidgetsLib
     LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     QT_PLUGINS    ${QT_PLUGINS}
     QT5_MODULES   ${SIMPLView_Qt5_Components}

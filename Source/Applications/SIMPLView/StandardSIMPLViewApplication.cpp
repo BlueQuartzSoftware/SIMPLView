@@ -38,7 +38,7 @@
 #include <unistd.h>
 #endif
 
-#include "QtSupportLib/QRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/SIMPLViewToolbox.h"
@@ -79,11 +79,11 @@ void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
   recentFilesMenu->clear();
 
   // Get the list from the static object
-  QStringList files = QRecentFileList::instance()->fileList();
+  QStringList files = QtSRecentFileList::instance()->fileList();
   foreach(QString file, files)
   {
     QAction* action = new QAction(recentFilesMenu);
-    action->setText(QRecentFileList::instance()->parentAndFileName(file));
+    action->setText(QtSRecentFileList::instance()->parentAndFileName(file));
     action->setData(file);
     action->setVisible(true);
     recentFilesMenu->addAction(action);
@@ -111,11 +111,11 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
   recentFilesMenu->addAction(clearRecentFilesAction);
 
   // Clear the actual list
-  QRecentFileList* recents = QRecentFileList::instance();
+  QtSRecentFileList* recents = QtSRecentFileList::instance();
   recents->clear();
 
   // Write out the empty list
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   recents->writeList(prefs.data());
  
 }

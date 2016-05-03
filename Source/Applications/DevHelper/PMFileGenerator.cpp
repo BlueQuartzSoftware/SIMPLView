@@ -44,7 +44,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QFileInfo>
 
-#include "QtSupportLib/ApplicationFileInfo.h"
+#include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_PMFileGenerator.cpp"

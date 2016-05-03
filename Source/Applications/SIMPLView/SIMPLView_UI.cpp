@@ -62,7 +62,7 @@
 #else
 #include <QtWidgets/QMessageBox>
 #include <QtGui/QDesktopServices>
-#include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #endif
 
 
@@ -73,17 +73,17 @@
 #include "SIMPLib/FilterParameters/QFilterParametersWriter.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 
-#include "QtSupportLib/QRecentFileList.h"
-#include "QtSupportLib/SIMPLQtMacros.h"
-#include "QtSupportLib/SIMPLPluginFrame.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSMacros.h"
+#include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 
-#include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
-#include "SIMPLViewWidgetsLib/UpdateCheck.h"
-#include "SIMPLViewWidgetsLib/UpdateCheckData.h"
-#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
-#include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
-#include "SIMPLViewWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
-#include "SIMPLViewWidgetsLib/Widgets/BookmarksModel.h"
+#include "SVWidgetsLib/Core/FilterWidgetManager.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheck.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
+#include "SVWidgetsLib/Workspace/PipelineViewWidget.h"
+#include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
+#include "SVWidgetsLib/Widgets/BookmarksModel.h"
 
 
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
@@ -179,7 +179,7 @@ SIMPLView_UI::~SIMPLView_UI()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::updateFirstRun()
 {
-  SIMPLViewSettings prefs;
+  QtSSettings prefs;
   QString filePath = prefs.fileName();
   QFileInfo fi(filePath);
 
@@ -199,7 +199,7 @@ void SIMPLView_UI::updateFirstRun()
 void SIMPLView_UI::checkFirstRun()
 {
   // Launch v6.0 dialog box if this is the first run of v6.0
-  SIMPLViewSettings prefs;
+  QtSSettings prefs;
   bool firstRun = prefs.value("First Run", true).toBool();
   if (firstRun == true)
   {
@@ -244,7 +244,7 @@ void SIMPLView_UI::resizeEvent ( QResizeEvent* event )
   emit parentResized();
 
   // We need to write the window settings so that any new windows will open with these window settings
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   writeWindowSettings(prefs.data());
 }
 
@@ -279,7 +279,7 @@ bool SIMPLView_UI::savePipeline()
     setWindowModified(false);
 
     // Add file to the recent files list
-    QRecentFileList* list = QRecentFileList::instance();
+    QtSRecentFileList* list = QtSRecentFileList::instance();
     list->addFile(filePath);
   }
 
@@ -317,7 +317,7 @@ bool SIMPLView_UI::savePipelineAs()
     setWindowModified(false);
 
     // Add file to the recent files list
-    QRecentFileList* list = QRecentFileList::instance();
+    QtSRecentFileList* list = QtSRecentFileList::instance();
     list->addFile(filePath);
 
     m_OpenedFilePath = filePath;
@@ -381,7 +381,7 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::readSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   // Have the pipeline builder read its settings from the prefs file
   readWindowSettings(prefs.data());
@@ -402,13 +402,13 @@ void SIMPLView_UI::readSettings()
 
   m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
 
-  QRecentFileList::instance()->readList(prefs.data());
+  QtSRecentFileList::instance()->readList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readWindowSettings(SIMPLViewSettings* prefs)
+void SIMPLView_UI::readWindowSettings(QtSSettings* prefs)
 {
   bool ok = false;
   prefs->beginGroup("WindowSettings");
@@ -439,7 +439,7 @@ void SIMPLView_UI::readWindowSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget* dw)
+void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 {
   restoreDockWidget(dw);
 
@@ -451,7 +451,7 @@ void SIMPLView_UI::readDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget*
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readVersionSettings(SIMPLViewSettings* prefs)
+void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
 {
 
 }
@@ -461,7 +461,7 @@ void SIMPLView_UI::readVersionSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::writeSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   // Have the pipeline builder write its settings to the prefs file
   writeWindowSettings(prefs.data());
@@ -482,13 +482,13 @@ void SIMPLView_UI::writeSettings()
 
   prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
 
-  QRecentFileList::instance()->writeList(prefs.data());
+  QtSRecentFileList::instance()->writeList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::writeVersionCheckSettings(SIMPLViewSettings* prefs)
+void SIMPLView_UI::writeVersionCheckSettings(QtSSettings* prefs)
 {
 
 }
@@ -496,7 +496,7 @@ void SIMPLView_UI::writeVersionCheckSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::writeWindowSettings(SIMPLViewSettings* prefs)
+void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
 {
   prefs->beginGroup("WindowSettings");
   QByteArray geo_data = saveGeometry();
@@ -515,7 +515,7 @@ void SIMPLView_UI::writeWindowSettings(SIMPLViewSettings* prefs)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::writeDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget* dw)
+void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 {
   prefs->setValue(dw->objectName(), dw->isHidden() );
 }
@@ -527,13 +527,13 @@ void SIMPLView_UI::checkForUpdatesAtStartup()
 {
 
   UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
-  SIMPLViewUpdateCheckDialog d(data, this);
+  UpdateCheckDialog d(data, this);
   if ( d.getAutomaticallyBtn()->isChecked() )
   {
-    SIMPLViewSettings updatePrefs;
+    QtSSettings updatePrefs;
 
-    updatePrefs.beginGroup( SIMPLViewUpdateCheckDialog::GetUpdatePreferencesGroup() );
-    QDate lastUpdateCheckDate = updatePrefs.value(SIMPLViewUpdateCheckDialog::GetUpdateCheckKey(), QString("")).toDate();
+    updatePrefs.beginGroup( UpdateCheckDialog::GetUpdatePreferencesGroup() );
+    QDate lastUpdateCheckDate = updatePrefs.value(UpdateCheckDialog::GetUpdateCheckKey(), QString("")).toDate();
     updatePrefs.endGroup();
 
     QDate systemDate;
@@ -543,9 +543,9 @@ void SIMPLView_UI::checkForUpdatesAtStartup()
     QDate weeklyThreshold = lastUpdateCheckDate.addDays(7);
     QDate monthlyThreshold = lastUpdateCheckDate.addMonths(1);
 
-    if ( (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckDaily && currentDateToday >= dailyThreshold)
-         || (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckWeekly && currentDateToday >= weeklyThreshold)
-         || (d.getHowOftenComboBox()->currentIndex() == SIMPLViewUpdateCheckDialog::UpdateCheckMonthly && currentDateToday >= monthlyThreshold) )
+    if ( (d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckDaily && currentDateToday >= dailyThreshold)
+         || (d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckWeekly && currentDateToday >= weeklyThreshold)
+         || (d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckMonthly && currentDateToday >= monthlyThreshold) )
     {
       m_UpdateCheck = QSharedPointer<UpdateCheck>(new UpdateCheck(data, this));
 
@@ -1059,7 +1059,7 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 {
   UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
 
-  SIMPLViewUpdateCheckDialog d(data, this);
+  UpdateCheckDialog d(data, this);
   //d->setCurrentVersion(data.complete);
   d.setApplicationName(BrandedStrings::ApplicationName);
 
@@ -1085,7 +1085,7 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 #ifdef SIMPLView_USE_QtWebEngine
     SIMPLViewUserManualDialog::LaunchHelpDialog(className);
 #else
-  QUrl helpURL = SIMPLViewHelpUrlGenerator::generateHTMLUrl(className.toLower());
+  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(className.toLower());
 
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)

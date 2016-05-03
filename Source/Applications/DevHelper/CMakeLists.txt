@@ -197,10 +197,25 @@ set(${PROJECT_NAME}_PROJECT_SRCS
 include_directories(${DevHelper_SOURCE_DIR}
                     ${DevHelper_SOURCE_DIR}/..
                     ${DevHelper_BINARY_DIR}
-                    ${SIMPLViewProj_BINARY_DIR}/QtSupportLib
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/QtSupportLib
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
+                    
+                    ${SIMPLViewProj_SOURCE_DIR}/Source
+										${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
+                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Workspace
+
+										${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Core
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Widgets
+                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Workspace      
   )
 
 
@@ -226,7 +241,7 @@ BuildQtAppBundle(
     VERSION_MINOR ${SIMPLView_VER_MINOR}
     VERSION_PATCH ${SIMPLView_VER_PATCH}
     BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
-    LINK_LIBRARIES QtSupportLib
+    LINK_LIBRARIES SVWidgetsLib
     LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     QT5_MODULES   ${Qt5_COMPONENTS}
     COMPONENT     Applications

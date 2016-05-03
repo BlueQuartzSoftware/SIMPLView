@@ -45,7 +45,7 @@
 
 #include "SIMPLib/Common/FilterManager.h"
 
-#include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewUserManualDialog.cpp"
@@ -133,7 +133,7 @@ void SIMPLViewUserManualDialog::LaunchHelpDialog(QUrl url)
 void SIMPLViewUserManualDialog::LaunchHelpDialog(QString className)
 {
   // Generate help page
-  QUrl helpURL = SIMPLViewHelpUrlGenerator::generateHTMLUrl(className.toLower());
+  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(className.toLower());
   SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
 }
 

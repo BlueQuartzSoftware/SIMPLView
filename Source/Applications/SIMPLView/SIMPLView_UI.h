@@ -53,9 +53,9 @@
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 
-#include "SIMPLViewWidgetsLib/FilterWidgetManager.h"
+#include "SVWidgetsLib/Core/FilterWidgetManager.h"
 
-#include "QtSupportLib/SIMPLViewSettings.h"
+#include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 
 //-- UIC generated Header
@@ -67,10 +67,10 @@ class FilterLibraryToolboxWidget;
 class BookmarksToolboxWidget;
 class PrebuiltsToolboxWidget;
 class FilterListWidget;
-class SIMPLViewUpdateCheckDialog;
+class UpdateCheckDialog;
 class UpdateCheckData;
 class UpdateCheck;
-class HelpDialog;
+class QtSHelpDialog;
 class QToolButton;
 class AboutSIMPLView;
 
@@ -324,11 +324,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      *
      * @param prefs
      */
-    void writeWindowSettings(SIMPLViewSettings* prefs);
-    void writeVersionCheckSettings(SIMPLViewSettings* prefs);
+    void writeWindowSettings(QtSSettings* prefs);
+    void writeVersionCheckSettings(QtSSettings* prefs);
 
-    void readWindowSettings(SIMPLViewSettings* prefs);
-    void readVersionSettings(SIMPLViewSettings* prefs);
+    void readWindowSettings(QtSSettings* prefs);
+    void readVersionSettings(QtSSettings* prefs);
 
     void checkForUpdatesAtStartup();
 
@@ -342,14 +342,14 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @param prefs
      * @param dw
      */
-    void readDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget* dw);
+    void readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
 
     /**
      * @brief writeDockWidgetSettings
      * @param prefs
      * @param dw
      */
-    void writeDockWidgetSettings(SIMPLViewSettings* prefs, QDockWidget* dw);
+    void writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
 
     /**
      * @brief Checks the currently open file for changes that need to be saved

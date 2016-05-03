@@ -54,18 +54,18 @@
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 
-#include "QtSupportLib/QRecentFileList.h"
-#include "QtSupportLib/SIMPLViewHelpUrlGenerator.h"
-#include "QtSupportLib/ApplicationAboutBoxDialog.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
+#include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 
 
 #include "Applications/SIMPLView/SIMPLView.h"
 #ifdef SIMPLView_USE_QtWebEngine
 #include "Applications/Common/SIMPLViewUserManualDialog.h"
 #endif
-#include "SIMPLViewWidgetsLib/Widgets/SIMPLViewUpdateCheckDialog.h"
-#include "SIMPLViewWidgetsLib/Widgets/AboutPlugins.h"
-#include "SIMPLViewWidgetsLib/Widgets/DSplashScreen.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
+#include "SVWidgetsLib/Dialogs/AboutPlugins.h"
+#include "SVWidgetsLib/Widgets/DSplashScreen.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
@@ -119,7 +119,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems, SIGNAL(clipboardHasChanged(bool)), this, SLOT(updatePasteState(bool)));
 
   // Connection to update the recent files list on all windows when it changes
-  QRecentFileList* recentsList = QRecentFileList::instance();
+  QtSRecentFileList* recentsList = QtSRecentFileList::instance();
   connect(recentsList, SIGNAL(fileListChanged(const QString&)),
           this, SLOT(updateRecentFileList(const QString&)));
 }
@@ -134,7 +134,7 @@ SIMPLViewApplication::~SIMPLViewApplication()
 
   writeSettings();
 
-  SIMPLViewSettings prefs;
+  QtSSettings prefs;
   if (prefs.value("Program Mode", QString("")) == "Clear Cache")
   {
     prefs.clear();
@@ -432,7 +432,7 @@ void SIMPLViewApplication::openRecentFile()
     newInstanceFromFile(filePath, true, true);
 
     // Add file path to the recent files list for both instances
-    QRecentFileList* list = QRecentFileList::instance();
+    QtSRecentFileList* list = QtSRecentFileList::instance();
     list->addFile(filePath);
   }
 }
@@ -654,7 +654,7 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
 {
   // Generate help page
-  QUrl helpURL = SIMPLViewHelpUrlGenerator::generateHTMLUrl("index");
+  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl("index");
 #ifdef SIMPLView_USE_QtWebEngine
   SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
 #else
@@ -707,14 +707,14 @@ void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 
   UpdateCheck::SIMPLVersionData_t data;
   Detail::fillVersionData(data);
-  SIMPLViewUpdateCheckDialog d(data, NULL);
+  UpdateCheckDialog d(data, NULL);
 
   //d.setCurrentVersion(SIMPLib::Version::Complete());
   d.setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
   d.setApplicationName(BrandedStrings::ApplicationName);
 
-  // Read from the SIMPLViewSettings Pref file the information that we need
-  SIMPLViewSettings prefs;
+  // Read from the QtSSettings Pref file the information that we need
+  QtSSettings prefs;
   prefs.beginGroup(SIMPLView::UpdateWebsite::VersionCheckGroupName);
   QDateTime dateTime = prefs.value(SIMPLView::UpdateWebsite::LastVersionCheck, QDateTime::currentDateTime()).toDateTime();
   d.setLastCheckDateTime(dateTime);
@@ -1224,7 +1224,7 @@ void SIMPLViewApplication::on_actionClearCache_triggered()
 
   if (response == QMessageBox::Yes)
   {
-    QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+    QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
     // Set a flag in the preferences file, so that we know that we are in "Clear Cache" mode
     prefs->setValue("Program Mode", QString("Clear Cache"));
@@ -1385,7 +1385,7 @@ void SIMPLViewApplication::newInstanceFromFile(const QString& filePath, const bo
 
   ui->getPipelineViewWidget()->openPipeline(nativeFilePath, 0, setOpenedFilePath, true);
 
-  QRecentFileList* list = QRecentFileList::instance();
+  QtSRecentFileList* list = QtSRecentFileList::instance();
   if (addToRecentFiles == true)
   {
     // Add file to the recent files list
@@ -1488,7 +1488,7 @@ void SIMPLViewApplication::updatePasteState(bool canPaste)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::writeSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   prefs->beginGroup("Application Settings");
 
@@ -1502,7 +1502,7 @@ void SIMPLViewApplication::writeSettings()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::readSettings()
 {
-  QSharedPointer<SIMPLViewSettings> prefs = QSharedPointer<SIMPLViewSettings>(new SIMPLViewSettings());
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   prefs->beginGroup("Application Settings");
 

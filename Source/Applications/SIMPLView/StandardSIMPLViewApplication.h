@@ -59,7 +59,7 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
 
     /**
     * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QRecentFileList->fileListChanged
+    * should be connected to the Signal QtSRecentFileList->fileListChanged
     * @param file The newly added file.
     */
     virtual void updateRecentFileList(const QString& file);

@@ -210,7 +210,7 @@ QString AddFilterParameter::getCategory()
 // -----------------------------------------------------------------------------
 QList<QString> AddFilterParameter::getTypeList()
 {
-#include "SIMPLViewWidgetsLib/Filter_Parameter_TypeList.cpp"
+#include "SVWidgetsLib/Filter_Parameter_TypeList.cpp"
 }
 
 // -----------------------------------------------------------------------------
