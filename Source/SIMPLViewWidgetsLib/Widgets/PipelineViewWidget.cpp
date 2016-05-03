@@ -872,7 +872,7 @@ void PipelineViewWidget::preflightPipeline()
   int err = pipeline->preflightPipeline();
   if (err < 0)
   {
-    //FIXME: Implement this
+    //FIXME: Implement error handling.
   }
   progress.setValue(1);
 

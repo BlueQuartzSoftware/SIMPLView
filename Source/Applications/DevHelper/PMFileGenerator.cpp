@@ -80,7 +80,7 @@ PMFileGenerator::PMFileGenerator(QString outputDir,
 // -----------------------------------------------------------------------------
 PMFileGenerator::~PMFileGenerator()
 {
-  // TODO Auto-generated destructor stub
+  
 }
 
 // -----------------------------------------------------------------------------
