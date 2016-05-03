@@ -439,6 +439,7 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     QList<PipelineFilterWidget*>        m_DraggedFilterWidgets;
     QVBoxLayout*                        m_FilterWidgetLayout;
     int                                 m_FilterOrigPos;
+    bool                                m_PipelineIsRunning;
     DropBoxWidget*                      m_DropBox;
     int                                 m_DropIndex;
     QLabel*                             m_EmptyPipelineLabel;

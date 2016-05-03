@@ -99,6 +99,7 @@ PipelineViewWidget::PipelineViewWidget(QWidget* parent) :
   m_ShiftStart(NULL),
   m_FilterWidgetLayout(NULL),
   m_FilterOrigPos(-1),
+  m_PipelineIsRunning(false),
   m_DropBox(NULL),
   m_DropIndex(-1),
   m_EmptyPipelineLabel(NULL),
@@ -1113,7 +1114,10 @@ void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
   {
-    emit deleteKeyPressed(this);
+    if (m_PipelineIsRunning == false)
+    {
+      emit deleteKeyPressed(this);
+    }
   }
   else if (event->key() == Qt::Key_A && qApp->queryKeyboardModifiers() == Qt::ControlModifier)
   {
@@ -1727,6 +1731,7 @@ void PipelineViewWidget::handleFilterParameterChanged()
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::toRunningState()
 {
+  m_PipelineIsRunning = true;
   setAcceptDrops(false);
 }
 
@@ -1735,6 +1740,7 @@ void PipelineViewWidget::toRunningState()
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::toIdleState()
 {
+  m_PipelineIsRunning = false;
   setAcceptDrops(true);
 }
 
