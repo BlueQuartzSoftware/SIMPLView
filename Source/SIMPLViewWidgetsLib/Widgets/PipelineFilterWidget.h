@@ -118,6 +118,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
 
     PipelineFilterWidget* deepCopy();
 
+    void setHasFocus(bool hasFocus);
+
   public slots:
 
 
@@ -218,6 +220,16 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     */
     void filterWidgetPasted();
 
+    /**
+    * @brief focusInEventStarted
+    */
+    void focusInEventStarted(QFocusEvent* event);
+
+    /**
+    * @brief focusOutEventStarted
+    */
+    void focusOutEventStarted(QFocusEvent* event);
+
   protected:
     /**
      * @brief mousePressEvent
@@ -259,10 +271,21 @@ class SIMPLViewWidgetsLib_EXPORT PipelineFilterWidget : public QFrame, private U
     */
     QHBoxLayout* getHorizontalLayout();
 
+    /**
+    * @brief focusInEvent
+    */
+    void focusInEvent(QFocusEvent* event);
+
+    /**
+    * @brief focusOutEvent
+    */
+    void focusOutEvent(QFocusEvent* event);
+
   private:
     QRect                             m_DeleteRect;
     QPoint                            dragStartPosition;
     bool                              m_IsSelected;
+    bool                              m_HasFocus;
     bool                              m_HasPreflightErrors;
     bool                              m_HasPreflightWarnings;
     static QString                    m_OpenDialogLastDirectory;

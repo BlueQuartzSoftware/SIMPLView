@@ -432,6 +432,9 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void handleFilterParameterChanged();
     void startDrag(QMouseEvent* event, PipelineFilterWidget *fw);
 
+    void on_focusInEventStarted(QFocusEvent* event);
+    void on_focusOutEventStarted(QFocusEvent* event);
+
     void requestContextMenu(const QPoint& pos);
 
   private:

@@ -244,7 +244,13 @@ int PipelineViewWidget::filterCount()
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::focusInEvent(QFocusEvent* event)
 {
-  std::cout << "Active!" << std::endl;
+  QList<PipelineFilterWidget*> filterWidgets = getSelectedFilterWidgets();
+  for(int i=0; i<filterWidgets.size(); i++)
+  {
+    PipelineFilterWidget* fw = filterWidgets[i];
+    fw->setHasFocus(true);
+    fw->changeStyle();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -252,7 +258,13 @@ void PipelineViewWidget::focusInEvent(QFocusEvent* event)
 // -----------------------------------------------------------------------------
 void PipelineViewWidget::focusOutEvent(QFocusEvent* event)
 {
-  std::cout << "Inactive!" << std::endl;
+  QList<PipelineFilterWidget*> filterWidgets = getSelectedFilterWidgets();
+  for(int i=0; i<filterWidgets.size(); i++)
+  {
+    PipelineFilterWidget* fw = filterWidgets[i];
+    fw->setHasFocus(false);
+    fw->changeStyle();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -695,6 +707,11 @@ void PipelineViewWidget::addFilterWidget(PipelineFilterWidget* fw, int index, bo
     connect(fw, SIGNAL(parametersChanged()),
             this, SLOT(handleFilterParameterChanged()));
 
+    connect(fw, SIGNAL(focusInEventStarted(QFocusEvent*)), this, SLOT(on_focusInEventStarted(QFocusEvent*)));
+
+    connect(fw, SIGNAL(focusOutEventStarted(QFocusEvent*)), this, SLOT(on_focusOutEventStarted(QFocusEvent*)));
+
+
     // Check to make sure at least the vertical spacer is in the Layout
     if (addSpacer)
     {
@@ -860,6 +877,23 @@ bool PipelineViewWidget::eventFilter(QObject* o, QEvent* e)
   return QFrame::eventFilter( o, e );
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::on_focusInEventStarted(QFocusEvent* event)
+{
+  Q_UNUSED(event)
+
+  setFocus();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::on_focusOutEventStarted(QFocusEvent* event)
+{
+  focusOutEvent(event);
+}
 
 // -----------------------------------------------------------------------------
 //
@@ -1045,6 +1079,8 @@ void PipelineViewWidget::setSelectedFilterWidget(PipelineFilterWidget* w, Qt::Ke
   {
     emit filterInputWidgetNeedsCleared();
   }
+
+  w->setFocus();
 }
 
 // -----------------------------------------------------------------------------
@@ -1129,6 +1165,8 @@ void PipelineViewWidget::keyPressEvent(QKeyEvent *event)
       setSelectedFilterWidget(filterWidget, Qt::ControlModifier);
     }
   }
+
+  QFrame::keyPressEvent(event);
 }
 
 // -----------------------------------------------------------------------------

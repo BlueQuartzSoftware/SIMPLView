@@ -708,9 +708,13 @@ void PipelineFilterWidget::changeStyle()
   {
     ss << "border: 2px solid rgb(172, 168, 0);";
   }
-  else if(m_IsSelected == true )
+  else if(m_IsSelected == true && m_HasFocus == true)
   {
     ss << "border: 2px solid MediumBlue;";
+  }
+  else if (m_IsSelected == true && m_HasFocus == false)
+  {
+    ss << "border: 2px solid DarkSlateGray;";
   }
   else
   {
@@ -840,6 +844,30 @@ void PipelineFilterWidget::mouseMoveEvent(QMouseEvent* event)
   }
 
   emit dragStarted(event, this);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineFilterWidget::focusInEvent(QFocusEvent* event)
+{
+  emit focusInEventStarted(event);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineFilterWidget::focusOutEvent(QFocusEvent* event)
+{
+  emit focusOutEventStarted(event);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineFilterWidget::setHasFocus(bool hasFocus)
+{
+  m_HasFocus = hasFocus;
 }
 
 // -----------------------------------------------------------------------------
