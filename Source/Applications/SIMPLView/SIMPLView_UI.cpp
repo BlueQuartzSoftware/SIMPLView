@@ -139,7 +139,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
-  m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(m_UndoStack, this);
+  m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(this);
 
   setMenuBar(m_InstanceMenuBar);
 #endif

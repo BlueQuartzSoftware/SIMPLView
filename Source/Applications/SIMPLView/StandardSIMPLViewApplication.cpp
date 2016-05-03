@@ -179,7 +179,7 @@ void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* windo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(QUndoStack* undoStack, SIMPLView_UI* instance)
+QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
