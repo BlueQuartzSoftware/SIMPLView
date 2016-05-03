@@ -1007,6 +1007,7 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(PipelineViewWi
         QMessageBox msgBox;
         msgBox.setParent(m_ActiveWindow);
         msgBox.setWindowModality(Qt::WindowModal);
+        msgBox.setWindowFlags(msgBox.windowFlags() & ~Qt::WindowContextHelpButtonHint);
         msgBox.setIcon(QMessageBox::Question);
         msgBox.setText("Are you sure that you want to delete these filters?");
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
