@@ -241,6 +241,22 @@ int PipelineViewWidget::filterCount()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void PipelineViewWidget::focusInEvent(QFocusEvent* event)
+{
+  std::cout << "Active!" << std::endl;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void PipelineViewWidget::focusOutEvent(QFocusEvent* event)
+{
+  std::cout << "Inactive!" << std::endl;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 PipelineFilterWidget* PipelineViewWidget::filterWidgetAt(int index)
 {
   PipelineFilterWidget* fw = NULL;

@@ -425,6 +425,8 @@ class SIMPLViewWidgetsLib_EXPORT PipelineViewWidget : public QFrame
     void dropEvent(QDropEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent *event);
+    void focusInEvent(QFocusEvent* event);
+    void focusOutEvent(QFocusEvent* event);
 
   protected slots:
     void handleFilterParameterChanged();
