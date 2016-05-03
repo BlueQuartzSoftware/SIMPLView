@@ -1474,14 +1474,7 @@ void PipelineViewWidget::dropEvent(QDropEvent* event)
       }
 
       AbstractFilter::Pointer filter = wf->create();
-      FilterPipeline::Pointer pipeline = FilterPipeline::New();
-      pipeline->pushBack(filter);
-
-      QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-
-      // Now that we have an index, insert the filter.
-      AddFiltersCommand* cmd = new AddFiltersCommand(jsonString, this, "Add", index);
-      addUndoCommand(cmd);
+      addFilter(filter, index, true);
 
       emit pipelineChanged();
       event->accept();

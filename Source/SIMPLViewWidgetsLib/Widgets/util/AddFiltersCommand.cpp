@@ -38,11 +38,13 @@
 #include <QtCore/QObject>
 
 #include "SIMPLViewWidgetsLib/Widgets/PipelineFilterWidget.h"
+#include "SIMPLViewWidgetsLib/Widgets/BreakpointFilterWidget.h"
 #include "SIMPLViewWidgetsLib/Widgets/PipelineViewWidget.h"
 
 
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/CoreFilters/Breakpoint.h"
 
 // -----------------------------------------------------------------------------
 //
@@ -202,8 +204,16 @@ void AddFiltersCommand::redo()
 
   for (int i = 0; i < m_TotalFiltersPasted; i++)
   {
-    PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
-    m_Destination->addFilterWidget(filterWidget, insertIndex, false);
+    if (std::dynamic_pointer_cast<Breakpoint>(container[i]))
+    {
+      BreakpointFilterWidget* filterWidget = new BreakpointFilterWidget(container[i], NULL, m_Destination);
+      m_Destination->addFilterWidget(filterWidget, insertIndex, false);
+    }
+    else
+    {
+      PipelineFilterWidget* filterWidget = new PipelineFilterWidget(container[i], NULL, m_Destination);
+      m_Destination->addFilterWidget(filterWidget, insertIndex, false);
+    }
     insertIndex++;
   }
 
