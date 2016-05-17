@@ -183,10 +183,15 @@ if("${SIMPLLibSearchDirs}" STREQUAL "")
 endif()
 
 
+
+# -----------------------------------------------------------------------
+# Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
+set(SIMPL_BUILD_WIDGETS ON CACHE BOOL "Build the QtWidets based library")
 # -----------------------------------------------------------------------
 # Bring in the SIMPL Project
 # -----------------------------------------------------------------------
 add_subdirectory( ${SIMPLProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPL)
+
 
 # -----------------------------------------------------------------------
 #Enable use of Solution Folders
@@ -212,49 +217,10 @@ if(UNIX AND NOT APPLE)
     set(DREAM3D_LINUX_SYSTEM ${CMAKE_SYSTEM_NAME} CACHE STRING "The Name of the linux distrubution for packaging")
 endif()
 
-
-#------------------------------------------------------------------------------
-# Find the Git Package for Versioning. It should be ok if Git is NOT found
-Find_package(Git)
-
-cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
-                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
-                        NAMESPACE "SIMPLViewProj"
-                        PROJECT_NAME "${PROJECT_NAME}"
-                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
-
-# --------------------------------------------------------------------
-# TODO: Do we need a SIMPL_DATA_DIR?
-
 # --------------------------------------------------------------------
 # Override CMake's built in module directory by prepending cmp's module
 # directory first
 set(CMAKE_MODULE_PATH ${CMP_MODULES_SOURCE_DIR} ${CMAKE_MODULE_PATH})
-
-# Build shared libraries
-OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" ON)
-set(LIB_TYPE STATIC)
-if(BUILD_SHARED_LIBS)
-  #message(FATAL_ERROR "Due to issues exporting symbols with MSVC DREAM3D does NOT currently support intermediate shared libraries. Please turn OFF BUILD_SHARED_LIBS")
-    set(LIB_TYPE SHARED)
-    list(APPEND CMP_LIB_SEARCH_DIRS  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
-    if(MSVC)
-        list(APPEND CMP_LIB_SEARCH_DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug
-                                        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release )
-    endif()
-else()
-  message(FATAL_ERROR "BUILD_SHARED_LIBS Must be set to ON in order to build properly.")
-endif(BUILD_SHARED_LIBS)
-
-# --------------------------------------------------------------------
-# Find and Use the Qt5 Libraries
-include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
-set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Script Svg Xml OpenGL PrintSupport )
-option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
-CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
-                    "${SIMPLView_USE_QtWebEngine}"
-                    "${SIMPLViewProj_BINARY_DIR}"
-                    "SIMPLView")
 
 # --------------------------------------------------------------------
 # Find HDF5 Headers/Libraries
@@ -309,6 +275,7 @@ else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
 endif()
 
+
 # --------------------------------------------------------------------
 # Find the Doxygen package
 FIND_PACKAGE(Doxygen)
@@ -317,6 +284,16 @@ if(DOXYGEN_FOUND)
 else()
   message(FATAL_ERROR "Doxygen is needed to build the documentation. Please install it correctly")
 endif()
+
+# --------------------------------------------------------------------
+# Find and Use the Qt5 Libraries
+include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
+set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Script Svg Xml OpenGL PrintSupport )
+option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
+CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
+                    "${SIMPLView_USE_QtWebEngine}"
+                    "${SIMPLViewProj_BINARY_DIR}"
+                    "SIMPLView")
 
 # --------------------------------------------------------------------
 # Now that we have found all of our required libraries and packages we can start the all
@@ -377,12 +354,6 @@ endif()
 include_directories(${SIMPLViewProj_SOURCE_DIR}/Source)
 include_directories(${SIMPLViewProj_BINARY_DIR})
 
-# ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(SIMPL_BUILD_TESTING "Compile the test programs" ON)
-if(SIMPL_BUILD_TESTING)
-    include( CTest )
-endif()
-
 
 #------------------------------------------------------------------------------
 # If we have not defined a "BrandedSIMPLView_DIR" then define it to the default
@@ -399,13 +370,6 @@ include_directories(${BrandedSIMPLView_DIR})
 if("${FilterWidgetsLib_BINARY_DIR}" STREQUAL "")
   set(FilterWidgetsLib_BINARY_DIR ${SIMPLViewProj_BINARY_DIR}/FilterWidgetsLib)
 endif()
-
-
-# --------------------------------------------------------------------
-# Build the SVWidgetsLib Library which holds all the SIMPLView Specific Widgets such
-# as the Filter Parameter Widgets and various building block widgets for the SIMPLView app
-# The plugins are also going to depend on these being built
-add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib ${PROJECT_BINARY_DIR}/SVWidgetsLib)
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application

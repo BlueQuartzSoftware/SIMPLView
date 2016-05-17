@@ -141,8 +141,6 @@ class SIMPLViewApplication : public QApplication
     void on_actionRenameBookmark_triggered();
     void on_actionRemoveBookmark_triggered();
     void on_actionShowBookmarkInFileSystem_triggered();
-    void on_actionLocateFile_triggered();
-    void on_actionClearPipeline_triggered();
     void on_actionClearCache_triggered();
     void on_actionClearBookmarks_triggered();
 
@@ -154,8 +152,6 @@ class SIMPLViewApplication : public QApplication
     void on_actionAboutSIMPLView_triggered();
 
     void on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget);
-    void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
-    void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
     void on_bookmarksDockContextMenuRequested(const QPoint&);
 
     void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);

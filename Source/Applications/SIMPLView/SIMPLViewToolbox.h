@@ -42,6 +42,10 @@
 //-- UIC generated Header
 #include "ui_SIMPLViewToolbox.h"
 
+class BookmarksToolboxWidget;
+class FilterListToolboxWidget;
+class FilterLibraryToolboxWidget;
+
 class SIMPLViewToolbox : public QMainWindow, private Ui::SIMPLViewToolbox
 {
     Q_OBJECT

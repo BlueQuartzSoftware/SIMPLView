@@ -161,7 +161,7 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
-  PipelineViewWidget* viewWidget = instance->getPipelineViewWidget();
+  SVPipelineViewWidget* viewWidget = instance->getPipelineViewWidget();
 
   if (instance->isActiveWindow())
   {

@@ -90,6 +90,12 @@ void SIMPLViewToolbox::setupGui()
 
   connect(bookmarksWidget, SIGNAL(pipelineFileActivated(const QString&, const bool&, const bool&)),
     dream3dApp, SLOT(newInstanceFromFile(const QString&, const bool&, const bool&)));
+
+
+  connect(bookmarksWidget->getBookmarksTreeView(), SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), dream3dApp, SLOT(bookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
+  connect(bookmarksWidget->getBookmarksTreeView(), SIGNAL(contextMenuRequested(const QPoint&)), dream3dApp, SLOT(on_bookmarksDockContextMenuRequested(const QPoint&)));
+
+
 }
 
 // -----------------------------------------------------------------------------

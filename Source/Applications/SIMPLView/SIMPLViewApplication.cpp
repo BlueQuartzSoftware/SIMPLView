@@ -57,7 +57,7 @@
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
-
+#include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 
 #include "Applications/SIMPLView/SIMPLView.h"
 #ifdef SIMPLView_USE_QtWebEngine
@@ -638,19 +638,6 @@ void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionClearPipeline_triggered()
-{
-  if (NULL != m_ActiveWindow)
-  {
-    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
-
-    widget->clearWidgets(true);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
 {
   // Generate help page
@@ -838,52 +825,6 @@ void SIMPLViewApplication::on_actionRemoveBookmark_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionLocateFile_triggered()
-{
-  BookmarksModel* model = BookmarksModel::Instance();
-  BookmarksToolboxWidget* bookmarksToolboxWidget = m_Toolbox->getBookmarksWidget();
-  BookmarksTreeView* bookmarksTreeView = bookmarksToolboxWidget->getBookmarksTreeView();
-
-  QModelIndex current = bookmarksTreeView->currentIndex();
-
-  QModelIndex nameIndex = model->index(current.row(), BookmarksItem::Name, current.parent());
-  QModelIndex pathIndex = model->index(current.row(), BookmarksItem::Path, current.parent());
-
-  QFileInfo fi(pathIndex.data().toString());
-  QString restrictions;
-  if (fi.completeSuffix() == "json")
-  {
-    restrictions = "Json File (*.json)";
-  }
-  else if (fi.completeSuffix() == "dream3d")
-  {
-    restrictions = "Dream3d File(*.dream3d)";
-  }
-  else if (fi.completeSuffix() == "txt")
-  {
-    restrictions = "Text File (*.txt)";
-  }
-  else
-  {
-    restrictions = "Ini File (*.ini)";
-  }
-
-  QString filePath = QFileDialog::getOpenFileName(bookmarksTreeView, tr("Locate Pipeline File"),
-                                                  pathIndex.data().toString(), tr(restrictions.toStdString().c_str()));
-  if (true == filePath.isEmpty()) { return; }
-
-  filePath = QDir::toNativeSeparators(filePath);
-
-  // Set the new path into the item
-  model->setData(pathIndex, filePath, Qt::DisplayRole);
-
-  // Change item back to default look and functionality
-  model->setData(nameIndex, false, Qt::UserRole);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
 {
   BookmarksModel* model = BookmarksModel::Instance();
@@ -962,6 +903,7 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
+  <<<<<<<<<<
   if (NULL != m_ActiveWindow)
   {
     PipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
@@ -974,22 +916,6 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 
     viewWidget->pasteFilters(container);
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos)
-{
-  m_ContextMenu->clear();
-
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  m_ContextMenu->addAction(menuItems->getActionPaste());
-  m_ContextMenu->addSeparator();
-  m_ContextMenu->addAction(menuItems->getActionClearPipeline());
-
-  m_ContextMenu->exec(widget->mapToGlobal(pos));
 }
 
 // -----------------------------------------------------------------------------

@@ -142,13 +142,13 @@ sss</string>
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
-          <widget class="PipelineViewWidget" name="pipelineViewWidget">
+          <widget class="SVPipelineViewWidget" name="pipelineViewWidget">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
              <width>1075</width>
-             <height>350</height>
+             <height>526</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -483,12 +483,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PipelineViewWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">PipelineViewWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>IssuesDockWidget</class>
    <extends>QDockWidget</extends>
    <header location="global">IssuesDockWidget.h</header>
@@ -504,6 +498,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>StandardOutputDockWidget</class>
    <extends>QDockWidget</extends>
    <header location="global">StandardOutputDockWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SVPipelineViewWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">SVPipelineViewWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
