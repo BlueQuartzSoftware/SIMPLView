@@ -66,6 +66,7 @@
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Widgets/DSplashScreen.h"
+#include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
@@ -860,8 +861,8 @@ void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    PipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
-    QList<PipelineFilterWidget*> filterWidgets = widget->getSelectedFilterWidgets();
+    SVPipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
+    QList<PipelineFilterObject*> filterWidgets = widget->getSelectedFilterObjects();
 
     FilterPipeline::Pointer pipeline = FilterPipeline::New();
     for (int i = 0; i < filterWidgets.size(); i++)
@@ -886,7 +887,7 @@ void SIMPLViewApplication::on_actionCopy_triggered()
   if (NULL != m_ActiveWindow)
   {
     FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    QList<PipelineFilterWidget*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterWidgets();
+    QList<PipelineFilterObject*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterObjects();
     for (int i = 0; i < filterWidgets.size(); i++)
     {
       pipeline->pushBack(filterWidgets[i]->getFilter());
@@ -903,10 +904,9 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
-  <<<<<<<<<<
   if (NULL != m_ActiveWindow)
   {
-    PipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
     QClipboard* clipboard = QApplication::clipboard();
     QString jsonString = clipboard->text();
@@ -921,11 +921,11 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget)
+void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget)
 {
   if (m_ActiveWindow)
   {
-    QList<PipelineFilterWidget*> selectedWidgets = widget->getSelectedFilterWidgets();
+    QList<PipelineFilterObject*> selectedWidgets = widget->getSelectedFilterObjects();
     if (selectedWidgets.size() > 0)
     {
       if (m_ShowFilterWidgetDeleteDialog == true)
@@ -962,7 +962,7 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(PipelineViewWi
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos)
 {
-  PipelineFilterWidget* filterWidget = dynamic_cast<PipelineFilterWidget*>(sender());
+  SVPipelineFilterWidget* filterWidget = dynamic_cast<SVPipelineFilterWidget*>(sender());
 
   if (NULL != filterWidget && NULL != filterWidget->getFilter())
   {
@@ -1372,7 +1372,7 @@ bool SIMPLViewApplication::isCurrentlyRunning(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> SIMPLViewApplication::getClipboard()
+QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> SIMPLViewApplication::getClipboard()
 {
   return m_Clipboard;
 }
@@ -1380,7 +1380,7 @@ QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> SIMPLViewApplication::g
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard)
+void SIMPLViewApplication::setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard)
 {
   // Properly delete what is currently stored on the clipboard
   for (int i = 0; i < m_Clipboard.first.size(); i++)

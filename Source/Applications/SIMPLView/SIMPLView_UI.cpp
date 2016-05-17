@@ -578,7 +578,8 @@ void SIMPLView_UI::setupGui()
   // or load an entire pipeline into the view
   connectSignalsSlots();
 
-  pipelineViewWidget->setStatusBar(statusbar);
+  connect(pipelineViewWidget, SIGNAL(statusMessage(const QString&)),
+          statusBar(), SLOT(showMessage(const QString&, int)) );
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
