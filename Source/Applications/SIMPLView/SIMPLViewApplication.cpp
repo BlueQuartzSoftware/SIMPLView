@@ -976,7 +976,7 @@ void SIMPLViewApplication::on_actionPaste_triggered()
     FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
     FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-    viewWidget->pasteFilters(container);
+    viewWidget->pasteFilters(container, -1);
   }
 }
 
@@ -1063,7 +1063,7 @@ void SIMPLViewApplication::on_actionClearCache_triggered()
 
     if (NULL != m_ActiveWindow)
     {
-      m_ActiveWindow->getPipelineViewWidget()->getStatusBar()->showMessage("The cache has been cleared successfully.  Please restart SIMPLView.");
+      m_ActiveWindow->setStatusBarMessage("The cache has been cleared successfully.  Please restart SIMPLView.");
     }
   }
 }
