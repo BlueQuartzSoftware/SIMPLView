@@ -960,40 +960,6 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos)
-{
-  SVPipelineFilterWidget* filterWidget = dynamic_cast<SVPipelineFilterWidget*>(sender());
-
-  if (NULL != filterWidget && NULL != filterWidget->getFilter())
-  {
-    m_ContextMenu->clear();
-
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-    QAction* actionCut = menuItems->getActionCut();
-    QAction* actionCopy = menuItems->getActionCopy();
-    QAction* actionPaste = menuItems->getActionPaste();
-
-    m_ContextMenu->addAction(actionCut);
-    m_ContextMenu->addAction(actionCopy);
-    m_ContextMenu->addAction(actionPaste);
-
-    m_ContextMenu->addSeparator();
-
-    QAction* actionLaunchHelp = new QAction(m_ContextMenu);
-    actionLaunchHelp->setObjectName(QString::fromUtf8("actionLaunchHelp"));
-    actionLaunchHelp->setText(QApplication::translate("SIMPLView_UI", "Filter Help", 0));
-    connect(actionLaunchHelp, SIGNAL(triggered()),
-      filterWidget, SLOT(launchHelpForItem()));
-
-    m_ContextMenu->addAction(actionLaunchHelp);
-    m_ContextMenu->exec(QCursor::pos());
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_bookmarksDockContextMenuRequested(const QPoint& pos)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
