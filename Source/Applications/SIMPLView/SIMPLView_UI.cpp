@@ -579,7 +579,7 @@ void SIMPLView_UI::setupGui()
   connectSignalsSlots();
 
   connect(pipelineViewWidget, SIGNAL(statusMessage(const QString&)),
-          statusBar(), SLOT(showMessage(const QString&, int)) );
+          statusBar(), SLOT(showMessage(const QString&)) );
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
