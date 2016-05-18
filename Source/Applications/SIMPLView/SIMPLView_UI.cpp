@@ -84,6 +84,7 @@
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
+#include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 
@@ -1131,7 +1132,7 @@ void SIMPLView_UI::cleanupPipeline()
   // Clear the filter input widget
   clearFilterInputWidget();
 
-  pipelineViewWidget->clearWidgets();
+  pipelineViewWidget->clearFilterWidgets();
   setWindowModified(true);
 }
 
