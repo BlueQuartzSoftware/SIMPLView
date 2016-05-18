@@ -161,6 +161,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionCut_triggered();
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
+    void on_actionClearPipeline_triggered();
 
     void updatePasteState(bool canPaste);
 

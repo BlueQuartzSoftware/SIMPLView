@@ -857,25 +857,22 @@ void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionClearPipeline_triggered()
+{
+  if (NULL != m_ActiveWindow)
+  {
+    m_ActiveWindow->getPipelineViewWidget()->on_actionClearPipeline_triggered();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCut_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    SVPipelineViewWidget* widget = m_ActiveWindow->getPipelineViewWidget();
-    QList<PipelineFilterObject*> filterWidgets = widget->getSelectedFilterObjects();
-
-    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    for (int i = 0; i < filterWidgets.size(); i++)
-    {
-      pipeline->pushBack(filterWidgets[i]->getFilter());
-    }
-
-    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
-
-    QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(jsonString);
-
-    widget->cutFilterWidgets(filterWidgets);
+    m_ActiveWindow->getPipelineViewWidget()->on_actionCut_triggered();
   }
 }
 
@@ -886,16 +883,7 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    QList<PipelineFilterObject*> filterWidgets = m_ActiveWindow->getPipelineViewWidget()->getSelectedFilterObjects();
-    for (int i = 0; i < filterWidgets.size(); i++)
-    {
-      pipeline->pushBack(filterWidgets[i]->getFilter());
-    }
-
-    QString json = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Copy - Pipeline");
-    QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(json);
+    m_ActiveWindow->getPipelineViewWidget()->on_actionCopy_triggered();
   }
 }
 
@@ -906,15 +894,7 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 {
   if (NULL != m_ActiveWindow)
   {
-    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-    QClipboard* clipboard = QApplication::clipboard();
-    QString jsonString = clipboard->text();
-
-    FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
-    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
-
-    viewWidget->pasteFilters(container);
+    m_ActiveWindow->getPipelineViewWidget()->on_actionPaste_triggered();
   }
 }
 
