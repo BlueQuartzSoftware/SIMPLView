@@ -156,6 +156,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems->getActionShowFilterLibrary(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowFilterLibrary_triggered(bool)));
   connect(menuItems->getActionShowFilterList(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowFilterList_triggered(bool)));
   connect(menuItems->getActionShowBookmarks(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowBookmarks_triggered(bool)));
+  connect(menuItems->getActionLocateFile(), SIGNAL(triggered()), m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SLOT(on_actionLocateFile_triggered()));
   connect(menuItems->getActionShowToolbox(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowToolbox_triggered(bool)));
   connect(menuItems->getActionShowIssues(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowIssues_triggered(bool)));
   connect(menuItems->getActionShowStdOutput(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowStdOutput_triggered(bool)));
