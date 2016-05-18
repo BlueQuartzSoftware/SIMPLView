@@ -180,7 +180,7 @@ class SIMPLViewApplication : public QApplication
     // SIMPLView_UI slots
     void openRecentFile();
 
-    void addFilter(const QString &className, int index);
+    void addFilter(const QString &className);
 
   private:
     QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>                  m_Clipboard;

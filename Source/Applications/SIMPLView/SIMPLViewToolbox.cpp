@@ -82,11 +82,11 @@ void SIMPLViewToolbox::setupGui()
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   // Connect the library and list widgets so that the "double-click to add" feature works
-  connect(filterLibraryWidget, SIGNAL(filterItemDoubleClicked(const QString&, int)),
-    dream3dApp, SLOT(addFilter(const QString&, int)));
+  connect(filterLibraryWidget, SIGNAL(filterItemDoubleClicked(const QString&)),
+    dream3dApp, SLOT(addFilter(const QString&)));
 
-  connect(filterListWidget, SIGNAL(filterItemDoubleClicked(const QString&, int)),
-    dream3dApp, SLOT(addFilter(const QString&, int)));
+  connect(filterListWidget, SIGNAL(filterItemDoubleClicked(const QString&)),
+    dream3dApp, SLOT(addFilter(const QString&)));
 
   connect(bookmarksWidget, SIGNAL(pipelineFileActivated(const QString&, const bool&, const bool&)),
     dream3dApp, SLOT(newInstanceFromFile(const QString&, const bool&, const bool&)));

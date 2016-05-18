@@ -450,11 +450,11 @@ void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::addFilter(const QString &className, int index)
+void SIMPLViewApplication::addFilter(const QString &className)
 {
   if (NULL != m_PreviousActiveWindow)
   {
-    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(className, index, true);
+    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(className, -1, true);
   }
 }
 
