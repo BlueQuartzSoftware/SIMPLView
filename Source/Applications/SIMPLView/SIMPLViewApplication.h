@@ -152,7 +152,6 @@ class SIMPLViewApplication : public QApplication
     void on_actionAboutSIMPLView_triggered();
 
     void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
-    void on_bookmarksDockContextMenuRequested(const QPoint&);
     void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void toPipelineRunningState();

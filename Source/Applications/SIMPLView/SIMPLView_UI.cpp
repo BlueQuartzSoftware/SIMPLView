@@ -84,14 +84,13 @@
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
-
+#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
+#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
 #include "Applications/SIMPLView/SIMPLViewv6Wizard.h"
 #include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
-#include "Applications/SIMPLView/SIMPLViewToolbox.h"
-#include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 
 #include "BrandedStrings.h"
 

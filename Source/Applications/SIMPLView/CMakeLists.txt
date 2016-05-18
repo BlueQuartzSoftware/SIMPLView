@@ -113,8 +113,6 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.cpp
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.cpp
   )
 
 if(APPLE)
@@ -138,8 +136,6 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.h
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.h
 )
 
 if(APPLE)
@@ -155,7 +151,6 @@ SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewv6Wizard.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewToolbox.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
