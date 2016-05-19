@@ -1008,12 +1008,12 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
 
         if (ret == QMessageBox::Yes)
         {
-          widget->removeFilterWidgets(selectedWidgets, true);
+          widget->removeFilterObjects(selectedWidgets, true);
         }
       }
       else
       {
-        widget->removeFilterWidgets(selectedWidgets, true);
+        widget->removeFilterObjects(selectedWidgets, true);
       }
     }
   }
