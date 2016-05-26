@@ -1252,6 +1252,7 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   m_ActiveWindow = newInstance;
 
   connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*)));
+  connect(newInstance, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)), this, SLOT(on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget*)) );
 
   // Check if this is the first run of SIMPLView
   newInstance->checkFirstRun();

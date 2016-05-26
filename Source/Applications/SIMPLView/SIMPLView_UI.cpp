@@ -581,6 +581,9 @@ void SIMPLView_UI::setupGui()
   connect(pipelineViewWidget, SIGNAL(statusMessage(const QString&)),
           statusBar(), SLOT(showMessage(const QString&)) );
 
+  connect(pipelineViewWidget, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)),
+          this, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)) );
+
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
   getFilterLibraryToolboxWidget()->refreshFilterGroups();

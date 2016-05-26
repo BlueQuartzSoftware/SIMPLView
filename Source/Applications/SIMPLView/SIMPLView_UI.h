@@ -284,6 +284,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
     void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
 
+    void deleteKeyPressed(SVPipelineViewWidget* viewWidget);
+
   protected:
 
     /**
