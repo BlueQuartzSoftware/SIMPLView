@@ -201,21 +201,19 @@ include_directories(${DevHelper_SOURCE_DIR}
                     ${SIMPLProj_BINARY_DIR}
                     
                     ${SIMPLViewProj_SOURCE_DIR}/Source
-										${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Workspace
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
 
-										${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Core
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Widgets
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Workspace      
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets  
   )
 
 

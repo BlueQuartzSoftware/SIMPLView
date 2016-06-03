@@ -51,8 +51,8 @@ class SIMPLView_UI;
 class QPluginLoader;
 class ISIMPLibPlugin;
 class SIMPLViewToolbox;
-class PipelineFilterWidget;
-class PipelineViewWidget;
+class SVPipelineFilterWidget;
+class SVPipelineViewWidget;
 
 class SIMPLViewApplication : public QApplication
 {
@@ -97,12 +97,12 @@ class SIMPLViewApplication : public QApplication
      */
     bool event(QEvent* event);
 
-    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> getClipboard();
+    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
   public slots:
     void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
-    void setClipboard(QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*> clipboard);
+    void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
 
   protected:
     SIMPLViewToolbox*                           m_Toolbox;
@@ -141,8 +141,6 @@ class SIMPLViewApplication : public QApplication
     void on_actionRenameBookmark_triggered();
     void on_actionRemoveBookmark_triggered();
     void on_actionShowBookmarkInFileSystem_triggered();
-    void on_actionLocateFile_triggered();
-    void on_actionClearPipeline_triggered();
     void on_actionClearCache_triggered();
     void on_actionClearBookmarks_triggered();
 
@@ -153,11 +151,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionPluginInformation_triggered();
     void on_actionAboutSIMPLView_triggered();
 
-    void on_pipelineViewWidget_deleteKeyPressed(PipelineViewWidget* widget);
-    void on_pipelineViewWidget_contextMenuRequested(PipelineViewWidget* widget, const QPoint& pos);
-    void on_pipelineFilterWidget_contextMenuRequested(const QPoint& pos);
-    void on_bookmarksDockContextMenuRequested(const QPoint&);
-
+    void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
     void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void toPipelineRunningState();
@@ -166,6 +160,7 @@ class SIMPLViewApplication : public QApplication
     void on_actionCut_triggered();
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
+    void on_actionClearPipeline_triggered();
 
     void updatePasteState(bool canPaste);
 
@@ -184,10 +179,10 @@ class SIMPLViewApplication : public QApplication
     // SIMPLView_UI slots
     void openRecentFile();
 
-    void addFilter(const QString &className, int index);
+    void addFilter(const QString &className);
 
   private:
-    QPair<QList<PipelineFilterWidget*>, PipelineViewWidget*>                  m_Clipboard;
+    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>                  m_Clipboard;
 
     QMenu*                                                                    m_ContextMenu;
 

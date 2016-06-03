@@ -38,11 +38,13 @@
 #include <unistd.h>
 #endif
 
+#include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
-#include "Applications/SIMPLView/SIMPLViewToolbox.h"
-#include "Applications/SIMPLView/SIMPLViewMenuItems.h"
+#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
+#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
+
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_StandardSIMPLViewApplication.cpp"

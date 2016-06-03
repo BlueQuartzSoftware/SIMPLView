@@ -41,22 +41,20 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${SIMPLProj_BINARY_DIR}
                     
                     ${SIMPLViewProj_SOURCE_DIR}/Source
-										${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-                    ${SIMPLViewProj_SOURCE_DIR}/Source/SVWidgetsLib/Workspace
+										${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
 
-										${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Core
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Widgets
-                    ${SIMPLViewProj_BINARY_DIR}/SVWidgetsLib/Workspace
-                    )
+										${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
+)
 
 # --------------------------------------------------------------------
 # Generate the License File Headers
@@ -115,8 +113,6 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.cpp
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.cpp
   )
 
 if(APPLE)
@@ -140,8 +136,6 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewv6Wizard.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewToolbox.h
-  ${SIMPLView_SOURCE_DIR}/SIMPLViewMenuItems.h
 )
 
 if(APPLE)
@@ -157,7 +151,6 @@ SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewv6Wizard.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLViewToolbox.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 

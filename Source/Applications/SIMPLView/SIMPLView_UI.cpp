@@ -81,17 +81,17 @@
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
-#include "SVWidgetsLib/Workspace/PipelineViewWidget.h"
+#include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
-
+#include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
+#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
+#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
 #include "Applications/SIMPLView/SIMPLViewv6Wizard.h"
 #include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
-#include "Applications/SIMPLView/SIMPLViewToolbox.h"
-#include "Applications/SIMPLView/SIMPLViewMenuItems.h"
 
 #include "BrandedStrings.h"
 
@@ -578,7 +578,11 @@ void SIMPLView_UI::setupGui()
   // or load an entire pipeline into the view
   connectSignalsSlots();
 
-  pipelineViewWidget->setStatusBar(statusbar);
+  connect(pipelineViewWidget, SIGNAL(statusMessage(const QString&)),
+          statusBar(), SLOT(showMessage(const QString&)) );
+
+  connect(pipelineViewWidget, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)),
+          this, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)) );
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
@@ -875,7 +879,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   // Connect signals and slots between SIMPLView_UI and each PipelineFilterWidget
   for (int i = 0; i < pipelineViewWidget->filterCount(); i++)
   {
-    PipelineFilterWidget* w = pipelineViewWidget->filterWidgetAt(i);
+    SVPipelineFilterWidget* w = dynamic_cast<SVPipelineFilterWidget*>(pipelineViewWidget->filterObjectAt(i));
 
     if (NULL != w)
     {
@@ -1131,7 +1135,7 @@ void SIMPLView_UI::cleanupPipeline()
   // Clear the filter input widget
   clearFilterInputWidget();
 
-  pipelineViewWidget->clearWidgets();
+  pipelineViewWidget->clearFilterWidgets();
   setWindowModified(true);
 }
 
@@ -1153,7 +1157,7 @@ void SIMPLView_UI::updateAndSyncDockWidget(QAction* action, QDockWidget* dock, b
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PipelineViewWidget* SIMPLView_UI::getPipelineViewWidget()
+SVPipelineViewWidget* SIMPLView_UI::getPipelineViewWidget()
 {
   return pipelineViewWidget;
 }

@@ -73,7 +73,7 @@ class UpdateCheck;
 class QtSHelpDialog;
 class QToolButton;
 class AboutSIMPLView;
-
+class SVPipelineViewWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -103,7 +103,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief getPipelineViewWidget
     * @param
     */
-    PipelineViewWidget* getPipelineViewWidget();
+    SVPipelineViewWidget* getPipelineViewWidget();
 
     /**
     * @brief getBookmarksToolboxWidget
@@ -283,6 +283,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
     void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
+
+    void deleteKeyPressed(SVPipelineViewWidget* viewWidget);
 
   protected:
 
