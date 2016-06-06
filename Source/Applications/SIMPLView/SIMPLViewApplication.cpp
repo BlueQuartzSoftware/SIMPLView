@@ -909,7 +909,10 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
   if (NULL != m_ActiveWindow)
   {
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-    viewWidget->clearFilterWidgets(true);
+    if (viewWidget->filterCount() > 0)
+    {
+      viewWidget->clearFilterWidgets(true);
+    }
   }
 }
 
