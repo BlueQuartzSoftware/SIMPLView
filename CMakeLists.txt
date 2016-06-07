@@ -88,6 +88,12 @@ endif()
 # Find the Git Package for Versioning. It should be ok if Git is NOT found
 Find_package(Git)
 
+cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
+                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
+                        NAMESPACE "SIMPLViewProj"
+                        PROJECT_NAME "${PROJECT_NAME}"
+                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
+
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
