@@ -186,7 +186,7 @@ endif()
 
 # -----------------------------------------------------------------------
 # Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
-set(SIMPL_BUILD_WIDGETS ON CACHE BOOL "Build the QtWidets based library")
+set(SIMPL_BUILD_WIDGETS ON CACHE BOOL "Build the QtWidgets based library")
 # -----------------------------------------------------------------------
 # Bring in the SIMPL Project
 # -----------------------------------------------------------------------
