@@ -120,6 +120,11 @@ class @ClassName@ : public AbstractFilter
      */
     void dataCheck();
 
+    /**
+    * @brief Initializes all the private instance variables
+    */
+    void initialize();
+
   private:
     @ClassName@(const @ClassName@&); // Copy Constructor Not Implemented
     void operator=(const @ClassName@&); // Operator '=' Not Implemented

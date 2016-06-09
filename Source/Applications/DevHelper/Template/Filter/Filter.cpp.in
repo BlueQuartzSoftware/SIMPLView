@@ -22,6 +22,7 @@
 @ClassName@::@ClassName@() :
 @InitList@
 {
+  initialize();
   setupFilterParameters();
 }
 
@@ -30,6 +31,15 @@
 // -----------------------------------------------------------------------------
 @ClassName@::~@ClassName@()
 {
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void @ClassName@::initialize()
+{
+  setErrorCondition(0);
+  setCancel(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -69,7 +79,7 @@ int @ClassName@::writeFilterParameters(AbstractFilterParametersWriter* writer, i
 void @ClassName@::dataCheck()
 {
   setErrorCondition(0);
-@DataCheckContents@
+  @DataCheckContents@
 }
 
 // -----------------------------------------------------------------------------
@@ -91,7 +101,7 @@ void @ClassName@::preflight()
 // -----------------------------------------------------------------------------
 void @ClassName@::execute()
 {
-  setErrorCondition(0);
+  initialize();
   dataCheck();
   if(getErrorCondition() < 0) { return; }
 
