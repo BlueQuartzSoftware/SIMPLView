@@ -271,7 +271,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   pluginDirs << applicationDirPath();
 
   QDir aPluginDir = QDir(applicationDirPath());
-  qDebug() << "Loading SIMPLView Plugins....";
+  qDebug() << "Loading " << BrandedStrings::ApplicationName << " Plugins....";
   QString thePath;
 
 #if defined(Q_OS_WIN)
@@ -426,7 +426,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
       Splash->hide();
       QString message("The plugin did not load with the following error\n");
       message.append(loader->errorString());
-      QMessageBox box(QMessageBox::Critical, tr("SIMPLView Plugin Load Error"), tr(message.toStdString().c_str()));
+      QMessageBox box(QMessageBox::Critical, tr("Plugin Load Error"), tr(message.toStdString().c_str()));
       box.setStandardButtons(QMessageBox::Ok | QMessageBox::Default);
       box.setDefaultButton(QMessageBox::Ok);
       box.setWindowFlags(box.windowFlags() | Qt::WindowStaysOnTopHint);
@@ -530,7 +530,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
 {
   QString proposedDir = m_OpenDialogLastDirectory;
   QString filePath = QFileDialog::getOpenFileName(NULL, tr("Open Pipeline"),
-    proposedDir, tr("Json File (*.json);;SIMPLView File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
+    proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
   if (filePath.isEmpty())
   {
     return;
@@ -581,7 +581,7 @@ void SIMPLViewApplication::on_actionAddBookmark_triggered()
     QList<QString> newPrefPaths;
 
     newPrefPaths = QFileDialog::getOpenFileNames(toolbox, tr("Choose Pipeline File(s)"),
-      proposedDir, tr("Json File (*.json);;SIMPLView File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
+      proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
     if (true == newPrefPaths.isEmpty()) { return; }
 
     QModelIndex parent = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->currentIndex();
@@ -698,7 +698,7 @@ void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
   {
     QMessageBox msgBox;
     msgBox.setText(QString("Error Opening Help File"));
-    msgBox.setInformativeText(QString::fromLatin1("SIMPLView could not open the help file path ") + helpURL.path());
+    msgBox.setInformativeText(QString::fromLatin1("%1 could not open the help file path ").arg(BrandedStrings::ApplicationName) + helpURL.path());
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.setIcon(QMessageBox::Critical);
@@ -776,7 +776,7 @@ void SIMPLViewApplication::on_actionPluginInformation_triggered()
   if (dialog.getLoadPreferencesDidChange() == true)
   {
     QMessageBox msgBox;
-    msgBox.setText("SIMPLView must be restarted to allow these changes to take effect.");
+    msgBox.setText(QString("%1 must be restarted to allow these changes to take effect.").arg(BrandedStrings::ApplicationName));
     msgBox.setInformativeText("Restart?");
     msgBox.setWindowTitle("Restart Needed");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -1028,8 +1028,10 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
 void SIMPLViewApplication::on_actionClearBookmarks_triggered()
 {
   QMessageBox msgBox;
-  msgBox.setWindowTitle("Clear SIMPLView Bookmarks");
-  msgBox.setText("Are you sure that you want to clear all SIMPLView bookmarks?");
+  QString title = QString("Clear %1 Bookmarks").arg(BrandedStrings::ApplicationName);
+  msgBox.setWindowTitle(title);
+  msgBox.setText(QString("Are you sure that you want to clear all %1 bookmarks?").arg(BrandedStrings::ApplicationName));
+
   msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox.setDefaultButton(QMessageBox::Yes);
   int response = msgBox.exec();
@@ -1049,10 +1051,18 @@ void SIMPLViewApplication::on_actionClearBookmarks_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionClearCache_triggered()
 {
+
+
   QMessageBox msgBox;
-  msgBox.setWindowTitle("Clear SIMPLView Cache");
-  msgBox.setText("Clearing the SIMPLView cache will clear the SIMPLView window settings, and will restore SIMPLView back to its default settings on the program's next run.");
-  msgBox.setInformativeText("Clear the SIMPLView cache?");
+
+  QString title = QString("Clear %1 Cache").arg(BrandedStrings::ApplicationName);
+  msgBox.setWindowTitle(title);
+
+  QString text = QString("Clearing the %1 cache will clear the %1 window settings, and will restore %1 back to its default settings on the program's next run.").arg(BrandedStrings::ApplicationName);
+  msgBox.setText(text);
+
+  QString infoText = QString("Clear the %1 cache?").arg(BrandedStrings::ApplicationName);
+  msgBox.setInformativeText(infoText);
   msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   msgBox.setDefaultButton(QMessageBox::Yes);
   int response = msgBox.exec();
@@ -1066,7 +1076,7 @@ void SIMPLViewApplication::on_actionClearCache_triggered()
 
     if (NULL != m_ActiveWindow)
     {
-      m_ActiveWindow->setStatusBarMessage("The cache has been cleared successfully.  Please restart SIMPLView.");
+      m_ActiveWindow->setStatusBarMessage(QString("The cache has been cleared successfully. Please restart %1.").arg(BrandedStrings::ApplicationName));
     }
   }
 }
