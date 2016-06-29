@@ -97,6 +97,7 @@ namespace Detail {
         data.revision = SIMPLView::Version::Revision();
         data.packageComplete = SIMPLView::Version::PackageComplete();
         data.buildDate = SIMPLView::Version::BuildDate();
+        data.appName = BrandedStrings::ApplicationName;
   }
 }
 // -----------------------------------------------------------------------------
