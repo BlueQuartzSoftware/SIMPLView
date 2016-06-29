@@ -70,7 +70,6 @@
 #include "SIMPLib/Common/Constants.h"
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/Common/DocRequestManager.h"
-#include "SIMPLib/FilterParameters/QFilterParametersWriter.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
