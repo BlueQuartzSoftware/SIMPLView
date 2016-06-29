@@ -312,12 +312,13 @@ set(SIMPLViewProj_INSTALL_FILES "${PROJECT_INSTALL_HEADERS}")
 # Generate our ReadMe and License Files
 configure_file(${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt
                 ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt )
-configure_file(${PROJECT_SOURCE_DIR}/ReadMe.md
-                ${SIMPLViewProj_BINARY_DIR}/ReadMe.md )
+configure_file(${PROJECT_SOURCE_DIR}/ReadMe-SIMPLView.md
+                ${SIMPLViewProj_BINARY_DIR}/ReadMe-SIMPLView.md )
 
 # --------------------------------------------------------------------
 # Generate install rules for the text files
-install(FILES ${SIMPLViewProj_BINARY_DIR}/ReadMe.md
+install(FILES ${SIMPLViewProj_BINARY_DIR}/ReadMe-SIMPLView.md
+              ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
         DESTINATION .
         COMPONENT Applications)
 
