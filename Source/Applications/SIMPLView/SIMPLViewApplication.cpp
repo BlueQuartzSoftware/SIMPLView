@@ -934,7 +934,8 @@ void SIMPLViewApplication::on_actionCut_triggered()
       pipeline->pushBack(filterWidgets[i]->getFilter());
     }
 
-    QString jsonString = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Pipeline");
+    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
+    QString jsonString = jsonWriter->writePipelineToString(pipeline, "Pipeline");
 
     QClipboard* clipboard = QApplication::clipboard();
     clipboard->setText(jsonString);
@@ -959,7 +960,8 @@ void SIMPLViewApplication::on_actionCopy_triggered()
       pipeline->pushBack(filterWidgets[i]->getFilter());
     }
 
-    QString json = JsonFilterParametersWriter::WritePipelineToString(pipeline, "Copy - Pipeline");
+    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
+    QString json = jsonWriter->writePipelineToString(pipeline, "Copy - Pipeline");
     QClipboard* clipboard = QApplication::clipboard();
     clipboard->setText(json);
   }
@@ -977,7 +979,8 @@ void SIMPLViewApplication::on_actionPaste_triggered()
     QClipboard* clipboard = QApplication::clipboard();
     QString jsonString = clipboard->text();
 
-    FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
+    JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
+    FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
     FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
     viewWidget->blockPreflightSignals(true);
