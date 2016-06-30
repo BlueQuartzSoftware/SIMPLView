@@ -398,8 +398,10 @@ add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/SIMPLView ${PR
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application
-add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/DevHelper  ${PROJECT_BINARY_DIR}/Applications/DevHelper)
-
+option(SIMPLView_BUILD_DevHelper "Build the DevHelper Application" OFF)
+if(SIMPLView_BUILD_DevHelper)
+  add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/DevHelper  ${PROJECT_BINARY_DIR}/Applications/DevHelper)
+endif()
 
 set(SIMPView_DOCS_ROOT_DIR "${SIMPLViewProj_BINARY_DIR}/Bin/Help/SIMPLView")
 
