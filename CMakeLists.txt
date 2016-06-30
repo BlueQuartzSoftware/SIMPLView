@@ -157,7 +157,11 @@ endif()
 # Official: This is an official release from BlueQuartz Software
 # Beta: This is a Beta release that has is getting ready to be officially released.
 # Development: This is currently in development and probably has bugs.
-set(SIMPLViewProj_RELEASE_TYPE "Development")
+get_property(SIMPLViewProj_RELEASE_TYPE GLOBAL PROPERTY PACKAGE_RELEASE_TYPE)
+if("${SIMPLViewProj_RELEASE_TYPE}" STREQUAL "")
+  set(SIMPLViewProj_RELEASE_TYPE "Development")
+  set_property(GLOBAL PROPERTY PACKAGE_RELEASE_TYPE "${SIMPLViewProj_RELEASE_TYPE}")
+endif()
 
 include(CMakeParseArguments)
 
@@ -188,11 +192,21 @@ if("${SIMPLLibSearchDirs}" STREQUAL "")
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt" "")
 endif()
 
-
+# -----------------------------------------------------------------------
+# The project generally does NOT want to install headers. See if another
+# project has over ridden that property
+get_property(CMP_PROJECT_INSTALL_HEADERS GLOBAL PROPERTY CMP_PROJECT_INSTALL_HEADERS)
+if("${CMP_PROJECT_INSTALL_HEADERS}" STREQUAL "")
+  set_property(GLOBAL PROPERTY CMP_PROJECT_INSTALL_HEADERS "0")
+  set(PROJECT_INSTALL_HEADERS "0")
+else()
+  set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
+endif()
 
 # -----------------------------------------------------------------------
 # Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
 set(SIMPL_BUILD_WIDGETS ON CACHE BOOL "Build the QtWidgets based library")
+
 # -----------------------------------------------------------------------
 # Bring in the SIMPL Project
 # -----------------------------------------------------------------------
@@ -205,7 +219,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(PROJECT_CODE_DIR ${PROJECT_SOURCE_DIR}/Source)
 set(PROJECT_RESOURCES_DIR ${SIMPLViewProj_SOURCE_DIR}/Resources)
 set(EXE_DEBUG_EXTENSION "_debug")
-set(PROJECT_INSTALL_HEADERS "1")
+set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
 set(PROJECT_INSTALL_EXECUTABLES "1")
 
 
