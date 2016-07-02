@@ -980,7 +980,11 @@ void SIMPLViewApplication::on_actionPaste_triggered()
     FilterPipeline::Pointer pipeline = JsonFilterParametersReader::ReadPipelineFromString(jsonString);
     FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
+    viewWidget->blockPreflightSignals(true);
     viewWidget->pasteFilters(container, -1);
+    viewWidget->blockPreflightSignals(false);
+    viewWidget->preflightPipeline();
+
   }
 }
 
