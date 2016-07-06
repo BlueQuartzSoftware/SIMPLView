@@ -35,6 +35,7 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${QT_INCLUDE_DIR}/..
                     ${SIMPLView_SOURCE_DIR}
                     ${SIMPLView_BINARY_DIR}
+                    ${SIMPLView_BINARY_DIR}/SIMPLView
                     ${PROJECT_CODE_DIR}
                     ${SIMPLViewProj_BINARY_DIR}/Applications
                     ${SIMPLProj_SOURCE_DIR}/Source
@@ -62,8 +63,14 @@ set(PROJECT_PREFIX "SIMPLView")
 set(CMP_HEADER_DIR ${SIMPLView_BINARY_DIR})
 set(CMP_CONFIGURATION_FILE_NAME "SIMPLViewConfiguration.h")
 set(CMP_TYPES_FILE_NAME "SIMPLViewTypes.h")
-set(CMP_VERSION_HEADER_FILE_NAME "SIMPLViewVersion.h")
-set(CMP_VERSION_SOURCE_FILE_NAME "SIMPLViewVersion.cpp")
+if(NOT DEFINED SIMPLView_APPLICATION_NAME)
+  set(CMP_VERSION_HEADER_FILE_NAME "SIMPLViewVersion.h")
+  set(CMP_VERSION_SOURCE_FILE_NAME "SIMPLViewVersion.cpp")
+else()
+  set(CMP_VERSION_HEADER_FILE_NAME "DO_NOT_USE_SIMPLViewVersion.h")
+  set(CMP_VERSION_SOURCE_FILE_NAME "DO_NOT_USE_SIMPLViewVersion.cpp")
+endif()
+
 set(CMP_TOP_HEADER_FILE "SIMPLView.h")
 set(CMP_PROJECT_NAMESPACE "${PROJECT_NAME}")
 set(CMP_PROJECT_NAME "${PROJECT_NAME}")

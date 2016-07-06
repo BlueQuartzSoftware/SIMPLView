@@ -61,7 +61,7 @@
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "Applications/SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"
-#include "Applications/SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"
 

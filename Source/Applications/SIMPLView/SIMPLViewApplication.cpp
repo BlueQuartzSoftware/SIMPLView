@@ -75,7 +75,7 @@
 #include "Applications/SIMPLView/SIMPLView_UI.h"
 #include "Applications/SIMPLView/AboutSIMPLView.h"
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
-#include "Applications/SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"
 
