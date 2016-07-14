@@ -62,7 +62,7 @@ class Symmetric6x6WidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateHIncludes();
+    virtual QList<QString> generateHIncludes();
 
   protected:
     Symmetric6x6WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

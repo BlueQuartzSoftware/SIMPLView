@@ -57,8 +57,11 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParamete
 {
     QString s;
   QTextStream out(&s);
-  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;";
-  out << "  parameters.push_back(AttributeMatrixSelectionFilterParameter::New(\"" << getHumanLabel() << "\", \"" << getPropertyName() << "\", get" << getPropertyName() << "(), " << getCategory() << ", amsReq));";
+  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;\n";
+  out << "  parameters.push_back(AttributeMatrixSelectionFilterParameter::New(\"" << getHumanLabel()
+      << "\", \"" << getPropertyName() << "\", get" << getPropertyName() << "(), " << getCategory()
+      << ", amsReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
   return s;
 }
 
@@ -94,7 +97,9 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> AttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/AttributeMatrixSelectionFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/AttributeMatrixSelectionFilterParameter.h\"");
+  return list;
 }

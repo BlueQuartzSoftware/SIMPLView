@@ -487,6 +487,9 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     QString category = filterParametersTable->item(row, CATEGORY)->text();
     QString initValue = filterParametersTable->item(row, INIT_VALUE)->text();
 
+    QSet<QString> hIncludesSet;
+    QSet<QString> cppIncludesSet;
+
     FPCodeGenerator::Pointer generator = factory->create(humanName, propertyName, type, category, initValue);
     if (generator->generateSetupFilterParameters().isEmpty() == false)
     {
@@ -520,12 +523,30 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
 
     if (generator->generateHIncludes().isEmpty() == false)
     {
-      filterHIncludes.append(generator->generateHIncludes() + "\n");
+      QList<QString> hIncludes = generator->generateHIncludes();
+      for (int i=0; i<hIncludes.size(); i++)
+      {
+        if (hIncludesSet.contains(hIncludes[i]) == false)
+        {
+          filterHIncludes.append(hIncludes[i]);
+          filterHIncludes.append("\n");
+          hIncludesSet.insert(hIncludes[i]);
+        }
+      }
     }
 
     if (generator->generateCPPIncludes().isEmpty() == false)
     {
-      filterCPPIncludes.append(generator->generateCPPIncludes() + "\n");
+      QList<QString> cppIncludes = generator->generateCPPIncludes();
+      for (int i=0; i<cppIncludes.size(); i++)
+      {
+        if (cppIncludesSet.contains(cppIncludes[i]) == false)
+        {
+          filterCPPIncludes.append(cppIncludes[i]);
+          filterCPPIncludes.append("\n");
+          cppIncludesSet.insert(cppIncludes[i]);
+        }
+      }
     }
   }
 

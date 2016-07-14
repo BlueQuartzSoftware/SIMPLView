@@ -62,7 +62,7 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateHIncludes();
 
   protected:
     RangeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

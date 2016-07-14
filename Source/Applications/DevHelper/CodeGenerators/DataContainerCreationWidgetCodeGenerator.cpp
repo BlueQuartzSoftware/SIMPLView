@@ -55,7 +55,10 @@ DataContainerCreationWidgetCodeGenerator::~DataContainerCreationWidgetCodeGenera
 // -----------------------------------------------------------------------------
 QString DataContainerCreationWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(DataContainerCreationFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(DataContainerCreationFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString DataContainerCreationWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerCreationWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataContainerCreationWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataContainerCreationFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataContainerCreationFilterParameter.h\"");
+  return list;
 }

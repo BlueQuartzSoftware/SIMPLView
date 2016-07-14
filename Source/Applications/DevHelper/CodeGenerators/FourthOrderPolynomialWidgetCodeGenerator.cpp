@@ -55,7 +55,10 @@ FourthOrderPolynomialWidgetCodeGenerator::~FourthOrderPolynomialWidgetCodeGenera
 // -----------------------------------------------------------------------------
 QString FourthOrderPolynomialWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(FourthOrderPolynomialFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(FourthOrderPolynomialFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString FourthOrderPolynomialWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FourthOrderPolynomialWidgetCodeGenerator::generateHIncludes()
+QList<QString> FourthOrderPolynomialWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/FourthOrderPolynomialFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/FourthOrderPolynomialFilterParameter.h\"");
+  return list;
 }

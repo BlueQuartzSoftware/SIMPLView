@@ -55,7 +55,10 @@ CalculatorWidgetCodeGenerator::~CalculatorWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString CalculatorWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(CalculatorFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(CalculatorFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), "
+      + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString CalculatorWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString CalculatorWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> CalculatorWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/CalculatorFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/CalculatorFilterParameter.h\"");
+  return list;
 }

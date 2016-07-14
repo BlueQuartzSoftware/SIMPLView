@@ -66,6 +66,8 @@ QString ChoiceWidgetCodeGenerator::generateSetupFilterParameters()
   ss << "    QVector<QString> choices;          // Please add choices to the choices QVector to finish this widget\n";
   ss << "    parameter->setChoices(choices);\n";
   ss << "    parameter->setCategory(" + getCategory() + ");\n";
+  ss << "    parameter->setSetterCallback(SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "));\n";
+  ss << "    parameter->setGetterCallback(SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "));\n";
   ss << "    parameters.push_back(parameter);\n";
   ss << "  }";
 
@@ -96,7 +98,9 @@ QString ChoiceWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString ChoiceWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> ChoiceWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/ChoiceFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/ChoiceFilterParameter.h\"");
+  return list;
 }

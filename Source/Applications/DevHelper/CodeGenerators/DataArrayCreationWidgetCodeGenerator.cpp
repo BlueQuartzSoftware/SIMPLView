@@ -57,8 +57,11 @@ QString DataArrayCreationWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  out << "  DataArrayCreationFilterParameter::RequirementType dacReq;";
-  out << "  parameters.push_back(DataArrayCreationFilterParameter::New(\"" << getHumanLabel() << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory() << ", dacReq));";
+  out << "  DataArrayCreationFilterParameter::RequirementType dacReq;\n";
+  out << "  parameters.push_back(DataArrayCreationFilterParameter::New(\"" << getHumanLabel()
+      << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory()
+      << ", dacReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
   return s;
 }
 
@@ -94,7 +97,9 @@ QString DataArrayCreationWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataArrayCreationWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataArrayCreationWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataArrayCreationFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataArrayCreationFilterParameter.h\"");
+  return list;
 }

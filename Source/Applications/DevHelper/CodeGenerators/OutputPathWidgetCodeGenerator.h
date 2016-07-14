@@ -62,7 +62,7 @@ class OutputPathWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     OutputPathWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

@@ -93,7 +93,9 @@ QString SeparatorWidgetCodeGenerator::generateInitializationList()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString SeparatorWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> SeparatorWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/SeparatorFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/SeparatorFilterParameter.h\"");
+  return list;
 }

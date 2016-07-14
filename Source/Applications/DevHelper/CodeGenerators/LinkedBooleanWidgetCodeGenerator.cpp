@@ -59,7 +59,10 @@ QString LinkedBooleanWidgetCodeGenerator::generateSetupFilterParameters()
   QTextStream ss(&contents);
 
   ss << "  // Please add a QStringList of linked property names to the second-to-last parameter.  It is generated as blank by default.\n";
-  ss << "  parameters.push_back(LinkedBooleanFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), QStringList(), " + getCategory() + "));";
+  ss << "  parameters.push_back(LinkedBooleanFilterParameter::New(\"" + getHumanLabel()
+        + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), QStringList(), "
+        + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+     + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 
   return contents;
 }
@@ -88,7 +91,9 @@ QString LinkedBooleanWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString LinkedBooleanWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> LinkedBooleanWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/LinkedBooleanFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/LinkedBooleanFilterParameter.h\"");
+  return list;
 }

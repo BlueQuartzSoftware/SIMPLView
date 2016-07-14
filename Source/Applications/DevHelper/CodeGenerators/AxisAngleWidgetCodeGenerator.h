@@ -62,9 +62,9 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
-    virtual QString generateHIncludes();
+    virtual QList<QString> generateHIncludes();
 
   protected:
     AxisAngleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

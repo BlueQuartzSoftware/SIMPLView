@@ -55,7 +55,10 @@ DataBundleSelectionWidgetCodeGenerator::~DataBundleSelectionWidgetCodeGenerator(
 // -----------------------------------------------------------------------------
 QString DataBundleSelectionWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(DataBundleSelectionFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(DataBundleSelectionFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString DataBundleSelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataBundleSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataBundleSelectionWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataBundleSelectionFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataBundleSelectionFilterParameter.h\"");
+  return list;
 }

@@ -55,7 +55,10 @@ DoubleWidgetCodeGenerator::~DoubleWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString DoubleWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(DoubleFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(DoubleFilterParameter::New(\"" + getHumanLabel() + "\", \""
+      + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -82,7 +85,9 @@ QString DoubleWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DoubleWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DoubleWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DoubleFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DoubleFilterParameter.h\"");
+  return list;
 }

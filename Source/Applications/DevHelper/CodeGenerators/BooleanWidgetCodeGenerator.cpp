@@ -55,7 +55,10 @@ BooleanWidgetCodeGenerator::~BooleanWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString BooleanWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(BooleanFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(BooleanFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), "
+      + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString BooleanWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString BooleanWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> BooleanWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/BooleanFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/BooleanFilterParameter.h\"");
+  return list;
 }

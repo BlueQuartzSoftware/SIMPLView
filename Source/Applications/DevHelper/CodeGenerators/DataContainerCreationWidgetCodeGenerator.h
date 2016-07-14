@@ -62,7 +62,7 @@ class DataContainerCreationWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     DataContainerCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

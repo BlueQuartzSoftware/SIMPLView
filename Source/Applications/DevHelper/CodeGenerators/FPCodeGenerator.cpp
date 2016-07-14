@@ -154,15 +154,15 @@ QString FPCodeGenerator::generateInitializationList()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FPCodeGenerator::generateHIncludes()
+QList<QString> FPCodeGenerator::generateHIncludes()
 {
-  return "";
+  return QList<QString>();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FPCodeGenerator::generateCPPIncludes()
+QList<QString> FPCodeGenerator::generateCPPIncludes()
 {
-  return "";
+  return QList<QString>();
 }

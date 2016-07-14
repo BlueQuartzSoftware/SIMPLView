@@ -55,7 +55,10 @@ FloatVec4WidgetCodeGenerator::~FloatVec4WidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString FloatVec4WidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(FloatVec4FilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(FloatVec4FilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString FloatVec4WidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FloatVec4WidgetCodeGenerator::generateHIncludes()
+QList<QString> FloatVec4WidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/FloatVec4FilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/FloatVec4FilterParameter.h\"");
+  return list;
 }

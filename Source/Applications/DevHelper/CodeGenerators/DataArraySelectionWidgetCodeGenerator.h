@@ -62,7 +62,7 @@ class DataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     DataArraySelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

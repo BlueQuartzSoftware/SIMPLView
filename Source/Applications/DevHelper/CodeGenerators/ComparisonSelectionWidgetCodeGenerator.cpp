@@ -60,7 +60,10 @@ QString ComparisonSelectionWidgetCodeGenerator::generateSetupFilterParameters()
 
   ss << "\n";
   ss << "  // Please fill in the QVariant and QVector parameters to complete the setup\n";
-  ss << "  parameters.push_back(ComparisonSelectionFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", \"\", QVector<QString>(), true, " + getCategory() + "));\n";
+  ss << "  parameters.push_back(ComparisonSelectionFilterParameter::New(\"" + getHumanLabel()
+        + "\", \"" + getPropertyName() + "\", \"\", QVector<QString>(), true, " + getCategory()
+        + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+     << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));\n";
   ss << "\n";
 
   return contents;
@@ -98,15 +101,19 @@ QString ComparisonSelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString ComparisonSelectionWidgetCodeGenerator::generateHIncludes()
+QList<QString> ComparisonSelectionWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/Common/ComparisonInputs.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/Common/ComparisonInputs.h\"");
+  return list;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString ComparisonSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> ComparisonSelectionWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/ComparisonSelectionFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/ComparisonSelectionFilterParameter.h\"");
+  return list;
 }

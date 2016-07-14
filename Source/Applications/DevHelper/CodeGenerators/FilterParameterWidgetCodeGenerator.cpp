@@ -106,7 +106,7 @@ QString FilterParameterWidgetCodeGenerator::generateInitializationList()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FilterParameterWidgetCodeGenerator::generateHIncludes()
+QList<QString> FilterParameterWidgetCodeGenerator::generateHIncludes()
 {
   return "";
 }
@@ -114,7 +114,7 @@ QString FilterParameterWidgetCodeGenerator::generateHIncludes()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FilterParameterWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> FilterParameterWidgetCodeGenerator::generateCPPIncludes()
 {
   return "";
 }

@@ -55,7 +55,10 @@ Symmetric6x6WidgetCodeGenerator::~Symmetric6x6WidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString Symmetric6x6WidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(Symmetric6x6FilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(Symmetric6x6FilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString Symmetric6x6WidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString Symmetric6x6WidgetCodeGenerator::generateHIncludes()
+QList<QString> Symmetric6x6WidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/Symmetric6x6FilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/Symmetric6x6FilterParameter.h\"");
+  return list;
 }

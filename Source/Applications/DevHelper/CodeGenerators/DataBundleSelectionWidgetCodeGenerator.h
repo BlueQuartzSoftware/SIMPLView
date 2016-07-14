@@ -62,7 +62,7 @@ class DataBundleSelectionWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     DataBundleSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

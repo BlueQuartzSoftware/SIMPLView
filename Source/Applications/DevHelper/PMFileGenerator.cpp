@@ -208,15 +208,6 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
   {
     QTextStream in(&rfile);
     text = in.readAll();
-    text.replace("@PluginName@", pluginName);
-    text.replace("@PluginNameLowerCase@", pluginName.toLower());
-    text.replace("@ClassName@", className);
-    text.replace("@FilterName@", filterName);
-    text.replace("@MD_FILE_NAME@", m_FileName);
-    text.replace("@ClassNameLowerCase@", className.toLower());
-    text.replace("@FilterGroup@", pluginName);
-    text.replace("@FilterSubgroup@", pluginName);
-
     // Replace function contents with the string that we have stored
     text.replace("@SetupFPContents@", setupFPContents);
     text.replace("@FPContents@", fpContents);
@@ -226,6 +217,15 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     text.replace("@InitList@", initListContents);
     text.replace("@Filter_H_Includes@", filterHIncludesContents);
     text.replace("@Filter_CPP_Includes@", filterCPPIncludesContents);
+
+    text.replace("@PluginName@", pluginName);
+    text.replace("@PluginNameLowerCase@", pluginName.toLower());
+    text.replace("@ClassName@", className);
+    text.replace("@FilterName@", filterName);
+    text.replace("@MD_FILE_NAME@", m_FileName);
+    text.replace("@ClassNameLowerCase@", className.toLower());
+    text.replace("@FilterGroup@", pluginName);
+    text.replace("@FilterSubgroup@", pluginName);
 
     if (replaceStr.isEmpty() == false)
     {

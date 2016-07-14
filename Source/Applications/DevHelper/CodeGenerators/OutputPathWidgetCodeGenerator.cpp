@@ -55,7 +55,10 @@ OutputPathWidgetCodeGenerator::~OutputPathWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString OutputPathWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(OutputPathFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + ", \"\"));";
+  return "  parameters.push_back(OutputPathFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), \"\"));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString OutputPathWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString OutputPathWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> OutputPathWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/OutputPathFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/OutputPathFilterParameter.h\"");
+  return list;
 }

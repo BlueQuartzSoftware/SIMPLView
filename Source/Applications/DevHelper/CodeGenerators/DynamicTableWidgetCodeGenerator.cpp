@@ -62,7 +62,10 @@ QString DynamicTableWidgetCodeGenerator::generateSetupFilterParameters()
   ss << "  {\n";
   ss << "    QStringList rHeaders, cHeaders;\n";
   ss << "    std::vector<std::vector<double> > defaultTable;\n";
-  ss << "    parameters.push_back(DynamicTableFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", rHeaders, cHeaders, defaultTable, " + getCategory() + ", false, false, 0));\n";
+  ss << "    parameters.push_back(DynamicTableFilterParameter::New(\"" + getHumanLabel()
+        + "\", \"" + getPropertyName() + "\", rHeaders, cHeaders, defaultTable, " + getCategory()
+        + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+     << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), false, false, 0));\n";
   ss << "  }";
 
   return contents;
@@ -100,15 +103,19 @@ QString DynamicTableWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DynamicTableWidgetCodeGenerator::generateHIncludes()
+QList<QString> DynamicTableWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DynamicTableData.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DynamicTableData.h\"");
+  return list;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DynamicTableWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DynamicTableWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DynamicTableFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DynamicTableFilterParameter.h\"");
+  return list;
 }

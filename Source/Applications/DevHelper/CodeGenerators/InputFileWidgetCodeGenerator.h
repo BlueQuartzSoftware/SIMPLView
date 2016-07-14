@@ -62,7 +62,7 @@ class InputFileWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     InputFileWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

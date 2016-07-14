@@ -60,7 +60,7 @@ class ChoiceWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     ChoiceWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

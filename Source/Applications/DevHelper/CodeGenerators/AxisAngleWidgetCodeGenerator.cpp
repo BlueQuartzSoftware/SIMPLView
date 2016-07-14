@@ -55,7 +55,10 @@ AxisAngleWidgetCodeGenerator::~AxisAngleWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString AxisAngleWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(AxisAngleFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(AxisAngleFilterParameter::New(\"" + getHumanLabel() + "\", \""
+      + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + ", " +
+      "SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,15 +93,20 @@ QString AxisAngleWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AxisAngleWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> AxisAngleWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/AxisAngleFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/AxisAngleFilterParameter.h\"");
+  return list;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AxisAngleWidgetCodeGenerator::generateHIncludes()
+QList<QString> AxisAngleWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"EbsdLib/EbsdConstants.h\"";
+  QList<QString> list;
+  list.push_back("#include \"EbsdLib/EbsdConstants.h\"");
+  list.push_back("#include \"SIMPLib/FilterParameters/AxisAngleInput.h\"");
+  return list;
 }

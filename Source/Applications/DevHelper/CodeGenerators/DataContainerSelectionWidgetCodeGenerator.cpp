@@ -57,8 +57,11 @@ QString DataContainerSelectionWidgetCodeGenerator::generateSetupFilterParameters
 {
   QString s;
   QTextStream out(&s);
-  out << "  DataContainerSelectionFilterParameter::RequirementType dcsReq;";
-  out << "  parameters.push_back(DataContainerSelectionFilterParameter::New(\"" << getHumanLabel() << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory() << ", dcsReq));";
+  out << "  DataContainerSelectionFilterParameter::RequirementType dcsReq;\n";
+  out << "  parameters.push_back(DataContainerSelectionFilterParameter::New(\"" << getHumanLabel()
+      << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory()
+      << ", dcsReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
   return s;
 }
 
@@ -94,7 +97,9 @@ QString DataContainerSelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataContainerSelectionWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataContainerSelectionFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataContainerSelectionFilterParameter.h\"");
+  return list;
 }

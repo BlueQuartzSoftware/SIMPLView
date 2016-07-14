@@ -67,6 +67,9 @@ QString DataContainerReaderWidgetCodeGenerator::generateSetupFilterParameters()
   ss << "    parameter->setInputFileProperty(\"InputFilePropertyName\");    // Set this property name, if needed\n";
   ss << "    parameter->setCategory(" + getCategory() + ");\n";
   ss << "    parameters.push_back(parameter);\n";
+  // FP: We need to pass in a DataContainerReader pointer so that we can set values.  Does this
+  //     make sense in the context of DevHelper???  When we use DevHelper, our resultant filter
+  //     is not a DataContainerReader filter...
   ss << "  }";
 
   return contents;
@@ -104,15 +107,19 @@ QString DataContainerReaderWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerReaderWidgetCodeGenerator::generateHIncludes()
+QList<QString> DataContainerReaderWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/DataContainers/DataContainerArrayProxy.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/DataContainers/DataContainerArrayProxy.h\"");
+  return list;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerReaderWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataContainerReaderWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataContainerReaderFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataContainerReaderFilterParameter.h\"");
+  return list;
 }

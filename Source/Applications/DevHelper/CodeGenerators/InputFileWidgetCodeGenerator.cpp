@@ -55,7 +55,10 @@ InputFileWidgetCodeGenerator::~InputFileWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString InputFileWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(InputFileFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + ", \"\", \"*.raw *.bin\"));";
+  return "  parameters.push_back(InputFileFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), \"\", \"*.raw *.bin\"));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString InputFileWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString InputFileWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> InputFileWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/InputFileFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/InputFileFilterParameter.h\"");
+  return list;
 }

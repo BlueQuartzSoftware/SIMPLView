@@ -55,7 +55,12 @@ MultiDataArraySelectionWidgetCodeGenerator::~MultiDataArraySelectionWidgetCodeGe
 // -----------------------------------------------------------------------------
 QString MultiDataArraySelectionWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  // MultiDataArraySelectionFilterParameter - Please pass in a default vector of DataArrayPaths\n  MultiDataArraySelectionFilterParameter::RequirementType mdaReq;  parameters.push_back(MultiDataArraySelectionFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", QVector<DataArrayPath>(), " + getCategory() + ", mdaReq, 0));";
+  return "  // MultiDataArraySelectionFilterParameter - Please pass in a default vector of DataArrayPaths\n  "
+         "MultiDataArraySelectionFilterParameter::RequirementType mdaReq;\n  "
+         "parameters.push_back(MultiDataArraySelectionFilterParameter::New(\"" + getHumanLabel() + "\", \""
+      + getPropertyName() + "\", QVector<DataArrayPath>(), " + getCategory()
+      + ", mdaReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), 0));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +95,9 @@ QString MultiDataArraySelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString MultiDataArraySelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> MultiDataArraySelectionWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/MultiDataArraySelectionFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/MultiDataArraySelectionFilterParameter.h\"");
+  return list;
 }

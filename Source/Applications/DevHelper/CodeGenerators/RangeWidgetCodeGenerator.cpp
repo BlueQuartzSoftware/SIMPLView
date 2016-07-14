@@ -55,7 +55,10 @@ RangeWidgetCodeGenerator::~RangeWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString RangeWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(RangeFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(RangeFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -63,7 +66,7 @@ QString RangeWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 QString RangeWidgetCodeGenerator::generateReadFilterParameters()
 {
-  return "  set" + getPropertyName() + "(reader->readPair(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
+  return "  set" + getPropertyName() + "(reader->readPairOfDoubles(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
 }
 
 // -----------------------------------------------------------------------------
@@ -81,8 +84,8 @@ QString RangeWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(QPair<double, double>, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(QPair<double, double> " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(FPRangePair, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(FPRangePair " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -90,7 +93,9 @@ QString RangeWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString RangeWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> RangeWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/RangeFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/RangeFilterParameter.h\"");
+  return list;
 }

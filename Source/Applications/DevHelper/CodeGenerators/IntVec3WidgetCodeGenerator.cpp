@@ -55,7 +55,10 @@ IntVec3WidgetCodeGenerator::~IntVec3WidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString IntVec3WidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(IntVec3FilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(IntVec3FilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString IntVec3WidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString IntVec3WidgetCodeGenerator::generateHIncludes()
+QList<QString> IntVec3WidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/IntVec3FilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/IntVec3FilterParameter.h\"");
+  return list;
 }

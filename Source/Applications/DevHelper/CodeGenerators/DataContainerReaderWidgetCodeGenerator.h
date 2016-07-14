@@ -62,9 +62,9 @@ class DataContainerReaderWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QString generateHIncludes();
+    virtual QList<QString> generateHIncludes();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     DataContainerReaderWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

@@ -79,9 +79,9 @@ class FPCodeGenerator
 
     virtual QString generateInitializationList();
 
-    virtual QString generateHIncludes();
+    virtual QList<QString> generateHIncludes();
 
-    virtual QString generateCPPIncludes();
+    virtual QList<QString> generateCPPIncludes();
 
   protected:
     FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);

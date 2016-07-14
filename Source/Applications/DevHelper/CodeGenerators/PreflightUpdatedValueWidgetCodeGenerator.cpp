@@ -55,7 +55,9 @@ PreflightUpdatedValueWidgetCodeGenerator::~PreflightUpdatedValueWidgetCodeGenera
 // -----------------------------------------------------------------------------
 QString PreflightUpdatedValueWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(PreflightUpdatedValueFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(PreflightUpdatedValueFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +92,9 @@ QString PreflightUpdatedValueWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString PreflightUpdatedValueWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> PreflightUpdatedValueWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/PreflightUpdatedValueFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/PreflightUpdatedValueFilterParameter.h\"");
+  return list;
 }

@@ -55,7 +55,10 @@ DataContainerArrayProxyWidgetCodeGenerator::~DataContainerArrayProxyWidgetCodeGe
 // -----------------------------------------------------------------------------
 QString DataContainerArrayProxyWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(DataContainerArrayProxyFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", \"\", DataContainerArrayProxy(), Qt::Unchecked, " + getCategory() + "));";
+  return "  parameters.push_back(DataContainerArrayProxyFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", \"\", DataContainerArrayProxy(), Qt::Unchecked, " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString DataContainerArrayProxyWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerArrayProxyWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> DataContainerArrayProxyWidgetCodeGenerator::generateCPPIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/DataContainerArrayProxyFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/DataContainerArrayProxyFilterParameter.h\"");
+  return list;
 }

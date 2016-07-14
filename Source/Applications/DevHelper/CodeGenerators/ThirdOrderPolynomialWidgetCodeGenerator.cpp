@@ -55,7 +55,10 @@ ThirdOrderPolynomialWidgetCodeGenerator::~ThirdOrderPolynomialWidgetCodeGenerato
 // -----------------------------------------------------------------------------
 QString ThirdOrderPolynomialWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(ThirdOrderPolynomialFilterParameter::New(\"" + getHumanLabel() + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory() + "));";
+  return "  parameters.push_back(ThirdOrderPolynomialFilterParameter::New(\"" + getHumanLabel()
+      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
+      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
+      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +93,9 @@ QString ThirdOrderPolynomialWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString ThirdOrderPolynomialWidgetCodeGenerator::generateHIncludes()
+QList<QString> ThirdOrderPolynomialWidgetCodeGenerator::generateHIncludes()
 {
-  return "#include \"SIMPLib/FilterParameters/ThirdOrderPolynomialFilterParameter.h\"";
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/ThirdOrderPolynomialFilterParameter.h\"");
+  return list;
 }
