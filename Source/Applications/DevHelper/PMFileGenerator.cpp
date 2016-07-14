@@ -208,7 +208,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
   {
     QTextStream in(&rfile);
     text = in.readAll();
-    // Replace function contents with the string that we have stored
+
     text.replace("@SetupFPContents@", setupFPContents);
     text.replace("@FPContents@", fpContents);
     text.replace("@ReadFPContents@", readFPContents);
@@ -218,6 +218,11 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     text.replace("@Filter_H_Includes@", filterHIncludesContents);
     text.replace("@Filter_CPP_Includes@", filterCPPIncludesContents);
 
+    // ****************************************************************
+    // The following replacements need to happen after the above
+    // replacements, because the above replacements add some additional
+    // tokens to the generated file.
+    // ****************************************************************
     text.replace("@PluginName@", pluginName);
     text.replace("@PluginNameLowerCase@", pluginName.toLower());
     text.replace("@ClassName@", className);
@@ -232,6 +237,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
       text.replace("@AddTestText@", replaceStr);    // Replace token for Test/CMakeLists.txt file
       text.replace("@Namespaces@", replaceStr);   // Replace token for Test/TestFileLocations.h.in file
     }
+    // ****************************************************************
 
     rfile.close();
   }
