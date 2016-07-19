@@ -1,5 +1,9 @@
 <html>
 <body>
+<div>
+SIMPLView has selected to license Qt under the LGPLv3.
+</div>
+
 <pre>
 GENERAL
 -------
