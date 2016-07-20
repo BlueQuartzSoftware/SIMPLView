@@ -1,26 +1,20 @@
 # --------------------------------------------------------------------
 # create Resource files for the various license files that are used and
 # also create a header file that lists all the License Files
-
-get_property(SIMPLViewLicenseFiles GLOBAL PROPERTY SIMPLViewLicenseFiles)
-if("${SIMPLViewLicenseFiles}" STREQUAL "")
-  message(STATUS "Setting GLOBAL PROPERTY SIMPLViewLicenseFiles")
-  set_property(GLOBAL PROPERTY SIMPLViewLicenseFiles 
+set(LICENSE_FILES
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/Boost.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/Eigen.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/HDF5.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/ITK.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/Qt.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/Qwt.txt
-                    )
-  get_property(LICENSE_FILES GLOBAL PROPERTY SIMPLViewLicenseFiles)
-endif()
-message(STATUS "LICENSE_FILES: ${LICENSE_FILES}")
+
+           )
 set(SIMPLView_LICENSE_FILE ${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt)
 set(QRC_LICENSE_FILES "")
 set(LICENSE_HEADER_FILE  ${PROJECT_BINARY_DIR}/SIMPLView/License/${PROJECT_NAME}LicenseFiles.h_tmp)
-file(WRITE ${LICENSE_HEADER_FILE} "#ifndef _simpleview_license_files_h_\n")
-file(APPEND ${LICENSE_HEADER_FILE} "#define _simpleview_license_files_h_\n")
+file(WRITE ${LICENSE_HEADER_FILE} "#ifndef _LICENSE_FILES_H_\n")
+file(APPEND ${LICENSE_HEADER_FILE} "#define _LICENSE_FILES_H_\n")
 file(APPEND ${LICENSE_HEADER_FILE} "namespace ${PROJECT_PREFIX} {\n")
 file(APPEND ${LICENSE_HEADER_FILE} "  QStringList LicenseList = (QStringList()  ")
 
@@ -28,19 +22,19 @@ set(THIRDPARTY_QRC_CONTENTS "<!DOCTYPE RCC>\n<RCC version=\"1.0\">\n<qresource>\
 
 foreach(lf ${LICENSE_FILES})
   string(CONCAT THIRDPARTY_QRC_CONTENTS ${THIRDPARTY_QRC_CONTENTS} "<file>")
-    get_filename_component(cmp_text_file_name ${lf} NAME_WE)
+  get_filename_component(cmp_text_file_name ${lf} NAME_WE)
 
-    set(cmp_text_file_name "ThirdParty/${cmp_text_file_name}.txt")
-    string(CONCAT THIRDPARTY_QRC_CONTENTS ${THIRDPARTY_QRC_CONTENTS} ${cmp_text_file_name})
+  set(cmp_text_file_name "ThirdParty/${cmp_text_file_name}.txt")
+  string(CONCAT THIRDPARTY_QRC_CONTENTS ${THIRDPARTY_QRC_CONTENTS} ${cmp_text_file_name})
 
-    get_filename_component(lf_fn ${lf} NAME_WE)
-    # Copy the text file into the Build Directory
-    configure_file("${lf}" ${PROJECT_BINARY_DIR}/ThirdParty/${lf_fn}.txt COPYONLY )
+  get_filename_component(lf_fn ${lf} NAME_WE)
+  # Copy the text file into the Build Directory
+  configure_file("${lf}" ${PROJECT_BINARY_DIR}/ThirdParty/${lf_fn}.txt COPYONLY )
 
-    # create the Qt Resource File
-    set(CMP_RESOURCE_FILE_NAME ${lf_fn}.txt)
-    
-    file(APPEND ${LICENSE_HEADER_FILE} " << \":/ThirdParty/${lf_fn}.txt\"")
+  # create the Qt Resource File
+  set(CMP_RESOURCE_FILE_NAME ${lf_fn}.txt)
+  
+  file(APPEND ${LICENSE_HEADER_FILE} " << \":/ThirdParty/${lf_fn}.txt\"")
   string(CONCAT THIRDPARTY_QRC_CONTENTS ${THIRDPARTY_QRC_CONTENTS} "</file>\n")
 endforeach(lf ${LICENSE_FILES})
 
@@ -64,7 +58,7 @@ file(APPEND ${LICENSE_HEADER_FILE} " << \":/SIMPLView/SIMPLViewLicense.txt\"")
 cmp_IDE_GENERATED_PROPERTIES("Generated/qrc" "${QRC_LICENSE_FILES}" "")
 
 file(APPEND ${LICENSE_HEADER_FILE}  ");\n")
-file(APPEND ${LICENSE_HEADER_FILE}  "}\n#endif /* _simpleview_license_files_h_ */ \n")
+file(APPEND ${LICENSE_HEADER_FILE}  "}\n#endif /* _LICENSE_FILES_H_ */ \n")
 
 cmpReplaceFileIfDifferent(OLD_FILE_PATH ${PROJECT_BINARY_DIR}/SIMPLView/License/${PROJECT_NAME}LicenseFiles.h
                           NEW_FILE_PATH ${LICENSE_HEADER_FILE} )
