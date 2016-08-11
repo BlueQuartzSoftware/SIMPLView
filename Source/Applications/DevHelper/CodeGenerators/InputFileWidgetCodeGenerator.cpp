@@ -55,10 +55,10 @@ InputFileWidgetCodeGenerator::~InputFileWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString InputFileWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(InputFileFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
-      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), \"\", \"*.raw *.bin\"));";
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_INPUT_FILE_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, \"*.raw *.bin\"));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

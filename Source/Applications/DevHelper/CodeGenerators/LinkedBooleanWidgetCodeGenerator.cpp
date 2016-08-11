@@ -54,17 +54,11 @@ LinkedBooleanWidgetCodeGenerator::~LinkedBooleanWidgetCodeGenerator()
 //
 // -----------------------------------------------------------------------------
 QString LinkedBooleanWidgetCodeGenerator::generateSetupFilterParameters()
-{
-  QString contents;
-  QTextStream ss(&contents);
-
-  ss << "  // Please add a QStringList of linked property names to the second-to-last parameter.  It is generated as blank by default.\n";
-  ss << "  parameters.push_back(LinkedBooleanFilterParameter::New(\"" + getHumanLabel()
-        + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), QStringList(), "
-        + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-     + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
-
-  return contents;
+{ 
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_LINKED_BOOL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, QStringList()));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

@@ -55,10 +55,10 @@ InputPathWidgetCodeGenerator::~InputPathWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString InputPathWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(InputPathFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
-      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), \"\", \"\"));";
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_INPUT_PATH_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, \"\", \"\"));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

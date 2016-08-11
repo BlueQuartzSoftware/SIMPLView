@@ -54,19 +54,12 @@ ComparisonSelectionWidgetCodeGenerator::~ComparisonSelectionWidgetCodeGenerator(
 //
 // -----------------------------------------------------------------------------
 QString ComparisonSelectionWidgetCodeGenerator::generateSetupFilterParameters()
-{
-  QString contents;
-  QTextStream ss(&contents);
-
-  ss << "\n";
-  ss << "  // Please fill in the QVariant and QVector parameters to complete the setup\n";
-  ss << "  parameters.push_back(ComparisonSelectionFilterParameter::New(\"" + getHumanLabel()
-        + "\", \"" + getPropertyName() + "\", \"\", QVector<QString>(), true, " + getCategory()
-        + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-     << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));\n";
-  ss << "\n";
-
-  return contents;
+{ 
+  QString s;
+  QTextStream out(&s);
+  out << "  // Please fill in the QVariant and QVector parameters to complete the setup\n";
+  out << "  parameters.push_back(SIMPL_NEW_COMP_SEL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, QVector<QString>(), true));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

@@ -55,12 +55,11 @@ MultiDataArraySelectionWidgetCodeGenerator::~MultiDataArraySelectionWidgetCodeGe
 // -----------------------------------------------------------------------------
 QString MultiDataArraySelectionWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  // MultiDataArraySelectionFilterParameter - Please pass in a default vector of DataArrayPaths\n  "
-         "MultiDataArraySelectionFilterParameter::RequirementType mdaReq;\n  "
-         "parameters.push_back(MultiDataArraySelectionFilterParameter::New(\"" + getHumanLabel() + "\", \""
-      + getPropertyName() + "\", QVector<DataArrayPath>(), " + getCategory()
-      + ", mdaReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), 0));";
+  QString s;
+  QTextStream out(&s);
+  out << "  MultiDataArraySelectionFilterParameter::RequirementType mdaReq;\n  ";
+  out << "  parameters.push_back(SIMPL_NEW_MDA_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, mdaReq));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

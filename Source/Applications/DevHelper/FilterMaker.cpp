@@ -705,8 +705,8 @@ void FilterMaker::updateTestList()
   source.open(QFile::ReadOnly);
 
   QString text = source.readAll();
-  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "\r\n");
-  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "\n");
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "Test\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "Test\n");
   source.remove();
 
   source.open(QFile::WriteOnly);

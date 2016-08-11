@@ -55,9 +55,10 @@ PreflightUpdatedValueWidgetCodeGenerator::~PreflightUpdatedValueWidgetCodeGenera
 // -----------------------------------------------------------------------------
 QString PreflightUpdatedValueWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(PreflightUpdatedValueFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
-      + ", SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_PREFLIGHTUPDATEDVALUE_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

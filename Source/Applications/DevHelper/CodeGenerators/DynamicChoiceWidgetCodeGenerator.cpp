@@ -55,16 +55,11 @@ DynamicChoiceWidgetCodeGenerator::~DynamicChoiceWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString DynamicChoiceWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  QString contents;
-  QTextStream ss(&contents);
-
-  ss << "  // Fill in ListPropertyName string, if needed\n";
-  ss << "  parameters.push_back(DynamicChoiceFilterParameter::New(\"" + getHumanLabel()
-        + "\",  \"" + getPropertyName() + "\", get" + getPropertyName() + "(), \"ListPropertyName\", "
-        + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-     + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
-
-  return contents;
+  QString s;
+  QTextStream out(&s);
+  out << "  // Fill in ListPropertyName string, if needed\n";
+  out << "  parameters.push_back(SIMPL_NEW_DYN_CHOICE_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, \"ListPropertyName\"));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

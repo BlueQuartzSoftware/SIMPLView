@@ -58,10 +58,7 @@ QString DataContainerSelectionWidgetCodeGenerator::generateSetupFilterParameters
   QString s;
   QTextStream out(&s);
   out << "  DataContainerSelectionFilterParameter::RequirementType dcsReq;\n";
-  out << "  parameters.push_back(DataContainerSelectionFilterParameter::New(\"" << getHumanLabel()
-      << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory()
-      << ", dcsReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
+  out << "  parameters.push_back(SIMPL_NEW_DC_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, dcsReq));";
   return s;
 }
 

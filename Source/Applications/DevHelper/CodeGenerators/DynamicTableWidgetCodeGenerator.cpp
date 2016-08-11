@@ -55,20 +55,11 @@ DynamicTableWidgetCodeGenerator::~DynamicTableWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString DynamicTableWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  QString contents;
-  QTextStream ss(&contents);
-
-  ss << "  // DynamicTableWidget - Fill in row headers, column headers, and table data\n";
-  ss << "  {\n";
-  ss << "    QStringList rHeaders, cHeaders;\n";
-  ss << "    std::vector<std::vector<double> > defaultTable;\n";
-  ss << "    parameters.push_back(DynamicTableFilterParameter::New(\"" + getHumanLabel()
-        + "\", \"" + getPropertyName() + "\", rHeaders, cHeaders, defaultTable, " + getCategory()
-        + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-     << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), false, false, 0));\n";
-  ss << "  }";
-
-  return contents;
+  QString s;
+  QTextStream out(&s);
+  out << "  // DynamicTableWidget - Use optional parameters to enable dynamic rows or dynamic columns\n";
+  out << "  parameters.push_back(SIMPL_NEW_DYN_TABLE_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

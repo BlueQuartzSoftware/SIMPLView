@@ -58,10 +58,7 @@ QString DataArrayCreationWidgetCodeGenerator::generateSetupFilterParameters()
   QString s;
   QTextStream out(&s);
   out << "  DataArrayCreationFilterParameter::RequirementType dacReq;\n";
-  out << "  parameters.push_back(DataArrayCreationFilterParameter::New(\"" << getHumanLabel()
-      << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory()
-      << ", dacReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
+  out << "  parameters.push_back(SIMPL_NEW_DA_CREATION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, dacReq));";
   return s;
 }
 
