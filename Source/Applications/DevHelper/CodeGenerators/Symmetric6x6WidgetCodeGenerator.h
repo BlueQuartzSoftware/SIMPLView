@@ -56,8 +56,6 @@ class Symmetric6x6WidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateSetupFilterParameters();
 
-    virtual QString generateReadFilterParameters();
-
     virtual QString generateDataCheck();
 
     virtual QString generateFilterParameters();

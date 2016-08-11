@@ -68,14 +68,6 @@ QString DataArraySelectionWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataArraySelectionWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataArrayPath(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString DataArraySelectionWidgetCodeGenerator::generateDataCheck()
 {
   return "";

@@ -69,10 +69,6 @@ class FPCodeGenerator
 
     virtual QString generateSetupFilterParameters();
 
-    virtual QString generateReadFilterParameters();
-
-    virtual QString generateWriteFilterParameters();
-
     virtual QString generateDataCheck();
 
     virtual QString generateFilterParameters();

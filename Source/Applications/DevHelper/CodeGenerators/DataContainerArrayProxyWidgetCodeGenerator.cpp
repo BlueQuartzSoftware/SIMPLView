@@ -64,14 +64,6 @@ QString DataContainerArrayProxyWidgetCodeGenerator::generateSetupFilterParameter
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerArrayProxyWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataContainerArrayProxy(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString DataContainerArrayProxyWidgetCodeGenerator::generateDataCheck()
 {
   return "";

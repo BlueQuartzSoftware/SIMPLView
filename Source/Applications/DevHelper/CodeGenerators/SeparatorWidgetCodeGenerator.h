@@ -56,8 +56,6 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateSetupFilterParameters();
 
-    virtual QString generateReadFilterParameters();
-
     virtual QString generateWriteFilterParameters();
 
     virtual QString generateDataCheck();

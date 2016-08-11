@@ -66,14 +66,6 @@ QString MultiDataArraySelectionWidgetCodeGenerator::generateSetupFilterParameter
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString MultiDataArraySelectionWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataArrayPathVector(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString MultiDataArraySelectionWidgetCodeGenerator::generateDataCheck()
 {
   return "";

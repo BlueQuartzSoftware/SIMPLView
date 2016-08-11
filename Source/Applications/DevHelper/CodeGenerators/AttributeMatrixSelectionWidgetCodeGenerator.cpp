@@ -68,14 +68,6 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParamete
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataArrayPath(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString AttributeMatrixSelectionWidgetCodeGenerator::generateDataCheck()
 {
   return "";

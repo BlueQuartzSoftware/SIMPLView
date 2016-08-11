@@ -110,22 +110,6 @@ QString FPCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FPCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + m_PropertyName + "(reader->readValue(\"" + m_PropertyName + "\", get" + m_PropertyName + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString FPCodeGenerator::generateWriteFilterParameters()
-{
-  return "  SIMPL_FILTER_WRITE_PARAMETER(" + m_PropertyName + ")";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString FPCodeGenerator::generateDataCheck()
 {
   return "";

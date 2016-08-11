@@ -61,14 +61,6 @@ QString SeparatorWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString SeparatorWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString SeparatorWidgetCodeGenerator::generateWriteFilterParameters()
 {
   return "";

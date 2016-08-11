@@ -64,14 +64,6 @@ QString SecondOrderPolynomialWidgetCodeGenerator::generateSetupFilterParameters(
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString SecondOrderPolynomialWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readFloat2ndOrderPoly(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString SecondOrderPolynomialWidgetCodeGenerator::generateDataCheck()
 {
   return "";

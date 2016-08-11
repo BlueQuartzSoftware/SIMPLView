@@ -64,14 +64,6 @@ QString AxisAngleWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AxisAngleWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readAxisAngle(\"" + getPropertyName() + "\", get" + getPropertyName() + "(), -1));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString AxisAngleWidgetCodeGenerator::generateDataCheck()
 {
   return "";

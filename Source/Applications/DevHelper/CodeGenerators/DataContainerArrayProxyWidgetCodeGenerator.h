@@ -57,8 +57,6 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateSetupFilterParameters();
 
-    virtual QString generateReadFilterParameters();
-
     virtual QString generateDataCheck();
 
     virtual QString generateFilterParameters();

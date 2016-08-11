@@ -64,14 +64,6 @@ QString FourthOrderPolynomialWidgetCodeGenerator::generateSetupFilterParameters(
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FourthOrderPolynomialWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readFloat4thOrderPoly(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString FourthOrderPolynomialWidgetCodeGenerator::generateDataCheck()
 {
   return "";

@@ -64,14 +64,6 @@ QString ThirdOrderPolynomialWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString ThirdOrderPolynomialWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readFloat3rdOrderPoly(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString ThirdOrderPolynomialWidgetCodeGenerator::generateDataCheck()
 {
   return "";
