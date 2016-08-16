@@ -125,6 +125,30 @@ void PluginMaker::setupGui()
             gen, SLOT(pluginNameChanged(const QString&)));
   }
 
+  //// This is for the .clang-format File Generation (this is an invisible file, and should not appear in the preview window)
+  {
+    pathTemplate = "@PluginName@";
+    QString resourceTemplate( QtSApplicationFileInfo::GenerateFileSystemPath("/Template/.clang-format.in") );
+    PMFileGenerator* clangFormatGen = new PMFileGenerator(m_OutputDir->text(),
+                                                              pathTemplate,
+                                                              QString(".clang-format"),
+                                                              resourceTemplate,
+                                                              nullptr,
+                                                              this);
+    clangFormatGen->setDoesGenerateOutput(true);
+    clangFormatGen->setNameChangeable(false);
+
+    connect(m_PluginName, SIGNAL(textChanged(const QString&)),
+            clangFormatGen, SLOT(pluginNameChanged(const QString&)));
+    connect(m_OutputDir, SIGNAL(textChanged(const QString&)),
+            clangFormatGen, SLOT(outputDirChanged(const QString&)));
+    // For "Directories" this probably isn't needed
+    connect(generateButton, SIGNAL(clicked()),
+            clangFormatGen, SLOT(generateOutput()));
+    connect(clangFormatGen, SIGNAL(outputError(const QString&)),
+            this, SLOT(generationError(const QString&)));
+  }
+
   //// This is for the @PluginName@Constants File Generation
   PMGeneratorTreeItem* pluginConstants = new PMGeneratorTreeItem(F_main);
   pluginConstants->setText(0, "Unknown Plugin Name");
