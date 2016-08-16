@@ -58,19 +58,8 @@ QString AttributeMatrixCreationWidgetCodeGenerator::generateSetupFilterParameter
   QString s;
   QTextStream out(&s);
   out << "  AttributeMatrixCreationFilterParameter::RequirementType amReq;\n";
-  out << "  parameters.push_back(AttributeMatrixCreationFilterParameter::New(\"" << getHumanLabel()
-      << "\", \"" + getPropertyName() << "\", get" + getPropertyName() << "(), " + getCategory()
-      << ", amReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
+  out << "  parameters.push_back(SIMPL_NEW_AM_CREATION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amReq));";
   return s;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString AttributeMatrixCreationWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataArrayPath(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
 }
 
 // -----------------------------------------------------------------------------

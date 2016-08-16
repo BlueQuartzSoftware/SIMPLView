@@ -61,8 +61,6 @@ PMFileGenerator::PMFileGenerator(QString outputDir,
   PMDirGenerator(outputDir, pathTemplate, QString(""), codeTemplateResourcePath, wi, parent),
   setupFPContents(""),
   fpContents(""),
-  readFPContents(""),
-  writeFPContents(""),
   dataCheckContents(""),
   initListContents(""),
   filterHIncludesContents(""),
@@ -211,8 +209,6 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
 
     text.replace("@SetupFPContents@", setupFPContents);
     text.replace("@FPContents@", fpContents);
-    text.replace("@ReadFPContents@", readFPContents);
-    text.replace("@WriteFPContents@", writeFPContents);
     text.replace("@DataCheckContents@", dataCheckContents);
     text.replace("@InitList@", initListContents);
     text.replace("@Filter_H_Includes@", filterHIncludesContents);
@@ -379,22 +375,6 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
 void PMFileGenerator::setSetupFPContents(QString contents)
 {
   setupFPContents = contents;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PMFileGenerator::setReadFPContents(QString contents)
-{
-  readFPContents = contents;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PMFileGenerator::setWriteFPContents(QString contents)
-{
-  writeFPContents = contents;
 }
 
 // -----------------------------------------------------------------------------

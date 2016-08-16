@@ -54,19 +54,11 @@ DataContainerCreationWidgetCodeGenerator::~DataContainerCreationWidgetCodeGenera
 //
 // -----------------------------------------------------------------------------
 QString DataContainerCreationWidgetCodeGenerator::generateSetupFilterParameters()
-{
-  return "  parameters.push_back(DataContainerCreationFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
-      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString DataContainerCreationWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readString(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
+{ 
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_DC_CREATION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

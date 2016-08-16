@@ -55,18 +55,10 @@ DataContainerArrayProxyWidgetCodeGenerator::~DataContainerArrayProxyWidgetCodeGe
 // -----------------------------------------------------------------------------
 QString DataContainerArrayProxyWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(DataContainerArrayProxyFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", \"\", DataContainerArrayProxy(), Qt::Unchecked, " + getCategory()
-      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString DataContainerArrayProxyWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataContainerArrayProxy(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_DCA_PROXY_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, DataContainerArrayProxy(), Qt::Unchecked));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

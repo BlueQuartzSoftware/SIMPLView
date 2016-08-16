@@ -55,18 +55,10 @@ OutputPathWidgetCodeGenerator::~OutputPathWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString OutputPathWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(OutputPathFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), " + getCategory()
-      + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + "), \"\"));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString OutputPathWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readString(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_OUTPUT_PATH_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, \"\"));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------

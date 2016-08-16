@@ -55,22 +55,11 @@ AttributeMatrixSelectionWidgetCodeGenerator::~AttributeMatrixSelectionWidgetCode
 // -----------------------------------------------------------------------------
 QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParameters()
 {
-    QString s;
+  QString s;
   QTextStream out(&s);
-  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;\n";
-  out << "  parameters.push_back(AttributeMatrixSelectionFilterParameter::New(\"" << getHumanLabel()
-      << "\", \"" << getPropertyName() << "\", get" << getPropertyName() << "(), " << getCategory()
-      << ", amsReq, SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      << "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
+  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amReq;\n";
+  out << "  parameters.push_back(SIMPL_NEW_AM_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amReq));";
   return s;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataArrayPath(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
 }
 
 // -----------------------------------------------------------------------------

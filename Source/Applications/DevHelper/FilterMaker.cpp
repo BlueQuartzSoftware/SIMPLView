@@ -352,16 +352,12 @@ void FilterMaker::updateFilterFileGenerators()
   if (contentsMap.size() > 0)
   {
     cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
-    cppGenerator->setReadFPContents(contentsMap["Read Filter Parameters"]);
-    cppGenerator->setWriteFPContents(contentsMap["Write Filter Parameters"]);
     cppGenerator->setInitListContents(contentsMap["Initialization List"]);
     cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
   }
   else
   {
     cppGenerator->setSetupFPContents(getDefaultSetupFPContents());
-    cppGenerator->setReadFPContents(getDefaultReadFPContents());
-    cppGenerator->setWriteFPContents(getDefaultWriteFPContents());
     cppGenerator->setInitListContents(getDefaultInitListContents());
     cppGenerator->setFilterCPPIncludesContents(getDefaultFilterCPPIncludesContents());
   }
@@ -470,8 +466,6 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   }
 
   QString setupFPContents = "";
-  QString readFPContents = "";
-  QString writeFPContents = "";
   QString dataCheckContents = "";
   QString FPContents = "";
   QString initListContents = "  AbstractFilter(),\n";
@@ -494,16 +488,6 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     if (generator->generateSetupFilterParameters().isEmpty() == false)
     {
       setupFPContents.append(generator->generateSetupFilterParameters() + "\n");
-    }
-
-    if (generator->generateReadFilterParameters().isEmpty() == false)
-    {
-      readFPContents.append(generator->generateReadFilterParameters() + "\n");
-    }
-
-    if (generator->generateWriteFilterParameters().isEmpty() == false)
-    {
-      writeFPContents.append(generator->generateWriteFilterParameters() + "\n");
     }
 
     if (generator->generateDataCheck().isEmpty() == false)
@@ -552,8 +536,6 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
 
   // Chop off the last, un-needed new-line character from each contents
   setupFPContents.chop(1);
-  readFPContents.chop(1);
-  writeFPContents.chop(1);
   dataCheckContents.chop(1);
   FPContents.chop(1);
   initListContents.chop(1);
@@ -564,8 +546,6 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   initListContents.chop(1);
 
   map.insert("Setup Filter Parameters", setupFPContents);
-  map.insert("Read Filter Parameters", readFPContents);
-  map.insert("Write Filter Parameters", writeFPContents);
   map.insert("Data Check", dataCheckContents);
   map.insert("Filter Parameters", FPContents);
   map.insert("Initialization List", initListContents);
@@ -725,8 +705,8 @@ void FilterMaker::updateTestList()
   source.open(QFile::ReadOnly);
 
   QString text = source.readAll();
-  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "\r\n");
-  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "\n");
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "Test\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "Test\n");
   source.remove();
 
   source.open(QFile::WriteOnly);
@@ -837,42 +817,6 @@ QString FilterMaker::getDefaultSetupFPContents()
 
   //Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/SetupFilterParameters.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
-    QTextStream in(&file);
-    contents = in.readAll();
-  }
-
-  return contents;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString FilterMaker::getDefaultReadFPContents()
-{
-  QString contents = "";
-
-  //Open file
-  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/ReadFilterParameters.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
-    QTextStream in(&file);
-    contents = in.readAll();
-  }
-
-  return contents;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString FilterMaker::getDefaultWriteFPContents()
-{
-  QString contents = "";
-
-  //Open file
-  QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/WriteFilterParameters.in"));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);

@@ -78,14 +78,6 @@ QString DataContainerReaderWidgetCodeGenerator::generateSetupFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString DataContainerReaderWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return "  set" + getPropertyName() + "(reader->readDataContainerArrayProxy(\"" + getPropertyName() + "\", get" + getPropertyName() + "()));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QString DataContainerReaderWidgetCodeGenerator::generateDataCheck()
 {
   return "";

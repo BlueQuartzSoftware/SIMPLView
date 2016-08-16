@@ -65,17 +65,16 @@ SET(DevHelper_MOC_HDRS
 cmp_IDE_SOURCE_PROPERTIES( "DevHelper" "${DevHelper_HDRS};${DevHelper_MOC_HDRS}" "${DevHelper_SRCS}" "${PROJECT_INSTALL_HEADERS}")
 
 set(DevHelper_CodeGenerator_HDRS
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixCreationWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArraySelectionWidgetCodeGenerator.h
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/DataBundleSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerArrayProxyWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerCreationWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerReaderWidgetCodeGenerator.h
@@ -83,11 +82,10 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DoubleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DynamicChoiceWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DynamicTableWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/FPCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.h
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec4WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.h
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/FPCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.h
@@ -97,26 +95,24 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SecondOrderPolynomialWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SeparatorWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.h
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/Symmetric6x6WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.h
-   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.h
   )
 
 set(DevHelper_CodeGenerator_SRCS
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixCreationWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArraySelectionWidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/DataBundleSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerArrayProxyWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerCreationWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerReaderWidgetCodeGenerator.cpp
@@ -124,11 +120,10 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DoubleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DynamicChoiceWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DynamicTableWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/FPCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec4WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/FPCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.cpp
@@ -138,12 +133,11 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SecondOrderPolynomialWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SeparatorWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/Symmetric6x6WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.cpp
   )
 
 cmp_IDE_SOURCE_PROPERTIES( "DevHelper/CodeGenerators" "${DevHelper_CodeGenerator_HDRS}" "${DevHelper_CodeGenerator_SRCS}" "${PROJECT_INSTALL_HEADERS}")

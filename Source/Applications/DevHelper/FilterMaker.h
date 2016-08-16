@@ -85,7 +85,6 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     void setupGui();
 
     QString getDefaultSetupFPContents();
-    QString getDefaultReadFPContents();
     QString getDefaultWriteFPContents();
     QString getDefaultDataCheckContents();
     QString getDefaultFPContents();

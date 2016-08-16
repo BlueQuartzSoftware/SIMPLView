@@ -55,18 +55,10 @@ BooleanWidgetCodeGenerator::~BooleanWidgetCodeGenerator()
 // -----------------------------------------------------------------------------
 QString BooleanWidgetCodeGenerator::generateSetupFilterParameters()
 {
-  return "  parameters.push_back(BooleanFilterParameter::New(\"" + getHumanLabel()
-      + "\", \"" + getPropertyName() + "\", get" + getPropertyName() + "(), "
-      + getCategory() + ", SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "), "
-      + "SIMPL_BIND_GETTER(@FilterName@, this, " + getPropertyName() + ")));";
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString BooleanWidgetCodeGenerator::generateReadFilterParameters()
-{
-  return FPCodeGenerator::generateReadFilterParameters();
+  QString s;
+  QTextStream out(&s);
+  out << "  parameters.push_back(SIMPL_NEW_BOOL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  return s;
 }
 
 // -----------------------------------------------------------------------------
