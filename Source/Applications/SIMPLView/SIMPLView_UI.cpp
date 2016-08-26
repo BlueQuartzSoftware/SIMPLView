@@ -705,7 +705,7 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineOpened(QString& file, const boo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::on_pipelineViewWidget_pipelineChanged()
+void SIMPLView_UI::on_pipelineViewWidget_windowNeedsRecheck()
 {
   QString fiBase = "Untitled";
   QFileInfo fi(fiBase);
