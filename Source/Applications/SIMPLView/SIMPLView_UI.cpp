@@ -1225,6 +1225,8 @@ void SIMPLView_UI::setOpenDialogLastDirectory(const QString& path)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
+  if (widget == nullptr) { return; }
+
   // Clear the filter input widget
   clearFilterInputWidget();
 
