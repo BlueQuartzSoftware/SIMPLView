@@ -88,12 +88,6 @@ endif()
 # Find the Git Package for Versioning. It should be ok if Git is NOT found
 Find_package(Git)
 
-cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
-                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
-                        NAMESPACE "SIMPLViewProj"
-                        PROJECT_NAME "${PROJECT_NAME}"
-                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
-
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
@@ -121,6 +115,16 @@ if(NOT EXISTS "${CMP_SOURCE_DIR}")
       a firewall blocking the 'git' protocol? ")
   endif()
 endif()
+
+INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
+
+# cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
+#                         GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
+#                         NAMESPACE "SIMPLViewProj"
+#                         PROJECT_NAME "${PROJECT_NAME}"
+#                         EXPORT_MACRO "SIMPLViewProj_EXPORT")
+
+get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
 # If the developer has set another SIMPL directory then use that, otherwise look
@@ -202,6 +206,7 @@ if("${CMP_PROJECT_INSTALL_HEADERS}" STREQUAL "")
 else()
   set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
 endif()
+get_property(CMP_PROJECT_INSTALL_HEADERS GLOBAL PROPERTY CMP_PROJECT_INSTALL_HEADERS)
 
 # -----------------------------------------------------------------------
 # Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
