@@ -12,7 +12,32 @@ set(SIMPLViewTest_SOURCE_DIR ${SIMPLViewProj_SOURCE_DIR}/Test)
 set(SIMPLViewTest_BINARY_DIR ${SIMPLViewProj_BINARY_DIR}/Test)
 
 
-include_directories(${SIMPLViewTest_SOURCE_DIR})
+include_directories(${HDF5_INCLUDE_DIR}
+                    ${QT_INCLUDE_DIR}/..
+                    ${SIMPLView_SOURCE_DIR}
+                    ${SIMPLView_BINARY_DIR}
+                    ${SIMPLView_BINARY_DIR}/SIMPLView
+                    ${PROJECT_CODE_DIR}
+                    ${SIMPLViewProj_BINARY_DIR}/Applications
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+                    
+                    ${SIMPLViewProj_SOURCE_DIR}/Source
+										${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
+
+										${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
+)
+
 
 #------------------------------------------------------------------------------
 # Include this file from the SIMPL Project
@@ -29,6 +54,11 @@ configure_file(${SIMPLViewTest_SOURCE_DIR}/TestFileLocations.h.in
                ${SIMPLViewTest_BINARY_DIR}/SIMPLViewTestFileLocations.h @ONLY IMMEDIATE)
 
 include_directories(${SIMPLViewTest_BINARY_DIR})
+
+AddSIMPLUnitTest(TESTNAME MemoryLeakTest
+  SOURCES ${SIMPLViewTest_SOURCE_DIR}/MemoryLeakTest.cpp
+  FOLDER "SIMPLViewProj/Test"
+  LINK_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets H5Support SIMPLib SVWidgetsLib)
 
 #------------------------------------------------------------------------------
 # Example Test code
