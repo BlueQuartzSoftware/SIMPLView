@@ -108,7 +108,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   QMainWindow(parent),
   m_WorkerThread(NULL),
   m_ActivePlugin(NULL),
-  m_UpdateCheckThread(NULL),
   m_FilterManager(NULL),
   m_FilterWidgetManager(NULL),
 #if !defined(Q_OS_MAC)
@@ -171,6 +170,8 @@ SIMPLView_UI::~SIMPLView_UI()
   {
     dream3dApp->setActiveWindow(NULL);
   }
+
+  if(m_WorkerThread) { delete m_WorkerThread;}
 }
 
 // -----------------------------------------------------------------------------

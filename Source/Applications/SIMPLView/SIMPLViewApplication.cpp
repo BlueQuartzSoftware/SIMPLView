@@ -109,9 +109,9 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_PreviousActiveWindow(NULL),
   m_OpenDialogLastDirectory(""),
   show_splash(true),
-  Splash(NULL),
-  m_ContextMenu(new QMenu(NULL))
+  Splash(NULL)
 {
+  m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
   m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
@@ -190,6 +190,11 @@ SIMPLViewApplication::~SIMPLViewApplication()
     prefs.setValue("First Run", QVariant(false));
 
     prefs.setValue("Program Mode", QString("Standard"));
+  }
+
+  foreach(QPluginLoader* pl, m_PluginLoaders)
+  {
+    delete pl;
   }
 }
 
