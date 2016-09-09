@@ -58,10 +58,10 @@
 // -----------------------------------------------------------------------------
 FilterMaker::FilterMaker(QWidget* parent) :
   QWidget(parent),
-  cppGenerator(NULL),
-  hGenerator(NULL),
-  htmlGenerator(NULL),
-  testGenerator(NULL)
+  m_cppGenerator(NULL),
+  m_hGenerator(NULL),
+  m_htmlGenerator(NULL),
+  m_testGenerator(NULL)
 {
   setupUi(this);
 
@@ -171,15 +171,15 @@ void FilterMaker::on_codeChooser_currentIndexChanged(int index)
 
   if (index == H_INDEX)
   {
-    codeViewer->setText(hGenerator->generateFileContents());
+    codeViewer->setText(m_hGenerator->generateFileContents());
   }
   else if (index == CPP_INDEX)
   {
-    codeViewer->setText(cppGenerator->generateFileContents());
+    codeViewer->setText(m_cppGenerator->generateFileContents());
   }
   else if (index == DOC_INDEX)
   {
-    codeViewer->setText(htmlGenerator->generateFileContents());
+    codeViewer->setText(m_htmlGenerator->generateFileContents());
   }
 }
 
@@ -331,68 +331,66 @@ void FilterMaker::updateFilterFileGenerators()
   QString pathTemplate = "@PluginName@Filters/";
   QString resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.cpp.in");
 
-  if (NULL != cppGenerator)
+  if (NULL != m_cppGenerator)
   {
-    delete cppGenerator;
-    cppGenerator = NULL;
+    m_cppGenerator.clear();
   }
-  cppGenerator = new PMFileGenerator(pluginDirText,
+  m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                      pathTemplate,
                                      QString(filterName + ".cpp"),
                                      resourceTemplate,
                                      NULL,
-                                     this);
+                                     this));
 
-  connect(cppGenerator, SIGNAL(outputError(const QString&)),
+  connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
-  cppGenerator->setDoesGenerateOutput(true);
-  cppGenerator->setPluginName(fi.baseName());
-  cppGenerator->setFilterName(filterName);
+  m_cppGenerator->setDoesGenerateOutput(true);
+  m_cppGenerator->setPluginName(fi.baseName());
+  m_cppGenerator->setFilterName(filterName);
 
   if (contentsMap.size() > 0)
   {
-    cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
-    cppGenerator->setInitListContents(contentsMap["Initialization List"]);
-    cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
+    m_cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
+    m_cppGenerator->setInitListContents(contentsMap["Initialization List"]);
+    m_cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
   }
   else
   {
-    cppGenerator->setSetupFPContents(getDefaultSetupFPContents());
-    cppGenerator->setInitListContents(getDefaultInitListContents());
-    cppGenerator->setFilterCPPIncludesContents(getDefaultFilterCPPIncludesContents());
+    m_cppGenerator->setSetupFPContents(getDefaultSetupFPContents());
+    m_cppGenerator->setInitListContents(getDefaultInitListContents());
+    m_cppGenerator->setFilterCPPIncludesContents(getDefaultFilterCPPIncludesContents());
   }
 
   // Filter.h file
   pathTemplate = "@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.h.in");
 
-  if (NULL != hGenerator)
+  if (NULL != m_hGenerator)
   {
-    delete hGenerator;
-    hGenerator = NULL;
+    m_hGenerator.clear();
   }
-  hGenerator = new PMFileGenerator(pluginDirText,
+  m_hGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                    pathTemplate,
                                    QString(filterName + ".h"),
                                    resourceTemplate,
                                    NULL,
-                                   this);
+                                   this));
 
-  connect(hGenerator, SIGNAL(outputError(const QString&)),
+  connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
-  hGenerator->setDoesGenerateOutput(true);
-  hGenerator->setPluginName(fi.baseName());
-  hGenerator->setFilterName(filterName);
+  m_hGenerator->setDoesGenerateOutput(true);
+  m_hGenerator->setPluginName(fi.baseName());
+  m_hGenerator->setFilterName(filterName);
 
   if (contentsMap.size() > 0)
   {
-    hGenerator->setFPContents(contentsMap["Filter Parameters"]);
-    hGenerator->setFilterHIncludesContents(contentsMap["Filter Header Includes"]);
+    m_hGenerator->setFPContents(contentsMap["Filter Parameters"]);
+    m_hGenerator->setFilterHIncludesContents(contentsMap["Filter Header Includes"]);
   }
   else
   {
-    hGenerator->setFPContents(getDefaultFPContents());
-    hGenerator->setFilterHIncludesContents(getDefaultFilterHIncludesContents());
+    m_hGenerator->setFPContents(getDefaultFPContents());
+    m_hGenerator->setFilterHIncludesContents(getDefaultFilterHIncludesContents());
   }
 
 
@@ -400,45 +398,43 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Documentation/@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
 
-  if (NULL != htmlGenerator)
+  if (NULL != m_htmlGenerator)
   {
-    delete htmlGenerator;
-    htmlGenerator = NULL;
+    m_htmlGenerator.clear();
   }
-  htmlGenerator = new PMFileGenerator(pluginDirText,
+  m_htmlGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + ".md"),
                                       resourceTemplate,
                                       NULL,
-                                      this);
+                                      this));
 
-  connect(htmlGenerator, SIGNAL(outputError(const QString&)),
+  connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
-  htmlGenerator->setDoesGenerateOutput(true);
-  htmlGenerator->setPluginName(fi.baseName());
-  htmlGenerator->setFilterName(filterName);
+  m_htmlGenerator->setDoesGenerateOutput(true);
+  m_htmlGenerator->setPluginName(fi.baseName());
+  m_htmlGenerator->setFilterName(filterName);
 
   // FilterTest.cpp file
   pathTemplate = "Test";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
-  if (NULL != testGenerator)
+  if (NULL != m_testGenerator)
   {
-    delete testGenerator;
-    testGenerator = NULL;
+    m_testGenerator.clear();
   }
-  testGenerator = new PMFileGenerator(pluginDirText,
+  m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + "Test.cpp"),
                                       resourceTemplate,
                                       NULL,
-                                      this);
+                                      this));
 
-  connect(testGenerator, SIGNAL(outputError(const QString&)),
+  connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
-  testGenerator->setDoesGenerateOutput(true);
-  testGenerator->setPluginName(fi.baseName());
-  testGenerator->setFilterName(filterName);
+  m_testGenerator->setDoesGenerateOutput(true);
+  m_testGenerator->setPluginName(fi.baseName());
+  m_testGenerator->setFilterName(filterName);
 }
 
 // -----------------------------------------------------------------------------
@@ -447,10 +443,10 @@ void FilterMaker::updateFilterFileGenerators()
 void FilterMaker::generateFilterFiles()
 {
   // Generate all the output
-  cppGenerator->generateOutput();
-  hGenerator->generateOutput();
-  htmlGenerator->generateOutput();
-  testGenerator->generateOutput();
+  m_cppGenerator->generateOutput();
+  m_hGenerator->generateOutput();
+  m_htmlGenerator->generateOutput();
+  m_testGenerator->generateOutput();
 }
 
 // -----------------------------------------------------------------------------

@@ -96,7 +96,6 @@ void PluginMaker::setupGui()
   m_OutputDir->setCompleter(com);
   QObject::connect(com, SIGNAL(activated(const QString&)), this, SLOT(on_m_OutputDir_textChanged(const QString&)));
 
-
   QString pathTemplate;
 
   nameLabel->setToolTip("Plugin Name");

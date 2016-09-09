@@ -375,7 +375,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     FilterPipeline::Pointer               m_PipelineInFlight;
 #if !defined(Q_OS_MAC)
-    QMenuBar*                             m_InstanceMenuBar;
+    QSharedPointer<QMenuBar>              m_InstanceMenuBar;
 #endif
     bool                                  m_ShouldRestart;
 

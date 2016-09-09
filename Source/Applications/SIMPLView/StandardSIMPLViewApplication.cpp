@@ -84,11 +84,9 @@ void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
   QStringList files = QtSRecentFileList::instance()->fileList();
   foreach(QString file, files)
   {
-    QAction* action = new QAction(recentFilesMenu);
-    action->setText(QtSRecentFileList::instance()->parentAndFileName(file));
+    QAction* action = recentFilesMenu->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
     action->setData(file);
     action->setVisible(true);
-    recentFilesMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
 

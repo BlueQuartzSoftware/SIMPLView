@@ -83,7 +83,8 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
 
 private:
   // The global menu
-  QMenuBar*                             m_GlobalMenu;
+  QSharedPointer<QMenuBar>              m_GlobalMenu;
+  QSharedPointer<QMenu>                 m_DockMenu;
   QMenu*                                m_MenuEdit;
   QAction*                              m_EditSeparator;
 

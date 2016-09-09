@@ -181,6 +181,11 @@ SIMPLViewApplication::~SIMPLViewApplication()
   delete this->Splash;
   this->Splash = NULL;
 
+  for (int i=0; i<m_PluginLoaders.size(); i++)
+  {
+    delete m_PluginLoaders[i];
+  }
+
   writeSettings();
 
   QtSSettings prefs;

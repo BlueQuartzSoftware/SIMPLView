@@ -58,8 +58,8 @@ m_GlobalMenu(NULL)
   createGlobalMenu();
 
   // Add custom actions to a dock menu
-  QMenu* dockMenu = createCustomDockMenu();
-  qt_mac_set_dock_menu(dockMenu);
+  m_DockMenu = QSharedPointer<QMenu>(createCustomDockMenu());
+  m_DockMenu.data()->setAsDockMenu();
 }
 
 // -----------------------------------------------------------------------------
@@ -86,11 +86,9 @@ void MacSIMPLViewApplication::updateRecentFileList(const QString& file)
   QStringList files = QtSRecentFileList::instance()->fileList();
   foreach(QString file, files)
   {
-    QAction* action = new QAction(recentFilesMenu);
-    action->setText(QtSRecentFileList::instance()->parentAndFileName(file));
+    QAction* action = recentFilesMenu->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
     action->setData(file);
     action->setVisible(true);
-    recentFilesMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
 
@@ -332,14 +330,14 @@ void MacSIMPLViewApplication::createGlobalMenu()
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  QMenu* menuFile = new QMenu("File", m_GlobalMenu);
-  m_MenuEdit = new QMenu("Edit", m_GlobalMenu);
-  QMenu* menuView = new QMenu("View", m_GlobalMenu);
-  QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu);
-  QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu);
-  QMenu* menuPipeline = new QMenu("Pipeline", m_GlobalMenu);
-  QMenu* menuHelp = new QMenu("Help", m_GlobalMenu);
-  QMenu* menuAdvanced = new QMenu("Advanced", m_GlobalMenu);
+  QMenu* menuFile = new QMenu("File", m_GlobalMenu.data());
+  m_MenuEdit = new QMenu("Edit", m_GlobalMenu.data());
+  QMenu* menuView = new QMenu("View", m_GlobalMenu.data());
+  QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu.data());
+  QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu.data());
+  QMenu* menuPipeline = new QMenu("Pipeline", m_GlobalMenu.data());
+  QMenu* menuHelp = new QMenu("Help", m_GlobalMenu.data());
+  QMenu* menuAdvanced = new QMenu("Advanced", m_GlobalMenu.data());
   QAction* actionNew = menuItems->getActionNew();
   QAction* actionOpen = menuItems->getActionOpen();
   QAction* actionSave = menuItems->getActionSave();
@@ -367,7 +365,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
 
-  m_GlobalMenu = new QMenuBar(NULL);
+  m_GlobalMenu = QSharedPointer<QMenuBar>(new QMenuBar());
 
   // Create File Menu
   m_GlobalMenu->addMenu(menuFile);

@@ -161,6 +161,11 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
 // -----------------------------------------------------------------------------
 SIMPLView_UI::~SIMPLView_UI()
 {
+  for (QMap<QWidget*,QTextEdit*>::iterator iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); ++iter)
+  {
+    delete iter.key();
+  }
+
   disconnectSignalsSlots();
 
   writeSettings();
@@ -203,10 +208,10 @@ void SIMPLView_UI::checkFirstRun()
   if (firstRun == true)
   {
     // This is the first run of SIMPLView v6.0, so we need to show the v6.0 wizard
-    SIMPLViewv6Wizard* wizard = new SIMPLViewv6Wizard(this, Qt::WindowTitleHint);
-    wizard->exec();
+    SIMPLViewv6Wizard wizard(this, Qt::WindowTitleHint);
+    wizard.exec();
 
-    bool value = wizard->isBookmarkBtnChecked();
+    bool value = wizard.isBookmarkBtnChecked();
     if (value == true)
     {
       BookmarksModel* model = BookmarksModel::Instance();
@@ -329,21 +334,18 @@ bool SIMPLView_UI::savePipelineAs()
   // Cache the last directory
   m_OpenDialogLastDirectory = fi.path();
 
-  QMessageBox* bookmarkMsgBox = new QMessageBox(this);
-  bookmarkMsgBox->setWindowTitle("Pipeline Saved");
-  bookmarkMsgBox->setText("The pipeline has been saved.");
-  bookmarkMsgBox->setInformativeText("Would you also like to bookmark this pipeline?");
-  bookmarkMsgBox->setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-  bookmarkMsgBox->setDefaultButton(QMessageBox::Yes);
-  int ret = bookmarkMsgBox->exec();
+  QMessageBox bookmarkMsgBox(this);
+  bookmarkMsgBox.setWindowTitle("Pipeline Saved");
+  bookmarkMsgBox.setText("The pipeline has been saved.");
+  bookmarkMsgBox.setInformativeText("Would you also like to bookmark this pipeline?");
+  bookmarkMsgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+  bookmarkMsgBox.setDefaultButton(QMessageBox::Yes);
+  int ret = bookmarkMsgBox.exec();
 
   if (ret == QMessageBox::Yes)
   {
     emit bookmarkNeedsToBeAdded(filePath, QModelIndex());
   }
-
-  delete bookmarkMsgBox;
-  bookmarkMsgBox = NULL;
 
   return true;
 }
@@ -355,12 +357,12 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
 {
   if (dream3dApp->isCurrentlyRunning(this) == true)
   {
-    QMessageBox* runningPipelineBox = new QMessageBox();
-    runningPipelineBox->setWindowTitle("Pipeline Is Running");
-    runningPipelineBox->setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
-    runningPipelineBox->setStandardButtons(QMessageBox::Ok);
-    runningPipelineBox->setIcon(QMessageBox::Warning);
-    runningPipelineBox->exec();
+    QMessageBox runningPipelineBox;
+    runningPipelineBox.setWindowTitle("Pipeline Is Running");
+    runningPipelineBox.setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
+    runningPipelineBox.setStandardButtons(QMessageBox::Ok);
+    runningPipelineBox.setIcon(QMessageBox::Warning);
+    runningPipelineBox.exec();
     event->ignore();
     return;
   }
@@ -844,13 +846,13 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   m_ProgressBar->show();
 
-  if (m_WorkerThread != NULL)
+  if (m_WorkerThread != nullptr)
   {
     m_WorkerThread->wait(); // Wait until the thread is complete
     if (m_WorkerThread->isFinished() == true)
     {
       delete m_WorkerThread;
-      m_WorkerThread = NULL;
+      m_WorkerThread = nullptr;
     }
   }
   m_WorkerThread = new QThread(); // Create a new Thread Resource

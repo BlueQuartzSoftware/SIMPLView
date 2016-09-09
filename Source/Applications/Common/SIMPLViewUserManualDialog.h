@@ -98,6 +98,8 @@ class  SIMPLViewUserManualDialog : public QDialog, public Ui::SIMPLViewUserManua
 
     QWebEngineView* m_WebView;
 
+    QAction* m_CloseAction = nullptr;
+
     SIMPLViewUserManualDialog(const SIMPLViewUserManualDialog&); // Copy Constructor Not Implemented
     void operator=(const SIMPLViewUserManualDialog&); // Operator '=' Not Implemented
 
