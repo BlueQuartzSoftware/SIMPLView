@@ -156,7 +156,7 @@ void StandardSIMPLViewApplication::toolboxWindowChanged()
 {
   if (m_Toolbox->isActiveWindow())
   {
-    m_ActiveWindow = NULL;
+    m_ActiveWindow = nullptr;
   }
 }
 
@@ -169,7 +169,7 @@ void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* windo
 
   if (m_PreviousActiveWindow == window)
   {
-    m_PreviousActiveWindow = NULL;
+    m_PreviousActiveWindow = nullptr;
   }
 
   if (m_SIMPLViewInstances.size() <= 0)

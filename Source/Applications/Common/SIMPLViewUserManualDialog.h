@@ -63,7 +63,7 @@ class  SIMPLViewUserManualDialog : public QDialog, public Ui::SIMPLViewUserManua
     * @brief Static instance to retrieve the global instance of this class
     * @return
     */
-    static SIMPLViewUserManualDialog* Instance(QWidget* parent = NULL);
+    static SIMPLViewUserManualDialog* Instance(QWidget* parent = nullptr);
 
     /**
     * @brief Static function to launch the help dialog with the given URL
@@ -85,7 +85,7 @@ class  SIMPLViewUserManualDialog : public QDialog, public Ui::SIMPLViewUserManua
     QWebEngineView* getWebView();
 
   protected:
-    SIMPLViewUserManualDialog(QWidget* parent = NULL);
+    SIMPLViewUserManualDialog(QWidget* parent = nullptr);
 
   protected slots:
     void on_backBtn_pressed();

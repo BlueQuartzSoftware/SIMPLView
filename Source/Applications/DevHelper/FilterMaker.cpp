@@ -58,10 +58,10 @@
 // -----------------------------------------------------------------------------
 FilterMaker::FilterMaker(QWidget* parent) :
   QWidget(parent),
-  cppGenerator(NULL),
-  hGenerator(NULL),
-  htmlGenerator(NULL),
-  testGenerator(NULL)
+  cppGenerator(nullptr),
+  hGenerator(nullptr),
+  htmlGenerator(nullptr),
+  testGenerator(nullptr)
 {
   setupUi(this);
 
@@ -331,16 +331,16 @@ void FilterMaker::updateFilterFileGenerators()
   QString pathTemplate = "@PluginName@Filters/";
   QString resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.cpp.in");
 
-  if (NULL != cppGenerator)
+  if (nullptr != cppGenerator)
   {
     delete cppGenerator;
-    cppGenerator = NULL;
+    cppGenerator = nullptr;
   }
   cppGenerator = new PMFileGenerator(pluginDirText,
                                      pathTemplate,
                                      QString(filterName + ".cpp"),
                                      resourceTemplate,
-                                     NULL,
+                                     nullptr,
                                      this);
 
   connect(cppGenerator, SIGNAL(outputError(const QString&)),
@@ -366,16 +366,16 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.h.in");
 
-  if (NULL != hGenerator)
+  if (nullptr != hGenerator)
   {
     delete hGenerator;
-    hGenerator = NULL;
+    hGenerator = nullptr;
   }
   hGenerator = new PMFileGenerator(pluginDirText,
                                    pathTemplate,
                                    QString(filterName + ".h"),
                                    resourceTemplate,
-                                   NULL,
+                                   nullptr,
                                    this);
 
   connect(hGenerator, SIGNAL(outputError(const QString&)),
@@ -400,16 +400,16 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Documentation/@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
 
-  if (NULL != htmlGenerator)
+  if (nullptr != htmlGenerator)
   {
     delete htmlGenerator;
-    htmlGenerator = NULL;
+    htmlGenerator = nullptr;
   }
   htmlGenerator = new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + ".md"),
                                       resourceTemplate,
-                                      NULL,
+                                      nullptr,
                                       this);
 
   connect(htmlGenerator, SIGNAL(outputError(const QString&)),
@@ -422,16 +422,16 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Test";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
-  if (NULL != testGenerator)
+  if (nullptr != testGenerator)
   {
     delete testGenerator;
-    testGenerator = NULL;
+    testGenerator = nullptr;
   }
   testGenerator = new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + "Test.cpp"),
                                       resourceTemplate,
-                                      NULL,
+                                      nullptr,
                                       this);
 
   connect(testGenerator, SIGNAL(outputError(const QString&)),

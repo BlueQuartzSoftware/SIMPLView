@@ -67,7 +67,7 @@ PMFileGenerator::PMFileGenerator(QString outputDir,
   filterCPPIncludesContents(""),
   m_FileName(fileName)
 {
-  if (NULL != wi)
+  if (nullptr != wi)
   {
     wi->setText(0, fileName);
   }
@@ -113,7 +113,7 @@ void PMFileGenerator::pluginNameChanged(const QString& pluginName)
   }
   m_FileName = pin + getDisplaySuffix();
 
-  if (NULL != getTreeWidgetItem())
+  if (nullptr != getTreeWidgetItem())
   {
     getTreeWidgetItem()->setText(0, m_FileName );
   }

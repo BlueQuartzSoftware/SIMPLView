@@ -52,7 +52,7 @@
 // -----------------------------------------------------------------------------
 MacSIMPLViewApplication::MacSIMPLViewApplication(int& argc, char** argv) :
 SIMPLViewApplication(argc, argv),
-m_GlobalMenu(NULL)
+m_GlobalMenu(nullptr)
 {
   // Create the global menu
   createGlobalMenu();
@@ -152,7 +152,7 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 
   if (m_PreviousActiveWindow == window)
   {
-    m_PreviousActiveWindow = NULL;
+    m_PreviousActiveWindow = nullptr;
   }
 }
 
@@ -175,8 +175,8 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   {
     /* If the inactive signal got fired and there are no more windows,
      * this means that the last window has been closed. */
-    m_ActiveWindow = NULL;
-    m_PreviousActiveWindow = NULL;
+    m_ActiveWindow = nullptr;
+    m_PreviousActiveWindow = nullptr;
     toEmptyMenuState();
   }
   else
@@ -196,7 +196,7 @@ void MacSIMPLViewApplication::toolboxWindowChanged()
   if (m_Toolbox->isActiveWindow())
   {
     toToolboxMenuState();
-    m_ActiveWindow = NULL;
+    m_ActiveWindow = nullptr;
   }
   else if (m_SIMPLViewInstances.size() <= 0)
   {
@@ -367,7 +367,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
 
-  m_GlobalMenu = new QMenuBar(NULL);
+  m_GlobalMenu = new QMenuBar(nullptr);
 
   // Create File Menu
   m_GlobalMenu->addMenu(menuFile);
