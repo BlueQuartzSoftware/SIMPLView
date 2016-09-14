@@ -973,9 +973,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
   {
     if(nullptr != this->statusBar())
     {
-      QString s = (msg.getPrefix());
-      s = s.append(" ").append(msg.getText().toLatin1().data());
-      this->statusBar()->showMessage(s);
+      this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
   else if (msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
@@ -983,9 +981,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     this->m_ProgressBar->setValue(msg.getProgressValue());
     if(nullptr != this->statusBar())
     {
-      QString s = (msg.getPrefix());
-      s = s.append(" ").append(msg.getText().toLatin1().data());
-      this->statusBar()->showMessage(s);
+      this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
   else if (msg.getType() == PipelineMessage::StandardOutputMessage)
