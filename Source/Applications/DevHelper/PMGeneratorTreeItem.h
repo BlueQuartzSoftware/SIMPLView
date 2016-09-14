@@ -46,7 +46,7 @@ class PMGeneratorTreeItem : public QTreeWidgetItem
   public:
     PMGeneratorTreeItem(QTreeWidget* view, int type = Type) :
       QTreeWidgetItem(view, type),
-      fileGenPtr(NULL)
+      fileGenPtr(nullptr)
     {}
 
     PMGeneratorTreeItem(PMDirGenerator* fileGen, QTreeWidget* view, int type = Type) :
@@ -56,7 +56,7 @@ class PMGeneratorTreeItem : public QTreeWidgetItem
 
     PMGeneratorTreeItem(QTreeWidgetItem* parent, int type = Type) :
       QTreeWidgetItem(parent, type),
-      fileGenPtr(NULL)
+      fileGenPtr(nullptr)
     {}
 
     PMDirGenerator* getFileGenPtr() const { return fileGenPtr; }

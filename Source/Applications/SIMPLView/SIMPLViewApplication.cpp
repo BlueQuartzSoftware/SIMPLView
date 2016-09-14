@@ -105,13 +105,13 @@ namespace Detail {
 // -----------------------------------------------------------------------------
 SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   QApplication(argc, argv),
-  m_ActiveWindow(NULL),
-  m_PreviousActiveWindow(NULL),
+  m_ActiveWindow(nullptr),
+  m_PreviousActiveWindow(nullptr),
   m_OpenDialogLastDirectory(""),
   show_splash(true),
-  Splash(NULL),
-  m_ContextMenu(new QMenu(NULL))
+  Splash(nullptr)
 {
+  m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
   m_Toolbox = SIMPLViewToolbox::Instance();
   m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
@@ -179,7 +179,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 SIMPLViewApplication::~SIMPLViewApplication()
 {
   delete this->Splash;
-  this->Splash = NULL;
+  this->Splash = nullptr;
 
   for (int i=0; i<m_PluginLoaders.size(); i++)
   {
@@ -195,6 +195,11 @@ SIMPLViewApplication::~SIMPLViewApplication()
     prefs.setValue("First Run", QVariant(false));
 
     prefs.setValue("Program Mode", QString("Standard"));
+  }
+
+  foreach(QPluginLoader* pl, m_PluginLoaders)
+  {
+    delete pl;
   }
 }
 
@@ -253,7 +258,7 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   if (show_splash)
   {
 //   delay(1);
-    this->Splash->finish(NULL);
+    this->Splash->finish(nullptr);
   }
   QApplication::instance()->processEvents();
 
@@ -505,7 +510,7 @@ void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::addFilter(const QString &className)
 {
-  if (NULL != m_PreviousActiveWindow)
+  if (nullptr != m_PreviousActiveWindow)
   {
     AbstractFilter::Pointer filter = AbstractFilter::CreateFilterFromClassName(className);
 
@@ -538,7 +543,7 @@ void SIMPLViewApplication::on_actionNew_triggered()
 void SIMPLViewApplication::on_actionOpen_triggered()
 {
   QString proposedDir = m_OpenDialogLastDirectory;
-  QString filePath = QFileDialog::getOpenFileName(NULL, tr("Open Pipeline"),
+  QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"),
     proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
   if (filePath.isEmpty())
   {
@@ -556,7 +561,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionSave_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     m_ActiveWindow->savePipeline();
   }
@@ -567,7 +572,7 @@ void SIMPLViewApplication::on_actionSave_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionSaveAs_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     m_ActiveWindow->savePipelineAs();
   }
@@ -584,7 +589,7 @@ void SIMPLViewApplication::on_actionAddBookmark_triggered()
 
   BookmarksToolboxWidget* bookmarksToolboxWidget = toolbox->getBookmarksWidget();
 
-  if (NULL != bookmarksToolboxWidget)
+  if (nullptr != bookmarksToolboxWidget)
   {
     QString proposedDir = m_OpenDialogLastDirectory;
     QList<QString> newPrefPaths;
@@ -663,12 +668,12 @@ void SIMPLViewApplication::on_actionShowToolbox_triggered(bool visible)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     QAction* actionShowIssues = qobject_cast<QAction*>(sender());
     IssuesDockWidget* issuesDockWidget = m_ActiveWindow->getIssuesDockWidget();
 
-    if (NULL != actionShowIssues && NULL != issuesDockWidget)
+    if (nullptr != actionShowIssues && nullptr != issuesDockWidget)
     {
       m_ActiveWindow->updateAndSyncDockWidget(actionShowIssues, issuesDockWidget, visible);
     }
@@ -680,12 +685,12 @@ void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     QAction* actionShowStdOutput = qobject_cast<QAction*>(sender());
     StandardOutputDockWidget* stdOutputDockWidget = m_ActiveWindow->getStandardOutputDockWidget();
 
-    if (NULL != actionShowStdOutput && NULL != stdOutputDockWidget)
+    if (nullptr != actionShowStdOutput && nullptr != stdOutputDockWidget)
     {
       m_ActiveWindow->updateAndSyncDockWidget(actionShowStdOutput, stdOutputDockWidget, visible);
     }
@@ -721,7 +726,7 @@ void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionAboutSIMPLView_triggered()
 {
-  AboutSIMPLView d(NULL);
+  AboutSIMPLView d(nullptr);
   d.exec();
 }
 
@@ -751,7 +756,7 @@ void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 
   UpdateCheck::SIMPLVersionData_t data;
   Detail::fillVersionData(data);
-  UpdateCheckDialog d(data, NULL);
+  UpdateCheckDialog d(data, nullptr);
 
   //d.setCurrentVersion(SIMPLib::Version::Complete());
   d.setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
@@ -773,7 +778,7 @@ void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPluginInformation_triggered()
 {
-  AboutPlugins dialog(NULL);
+  AboutPlugins dialog(nullptr);
   dialog.exec();
 
   // Write cache on exit
@@ -915,7 +920,7 @@ void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
     if (viewWidget->filterCount() > 0)
@@ -930,7 +935,7 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCut_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
@@ -958,7 +963,7 @@ void SIMPLViewApplication::on_actionCut_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCopy_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
@@ -981,7 +986,7 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
@@ -1082,7 +1087,7 @@ void SIMPLViewApplication::on_actionClearCache_triggered()
     // Set a flag in the preferences file, so that we know that we are in "Clear Cache" mode
     prefs->setValue("Program Mode", QString("Clear Cache"));
 
-    if (NULL != m_ActiveWindow)
+    if (nullptr != m_ActiveWindow)
     {
       m_ActiveWindow->setStatusBarMessage(QString("The cache has been cleared successfully. Please restart %1.").arg(BrandedStrings::ApplicationName));
     }
@@ -1110,7 +1115,7 @@ void SIMPLViewApplication::on_actionExit_triggered()
   for (int i = 0; i<m_SIMPLViewInstances.size(); i++)
   {
     SIMPLView_UI* dream3dWindow = m_SIMPLViewInstances[i];
-    if (NULL != dream3dWindow)
+    if (nullptr != dream3dWindow)
     {
       if (dream3dWindow->close() == false)
       {
@@ -1207,7 +1212,7 @@ void SIMPLViewApplication::toPipelineRunningState()
   menuItems->getActionClearPipeline()->setDisabled(true);
 
   SIMPLView_UI* runningInstance = qobject_cast<SIMPLView_UI*>(sender());
-  if (NULL != runningInstance)
+  if (nullptr != runningInstance)
   {
     m_CurrentlyRunningInstances.insert(runningInstance);
   }
@@ -1222,7 +1227,7 @@ void SIMPLViewApplication::toPipelineIdleState()
   menuItems->getActionClearPipeline()->setEnabled(true);
 
   SIMPLView_UI* runningInstance = qobject_cast<SIMPLView_UI*>(sender());
-  if (NULL != runningInstance)
+  if (nullptr != runningInstance)
   {
     m_CurrentlyRunningInstances.remove(runningInstance);
   }
@@ -1256,16 +1261,16 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   QVector<ISIMPLibPlugin*> plugins = pluginManager->getPluginsVector();
 
   // Create new SIMPLView instance
-  SIMPLView_UI* newInstance = new SIMPLView_UI(NULL);
+  SIMPLView_UI* newInstance = new SIMPLView_UI(nullptr);
   newInstance->setLoadedPlugins(plugins);
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
   newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
 
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     newInstance->move(m_ActiveWindow->x() + 45, m_ActiveWindow->y() + 45);
   }
-  else if (NULL != m_PreviousActiveWindow)
+  else if (nullptr != m_PreviousActiveWindow)
   {
     newInstance->move(m_PreviousActiveWindow->x() + 45, m_PreviousActiveWindow->y() + 45);
   }
@@ -1327,7 +1332,7 @@ void SIMPLViewApplication::updatePasteState(bool canPaste)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  if (NULL != m_ActiveWindow)
+  if (nullptr != m_ActiveWindow)
   {
     menuItems->getActionPaste()->setEnabled(canPaste);
   }

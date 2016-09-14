@@ -473,10 +473,10 @@ void PluginMaker::setupGui()
   }
 
   // Dummy HTML file (to bundle the plugin CPP and H files in a FilterBundler)
-  PMFileGenerator* htmlPluginDoc = new PMFileGenerator("", "", "", "", NULL, this);
+  PMFileGenerator* htmlPluginDoc = new PMFileGenerator("", "", "", "", nullptr, this);
 
   // Dummy test file (to bundle the plugin CPP and H files in a FilterBundler)
-  PMFileGenerator* testPluginFile = new PMFileGenerator("", "", "", "", NULL, this);
+  PMFileGenerator* testPluginFile = new PMFileGenerator("", "", "", "", nullptr, this);
 
   FilterBundler fb(cppPluginGen, hPluginGen, htmlPluginDoc, testPluginFile, true);
 
@@ -984,7 +984,7 @@ void PluginMaker::on_addFilterBtn_clicked()
 void PluginMaker::on_removeFilterBtn_clicked()
 {
   QTreeWidgetItem* ptr(treeWidget->currentItem());
-  if (ptr == NULL)
+  if (ptr == nullptr)
   {
     return;
   }
@@ -1037,20 +1037,20 @@ void PluginMaker::on_treeWidget_itemSelectionChanged()
   QString pluginName = cleanName(m_PluginName->text());
 
   PMGeneratorTreeItem* currentFile = dynamic_cast<PMGeneratorTreeItem*> ( treeWidget->currentItem() );
-  if (currentFile == NULL)
+  if (currentFile == nullptr)
   {
     return;
   }
 
   QString text = "";
   QTreeWidgetItem* parent = treeWidget->currentItem()->parent();
-  if(NULL != parent
+  if(nullptr != parent
       && parent->text(0).endsWith("Filters")
       && currentFile->text(0).compare("SourceList.cmake") == 0 )
   {
     text = generateCmakeContents();
   }
-  else if ( NULL != parent
+  else if ( nullptr != parent
             && parent->text(0) == "Test"
             && currentFile->text(0) == "TestFileLocations.h.in")
   {
@@ -1063,7 +1063,7 @@ void PluginMaker::on_treeWidget_itemSelectionChanged()
     QString replaceStr = fileGen->createReplacementString(TESTFILELOCATIONS, m_TestFileLocationNames);
     text = fileGen->generateFileContents(replaceStr);
   }
-  else if (NULL != parent
+  else if (nullptr != parent
            && parent->text(0) == "Test"
            && currentFile->text(0) == "CMakeLists.txt")
   {

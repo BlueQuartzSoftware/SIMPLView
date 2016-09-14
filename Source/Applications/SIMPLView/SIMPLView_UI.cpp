@@ -106,13 +106,12 @@ QString SIMPLView_UI::m_OpenDialogLastDirectory = "";
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
   QMainWindow(parent),
-  m_WorkerThread(NULL),
-  m_ActivePlugin(NULL),
-  m_UpdateCheckThread(NULL),
-  m_FilterManager(NULL),
-  m_FilterWidgetManager(NULL),
+  m_WorkerThread(nullptr),
+  m_ActivePlugin(nullptr),
+  m_FilterManager(nullptr),
+  m_FilterWidgetManager(nullptr),
 #if !defined(Q_OS_MAC)
-  m_InstanceMenuBar(NULL),
+  m_InstanceMenuBar(nullptr),
 #endif
   m_ShouldRestart(false),
   m_OpenedFilePath("")
@@ -174,8 +173,10 @@ SIMPLView_UI::~SIMPLView_UI()
 
   if (dream3dApp->activeWindow() == this)
   {
-    dream3dApp->setActiveWindow(NULL);
+    dream3dApp->setActiveWindow(nullptr);
   }
+
+  if(m_WorkerThread) { delete m_WorkerThread;}
 }
 
 // -----------------------------------------------------------------------------
@@ -347,6 +348,8 @@ bool SIMPLView_UI::savePipelineAs()
     emit bookmarkNeedsToBeAdded(filePath, QModelIndex());
   }
 
+  delete bookmarkMsgBox;
+  bookmarkMsgBox = nullptr;
   return true;
 }
 
@@ -882,7 +885,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   {
     SVPipelineFilterWidget* w = dynamic_cast<SVPipelineFilterWidget*>(pipelineViewWidget->filterObjectAt(i));
 
-    if (NULL != w)
+    if (nullptr != w)
     {
       connect(this, SIGNAL(pipelineStarted()), w, SLOT(toRunningState()));
       connect(this, SIGNAL(pipelineCanceled()), w, SLOT(toIdleState()));
@@ -972,21 +975,17 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
   }
   else if (msg.getType() == PipelineMessage::StatusMessage)
   {
-    if(NULL != this->statusBar())
+    if(nullptr != this->statusBar())
     {
-      QString s = (msg.getPrefix());
-      s = s.append(" ").append(msg.getText().toLatin1().data());
-      this->statusBar()->showMessage(s);
+      this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
   else if (msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
     this->m_ProgressBar->setValue(msg.getProgressValue());
-    if(NULL != this->statusBar())
+    if(nullptr != this->statusBar())
     {
-      QString s = (msg.getPrefix());
-      s = s.append(" ").append(msg.getText().toLatin1().data());
-      this->statusBar()->showMessage(s);
+      this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
   else if (msg.getType() == PipelineMessage::StandardOutputMessage)
@@ -1012,7 +1011,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       {
         matched = true;
         QTextEdit* textEdit = m_StdOutputTabMap.value(tabWidget->widget(i));
-        if (NULL != textEdit)
+        if (nullptr != textEdit)
         {
           textEdit->append(text);
           textEdit->ensureCursorVisible();
@@ -1249,7 +1248,7 @@ void SIMPLView_UI::clearFilterInputWidget()
     if (w)
     {
       w->hide();
-      w->setParent(NULL);
+      w->setParent(nullptr);
     }
   }
 }

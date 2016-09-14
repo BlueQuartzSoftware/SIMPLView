@@ -50,7 +50,7 @@
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_SIMPLViewUserManualDialog.cpp"
 
-SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::self = NULL;
+SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::self = nullptr;
 
 // -----------------------------------------------------------------------------
 //
@@ -106,7 +106,7 @@ SIMPLViewUserManualDialog::~SIMPLViewUserManualDialog()
 // -----------------------------------------------------------------------------
 SIMPLViewUserManualDialog* SIMPLViewUserManualDialog::Instance(QWidget* parent)
 {
-  if (self == NULL)
+  if (self == nullptr)
   {
     self = new SIMPLViewUserManualDialog(parent);
   }

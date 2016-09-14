@@ -363,13 +363,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void resizeEvent ( QResizeEvent* event );
 
   private:
-    QThread*                              m_WorkerThread;
+    QThread*                              m_WorkerThread = nullptr;
     ISIMPLibPlugin*                       m_ActivePlugin;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
 
     QSharedPointer<UpdateCheck>           m_UpdateCheck;
-
-    QThread*                              m_UpdateCheckThread;
     FilterManager*                        m_FilterManager;
     FilterWidgetManager*                  m_FilterWidgetManager;
 

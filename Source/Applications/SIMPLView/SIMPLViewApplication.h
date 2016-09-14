@@ -37,6 +37,7 @@
 #define _simplviewapplication_h_
 
 #include <QtCore/QSet>
+#include <QtCore/QSharedPointer>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
@@ -182,11 +183,11 @@ class SIMPLViewApplication : public QApplication
     void addFilter(const QString &className);
 
   private:
-    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>                  m_Clipboard;
+    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>    m_Clipboard;
 
-    QMenu*                                                                    m_ContextMenu;
+    QSharedPointer<QMenu>                                            m_ContextMenu;
 
-    bool                                                                      m_ShowFilterWidgetDeleteDialog;
+    bool                                                             m_ShowFilterWidgetDeleteDialog;
 
     void readSettings();
     void writeSettings();

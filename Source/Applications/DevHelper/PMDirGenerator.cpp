@@ -207,7 +207,7 @@ void PMDirGenerator::pluginNameChanged(const QString& pluginname)
 
   m_PluginName = cleanName(pluginname);
 
-  if (NULL != m_TreeWidgetItem)
+  if (nullptr != m_TreeWidgetItem)
   {
     m_TreeWidgetItem->setText(0, m_PluginName + m_DisplaySuffix);
   }

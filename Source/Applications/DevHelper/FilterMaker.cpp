@@ -339,8 +339,8 @@ void FilterMaker::updateFilterFileGenerators()
                                      pathTemplate,
                                      QString(filterName + ".cpp"),
                                      resourceTemplate,
-                                     NULL,
-                                     this));
+                                     nullptr,
+                                     this);
 
   connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -373,8 +373,8 @@ void FilterMaker::updateFilterFileGenerators()
                                    pathTemplate,
                                    QString(filterName + ".h"),
                                    resourceTemplate,
-                                   NULL,
-                                   this));
+                                   nullptr,
+                                   this);
 
   connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -406,8 +406,8 @@ void FilterMaker::updateFilterFileGenerators()
                                       pathTemplate,
                                       QString(filterName + ".md"),
                                       resourceTemplate,
-                                      NULL,
-                                      this));
+                                      nullptr,
+                                      this);
 
   connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -419,16 +419,17 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Test";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
-  if (NULL != m_testGenerator)
+  if (nullptr != testGenerator)
   {
-    m_testGenerator.clear();
+    delete testGenerator;
+    testGenerator = nullptr;
   }
   m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + "Test.cpp"),
                                       resourceTemplate,
-                                      NULL,
-                                      this));
+                                      nullptr,
+                                      this);
 
   connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
