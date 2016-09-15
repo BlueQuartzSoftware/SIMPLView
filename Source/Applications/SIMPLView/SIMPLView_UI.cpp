@@ -348,8 +348,6 @@ bool SIMPLView_UI::savePipelineAs()
     emit bookmarkNeedsToBeAdded(filePath, QModelIndex());
   }
 
-  delete bookmarkMsgBox;
-  bookmarkMsgBox = nullptr;
   return true;
 }
 
