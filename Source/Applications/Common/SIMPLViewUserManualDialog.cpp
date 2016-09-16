@@ -77,10 +77,10 @@ SIMPLViewUserManualDialog::SIMPLViewUserManualDialog(QWidget* parent) :
   self->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 #if defined (Q_OS_MAC)
-  QAction* closeAction = new QAction(this);
-  closeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
-  connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-  addAction(closeAction);
+  m_CloseAction = new QAction(this);
+  m_CloseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
+  connect(m_CloseAction, SIGNAL(triggered()), this, SLOT(close()));
+  addAction(m_CloseAction);
 #endif
 
   connect(m_WebView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons(bool)));
@@ -89,7 +89,17 @@ SIMPLViewUserManualDialog::SIMPLViewUserManualDialog(QWidget* parent) :
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLViewUserManualDialog::~SIMPLViewUserManualDialog() {}
+SIMPLViewUserManualDialog::~SIMPLViewUserManualDialog()
+{
+  delete m_WebView;
+
+#if defined (Q_OS_MAC)
+  if (m_CloseAction != nullptr)
+  {
+    delete m_CloseAction;
+  }
+#endif
+}
 
 // -----------------------------------------------------------------------------
 //

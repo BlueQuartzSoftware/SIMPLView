@@ -85,6 +85,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
   private:
     QStringList m_licenseFiles;
 
+    QAction* m_CloseAction = nullptr;
 
     AboutSIMPLView(const AboutSIMPLView&); // Copy Constructor Not Implemented
     void operator=(const AboutSIMPLView&); // Operator '=' Not Implemented

@@ -109,11 +109,11 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     void updateStatusBar(QString message);
 
   private:
-    QString                     m_OpenDialogLastDirectory;
-    PMFileGenerator*            cppGenerator;
-    PMFileGenerator*            hGenerator;
-    PMFileGenerator*            htmlGenerator;
-    PMFileGenerator*            testGenerator;
+    QString                                     m_OpenDialogLastDirectory;
+    QSharedPointer<PMFileGenerator>             m_cppGenerator;
+    QSharedPointer<PMFileGenerator>             m_hGenerator;
+    QSharedPointer<PMFileGenerator>             m_htmlGenerator;
+    QSharedPointer<PMFileGenerator>             m_testGenerator;
 
     void updateFilterFileGenerators();
     void generateFilterFiles();

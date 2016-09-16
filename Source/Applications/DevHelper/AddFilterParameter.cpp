@@ -48,6 +48,8 @@
 AddFilterParameter::AddFilterParameter(QWidget* parent) :
   QWidget(parent)
 {
+  setAttribute(Qt::WA_DeleteOnClose);
+
   setupUi(this);
 
   setupGui();

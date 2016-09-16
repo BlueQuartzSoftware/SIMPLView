@@ -115,6 +115,8 @@ int main(int argc, char** argv)
       delete verticalSpacer;
   }
 
+  delete layout;
+
   return app.exec();
 }
 
