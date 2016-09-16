@@ -197,10 +197,6 @@ SIMPLViewApplication::~SIMPLViewApplication()
     prefs.setValue("Program Mode", QString("Standard"));
   }
 
-  foreach(QPluginLoader* pl, m_PluginLoaders)
-  {
-    delete pl;
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -220,6 +216,9 @@ void delay(int seconds)
 // -----------------------------------------------------------------------------
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
+
+  Q_UNUSED(argc)
+  Q_UNUSED(argv)
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
 
   readSettings();
