@@ -160,6 +160,11 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent) :
 // -----------------------------------------------------------------------------
 SIMPLView_UI::~SIMPLView_UI()
 {
+  for (QMap<QWidget*,QTextEdit*>::iterator iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); ++iter)
+  {
+    delete iter.key();
+  }
+
   disconnectSignalsSlots();
 
   writeSettings();
@@ -172,6 +177,9 @@ SIMPLView_UI::~SIMPLView_UI()
   }
 
   if(m_WorkerThread) { delete m_WorkerThread;}
+#if !defined(Q_OS_MAC)
+  if (m_InstanceMenuBar) { delete m_InstanceMenuBar; }
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -204,10 +212,10 @@ void SIMPLView_UI::checkFirstRun()
   if (firstRun == true)
   {
     // This is the first run of SIMPLView v6.0, so we need to show the v6.0 wizard
-    SIMPLViewv6Wizard* wizard = new SIMPLViewv6Wizard(this, Qt::WindowTitleHint);
-    wizard->exec();
+    SIMPLViewv6Wizard wizard(this, Qt::WindowTitleHint);
+    wizard.exec();
 
-    bool value = wizard->isBookmarkBtnChecked();
+    bool value = wizard.isBookmarkBtnChecked();
     if (value == true)
     {
       BookmarksModel* model = BookmarksModel::Instance();
@@ -330,21 +338,18 @@ bool SIMPLView_UI::savePipelineAs()
   // Cache the last directory
   m_OpenDialogLastDirectory = fi.path();
 
-  QMessageBox* bookmarkMsgBox = new QMessageBox(this);
-  bookmarkMsgBox->setWindowTitle("Pipeline Saved");
-  bookmarkMsgBox->setText("The pipeline has been saved.");
-  bookmarkMsgBox->setInformativeText("Would you also like to bookmark this pipeline?");
-  bookmarkMsgBox->setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-  bookmarkMsgBox->setDefaultButton(QMessageBox::Yes);
-  int ret = bookmarkMsgBox->exec();
+  QMessageBox bookmarkMsgBox(this);
+  bookmarkMsgBox.setWindowTitle("Pipeline Saved");
+  bookmarkMsgBox.setText("The pipeline has been saved.");
+  bookmarkMsgBox.setInformativeText("Would you also like to bookmark this pipeline?");
+  bookmarkMsgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+  bookmarkMsgBox.setDefaultButton(QMessageBox::Yes);
+  int ret = bookmarkMsgBox.exec();
 
   if (ret == QMessageBox::Yes)
   {
     emit bookmarkNeedsToBeAdded(filePath, QModelIndex());
   }
-
-  delete bookmarkMsgBox;
-  bookmarkMsgBox = nullptr;
 
   return true;
 }
@@ -356,12 +361,12 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
 {
   if (dream3dApp->isCurrentlyRunning(this) == true)
   {
-    QMessageBox* runningPipelineBox = new QMessageBox();
-    runningPipelineBox->setWindowTitle("Pipeline Is Running");
-    runningPipelineBox->setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
-    runningPipelineBox->setStandardButtons(QMessageBox::Ok);
-    runningPipelineBox->setIcon(QMessageBox::Warning);
-    runningPipelineBox->exec();
+    QMessageBox runningPipelineBox;
+    runningPipelineBox.setWindowTitle("Pipeline Is Running");
+    runningPipelineBox.setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
+    runningPipelineBox.setStandardButtons(QMessageBox::Ok);
+    runningPipelineBox.setIcon(QMessageBox::Warning);
+    runningPipelineBox.exec();
     event->ignore();
     return;
   }
@@ -706,7 +711,7 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineOpened(QString& file, const boo
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::on_pipelineViewWidget_pipelineChanged()
+void SIMPLView_UI::on_pipelineViewWidget_windowNeedsRecheck()
 {
   QString fiBase = "Untitled";
   QFileInfo fi(fiBase);
@@ -1222,6 +1227,8 @@ void SIMPLView_UI::setOpenDialogLastDirectory(const QString& path)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
+  if (widget == nullptr) { return; }
+
   // Clear the filter input widget
   clearFilterInputWidget();
 

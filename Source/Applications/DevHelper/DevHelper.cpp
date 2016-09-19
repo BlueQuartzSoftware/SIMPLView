@@ -79,7 +79,10 @@ DevHelper::DevHelper(QWidget* parent) :
 // -----------------------------------------------------------------------------
 DevHelper::~DevHelper()
 {
-
+  if (m_HelpDialog != nullptr)
+  {
+    delete m_HelpDialog;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -254,8 +257,8 @@ void DevHelper::readWindowSettings(QtSSettings& prefs)
 // -----------------------------------------------------------------------------
 void DevHelper::on_actionShowUserManual_triggered()
 {
-  HelpWidget* helpDialog = new HelpWidget(this);
-  helpDialog->show();
+  m_HelpDialog = new HelpWidget(this);
+  m_HelpDialog->show();
 }
 
 // -----------------------------------------------------------------------------

@@ -43,6 +43,8 @@
 
 #include "ui_DevHelper.h"
 
+class HelpWidget;
+
 class DevHelper : public QMainWindow, public Ui::DevHelper
 {
     Q_OBJECT
@@ -63,7 +65,7 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
     void on_actionAbout_triggered();
 
   private:
-
+    HelpWidget* m_HelpDialog = nullptr;
 
     void closeEvent(QCloseEvent* event);
     void writeSettings();

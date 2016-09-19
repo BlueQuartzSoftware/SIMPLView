@@ -232,10 +232,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     void processPipelineMessage(const PipelineMessage& msg);
 
-    /**
-     * @brief on_pipelineViewWidget_pipelineChanged AUTO HOOKUP by name
-     */
-    void on_pipelineViewWidget_pipelineChanged();
+    void on_pipelineViewWidget_windowNeedsRecheck();
     void on_pipelineViewWidget_pipelineIssuesCleared();
     void on_pipelineViewWidget_pipelineHasNoErrors();
     void on_pipelineViewWidget_pipelineOpened(QString& file, const bool& setOpenedFilePath, const bool& changeTitle);
@@ -367,17 +364,15 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
   private:
     QThread*                              m_WorkerThread = nullptr;
-    ISIMPLibPlugin*                       m_ActivePlugin;
+    ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
 
     QSharedPointer<UpdateCheck>           m_UpdateCheck;
-    FilterManager*                        m_FilterManager;
-    FilterWidgetManager*                  m_FilterWidgetManager;
+    FilterManager*                        m_FilterManager = nullptr;
+    FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
 
     FilterPipeline::Pointer               m_PipelineInFlight;
-#if !defined(Q_OS_MAC)
-    QMenuBar*                             m_InstanceMenuBar;
-#endif
+    QMenuBar*                             m_InstanceMenuBar = nullptr;
     bool                                  m_ShouldRestart;
 
     QString                               m_OpenedFilePath;

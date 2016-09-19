@@ -84,11 +84,9 @@ void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
   QStringList files = QtSRecentFileList::instance()->fileList();
   foreach(QString file, files)
   {
-    QAction* action = new QAction(recentFilesMenu);
-    action->setText(QtSRecentFileList::instance()->parentAndFileName(file));
+    QAction* action = recentFilesMenu->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
     action->setData(file);
     action->setVisible(true);
-    recentFilesMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
 
@@ -119,7 +117,7 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
   // Write out the empty list
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   recents->writeList(prefs.data());
- 
+
 }
 
 // -----------------------------------------------------------------------------

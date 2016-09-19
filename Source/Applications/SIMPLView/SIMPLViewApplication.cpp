@@ -181,6 +181,11 @@ SIMPLViewApplication::~SIMPLViewApplication()
   delete this->Splash;
   this->Splash = nullptr;
 
+  for (int i=0; i<m_PluginLoaders.size(); i++)
+  {
+    delete m_PluginLoaders[i];
+  }
+
   writeSettings();
 
   QtSSettings prefs;
@@ -192,10 +197,6 @@ SIMPLViewApplication::~SIMPLViewApplication()
     prefs.setValue("Program Mode", QString("Standard"));
   }
 
-  foreach(QPluginLoader* pl, m_PluginLoaders)
-  {
-    delete pl;
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -215,6 +216,9 @@ void delay(int seconds)
 // -----------------------------------------------------------------------------
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
+
+  Q_UNUSED(argc)
+  Q_UNUSED(argv)
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
 
   readSettings();
@@ -507,7 +511,10 @@ void SIMPLViewApplication::addFilter(const QString &className)
 {
   if (nullptr != m_PreviousActiveWindow)
   {
-    m_PreviousActiveWindow->getPipelineViewWidget()->addFilter(className, -1, true);
+    AbstractFilter::Pointer filter = AbstractFilter::CreateFilterFromClassName(className);
+
+    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
+    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
   }
 }
 
@@ -917,7 +924,7 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
     SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
     if (viewWidget->filterCount() > 0)
     {
-      viewWidget->clearFilterWidgets(true);
+      viewWidget->clearFilterWidgets();
     }
   }
 }
@@ -945,7 +952,8 @@ void SIMPLViewApplication::on_actionCut_triggered()
     QClipboard* clipboard = QApplication::clipboard();
     clipboard->setText(jsonString);
 
-    viewWidget->cutFilterWidgets(filterWidgets);
+    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(filterWidgets, viewWidget, "Cut");
+    viewWidget->addUndoCommand(removeCmd);
   }
 }
 
@@ -988,11 +996,8 @@ void SIMPLViewApplication::on_actionPaste_triggered()
     FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
     FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-    viewWidget->blockPreflightSignals(true);
-    viewWidget->pasteFilters(container, -1);
-    viewWidget->blockPreflightSignals(false);
-    viewWidget->preflightPipeline();
-
+    AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
+    viewWidget->addUndoCommand(addCmd);
   }
 }
 
@@ -1004,34 +1009,28 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
   if (m_ActiveWindow)
   {
     QList<PipelineFilterObject*> selectedWidgets = widget->getSelectedFilterObjects();
-    if (selectedWidgets.size() > 0)
-    {
-      if (m_ShowFilterWidgetDeleteDialog == true)
-      {
-        QMessageBox msgBox;
-        msgBox.setParent(m_ActiveWindow);
-        msgBox.setWindowModality(Qt::WindowModal);
-        msgBox.setWindowFlags(msgBox.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-        msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText("Are you sure that you want to delete these filters?");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::Yes);
-        QCheckBox* chkBox = new QCheckBox("Do not show me this again");
-        msgBox.setCheckBox(chkBox);
-        int ret = msgBox.exec();
+    if (selectedWidgets.size() <= 0) { return; }
 
-        m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
+    if (m_ShowFilterWidgetDeleteDialog == false) { return; }
 
-        if (ret == QMessageBox::Yes)
-        {
-          widget->removeFilterObjects(selectedWidgets, true);
-        }
-      }
-      else
-      {
-        widget->removeFilterObjects(selectedWidgets, true);
-      }
-    }
+    QMessageBox msgBox;
+    msgBox.setParent(m_ActiveWindow);
+    msgBox.setWindowModality(Qt::WindowModal);
+    msgBox.setWindowFlags(msgBox.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setText("Are you sure that you want to delete these filters?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    QCheckBox* chkBox = new QCheckBox("Do not show me this again");
+    msgBox.setCheckBox(chkBox);
+    int ret = msgBox.exec();
+
+    m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
+
+    if (ret != QMessageBox::Yes) { return; }
+
+    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
+    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
   }
 }
 
