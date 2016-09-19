@@ -117,7 +117,7 @@ void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
   // Write out the empty list
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
   recents->writeList(prefs.data());
- 
+
 }
 
 // -----------------------------------------------------------------------------

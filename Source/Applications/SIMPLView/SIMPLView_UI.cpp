@@ -177,6 +177,9 @@ SIMPLView_UI::~SIMPLView_UI()
   }
 
   if(m_WorkerThread) { delete m_WorkerThread;}
+#if !defined(Q_OS_MAC)
+  if (m_InstanceMenuBar) { delete m_InstanceMenuBar; }
+#endif
 }
 
 // -----------------------------------------------------------------------------

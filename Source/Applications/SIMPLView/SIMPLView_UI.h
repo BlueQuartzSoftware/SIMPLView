@@ -364,17 +364,15 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
   private:
     QThread*                              m_WorkerThread = nullptr;
-    ISIMPLibPlugin*                       m_ActivePlugin;
+    ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
 
     QSharedPointer<UpdateCheck>           m_UpdateCheck;
-    FilterManager*                        m_FilterManager;
-    FilterWidgetManager*                  m_FilterWidgetManager;
+    FilterManager*                        m_FilterManager = nullptr;
+    FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
 
     FilterPipeline::Pointer               m_PipelineInFlight;
-#if !defined(Q_OS_MAC)
-    QSharedPointer<QMenuBar>              m_InstanceMenuBar;
-#endif
+    QMenuBar*                             m_InstanceMenuBar = nullptr;
     bool                                  m_ShouldRestart;
 
     QString                               m_OpenedFilePath;
