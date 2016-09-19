@@ -340,7 +340,7 @@ void FilterMaker::updateFilterFileGenerators()
                                      QString(filterName + ".cpp"),
                                      resourceTemplate,
                                      nullptr,
-                                     this);
+                                     this));
 
   connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -374,7 +374,7 @@ void FilterMaker::updateFilterFileGenerators()
                                    QString(filterName + ".h"),
                                    resourceTemplate,
                                    nullptr,
-                                   this);
+                                   this));
 
   connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -407,7 +407,7 @@ void FilterMaker::updateFilterFileGenerators()
                                       QString(filterName + ".md"),
                                       resourceTemplate,
                                       nullptr,
-                                      this);
+                                      this));
 
   connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -419,17 +419,16 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Test";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
-  if (nullptr != testGenerator)
+  if (nullptr != m_testGenerator)
   {
-    delete testGenerator;
-    testGenerator = nullptr;
+    m_testGenerator.clear();
   }
   m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                       pathTemplate,
                                       QString(filterName + "Test.cpp"),
                                       resourceTemplate,
                                       nullptr,
-                                      this);
+                                      this));
 
   connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
