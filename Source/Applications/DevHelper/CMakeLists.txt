@@ -88,6 +88,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.h
@@ -128,6 +129,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.cpp
