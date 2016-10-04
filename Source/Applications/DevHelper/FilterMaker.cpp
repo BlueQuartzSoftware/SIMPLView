@@ -335,7 +335,13 @@ void FilterMaker::updateFilterFileGenerators()
   {
     m_cppGenerator.clear();
   }
-  m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".cpp"), resourceTemplate, nullptr, this));
+
+  m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
+                                     pathTemplate,
+                                     QString(filterName + ".cpp"),
+                                     resourceTemplate,
+                                     nullptr,
+                                     this));
 
   connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
