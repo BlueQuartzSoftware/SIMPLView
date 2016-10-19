@@ -335,6 +335,7 @@ void FilterMaker::updateFilterFileGenerators()
   {
     m_cppGenerator.clear();
   }
+
   m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
                                      pathTemplate,
                                      QString(filterName + ".cpp"),
