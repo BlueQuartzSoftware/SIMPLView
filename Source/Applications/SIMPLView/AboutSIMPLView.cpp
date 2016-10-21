@@ -47,6 +47,7 @@
 #include <tbb/tbb_stddef.h>
 #endif
 
+#include <Eigen/Core>
 #include <Eigen/src/Core/util/Macros.h>
 
 
