@@ -44,7 +44,10 @@
 #include <QtCore/QProcess>
 
 #include <QtWidgets/QFileDialog>
-
+#include <QtWidgets/QSplashScreen>
+#include <QtGui/QScreen>
+#include <QtGui/QIcon>
+#include <QtGui/QBitmap>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QBitmap>
 #include <QtGui/QClipboard>
@@ -65,7 +68,6 @@
 #endif
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
-#include "SVWidgetsLib/Widgets/DSplashScreen.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
@@ -108,8 +110,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_ActiveWindow(nullptr),
   m_PreviousActiveWindow(nullptr),
   m_OpenDialogLastDirectory(""),
-  show_splash(true),
-  Splash(nullptr)
+  m_ShowSplash(true),
+  m_SplashScreen(nullptr)
 {
   m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
@@ -178,8 +180,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
 // -----------------------------------------------------------------------------
 SIMPLViewApplication::~SIMPLViewApplication()
 {
-  delete this->Splash;
-  this->Splash = nullptr;
+  delete this->m_SplashScreen;
+  this->m_SplashScreen = nullptr;
 
   for (int i=0; i<m_PluginLoaders.size(); i++)
   {
@@ -223,11 +225,21 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
 
   readSettings();
 
+  // Assume we are launching on the main screen.
+  float pixelRatio = qApp->screens().at(0)->devicePixelRatio();
+
+  QString name (":/splash/branded_splash");
+  if (pixelRatio >= 2) {
+    name.append("@2x");
+  }
+
+  name.append(".png");
+
   // Create and show the splash screen as the main window is being created.
-  QPixmap pixmap(QLatin1String(":/splash/branded_splash.png"));
-  this->Splash = new DSplashScreen(pixmap);
-  this->Splash->setMask(pixmap.createMaskFromColor(QColor(Qt::transparent)));
-  this->Splash->show();
+  QPixmap pixmap(name);
+
+  this->m_SplashScreen = new QSplashScreen(pixmap);
+  this->m_SplashScreen->show();
 
   QDir dir(QApplication::applicationDirPath());
 
@@ -254,10 +266,10 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
 
   // give GUI components time to update before the mainwindow is shown
   QApplication::instance()->processEvents();
-  if (show_splash)
+  if (m_ShowSplash)
   {
 //   delay(1);
-    this->Splash->finish(nullptr);
+    this->m_SplashScreen->finish(nullptr);
   }
   QApplication::instance()->processEvents();
 
@@ -414,8 +426,8 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
         QString pluginName = ipPlugin->getPluginName();
         if (loadingMap.value(pluginName, true) == true)
         {
-          QString msg = QObject::tr("Loading Plugin %1").arg(fileName);
-          this->Splash->showMessage(msg);
+          QString msg = QObject::tr("Loading Plugin %1  ").arg(fileName);
+          this->m_SplashScreen->showMessage(msg, Qt::AlignVCenter | Qt::AlignRight, Qt::white);
           //ISIMPLibPlugin::Pointer ipPluginPtr(ipPlugin);
           ipPlugin->registerFilterWidgets(fwm);
           ipPlugin->registerFilters(fm);
@@ -433,15 +445,17 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     }
     else
     {
-      Splash->hide();
-      QString message("The plugin did not load with the following error\n");
+      m_SplashScreen->hide();
+      QString message("The plugin did not load with the following error\n\n");
       message.append(loader->errorString());
+      message.append("\n\n");
+      message.append("Possible causes include missing libraries that plugin depends on.");
       QMessageBox box(QMessageBox::Critical, tr("Plugin Load Error"), tr(message.toStdString().c_str()));
       box.setStandardButtons(QMessageBox::Ok | QMessageBox::Default);
       box.setDefaultButton(QMessageBox::Ok);
       box.setWindowFlags(box.windowFlags() | Qt::WindowStaysOnTopHint);
       box.exec();
-      Splash->show();
+      m_SplashScreen->show();
       delete loader;
     }
   }

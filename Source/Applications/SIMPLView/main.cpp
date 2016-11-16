@@ -78,11 +78,11 @@ int main(int argc, char* argv[])
   qDebug() << "        cwd: " << cwd;
 #endif
 
-#if !defined (Q_OS_MAC)
+//#if !defined (Q_OS_MAC)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-#endif
+//#endif
 
 #if defined (Q_OS_MAC)
   MacSIMPLViewApplication qtapp(argc, argv);

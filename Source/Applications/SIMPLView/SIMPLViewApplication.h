@@ -45,9 +45,9 @@
 
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 
-#define dream3dApp (static_cast<SIMPLViewApplication *>(qApp))
+#define dream3dApp (static_cast<SIMPLViewApplication*>(qApp))
 
-class DSplashScreen;
+class QSplashScreen;
 class SIMPLView_UI;
 class QPluginLoader;
 class ISIMPLibPlugin;
@@ -57,144 +57,142 @@ class SVPipelineViewWidget;
 
 class SIMPLViewApplication : public QApplication
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    SIMPLViewApplication(int& argc, char** argv);
-    ~SIMPLViewApplication();
+public:
+  SIMPLViewApplication(int& argc, char** argv);
+  ~SIMPLViewApplication();
 
-    enum PasteType
-    {
-      None,
-      Cut,
-      Copy
-    };
+  enum PasteType
+  {
+    None,
+    Cut,
+    Copy
+  };
 
-     /**
-     * @brief fillVersionData
-     * @return
-     */
-    static UpdateCheck::SIMPLVersionData_t FillVersionData();
+  /**
+  * @brief fillVersionData
+  * @return
+  */
+  static UpdateCheck::SIMPLVersionData_t FillVersionData();
 
-    bool initialize(int argc, char* argv[]);
+  bool initialize(int argc, char* argv[]);
 
-    QList<SIMPLView_UI*> getSIMPLViewInstances();
+  QList<SIMPLView_UI*> getSIMPLViewInstances();
 
-    void registerSIMPLViewWindow(SIMPLView_UI* window);
+  void registerSIMPLViewWindow(SIMPLView_UI* window);
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+  virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    SIMPLView_UI* getNewSIMPLViewInstance();
+  SIMPLView_UI* getNewSIMPLViewInstance();
 
-    SIMPLView_UI* getActiveWindow();
-    void setActiveWindow(SIMPLView_UI* instance);
+  SIMPLView_UI* getActiveWindow();
+  void setActiveWindow(SIMPLView_UI* instance);
 
-    bool isCurrentlyRunning(SIMPLView_UI* instance);
+  bool isCurrentlyRunning(SIMPLView_UI* instance);
 
-    /**
-     * @brief event
-     * @param event
-     * @return
-     */
-    bool event(QEvent* event);
+  /**
+   * @brief event
+   * @param event
+   * @return
+   */
+  bool event(QEvent* event);
 
-    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
+  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
-  public slots:
-    void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
+public slots:
+  void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
-    void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
+  void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
 
-  protected:
-    SIMPLViewToolbox*                           m_Toolbox;
+protected:
+  SIMPLViewToolbox* m_Toolbox;
 
-    // This is a set of all SIMPLView instances currently available
-    QList<SIMPLView_UI*>                        m_SIMPLViewInstances;
+  // This is a set of all SIMPLView instances currently available
+  QList<SIMPLView_UI*> m_SIMPLViewInstances;
 
-    // This is the set of SIMPLView instances that are currently running a pipeline
-    QSet<SIMPLView_UI*>                         m_CurrentlyRunningInstances;
+  // This is the set of SIMPLView instances that are currently running a pipeline
+  QSet<SIMPLView_UI*> m_CurrentlyRunningInstances;
 
-    // The currently active SIMPLView instance
-    SIMPLView_UI*                               m_ActiveWindow;
-    SIMPLView_UI*                               m_PreviousActiveWindow;
+  // The currently active SIMPLView instance
+  SIMPLView_UI* m_ActiveWindow;
+  SIMPLView_UI* m_PreviousActiveWindow;
 
-    QString                                   m_OpenDialogLastDirectory;
+  QString m_OpenDialogLastDirectory;
 
-    bool                                      show_splash;
-    DSplashScreen*                            Splash;
+  bool m_ShowSplash;
+  QSplashScreen* m_SplashScreen;
+  QVector<QPluginLoader*> m_PluginLoaders;
 
-    QVector<QPluginLoader*>                   m_PluginLoaders;
+  QVector<ISIMPLibPlugin*> loadPlugins();
 
-    QVector<ISIMPLibPlugin*> loadPlugins();
+protected slots:
+  void on_actionCloseToolbox_triggered();
+  void on_actionNew_triggered();
+  void on_actionOpen_triggered();
+  void on_actionSave_triggered();
+  void on_actionSaveAs_triggered();
+  void on_actionShowToolbox_triggered(bool visible);
+  void on_actionShowIssues_triggered(bool visible);
+  void on_actionShowStdOutput_triggered(bool visible);
 
-  protected slots:
-    void on_actionCloseToolbox_triggered();
-    void on_actionNew_triggered();
-    void on_actionOpen_triggered();
-    void on_actionSave_triggered();
-    void on_actionSaveAs_triggered();
-    void on_actionShowToolbox_triggered(bool visible);
-    void on_actionShowIssues_triggered(bool visible);
-    void on_actionShowStdOutput_triggered(bool visible);
+  void on_actionAddBookmark_triggered();
+  void on_actionNewFolder_triggered();
+  void on_actionRenameBookmark_triggered();
+  void on_actionRemoveBookmark_triggered();
+  void on_actionShowBookmarkInFileSystem_triggered();
+  void on_actionClearCache_triggered();
+  void on_actionClearBookmarks_triggered();
 
-    void on_actionAddBookmark_triggered();
-    void on_actionNewFolder_triggered();
-    void on_actionRenameBookmark_triggered();
-    void on_actionRemoveBookmark_triggered();
-    void on_actionShowBookmarkInFileSystem_triggered();
-    void on_actionClearCache_triggered();
-    void on_actionClearBookmarks_triggered();
+  void on_actionCloseWindow_triggered();
+  void on_actionExit_triggered();
+  void on_actionShowSIMPLViewHelp_triggered();
+  void on_actionCheckForUpdates_triggered();
+  void on_actionPluginInformation_triggered();
+  void on_actionAboutSIMPLView_triggered();
 
-    void on_actionCloseWindow_triggered();
-    void on_actionExit_triggered();
-    void on_actionShowSIMPLViewHelp_triggered();
-    void on_actionCheckForUpdates_triggered();
-    void on_actionPluginInformation_triggered();
-    void on_actionAboutSIMPLView_triggered();
+  void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
+  void bookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
-    void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
-    void bookmarkSelectionChanged(const QModelIndex &current, const QModelIndex &previous);
+  void toPipelineRunningState();
+  void toPipelineIdleState();
 
-    void toPipelineRunningState();
-    void toPipelineIdleState();
+  void on_actionCut_triggered();
+  void on_actionCopy_triggered();
+  void on_actionPaste_triggered();
+  void on_actionClearPipeline_triggered();
 
-    void on_actionCut_triggered();
-    void on_actionCopy_triggered();
-    void on_actionPaste_triggered();
-    void on_actionClearPipeline_triggered();
+  void updatePasteState(bool canPaste);
 
-    void updatePasteState(bool canPaste);
+  /**
+  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+  * should be connected to the Signal QtSRecentFileList->fileListChanged
+  * @param file The newly added file.
+  */
+  virtual void updateRecentFileList(const QString& file);
 
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QtSRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
+  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  virtual void toolboxWindowChanged();
 
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-    virtual void toolboxWindowChanged();
+  virtual void on_actionClearRecentFiles_triggered();
 
-    virtual void on_actionClearRecentFiles_triggered();
+  // SIMPLView_UI slots
+  void openRecentFile();
 
-    // SIMPLView_UI slots
-    void openRecentFile();
+  void addFilter(const QString& className);
 
-    void addFilter(const QString &className);
+private:
+  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> m_Clipboard;
 
-  private:
-    QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>    m_Clipboard;
+  QSharedPointer<QMenu> m_ContextMenu;
 
-    QSharedPointer<QMenu>                                            m_ContextMenu;
+  bool m_ShowFilterWidgetDeleteDialog;
 
-    bool                                                             m_ShowFilterWidgetDeleteDialog;
+  void readSettings();
+  void writeSettings();
 
-    void readSettings();
-    void writeSettings();
-
-    SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const SIMPLViewApplication&); // Operator '=' Not Implemented
+  SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
+  void operator=(const SIMPLViewApplication&);       // Operator '=' Not Implemented
 };
 
 #endif /* _SIMPLViewApplication_H */
-
