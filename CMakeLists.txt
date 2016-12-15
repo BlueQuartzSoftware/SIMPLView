@@ -321,7 +321,7 @@ endif()
 # --------------------------------------------------------------------
 # Find and Use the Qt5 Libraries
 include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
-set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Script Svg Xml OpenGL PrintSupport )
+set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Svg Xml OpenGL PrintSupport )
 option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
 CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
                     "${SIMPLView_USE_QtWebEngine}"
