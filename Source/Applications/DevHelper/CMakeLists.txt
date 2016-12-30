@@ -88,6 +88,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec2WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.h
@@ -130,6 +131,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FileListInfoWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec2WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatVec3WidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/FloatWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/FourthOrderPolynomialWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.cpp
@@ -201,7 +203,7 @@ include_directories(${DevHelper_SOURCE_DIR}
                     ${DevHelper_BINARY_DIR}
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
-                    
+
                     ${SIMPLViewProj_SOURCE_DIR}/Source
                     ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
                     ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
@@ -215,7 +217,7 @@ include_directories(${DevHelper_SOURCE_DIR}
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets  
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
   )
 
 
