@@ -92,6 +92,12 @@ endif()
 # Find the Git Package for Versioning. It should be ok if Git is NOT found
 Find_package(Git)
 
+cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
+                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
+                        NAMESPACE "SIMPLViewProj"
+                        PROJECT_NAME "${PROJECT_NAME}"
+                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
+
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
@@ -178,7 +184,7 @@ include(CMakeParseArguments)
 # into a single known location
 get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
 if("${DREAM3DDocRoot}" STREQUAL "")
-  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
+#  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
   set_property(GLOBAL PROPERTY DREAM3DDocRoot "${SIMPLViewProj_BINARY_DIR}")
   get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList" "")
@@ -186,7 +192,7 @@ endif()
 
 get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
 if("${SIMPLPluginList}" STREQUAL "")
-  message(STATUS "Setting GLOBAL PROPERTY SIMPLPluginList")
+#  message(STATUS "Setting GLOBAL PROPERTY SIMPLPluginList")
   set_property(GLOBAL PROPERTY SIMPLPluginList "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt")
   get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt" "")
@@ -194,7 +200,7 @@ endif()
 
 get_property(SIMPLibSearchDirs GLOBAL PROPERTY SIMPLibSearchDirs)
 if("${SIMPLibSearchDirs}" STREQUAL "")
-  message(STATUS "Setting GLOBAL PROPERTY SIMPLibSearchDirs")
+#  message(STATUS "Setting GLOBAL PROPERTY SIMPLibSearchDirs")
   set_property(GLOBAL PROPERTY SIMPLibSearchDirs "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt")
   get_property(SIMPLibSearchDirs GLOBAL PROPERTY SIMPLibSearchDirs)
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt" "")
@@ -233,7 +239,6 @@ set(PROJECT_INSTALL_EXECUTABLES "1")
 
 
 set(CMP_CONFIGURED_FILES_SOURCE_DIR ${CMP_SOURCE_DIR}/ConfiguredFiles)
-INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 set(CMP_ENABLE_PLUGINS "1")
 set(CMP_PLUGIN_LIST_FILE "${SIMPLPluginList}")
 set(CMP_PLUGIN_SEARCHDIR_FILE "${SIMPLibSearchDirs}")
