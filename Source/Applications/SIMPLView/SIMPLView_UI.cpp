@@ -714,6 +714,9 @@ void SIMPLView_UI::on_pipelineViewWidget_pipelineOpened(QString& file, const boo
 void SIMPLView_UI::on_pipelineViewWidget_windowNeedsRecheck()
 {
   QString fiBase = "Untitled";
+  if (!m_OpenedFilePath.isEmpty())
+    fiBase = m_OpenedFilePath;
+  
   QFileInfo fi(fiBase);
   if ( !windowFilePath().isEmpty() )
   {
