@@ -39,11 +39,6 @@ if(UNIX AND NOT APPLE)
     endif(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
 endif()
 
-# Add a short ReadMe file for OS X that warns of moving the applications
-if(APPLE)
-    install(FILES ${PROJECT_RESOURCES_DIR}/CPack/OS_X_ReadMe.txt DESTINATION .)
-endif()
-
 message(STATUS "SIMPLViewProj_RELEASE_TYPE: ${SIMPLViewProj_RELEASE_TYPE}")
 if("${SIMPLViewProj_RELEASE_TYPE}" STREQUAL "Official")
   set(SIMPLViewProj_VERSION_SHORT "${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR}.${SIMPLViewProj_VERSION_PATCH}")

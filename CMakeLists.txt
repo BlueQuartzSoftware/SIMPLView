@@ -269,7 +269,7 @@ include(${CMP_SOURCE_DIR}/ExtLib/HDF5Support.cmake)
 set(Boost_DEBUG FALSE)
 set(Boost_USE_MULTITHREADED TRUE)
 set(Boost_USE_STATIC_LIBS TRUE)
-set(Boost_ADDITIONAL_VERSIONS 1.57 1.58 1.59 1.60)
+set(Boost_ADDITIONAL_VERSIONS 1.57 1.58 1.59 1.60 1.61)
 set(Boost_FIND_COMPONENTS "")
 set(Boost_NO_BOOST_CMAKE 1)
 FIND_PACKAGE(Boost)
@@ -344,14 +344,11 @@ set(SIMPLViewProj_INSTALL_FILES "${PROJECT_INSTALL_HEADERS}")
 # Generate our ReadMe and License Files
 configure_file(${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt
                 ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt )
-configure_file(${PROJECT_SOURCE_DIR}/ReadMe-SIMPLView.md
-                ${SIMPLViewProj_BINARY_DIR}/ReadMe-SIMPLView.md )
 
 # --------------------------------------------------------------------
 # Generate install rules for the text files
-install(FILES ${SIMPLViewProj_BINARY_DIR}/ReadMe-SIMPLView.md
-              ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
-        DESTINATION .
+install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
+        DESTINATION ${DREAM3D_PACKAGE_DEST_PREFIX}
         COMPONENT Applications)
 
 # Include some directories for the compiler
