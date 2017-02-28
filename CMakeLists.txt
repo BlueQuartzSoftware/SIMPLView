@@ -348,7 +348,7 @@ configure_file(${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt
 # --------------------------------------------------------------------
 # Generate install rules for the text files
 install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
-        DESTINATION ${DREAM3D_PACKAGE_DEST_PREFIX}
+        DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
         COMPONENT Applications)
 
 # Include some directories for the compiler
