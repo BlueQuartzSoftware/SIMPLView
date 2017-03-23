@@ -101,6 +101,8 @@ public:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
 public slots:
+  void pipelineFileActivated(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
+
   void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
   void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
@@ -125,6 +127,8 @@ protected:
   QVector<QPluginLoader*> m_PluginLoaders;
 
   QVector<ISIMPLibPlugin*> loadPlugins();
+
+  void openPipeline(SIMPLView_UI* ui, const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
 
 protected slots:
   void on_actionCloseToolbox_triggered();

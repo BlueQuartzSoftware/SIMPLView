@@ -132,7 +132,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
     this, SLOT(addFilter(const QString&)));
 
   connect(m_Toolbox->getBookmarksWidget(), SIGNAL(pipelineFileActivated(const QString&, const bool&, const bool&)),
-    this, SLOT(newInstanceFromFile(const QString&, const bool&, const bool&)));
+    this, SLOT(pipelineFileActivated(const QString&, const bool&, const bool&)));
 
   connect(m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(bookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
 
@@ -473,7 +473,7 @@ bool SIMPLViewApplication::event(QEvent* event)
     QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
     QString filePath = openEvent->file();
 
-    newInstanceFromFile(filePath, true, true);
+    pipelineFileActivated(filePath, true, true);
 
     return true;
   }
@@ -501,7 +501,7 @@ void SIMPLViewApplication::openRecentFile()
   {
     QString filePath = action->data().toString();
 
-    newInstanceFromFile(filePath, true, true);
+    pipelineFileActivated(filePath, true, true);
 
     // Add file path to the recent files list for both instances
     QtSRecentFileList* list = QtSRecentFileList::instance();
@@ -563,7 +563,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
     return;
   }
 
-  newInstanceFromFile(filePath, true, true);
+  pipelineFileActivated(filePath, true, true);
 
   // Cache the last directory on old instance
   m_OpenDialogLastDirectory = filePath;
@@ -1249,11 +1249,9 @@ void SIMPLViewApplication::toPipelineIdleState()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles)
+void SIMPLViewApplication::openPipeline(SIMPLView_UI* ui, const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles)
 {
-  SIMPLView_UI* ui = getNewSIMPLViewInstance();
   QString nativeFilePath = QDir::toNativeSeparators(filePath);
-
   ui->getPipelineViewWidget()->openPipeline(nativeFilePath, 0, setOpenedFilePath, true);
 
   QtSRecentFileList* list = QtSRecentFileList::instance();
@@ -1262,6 +1260,34 @@ void SIMPLViewApplication::newInstanceFromFile(const QString& filePath, const bo
     // Add file to the recent files list
     list->addFile(filePath);
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::pipelineFileActivated(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles)
+{
+  QList<SIMPLView_UI*> instances = getSIMPLViewInstances();
+  for (QList<SIMPLView_UI*>::iterator iter = instances.begin(); iter != instances.end(); iter++)
+  {
+    SIMPLView_UI* ui = (*iter);
+    if (ui->isPipelineEmpty())
+    {
+      openPipeline(ui, filePath, setOpenedFilePath, addToRecentFiles);
+      return;
+    }
+  }
+
+  newInstanceFromFile(filePath, setOpenedFilePath, addToRecentFiles);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles)
+{
+  SIMPLView_UI* ui = getNewSIMPLViewInstance();
+  openPipeline(ui, filePath, setOpenedFilePath, addToRecentFiles);
   ui->show();
 }
 

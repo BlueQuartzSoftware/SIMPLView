@@ -175,6 +175,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
+    /**
+    * @ Helper function that returns true if the current pipeline is empty
+    */
+    bool isPipelineEmpty();
+
   public slots:
 
     /**

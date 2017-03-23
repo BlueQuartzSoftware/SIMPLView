@@ -265,6 +265,21 @@ void SIMPLView_UI::resizeEvent(QResizeEvent* event)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+bool SIMPLView_UI::isPipelineEmpty()
+{
+  if (nullptr == getPipelineViewWidget())
+  {
+    return false;
+  }
+
+  FilterPipeline::Pointer fp = getPipelineViewWidget()->getCopyOfFilterPipeline();
+
+  return fp->size() == 0;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipeline()
 {
   if(isWindowModified() == true)
