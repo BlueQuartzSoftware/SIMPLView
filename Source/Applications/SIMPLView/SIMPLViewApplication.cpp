@@ -194,8 +194,6 @@ SIMPLViewApplication::~SIMPLViewApplication()
   if (prefs.value("Program Mode", QString("")) == "Clear Cache")
   {
     prefs.clear();
-    prefs.setValue("First Run", QVariant(false));
-
     prefs.setValue("Program Mode", QString("Standard"));
   }
 
@@ -1292,9 +1290,6 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
 
   connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*)));
   connect(newInstance, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)), this, SLOT(on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget*)) );
-
-  // Check if this is the first run of SIMPLView
-  newInstance->checkFirstRun();
 
   return newInstance;
 }

@@ -88,7 +88,6 @@
 
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
-#include "Applications/SIMPLView/SIMPLViewv6Wizard.h"
 #include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
 
 #include "BrandedStrings.h"
@@ -117,9 +116,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_OpenedFilePath("")
 {
   m_OpenDialogLastDirectory = QDir::homePath();
-
-  // Update first run
-  updateFirstRun();
 
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
@@ -186,66 +182,6 @@ SIMPLView_UI::~SIMPLView_UI()
     delete m_InstanceMenuBar;
   }
 #endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::updateFirstRun()
-{
-  QtSSettings prefs;
-  QString filePath = prefs.fileName();
-  QFileInfo fi(filePath);
-
-  if(prefs.contains("First Run") == false)
-  {
-    prefs.setValue("First Run", true);
-  }
-  else
-  {
-    prefs.setValue("First Run", QVariant(false));
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::checkFirstRun()
-{
-  // Launch v6.0 dialog box if this is the first run of v6.0
-  QtSSettings prefs;
-  bool firstRun = prefs.value("First Run", true).toBool();
-  if(firstRun == true)
-  {
-    // This is the first run of SIMPLView v6.0, so we need to show the v6.0 wizard
-    SIMPLViewv6Wizard wizard(this, Qt::WindowTitleHint);
-    wizard.exec();
-
-    bool value = wizard.isBookmarkBtnChecked();
-    if(value == true)
-    {
-      BookmarksModel* model = BookmarksModel::Instance();
-
-      model->insertRow(0, QModelIndex());
-      QModelIndex nameIndex = model->index(0, BookmarksItem::Name, QModelIndex());
-      model->setData(nameIndex, "SIMPLView v4 Favorites", Qt::DisplayRole);
-      model->setData(nameIndex, QIcon(":/folder_blue.png"), Qt::DecorationRole);
-
-      QDir favoritesDir = getBookmarksToolboxWidget()->findV4FavoritesDirectory();
-      QString favoritesPath = favoritesDir.path();
-      QFileInfo fi(favoritesPath);
-
-      if(fi.exists() && favoritesPath.isEmpty() == false)
-      {
-        QDirIterator iter(favoritesPath, QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
-        while(iter.hasNext())
-        {
-          QString path = iter.next();
-          model->addFileToTree(path, nameIndex);
-        }
-      }
-    }
-  }
 }
 
 // -----------------------------------------------------------------------------

@@ -160,12 +160,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void writeSettings();
 
     /**
-    * @brief Checks if this the first run of SIMPLView
-    * and if so, displays an informative dialog box.
-    */
-    void checkFirstRun();
-
-    /**
      * @brief savePipeline Helper function that saves the pipeline
      */
     bool savePipeline();
@@ -381,11 +375,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
     bool                                  m_ShowFilterWidgetDeleteDialog;
-
-    /**
-    * @brief Updates the "first run" variable in the preferences file
-    */
-    void updateFirstRun();
 
     void cleanupPipeline();
 
