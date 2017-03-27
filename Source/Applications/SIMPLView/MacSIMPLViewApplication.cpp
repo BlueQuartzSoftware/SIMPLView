@@ -137,6 +137,13 @@ bool MacSIMPLViewApplication::event(QEvent* event)
     // We are already handling this event past this point, so don't pass it on
     return false;
   }
+  else if (event->type() == QEvent::FileOpen)
+  {
+    QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
+    QString filePath = openEvent->file();
+
+    newInstanceFromFile(filePath, true, true);
+  }
 
   return QApplication::event(event);
 }

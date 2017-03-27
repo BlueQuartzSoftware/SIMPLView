@@ -464,24 +464,6 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool SIMPLViewApplication::event(QEvent* event)
-{
-  if (event->type() == QEvent::FileOpen)
-  {
-    QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
-    QString filePath = openEvent->file();
-
-    newInstanceFromFile(filePath, true, true);
-
-    return true;
-  }
-
-  return QApplication::event(event);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::updateRecentFileList(const QString& file)
 {
   // This should never be executed

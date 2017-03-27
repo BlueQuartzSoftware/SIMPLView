@@ -91,13 +91,6 @@ public:
 
   bool isCurrentlyRunning(SIMPLView_UI* instance);
 
-  /**
-   * @brief event
-   * @param event
-   * @return
-   */
-  bool event(QEvent* event);
-
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
 public slots:
