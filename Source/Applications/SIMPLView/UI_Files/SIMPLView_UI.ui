@@ -208,7 +208,11 @@ sss</string>
           <item>
            <widget class="QPushButton" name="startPipelineBtn">
             <property name="text">
-             <string>Go</string>
+             <string>Start Pipeline</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
+              <normaloff>:/media_play_green.png</normaloff>:/media_play_green.png</iconset>
             </property>
             <property name="default">
              <bool>false</bool>
@@ -507,6 +511,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
