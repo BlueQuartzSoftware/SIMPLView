@@ -535,6 +535,10 @@ void SIMPLView_UI::setupGui()
   // Set the IssuesDockWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->setPipelineMessageObserver(issuesDockWidget);
 
+  // Add icon to "Start Pipeline" button
+  startPipelineBtn->setText("Start Pipeline");
+  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
+
   m_ProgressBar->hide();
   //  horizontalLayout_2->removeWidget(m_ProgressBar);
   //  horizontalLayout_2->removeWidget(startPipelineBtn);
@@ -740,7 +744,7 @@ QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::on_startPipelineBtn_clicked()
 {
-  if(startPipelineBtn->text().compare("Cancel") == 0)
+  if(startPipelineBtn->text().compare("Cancel Pipeline") == 0)
   {
     qDebug() << "canceling from GUI...."
              << "\n";
@@ -862,7 +866,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   emit pipelineStarted();
   m_WorkerThread->start();
-  startPipelineBtn->setText("Cancel");
+  startPipelineBtn->setText("Cancel Pipeline");
+  startPipelineBtn->setIcon(QIcon(":/media_stop_red.png"));
 }
 
 // -----------------------------------------------------------------------------
@@ -950,7 +955,8 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 void SIMPLView_UI::pipelineDidFinish()
 {
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
-  startPipelineBtn->setText("Go");
+  startPipelineBtn->setText("Start Pipeline");
+  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
   m_ProgressBar->setValue(0);
 
   m_ProgressBar->hide();

@@ -210,10 +210,6 @@ sss</string>
             <property name="text">
              <string>Start Pipeline</string>
             </property>
-            <property name="icon">
-             <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-              <normaloff>:/media_play_green.png</normaloff>:/media_play_green.png</iconset>
-            </property>
             <property name="default">
              <bool>false</bool>
             </property>
