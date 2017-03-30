@@ -537,22 +537,6 @@ void SIMPLView_UI::setupGui()
 
   // Add icon to "Start Pipeline" button
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
-
-  circularProgress->setNullPosition(QRoundProgressBar::PositionTop);
-  //circularProgress->setBarStyle(QRoundProgressBar::StylePie);
-  circularProgress->setFormat("%v%");
-  circularProgress->setDecimals(0);
-
-  QPalette p2;
-  //p2.setBrush(QPalette::AlternateBase, Qt::black);
-  p2.setBrush(QPalette::Base, Qt::lightGray);
-  p2.setColor(QPalette::Text, Qt::black);
-  p2.setColor(QPalette::Highlight, Qt::black);
-  circularProgress->setPalette(p2);
-
-  circularProgress->hide();
-
 }
 
 // -----------------------------------------------------------------------------
@@ -779,8 +763,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   }
   m_StdOutputTabMap.clear();
 
-  circularProgress->show();
-
   if(m_WorkerThread != nullptr)
   {
     m_WorkerThread->wait(); // Wait until the thread is complete
@@ -876,7 +858,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_red.png"));
 }
 
 // -----------------------------------------------------------------------------
@@ -893,7 +874,15 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
   if(msg.getType() == PipelineMessage::ProgressValue)
   {
-    this->circularProgress->setValue(msg.getProgressValue());
+    double progValue = static_cast<double>(msg.getProgressValue()) / 100;
+    QString cssStr;
+    QTextStream ss(&cssStr);
+    ss << "QPushButton { ";
+    ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(92, 182, 45), stop:%1 rgb(92, 182, 45), stop:%2 rgb(135, 211, 95), stop:1 rgb(135, 211, 95));\n").arg(progValue).arg(progValue + 0.001);
+    ss << "color: white;\n";
+    ss << "border-radius: 3px;\n";
+    ss << "}";
+    startPipelineBtn->setStyleSheet(cssStr);
   }
   else if(msg.getType() == PipelineMessage::StatusMessage)
   {
@@ -904,7 +893,17 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
   }
   else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
-    this->circularProgress->setValue(msg.getProgressValue());
+
+    double progValue = static_cast<double>(msg.getProgressValue()) / 100;
+    QString cssStr;
+    QTextStream ss(&cssStr);
+    ss << "QPushButton { ";
+    ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(92, 182, 45), stop:%1 rgb(92, 182, 45), stop:%2 rgb(135, 211, 95), stop:1 rgb(135, 211, 95));\n").arg(progValue).arg(progValue + 0.001);
+    ss << "color: white;\n";
+    ss << "border-radius: 3px;\n";
+    ss << "}";
+    startPipelineBtn->setStyleSheet(cssStr);
+
     if(nullptr != this->statusBar())
     {
       this->statusBar()->showMessage(msg.generateStatusString());
@@ -965,10 +964,15 @@ void SIMPLView_UI::pipelineDidFinish()
 {
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
-  circularProgress->setValue(0);
 
-  circularProgress->hide();
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton { ";
+  ss << "background-color: rgb(135, 211, 95);\n";
+  ss << "color: white;\n";
+  ss << "border-radius: 3px;\n";
+  ss << "}";
+  startPipelineBtn->setStyleSheet(cssStr);
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);
