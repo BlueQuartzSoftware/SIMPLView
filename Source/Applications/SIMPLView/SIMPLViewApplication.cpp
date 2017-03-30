@@ -919,6 +919,8 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
     if (viewWidget->filterCount() > 0)
     {
       viewWidget->clearFilterWidgets();
+      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+      menuItems->getActionClearPipeline()->setDisabled(true);
     }
   }
 }
