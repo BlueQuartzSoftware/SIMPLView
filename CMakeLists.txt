@@ -92,12 +92,6 @@ endif()
 # Find the Git Package for Versioning. It should be ok if Git is NOT found
 Find_package(Git)
 
-cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
-                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
-                        NAMESPACE "SIMPLViewProj"
-                        PROJECT_NAME "${PROJECT_NAME}"
-                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
-
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
@@ -127,6 +121,12 @@ if(NOT EXISTS "${CMP_SOURCE_DIR}")
 endif()
 
 INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
+
+cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
+                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
+                        NAMESPACE "SIMPLViewProj"
+                        PROJECT_NAME "${PROJECT_NAME}"
+                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
 
 # cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
 #                         GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
@@ -217,6 +217,20 @@ else()
   set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
 endif()
 get_property(CMP_PROJECT_INSTALL_HEADERS GLOBAL PROPERTY CMP_PROJECT_INSTALL_HEADERS)
+
+# -----------------------------------------------------------------------
+# Set a Global Prefix where everthing is going to get intalled. For OS X we are
+# going to try to install everything into the .app package
+# -----------------------------------------------------------------------
+set_property(GLOBAL PROPERTY DREAM3D_PACKAGE_DEST_PREFIX ".")
+if(APPLE)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set_property(GLOBAL PROPERTY DREAM3D_PACKAGE_DEST_PREFIX "${SIMPLView_APPLICATION_NAME}${EXE_DEBUG_EXTENSION}.app/Contents/")
+  else()
+    set_property(GLOBAL PROPERTY DREAM3D_PACKAGE_DEST_PREFIX "${SIMPLView_APPLICATION_NAME}.app/Contents/")
+  endif()
+endif()
+get_property(DREAM3D_PACKAGE_DEST_PREFIX GLOBAL PROPERTY DREAM3D_PACKAGE_DEST_PREFIX)
 
 # -----------------------------------------------------------------------
 # Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
