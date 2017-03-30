@@ -539,11 +539,20 @@ void SIMPLView_UI::setupGui()
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
 
-  m_ProgressBar->hide();
-  //  horizontalLayout_2->removeWidget(m_ProgressBar);
-  //  horizontalLayout_2->removeWidget(startPipelineBtn);
-  //  horizontalLayout_2->addSpacerItem(progressSpacer);
-  //  horizontalLayout_2->addWidget(startPipelineBtn);
+  circularProgress->setNullPosition(QRoundProgressBar::PositionTop);
+  //circularProgress->setBarStyle(QRoundProgressBar::StylePie);
+  circularProgress->setFormat("%v%");
+  circularProgress->setDecimals(0);
+
+  QPalette p2;
+  //p2.setBrush(QPalette::AlternateBase, Qt::black);
+  p2.setBrush(QPalette::Base, Qt::lightGray);
+  p2.setColor(QPalette::Text, Qt::black);
+  p2.setColor(QPalette::Highlight, Qt::black);
+  circularProgress->setPalette(p2);
+
+  circularProgress->hide();
+
 }
 
 // -----------------------------------------------------------------------------
@@ -770,7 +779,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   }
   m_StdOutputTabMap.clear();
 
-  m_ProgressBar->show();
+  circularProgress->show();
 
   if(m_WorkerThread != nullptr)
   {
@@ -884,7 +893,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
   if(msg.getType() == PipelineMessage::ProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    this->circularProgress->setValue(msg.getProgressValue());
   }
   else if(msg.getType() == PipelineMessage::StatusMessage)
   {
@@ -895,7 +904,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
   }
   else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    this->circularProgress->setValue(msg.getProgressValue());
     if(nullptr != this->statusBar())
     {
       this->statusBar()->showMessage(msg.generateStatusString());
@@ -957,9 +966,9 @@ void SIMPLView_UI::pipelineDidFinish()
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
-  m_ProgressBar->setValue(0);
+  circularProgress->setValue(0);
 
-  m_ProgressBar->hide();
+  circularProgress->hide();
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);
