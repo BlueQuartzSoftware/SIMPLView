@@ -109,7 +109,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   QApplication(argc, argv),
   m_ActiveWindow(nullptr),
   m_PreviousActiveWindow(nullptr),
-  m_OpenDialogLastDirectory(""),
+  m_OpenDialogLastFilePath(""),
   m_ShowSplash(true),
   m_SplashScreen(nullptr)
 {
@@ -538,7 +538,7 @@ void SIMPLViewApplication::on_actionNew_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionOpen_triggered()
 {
-  QString proposedDir = m_OpenDialogLastDirectory;
+  QString proposedDir = m_OpenDialogLastFilePath;
   QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"),
     proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
   if (filePath.isEmpty())
@@ -549,7 +549,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
   newInstanceFromFile(filePath, true, true);
 
   // Cache the last directory on old instance
-  m_OpenDialogLastDirectory = filePath;
+  m_OpenDialogLastFilePath = filePath;
 }
 
 // -----------------------------------------------------------------------------
@@ -587,7 +587,7 @@ void SIMPLViewApplication::on_actionAddBookmark_triggered()
 
   if (nullptr != bookmarksToolboxWidget)
   {
-    QString proposedDir = m_OpenDialogLastDirectory;
+    QString proposedDir = m_OpenDialogLastFilePath;
     QList<QString> newPrefPaths;
 
     newPrefPaths = QFileDialog::getOpenFileNames(toolbox, tr("Choose Pipeline File(s)"),
@@ -611,7 +611,7 @@ void SIMPLViewApplication::on_actionAddBookmark_triggered()
     if (newPrefPaths.size() > 0)
     {
       // Cache the directory from the last path added
-      m_OpenDialogLastDirectory = newPrefPaths[newPrefPaths.size() - 1];
+      m_OpenDialogLastFilePath = newPrefPaths[newPrefPaths.size() - 1];
     }
   }
 }

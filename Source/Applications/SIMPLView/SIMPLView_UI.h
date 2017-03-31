@@ -139,7 +139,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief setOpenedFilePath
     * @param path
     */
-    void setOpenDialogLastDirectory(const QString& path);
+    void setOpenDialogLastFilePath(const QString& path);
 
     /**
      * @brief updateAndSyncDockWidget
@@ -376,7 +376,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     bool                                  m_ShouldRestart;
 
     QString                               m_OpenedFilePath;
-    static QString                        m_OpenDialogLastDirectory;
+    static QString                        m_OpenDialogLastFilePath;
 
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
