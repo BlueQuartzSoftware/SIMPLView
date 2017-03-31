@@ -181,6 +181,8 @@ private:
 
   bool m_ShowFilterWidgetDeleteDialog;
 
+  int m_minSplashTime;
+
   void readSettings();
   void writeSettings();
 

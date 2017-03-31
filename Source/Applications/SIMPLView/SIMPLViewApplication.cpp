@@ -39,9 +39,11 @@
 #endif
 
 #include <iostream>
+#include <ctime>
 
 #include <QtCore/QPluginLoader>
 #include <QtCore/QProcess>
+#include <QtCore/QThread>
 
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QSplashScreen>
@@ -111,7 +113,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_PreviousActiveWindow(nullptr),
   m_OpenDialogLastDirectory(""),
   m_ShowSplash(true),
-  m_SplashScreen(nullptr)
+  m_SplashScreen(nullptr),
+  m_minSplashTime(4)
 {
   m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
@@ -239,6 +242,9 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   this->m_SplashScreen = new QSplashScreen(pixmap);
   this->m_SplashScreen->show();
 
+  // start timer;
+  std::clock_t startClock = std::clock();
+
   QDir dir(QApplication::applicationDirPath());
 
 #if defined (Q_OS_MAC)
@@ -267,6 +273,20 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   if (m_ShowSplash)
   {
 //   delay(1);
+    // if official release, enforce the minimum duration for splash screen
+    QString releaseType = QString::fromLatin1(SIMPLViewProj_RELEASE_TYPE);
+    if(releaseType.compare("Official") == 0)
+    {
+      double splashDuration = (std::clock() - startClock) / (double)CLOCKS_PER_SEC;
+      if(splashDuration < m_minSplashTime)
+      {
+        QString msg = QObject::tr("");
+        this->m_SplashScreen->showMessage(msg, Qt::AlignVCenter | Qt::AlignRight, Qt::white);
+
+        unsigned long extendedDuration = static_cast<unsigned long>((m_minSplashTime - splashDuration) * 1000);
+        QThread::msleep(extendedDuration);
+      }
+    }
     this->m_SplashScreen->finish(nullptr);
   }
   QApplication::instance()->processEvents();
