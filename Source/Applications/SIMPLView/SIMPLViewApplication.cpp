@@ -168,6 +168,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems->getActionCut(), SIGNAL(triggered()), this, SLOT(on_actionCut_triggered()));
   connect(menuItems->getActionCopy(), SIGNAL(triggered()), this, SLOT(on_actionCopy_triggered()));
   connect(menuItems->getActionPaste(), SIGNAL(triggered()), this, SLOT(on_actionPaste_triggered()));
+  connect(menuItems->getActionUndo(), SIGNAL(triggered()), this, SLOT(on_actionUndo_triggered()));
+  connect(menuItems->getActionRedo(), SIGNAL(triggered()), this, SLOT(on_actionRedo_triggered()));
 
   // Connection to update the recent files list on all windows when it changes
   QtSRecentFileList* recentsList = QtSRecentFileList::instance();
@@ -507,11 +509,11 @@ void SIMPLViewApplication::addFilter(const QString &className)
   {
     AbstractFilter::Pointer filter = AbstractFilter::CreateFilterFromClassName(className);
 
-    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
-    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
-
     m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
     m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
+
+    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
+    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
   }
 }
 
@@ -997,6 +999,34 @@ void SIMPLViewApplication::on_actionPaste_triggered()
 
     AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
     viewWidget->addUndoCommand(addCmd);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionUndo_triggered()
+{
+  if (nullptr != m_ActiveWindow)
+  {
+    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+    m_ActiveWindow->addStdOutputMessage(menuItems->getActionUndo()->text());
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionRedo_triggered()
+{
+  if (nullptr != m_ActiveWindow)
+  {
+    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+    m_ActiveWindow->addStdOutputMessage(menuItems->getActionRedo()->text());
   }
 }
 

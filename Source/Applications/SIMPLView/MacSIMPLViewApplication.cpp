@@ -170,8 +170,9 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 
   if (instance->isActiveWindow())
   {
-    m_MenuEdit->insertAction(m_EditSeparator, viewWidget->getActionRedo());
-    m_MenuEdit->insertAction(viewWidget->getActionRedo(), viewWidget->getActionUndo());
+    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+    menuItems->getActionUndo()->setText(viewWidget->getActionUndo()->text());
+    menuItems->getActionRedo()->setText(viewWidget->getActionRedo()->text());
 
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
@@ -186,9 +187,6 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   }
   else
   {
-    m_MenuEdit->removeAction(viewWidget->getActionRedo());
-    m_MenuEdit->removeAction(viewWidget->getActionUndo());
-
     m_PreviousActiveWindow = instance;
   }
 }
@@ -371,6 +369,8 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
+  QAction* actionUndo = menuItems->getActionUndo();
+  QAction* actionRedo = menuItems->getActionRedo();
 
   m_GlobalMenu = QSharedPointer<QMenuBar>(new QMenuBar());
 
@@ -390,6 +390,8 @@ void MacSIMPLViewApplication::createGlobalMenu()
 
   // Create Edit Menu
   m_GlobalMenu->addMenu(m_MenuEdit);
+  m_MenuEdit->addAction(actionUndo);
+  m_MenuEdit->addAction(actionRedo);
   m_EditSeparator = m_MenuEdit->addSeparator();
   m_MenuEdit->addAction(actionCut);
   m_MenuEdit->addAction(actionCopy);
