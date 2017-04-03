@@ -57,17 +57,23 @@
          <height>32</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Show the previous page</string>
+       </property>
+       <property name="statusTip">
+        <string>Show the previous page</string>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../Resources/icons/images/Icons.qrc">
+        <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
          <normaloff>:/nav_left_blue.png</normaloff>:/nav_left_blue.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>32</width>
+         <height>32</height>
         </size>
        </property>
        <property name="flat">
@@ -95,17 +101,23 @@
          <height>32</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Show the next page</string>
+       </property>
+       <property name="statusTip">
+        <string>Show the next page</string>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../Resources/icons/images/Icons.qrc">
+        <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
          <normaloff>:/nav_right_blue.png</normaloff>:/nav_right_blue.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>32</width>
+         <height>32</height>
         </size>
        </property>
        <property name="flat">
@@ -133,12 +145,18 @@
          <height>32</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Reload this page</string>
+       </property>
+       <property name="statusTip">
+        <string>Reload this page</string>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../../../Resources/icons/images/Icons.qrc">
-         <normaloff>:/nav_refresh_blue.png</normaloff>:/nav_refresh_blue.png</iconset>
+        <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
+         <normaloff>:/refresh.png</normaloff>:/refresh.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -191,7 +209,7 @@ rgb(162, 162, 162);
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../../Resources/icons/images/Icons.qrc"/>
+  <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
  </resources>
  <connections/>
 </ui>
