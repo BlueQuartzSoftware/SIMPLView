@@ -48,7 +48,7 @@ sss</string>
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -61,10 +61,21 @@ sss</string>
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <item row="0" column="0">
+    <item row="2" column="0">
+     <widget class="StandardOutputDockWidget" name="stdOutDockWidget">
+      <property name="windowTitle">
+       <string>[*]Standard Output</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="IssuesDockWidget" name="issuesDockWidget">
+      <property name="windowTitle">
+       <string>[*]Pipeline Issues</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
      <widget class="QtSSplitter" name="splitter">
       <property name="styleSheet">
        <string notr="true">QSplitter::handle {
@@ -148,7 +159,7 @@ sss</string>
              <x>0</x>
              <y>0</y>
              <width>1075</width>
-             <height>526</height>
+             <height>527</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -208,7 +219,7 @@ sss</string>
           <item>
            <widget class="QPushButton" name="startPipelineBtn">
             <property name="text">
-             <string>Go</string>
+             <string>Start Pipeline</string>
             </property>
             <property name="default">
              <bool>false</bool>
@@ -255,45 +266,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="IssuesDockWidget" name="issuesDockWidget">
-   <property name="windowTitle">
-    <string>[*]Pipeline Issues</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-  </widget>
-  <widget class="StandardOutputDockWidget" name="stdOutDockWidget">
-   <property name="windowTitle">
-    <string>[*]Standard Output</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
     <string>Filter Library</string>
@@ -507,6 +479,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

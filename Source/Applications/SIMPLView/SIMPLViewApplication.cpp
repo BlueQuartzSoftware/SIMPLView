@@ -529,6 +529,9 @@ void SIMPLViewApplication::addFilter(const QString &className)
 
     AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
     m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
+
+    m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
+    m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
   }
 }
 
@@ -939,6 +942,8 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
     if (viewWidget->filterCount() > 0)
     {
       viewWidget->clearFilterWidgets();
+      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+      menuItems->getActionClearPipeline()->setDisabled(true);
     }
   }
 }
