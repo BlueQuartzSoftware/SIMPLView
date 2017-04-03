@@ -155,9 +155,6 @@ protected slots:
   void on_actionPaste_triggered();
   void on_actionClearPipeline_triggered();
 
-  void on_actionUndo_triggered();
-  void on_actionRedo_triggered();
-
   void updatePasteState(bool canPaste);
 
   /**
