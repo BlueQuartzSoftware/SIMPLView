@@ -525,6 +525,7 @@ void SIMPLView_UI::setupGui()
   connectSignalsSlots();
 
   connect(pipelineViewWidget, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
+  connect(pipelineViewWidget, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
 
   connect(pipelineViewWidget, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)), this, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)));
 
@@ -532,8 +533,11 @@ void SIMPLView_UI::setupGui()
   // Tell the Filter Library that we have more Filters (potentially)
   getFilterLibraryToolboxWidget()->refreshFilterGroups();
 
+  connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesDockWidget, SLOT(clearIssues()));
+  connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesDockWidget, SLOT(displayCachedMessages()));
+
   // Set the IssuesDockWidget as a PipelineMessageObserver Object.
-  pipelineViewWidget->setPipelineMessageObserver(issuesDockWidget);
+  pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
 
   // Add icon to "Start Pipeline" button
   startPipelineBtn->setText("Start Pipeline");
@@ -884,13 +888,13 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     ss << "}";
     startPipelineBtn->setStyleSheet(cssStr);
   }
-  else if(msg.getType() == PipelineMessage::StatusMessage)
-  {
-    if(nullptr != this->statusBar())
-    {
-      this->statusBar()->showMessage(msg.generateStatusString());
-    }
-  }
+//  else if(msg.getType() == PipelineMessage::StatusMessage)
+//  {
+//    if(nullptr != this->statusBar())
+//    {
+//      this->statusBar()->showMessage(msg.generateStatusString());
+//    }
+//  }
   else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
 
@@ -909,8 +913,16 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
-  else if(msg.getType() == PipelineMessage::StandardOutputMessage)
+  else if(msg.getType() == PipelineMessage::StandardOutputMessage || msg.getType() == PipelineMessage::StatusMessage)
   {
+    if (msg.getType() == PipelineMessage::StatusMessage)
+    {
+      if(nullptr != this->statusBar())
+      {
+        this->statusBar()->showMessage(msg.generateStatusString());
+      }
+    }
+
     if(stdOutDockWidget->isVisible() == false)
     {
       stdOutDockWidget->setVisible(true);
@@ -921,39 +933,10 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
     }
 
-    int pipelineIndex = msg.getPipelineIndex();
-    QString humanLabel = msg.getFilterHumanLabel();
-    QString text = msg.getText();
-    QString tabTitle = tr("[%1] %2").arg(QString::number(pipelineIndex)).arg(humanLabel);
-    bool matched = false;
-    for(int i = 0; i < tabWidget->count(); i++)
-    {
-      if(tabWidget->tabText(i) == tabTitle)
-      {
-        matched = true;
-        QTextEdit* textEdit = m_StdOutputTabMap.value(tabWidget->widget(i));
-        if(nullptr != textEdit)
-        {
-          textEdit->append(text);
-          textEdit->ensureCursorVisible();
-        }
-      }
-    }
-
-    if(matched == false)
-    {
-      QWidget* tab = new QWidget();
-      QGridLayout* gridLayout = new QGridLayout(tab);
-      gridLayout->setContentsMargins(0, 0, 0, 0);
-      QTextEdit* textEdit = new QTextEdit(tab);
-      textEdit->setReadOnly(true);
-      textEdit->append(text);
-      textEdit->ensureCursorVisible();
-      gridLayout->addWidget(textEdit, 0, 0, 1, 1);
-      tabWidget->addTab(tab, tabTitle);
-      tabWidget->setCurrentWidget(tab);
-      m_StdOutputTabMap.insert(tab, textEdit);
-    }
+    QString text = "<span style=\" color:#000000;\" >";
+    text.append(msg.getText());
+    text.append("</span>");
+    stdOutDockWidget->appendText(text);
   }
 }
 
@@ -1197,6 +1180,17 @@ void SIMPLView_UI::markDocumentAsDirty()
 void SIMPLView_UI::setStatusBarMessage(const QString& msg)
 {
   statusbar->showMessage(msg);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addStdOutputMessage(const QString& msg)
+{
+  QString text = "<span style=\" color:#000000;\" >";
+  text.append(msg);
+  text.append("</span>");
+  stdOutDockWidget->appendText(text);
 }
 
 // -----------------------------------------------------------------------------

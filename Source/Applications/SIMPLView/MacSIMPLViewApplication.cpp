@@ -254,13 +254,13 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  if (isCurrentlyRunning(instance) == true)
+  if (isCurrentlyRunning(instance) == false && instance->getPipelineViewWidget()->getFilterPipeline()->getFilterContainer().size() > 0)
   {
-    menuItems->getActionClearPipeline()->setDisabled(true);
+    menuItems->getActionClearPipeline()->setEnabled(true);
   }
   else
   {
-    menuItems->getActionClearPipeline()->setEnabled(true);
+    menuItems->getActionClearPipeline()->setDisabled(true);
   }
 
   menuItems->getActionShowFilterList()->setDisabled(true);

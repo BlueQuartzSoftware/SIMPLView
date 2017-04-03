@@ -70,7 +70,6 @@ class FilterListWidget;
 class UpdateCheckDialog;
 class UpdateCheckData;
 class UpdateCheck;
-class QtSHelpDialog;
 class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
@@ -179,9 +178,15 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     /**
     * @brief setFilterBeingDragged
-    * @param w
+    * @param msg
     */
     void setStatusBarMessage(const QString& msg);
+
+    /**
+    * @brief addStdOutputMessage
+    * @param msg
+    */
+    void addStdOutputMessage(const QString& msg);
 
     /**
     * @brief versionCheckReply
