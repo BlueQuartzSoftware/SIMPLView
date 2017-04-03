@@ -872,6 +872,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_stop_red.png"));
+  addStdOutputMessage("");
+  addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
 
 // -----------------------------------------------------------------------------
@@ -937,11 +939,20 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::pipelineDidFinish()
 {
+  if (m_PipelineInFlight->getCancel() == true)
+  {
+    addStdOutputMessage("<b>*************** PIPELINE CANCELED ***************</b>");
+  }
+  else
+  {
+    addStdOutputMessage("<b>*************** PIPELINE FINISHED ***************</b>");
+  }
+  addStdOutputMessage("");
+
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
   m_ProgressBar->setValue(0);
-
   m_ProgressBar->hide();
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
