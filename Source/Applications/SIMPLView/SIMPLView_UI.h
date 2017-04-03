@@ -70,7 +70,6 @@ class FilterListWidget;
 class UpdateCheckDialog;
 class UpdateCheckData;
 class UpdateCheck;
-class QtSHelpDialog;
 class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
