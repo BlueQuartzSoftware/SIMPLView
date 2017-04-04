@@ -542,12 +542,6 @@ void SIMPLView_UI::setupGui()
   // Add icon to "Start Pipeline" button
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
-
-  m_ProgressBar->hide();
-  //  horizontalLayout_2->removeWidget(m_ProgressBar);
-  //  horizontalLayout_2->removeWidget(startPipelineBtn);
-  //  horizontalLayout_2->addSpacerItem(progressSpacer);
-  //  horizontalLayout_2->addWidget(startPipelineBtn);
 }
 
 // -----------------------------------------------------------------------------
@@ -953,7 +947,6 @@ void SIMPLView_UI::pipelineDidFinish()
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
   m_ProgressBar->setValue(0);
-  m_ProgressBar->hide();
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);

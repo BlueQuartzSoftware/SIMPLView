@@ -204,6 +204,16 @@ sss</string>
            <number>0</number>
           </property>
           <item>
+           <widget class="QPushButton" name="startPipelineBtn">
+            <property name="text">
+             <string>Start Pipeline</string>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QProgressBar" name="m_ProgressBar">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -213,16 +223,6 @@ sss</string>
             </property>
             <property name="value">
              <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="startPipelineBtn">
-            <property name="text">
-             <string>Start Pipeline</string>
-            </property>
-            <property name="default">
-             <bool>false</bool>
             </property>
            </widget>
           </item>
