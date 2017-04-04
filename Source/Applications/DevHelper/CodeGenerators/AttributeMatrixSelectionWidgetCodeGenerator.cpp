@@ -57,8 +57,8 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParamete
 {
   QString s;
   QTextStream out(&s);
-  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amReq;\n";
-  out << "  parameters.push_back(SIMPL_NEW_AM_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amReq));";
+  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;\n";
+  out << "  parameters.push_back(SIMPL_NEW_AM_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amsReq));";
   return s;
 }
 
