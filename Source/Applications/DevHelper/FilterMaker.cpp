@@ -657,17 +657,16 @@ void FilterMaker::updateTestLocations()
   QStringList outLines;
   QStringList list = contents.split(QRegExp("\\n"));
   QStringListIterator sourceLines(list);
-  QString searchString = "#endif";
+  QString searchString = "@FILTER_NAMESPACE@";
 
   while (sourceLines.hasNext())
   {
     QString line = sourceLines.next();
     if (line.contains(searchString))
     {
-      QString str("namespace UnitTest\n{");
+      QString str;
       QTextStream outStream(&str);
       outStream << namespaceStr << "\n";
-      outStream << "}\n";
       outLines.push_back(str);
       outLines.push_back(line);
     }
