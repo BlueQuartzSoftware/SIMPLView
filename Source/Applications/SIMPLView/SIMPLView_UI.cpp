@@ -865,7 +865,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_red.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_stop.png"));
   addStdOutputMessage("");
   addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }

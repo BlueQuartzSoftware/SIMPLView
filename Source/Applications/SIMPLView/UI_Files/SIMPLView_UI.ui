@@ -20,26 +20,7 @@
    <string>ActiveDocument.txt</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"> QStatusBar {
-     background: rgb(80, 80, 80);
-     color: white;
- }
-
- QStatusBar QToolButton {
-  font: bold 12pt &quot;Arial&quot;;
-     border: 1px solid #8f8f91;
-     border-radius: 3px;
-  color: rgb(255, 255, 255);
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(103, 103, 103, 255), stop:1 rgba(158, 158, 158, 255));
-     min-width: 80px;
-  min-height: 20px;
- }
-
- QStatusBar QToolButton:checked {
-  color: rgb(0, 0, 0);
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(210, 210, 210, 255), stop:1 rgba(225, 225, 225, 255));
- }
-sss</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
@@ -159,7 +140,7 @@ sss</string>
              <x>0</x>
              <y>0</y>
              <width>1075</width>
-             <height>527</height>
+             <height>515</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -205,11 +186,36 @@ sss</string>
           </property>
           <item>
            <widget class="QPushButton" name="startPipelineBtn">
+            <property name="palette">
+             <palette>
+              <active/>
+              <inactive/>
+              <disabled/>
+             </palette>
+            </property>
+            <property name="font">
+             <font>
+              <stylestrategy>PreferAntialias</stylestrategy>
+             </font>
+            </property>
             <property name="text">
              <string>Start Pipeline</string>
             </property>
+            <property name="icon">
+             <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
+              <normaloff>:/media_play_green@2x.png</normaloff>:/media_play_green@2x.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
             <property name="default">
              <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

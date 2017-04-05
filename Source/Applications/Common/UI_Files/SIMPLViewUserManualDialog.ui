@@ -68,7 +68,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-         <normaloff>:/nav_left_blue.png</normaloff>:/nav_left_blue.png</iconset>
+         <normaloff>:/navigate_left.png</normaloff>:/navigate_left.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -112,7 +112,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-         <normaloff>:/nav_right_blue.png</normaloff>:/nav_right_blue.png</iconset>
+         <normaloff>:/navigate_right.png</normaloff>:/navigate_right.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -156,7 +156,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-         <normaloff>:/refresh.png</normaloff>:/refresh.png</iconset>
+         <normaloff>:/reload@2x.png</normaloff>:/reload@2x.png</iconset>
        </property>
        <property name="iconSize">
         <size>
