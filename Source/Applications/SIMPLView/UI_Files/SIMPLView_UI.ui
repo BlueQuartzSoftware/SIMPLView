@@ -179,7 +179,7 @@
            <number>4</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>10</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -203,7 +203,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-              <normaloff>:/media_play_green@2x.png</normaloff>:/media_play_green@2x.png</iconset>
+              <normaloff>:/media_play_flat@2x.png</normaloff>:/media_play_flat@2x.png</iconset>
             </property>
             <property name="iconSize">
              <size>

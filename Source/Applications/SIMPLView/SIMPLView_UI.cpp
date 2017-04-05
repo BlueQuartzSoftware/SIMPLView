@@ -540,8 +540,8 @@ void SIMPLView_UI::setupGui()
   pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
 
   // Add icon to "Start Pipeline" button
-  startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
+ // startPipelineBtn->setText("Start Pipeline");
+  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
 }
 
 // -----------------------------------------------------------------------------
@@ -865,7 +865,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_stop_flat.png"));
   addStdOutputMessage("");
   addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
@@ -945,7 +945,7 @@ void SIMPLView_UI::pipelineDidFinish()
 
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
   m_ProgressBar->setValue(0);
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
