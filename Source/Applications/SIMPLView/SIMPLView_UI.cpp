@@ -538,10 +538,6 @@ void SIMPLView_UI::setupGui()
 
   // Set the IssuesDockWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
-
-  // Add icon to "Start Pipeline" button
- // startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
 }
 
 // -----------------------------------------------------------------------------
@@ -768,8 +764,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   }
   m_StdOutputTabMap.clear();
 
-  m_ProgressBar->show();
-
   if(m_WorkerThread != nullptr)
   {
     m_WorkerThread->wait(); // Wait until the thread is complete
@@ -865,7 +859,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_flat.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
   addStdOutputMessage("");
   addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
@@ -884,7 +878,15 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
   if(msg.getType() == PipelineMessage::ProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    double progValue = static_cast<double>(msg.getProgressValue()) / 100;
+    QString cssStr;
+    QTextStream ss(&cssStr);
+    ss << "QPushButton { ";
+    ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(48, 48, 48), stop:%1 rgb(48, 48, 48), stop:%2 rgb(94, 94, 94), stop:1 rgb(94, 94, 94));\n").arg(progValue).arg(progValue + 0.001);
+    ss << "color: white;\n";
+    ss << "border-radius: 3px;\n";
+    ss << "}";
+    startPipelineBtn->setStyleSheet(cssStr);
   }
 //  else if(msg.getType() == PipelineMessage::StatusMessage)
 //  {
@@ -895,36 +897,45 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 //  }
   else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
-    if(nullptr != this->statusBar())
-    {
-      this->statusBar()->showMessage(msg.generateStatusString());
-    }
+      double progValue = static_cast<double>(msg.getProgressValue()) / 100;
+      QString cssStr;
+      QTextStream ss(&cssStr);
+      ss << "QPushButton { ";
+      ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(48, 48, 48), stop:%1 rgb(48, 48, 48), stop:%2 rgb(94, 94, 94), stop:1 rgb(94, 94, 94));\n").arg(progValue).arg(progValue + 0.001);
+      ss << "color: white;\n";
+      ss << "border-radius: 3px;\n";
+      ss << "}";
+      startPipelineBtn->setStyleSheet(cssStr);
+      
+      if(nullptr != this->statusBar())
+      {
+          this->statusBar()->showMessage(msg.generateStatusString());
+      }
   }
   else if(msg.getType() == PipelineMessage::StandardOutputMessage || msg.getType() == PipelineMessage::StatusMessage)
   {
-    if (msg.getType() == PipelineMessage::StatusMessage)
-    {
-      if(nullptr != this->statusBar())
+      if (msg.getType() == PipelineMessage::StatusMessage)
       {
-        this->statusBar()->showMessage(msg.generateStatusString());
+          if(nullptr != this->statusBar())
+          {
+              this->statusBar()->showMessage(msg.generateStatusString());
+          }
       }
-    }
-
-    if(stdOutDockWidget->isVisible() == false)
-    {
-      stdOutDockWidget->setVisible(true);
-
-      // Update the standard output menu item with the correct value
-      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-      QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
-      menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
-    }
-
-    QString text = "<span style=\" color:#000000;\" >";
-    text.append(msg.getText());
-    text.append("</span>");
-    stdOutDockWidget->appendText(text);
+      
+      if(stdOutDockWidget->isVisible() == false)
+      {
+          stdOutDockWidget->setVisible(true);
+          
+          // Update the standard output menu item with the correct value
+          SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+          QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
+          menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+      }
+      
+      QString text = "<span style=\" color:#000000;\" >";
+      text.append(msg.getText());
+      text.append("</span>");
+      stdOutDockWidget->appendText(text);
   }
 }
 
@@ -945,8 +956,16 @@ void SIMPLView_UI::pipelineDidFinish()
 
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
-  m_ProgressBar->setValue(0);
+  startPipelineBtn->setIcon(QIcon(":/media_play_white.png"));
+
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton { ";
+  ss << "background-color: rgb(94, 94, 94);\n";
+  ss << "color: white;\n";
+  ss << "border-radius: 3px;\n";
+  ss << "}";
+  startPipelineBtn->setStyleSheet(cssStr);
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);

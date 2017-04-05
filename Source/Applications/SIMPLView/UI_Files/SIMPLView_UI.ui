@@ -140,7 +140,7 @@
              <x>0</x>
              <y>0</y>
              <width>1075</width>
-             <height>515</height>
+             <height>517</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -173,37 +173,49 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="spacing">
-           <number>5</number>
+           <number>0</number>
           </property>
           <property name="leftMargin">
-           <number>4</number>
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>10</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
            <widget class="QPushButton" name="startPipelineBtn">
-            <property name="palette">
-             <palette>
-              <active/>
-              <inactive/>
-              <disabled/>
-             </palette>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
             </property>
             <property name="font">
              <font>
-              <stylestrategy>PreferAntialias</stylestrategy>
+              <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton
+{
+	background-color: rgb(94, 94, 94);
+	color: white;
+	border-radius: 3px;
+}</string>
             </property>
             <property name="text">
              <string>Start Pipeline</string>
             </property>
             <property name="icon">
              <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-              <normaloff>:/media_play_flat@2x.png</normaloff>:/media_play_flat@2x.png</iconset>
+              <normaloff>:/media_play_white.png</normaloff>:/media_play_white.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -216,19 +228,6 @@
             </property>
             <property name="flat">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="m_ProgressBar">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="value">
-             <number>0</number>
             </property>
            </widget>
           </item>
