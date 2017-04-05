@@ -560,7 +560,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
 {
   QString proposedDir = m_OpenDialogLastDirectory;
   QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"),
-    proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
+    proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;All Files (*.*)"));
   if (filePath.isEmpty())
   {
     return;
