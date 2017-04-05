@@ -129,8 +129,11 @@ QString FPCodeGenerator::generateFilterParameters()
 QString FPCodeGenerator::generateInitializationList()
 {
   QString contents;
-  QTextStream ss(&contents);
-  ss << "  m_" + getPropertyName() + "(" + getInitValue() + "),";
+  if (getInitValue().isEmpty() == false)
+  {
+    QTextStream ss(&contents);
+    ss << "  m_" + getPropertyName() + "(" + getInitValue() + "),";
+  }
 
   return contents;
 }

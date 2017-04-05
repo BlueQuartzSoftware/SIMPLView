@@ -657,17 +657,16 @@ void FilterMaker::updateTestLocations()
   QStringList outLines;
   QStringList list = contents.split(QRegExp("\\n"));
   QStringListIterator sourceLines(list);
-  QString searchString = "#endif";
+  QString searchString = "@FILTER_NAMESPACE@";
 
   while (sourceLines.hasNext())
   {
     QString line = sourceLines.next();
     if (line.contains(searchString))
     {
-      QString str("namespace UnitTest\n{");
+      QString str;
       QTextStream outStream(&str);
       outStream << namespaceStr << "\n";
-      outStream << "}\n";
       outLines.push_back(str);
       outLines.push_back(line);
     }
@@ -702,8 +701,8 @@ void FilterMaker::updateTestList()
   source.open(QFile::ReadOnly);
 
   QString text = source.readAll();
-  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "Test\r\n");
-  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "Test\n");
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "\n");
   source.remove();
 
   source.open(QFile::WriteOnly);
