@@ -45,7 +45,7 @@
     <item row="2" column="0">
      <widget class="StandardOutputDockWidget" name="stdOutDockWidget">
       <property name="windowTitle">
-       <string>[*]Standard Output</string>
+       <string>[*]Pipeline Output</string>
       </property>
      </widget>
     </item>
