@@ -305,7 +305,7 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
   if(dream3dApp->isCurrentlyRunning(this) == true)
   {
     QMessageBox runningPipelineBox;
-    runningPipelineBox.setWindowTitle("Pipeline Is Running");
+    runningPipelineBox.setWindowTitle("Pipeline is Running");
     runningPipelineBox.setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
     runningPipelineBox.setStandardButtons(QMessageBox::Ok);
     runningPipelineBox.setIcon(QMessageBox::Warning);
