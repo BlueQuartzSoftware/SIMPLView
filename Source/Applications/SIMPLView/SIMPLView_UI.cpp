@@ -538,6 +538,7 @@ void SIMPLView_UI::setupGui()
 
   // Set the IssuesDockWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
+  startPipelineBtn->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -882,9 +883,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     QString cssStr;
     QTextStream ss(&cssStr);
     ss << "QPushButton { ";
-    ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(48, 48, 48), stop:%1 rgb(48, 48, 48), stop:%2 rgb(94, 94, 94), stop:1 rgb(94, 94, 94));\n").arg(progValue).arg(progValue + 0.001);
+    ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(progValue).arg(progValue + 0.001);
     ss << "color: white;\n";
-    ss << "border-radius: 3px;\n";
+    ss << "border-radius: 0px;\n";
     ss << "}";
     startPipelineBtn->setStyleSheet(cssStr);
   }
@@ -901,9 +902,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       QString cssStr;
       QTextStream ss(&cssStr);
       ss << "QPushButton { ";
-      ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(48, 48, 48), stop:%1 rgb(48, 48, 48), stop:%2 rgb(94, 94, 94), stop:1 rgb(94, 94, 94));\n").arg(progValue).arg(progValue + 0.001);
+      ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(progValue).arg(progValue + 0.001);
       ss << "color: white;\n";
-      ss << "border-radius: 3px;\n";
+      ss << "border-radius: 0px;\n";
       ss << "}";
       startPipelineBtn->setStyleSheet(cssStr);
       

@@ -203,11 +203,18 @@
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton
+             <string notr="true">QPushButton:enabled
 {
-	background-color: rgb(94, 94, 94);
+	background-color: rgb(0, 118, 6);
 	color: white;
-	border-radius: 3px;
+	border-radius: 0px;
+}
+
+QPushButton:disabled
+{
+	background-color: rgb(150, 150, 150);
+	color: rgb(190, 190, 190);
+	border-radius: 0px;
 }</string>
             </property>
             <property name="text">
