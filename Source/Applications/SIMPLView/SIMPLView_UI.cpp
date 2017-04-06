@@ -102,18 +102,18 @@ QString SIMPLView_UI::m_OpenDialogLastDirectory = "";
 //
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
-: QMainWindow(parent)
-, m_WorkerThread(nullptr)
-, m_ActivePlugin(nullptr)
-, m_FilterManager(nullptr)
-, m_FilterWidgetManager(nullptr)
-,
-#if !defined(Q_OS_MAC)
+  : QMainWindow(parent)
+  , m_WorkerThread(nullptr)
+  , m_ActivePlugin(nullptr)
+  , m_FilterManager(nullptr)
+  , m_FilterWidgetManager(nullptr)
+  ,
+    #if !defined(Q_OS_MAC)
     m_InstanceMenuBar(nullptr)
-,
-#endif
+  ,
+    #endif
     m_ShouldRestart(false)
-, m_OpenedFilePath("")
+  , m_OpenedFilePath("")
 {
   m_OpenDialogLastDirectory = QDir::homePath();
 
@@ -130,7 +130,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
   // using the QDesigner program
   setupUi(this);
 
-// Set up the menu
+  // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
   m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(this);
@@ -538,10 +538,8 @@ void SIMPLView_UI::setupGui()
 
   // Set the IssuesDockWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
-
-  // Add icon to "Start Pipeline" button
- // startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
+  startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
+  startPipelineBtn->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -768,8 +766,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   }
   m_StdOutputTabMap.clear();
 
-  m_ProgressBar->show();
-
   if(m_WorkerThread != nullptr)
   {
     m_WorkerThread->wait(); // Wait until the thread is complete
@@ -865,7 +861,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_flat.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
   addStdOutputMessage("");
   addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
@@ -884,18 +880,14 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
   if(msg.getType() == PipelineMessage::ProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
+    startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
   }
-//  else if(msg.getType() == PipelineMessage::StatusMessage)
-//  {
-//    if(nullptr != this->statusBar())
-//    {
-//      this->statusBar()->showMessage(msg.generateStatusString());
-//    }
-//  }
   else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
+    startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
+
     if(nullptr != this->statusBar())
     {
       this->statusBar()->showMessage(msg.generateStatusString());
@@ -945,8 +937,8 @@ void SIMPLView_UI::pipelineDidFinish()
 
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_flat.png"));
-  m_ProgressBar->setValue(0);
+  startPipelineBtn->setIcon(QIcon(":/media_play_white.png"));
+  startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);
@@ -955,6 +947,44 @@ void SIMPLView_UI::pipelineDidFinish()
   getFilterLibraryToolboxWidget()->blockSignals(false);
 
   emit pipelineFinished();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString SIMPLView_UI::getStartPipelineIdleStyle()
+{
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton:enabled { ";
+  ss << "background-color: rgb(0, 118, 6);\n";
+  ss << "color: white;\n";
+  ss << "border-radius: 0px;\n";
+  ss << "}\n\n";
+
+  ss << "QPushButton:disabled { ";
+  ss << "background-color: rgb(150, 150, 150);\n";
+  ss << "color: rgb(190, 190, 190);\n";
+  ss << "border-radius: 0px;\n";
+  ss << "}";
+
+  return cssStr;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
+{
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton { ";
+  ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
+  ss << "color: white;\n";
+  ss << "border-radius: 0px;\n";
+  ss << "}";
+
+  return cssStr;
 }
 
 // -----------------------------------------------------------------------------
@@ -986,7 +1016,7 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
-// Launch the dialog
+  // Launch the dialog
 #ifdef SIMPLView_USE_QtWebEngine
   SIMPLViewUserManualDialog::LaunchHelpDialog(className);
 #else
