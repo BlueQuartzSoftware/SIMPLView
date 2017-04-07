@@ -804,12 +804,10 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     if(nullptr != w)
     {
-      w->setDisabled(true);
-      //w->setCurrentState(PipelineFilterObject::State::Running);
-      w->changeStyle();
-      //connect(this, SIGNAL(pipelineStarted()), w, SLOT(toRunningState()));
-      connect(this, SIGNAL(pipelineCanceled()), w, SLOT(toIdleState()));
-      connect(this, SIGNAL(pipelineFinished()), w, SLOT(toIdleState()));
+      w->toReadyState();
+      w->toRunningState();
+      connect(this, SIGNAL(pipelineCanceled()), w, SLOT(toStoppedState()));
+      connect(this, SIGNAL(pipelineFinished()), w, SLOT(toStoppedState()));
     }
   }
 
