@@ -74,6 +74,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
@@ -957,18 +958,35 @@ void SIMPLView_UI::pipelineDidFinish()
 // -----------------------------------------------------------------------------
 QString SIMPLView_UI::getStartPipelineIdleStyle()
 {
+
+  QFont font = QtSStyles::GetHumanLabelFont();
+  QString fontString;
+  QTextStream in(&fontString);
+  in << "font: " << font.weight() << " " << 
+#if defined(Q_OS_MAC)
+  font.pointSize() - 2
+#elif defined(Q_OS_WIN)
+  font.pointSize()
+  #else
+  font.pointSize()
+#endif
+  << "pt \"" << font.family()  << "\";"
+  << "font-weight: bold;";
+
   QString cssStr;
   QTextStream ss(&cssStr);
   ss << "QPushButton:enabled { ";
   ss << "background-color: rgb(0, 118, 6);\n";
   ss << "color: white;\n";
   ss << "border-radius: 0px;\n";
+  ss << fontString;
   ss << "}\n\n";
 
   ss << "QPushButton:disabled { ";
   ss << "background-color: rgb(150, 150, 150);\n";
   ss << "color: rgb(190, 190, 190);\n";
   ss << "border-radius: 0px;\n";
+  ss << fontString;
   ss << "}";
 
   return cssStr;
@@ -979,12 +997,29 @@ QString SIMPLView_UI::getStartPipelineIdleStyle()
 // -----------------------------------------------------------------------------
 QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
 {
+  QFont font = QtSStyles::GetHumanLabelFont();
+  QString fontString;
+  QTextStream in(&fontString);
+  in << "font: " << font.weight() << " " << 
+#if defined(Q_OS_MAC)
+  font.pointSize() - 2
+#elif defined(Q_OS_WIN)
+  font.pointSize()
+  #else
+  font.pointSize()
+#endif
+  << "pt \"" << font.family()  << "\";"
+  << "font-weight: bold;";
+
+
   QString cssStr;
   QTextStream ss(&cssStr);
   ss << "QPushButton { ";
   ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
   ss << "color: white;\n";
   ss << "border-radius: 0px;\n";
+  ss << fontString;
+
   ss << "}";
 
   return cssStr;
