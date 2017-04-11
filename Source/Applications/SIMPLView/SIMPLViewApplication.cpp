@@ -686,13 +686,7 @@ void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
 {
   if (nullptr != m_ActiveWindow)
   {
-    QAction* actionShowIssues = qobject_cast<QAction*>(sender());
-    IssuesDockWidget* issuesDockWidget = m_ActiveWindow->getIssuesDockWidget();
-
-    if (nullptr != actionShowIssues && nullptr != issuesDockWidget)
-    {
-      m_ActiveWindow->updateAndSyncDockWidget(actionShowIssues, issuesDockWidget, visible);
-    }
+    m_ActiveWindow->toggleIssuesDockWidget(visible);
   }
 }
 
@@ -703,13 +697,7 @@ void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
 {
   if (nullptr != m_ActiveWindow)
   {
-    QAction* actionShowStdOutput = qobject_cast<QAction*>(sender());
-    StandardOutputDockWidget* stdOutputDockWidget = m_ActiveWindow->getStandardOutputDockWidget();
-
-    if (nullptr != actionShowStdOutput && nullptr != stdOutputDockWidget)
-    {
-      m_ActiveWindow->updateAndSyncDockWidget(actionShowStdOutput, stdOutputDockWidget, visible);
-    }
+    m_ActiveWindow->toggleStdOutputDockWidget(visible);
   }
 }
 

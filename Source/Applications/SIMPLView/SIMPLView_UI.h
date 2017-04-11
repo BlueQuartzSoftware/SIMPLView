@@ -123,30 +123,27 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     FilterLibraryToolboxWidget* getFilterLibraryToolboxWidget();
 
     /**
-    * @brief getFilterListToolboxWidget
-    * @param
-    */
-    IssuesDockWidget* getIssuesDockWidget();
-
-    /**
-    * @brief getStandardOutputDockWidget
-    * @param
-    */
-    StandardOutputDockWidget* getStandardOutputDockWidget();
-
-    /**
     * @brief setOpenedFilePath
     * @param path
     */
     void setOpenDialogLastDirectory(const QString& path);
 
     /**
-     * @brief updateAndSyncDockWidget
-     * @param action
-     * @param dock
-     * @param b
+     * @brief updateAndSyncDockWidgets
      */
-    void updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b);
+    void updateAndSyncDockWidgets();
+
+    /**
+     * @brief toggleIssuesDockWidget
+     * @param visible
+     */
+    void toggleIssuesDockWidget(bool visible);
+
+    /**
+     * @brief toggleStdOutputDockWidget
+     * @param visible
+     */
+    void toggleStdOutputDockWidget(bool visible);
 
     /**
     * @brief Reads the preferences from the users pref file
@@ -385,6 +382,14 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QString getStartPipelineIdleStyle();
     QString getStartPipelineInProgressStyle(float percent);
+
+    /**
+     * @brief updateAndSyncDockWidget
+     * @param action
+     * @param dock
+     * @param b
+     */
+    void updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b);
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented

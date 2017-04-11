@@ -131,13 +131,7 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 
     m_ActiveWindow = instance;
 
-    // Update the issues menu item with the correct value
-    QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
-    menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
-
-    // Update the standard output menu item with the correct value
-    QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
-    menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+    m_ActiveWindow->updateAndSyncDockWidgets();
 
     menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   }

@@ -29,7 +29,7 @@
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0">
+   <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -42,21 +42,7 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="2" column="0">
-     <widget class="StandardOutputDockWidget" name="stdOutDockWidget">
-      <property name="windowTitle">
-       <string>[*]Pipeline Output</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="IssuesDockWidget" name="issuesDockWidget">
-      <property name="windowTitle">
-       <string>[*]Pipeline Issues</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="0">
      <widget class="QtSSplitter" name="splitter">
       <property name="styleSheet">
        <string notr="true">QSplitter::handle {
@@ -140,7 +126,7 @@
              <x>0</x>
              <y>0</y>
              <width>1075</width>
-             <height>517</height>
+             <height>516</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -266,6 +252,24 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="issuesDockWidget">
+   <property name="windowTitle">
+    <string>[*]Pipeline Issues</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="IssuesWidget" name="issuesWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="stdOutDockWidget">
+   <property name="windowTitle">
+    <string>[*]Pipeline Output</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="StandardOutputWidget" name="stdOutWidget"/>
+  </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
     <string>Filter Library</string>
@@ -455,27 +459,27 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
  </widget>
  <customwidgets>
   <customwidget>
-   <class>IssuesDockWidget</class>
-   <extends>QDockWidget</extends>
-   <header location="global">IssuesDockWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QtSSplitter</class>
    <extends>QSplitter</extends>
    <header location="global">SVWidgetsLib/QtSupport/QtSSplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>StandardOutputDockWidget</class>
-   <extends>QDockWidget</extends>
-   <header location="global">StandardOutputDockWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>SVPipelineViewWidget</class>
    <extends>QWidget</extends>
    <header location="global">SVPipelineViewWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>IssuesWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">IssuesWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StandardOutputWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">StandardOutputWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

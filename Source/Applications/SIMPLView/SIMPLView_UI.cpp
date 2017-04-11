@@ -340,11 +340,11 @@ void SIMPLView_UI::readSettings()
   prefs->beginGroup("DockWidgetSettings");
 
   prefs->beginGroup("Issues Dock Widget");
-  issuesDockWidget->readSettings(this, prefs.data());
+  readDockWidgetSettings(prefs.data(), issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
-  stdOutDockWidget->readSettings(this, prefs.data());
+  readDockWidgetSettings(prefs.data(), stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -420,11 +420,11 @@ void SIMPLView_UI::writeSettings()
   prefs->beginGroup("DockWidgetSettings");
 
   prefs->beginGroup("Issues Dock Widget");
-  issuesDockWidget->writeSettings(prefs.data());
+  writeDockWidgetSettings(prefs.data(), issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
-  stdOutDockWidget->writeSettings(prefs.data());
+  writeDockWidgetSettings(prefs.data(), stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -534,11 +534,11 @@ void SIMPLView_UI::setupGui()
   // Tell the Filter Library that we have more Filters (potentially)
   getFilterLibraryToolboxWidget()->refreshFilterGroups();
 
-  connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesDockWidget, SLOT(clearIssues()));
-  connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesDockWidget, SLOT(displayCachedMessages()));
+  connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
+  connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
-  // Set the IssuesDockWidget as a PipelineMessageObserver Object.
-  pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
+  // Set the IssuesWidget as a PipelineMessageObserver Object.
+  pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
   startPipelineBtn->setDisabled(true);
 }
@@ -779,7 +779,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_WorkerThread = new QThread(); // Create a new Thread Resource
 
   // Clear out the Issues Table
-  issuesDockWidget->clearIssues();
+  issuesWidget->clearIssues();
 
   // Ask the PipelineViewWidget to create a FilterPipeline Object
   // m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
@@ -790,7 +790,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   if(err < 0)
   {
     m_PipelineInFlight = FilterPipeline::NullPointer();
-    issuesDockWidget->displayCachedMessages();
+    issuesWidget->displayCachedMessages();
     return;
   }
 
@@ -834,7 +834,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_PipelineInFlight->addMessageReceiver(this);
 
   // Clear the Error table
-  issuesDockWidget->clearIssues();
+  issuesWidget->clearIssues();
 
   /* Connect the signal 'started()' from the QThread to the 'run' slot of the
    * PipelineBuilder object. Since the PipelineBuilder object has been moved to another
@@ -852,10 +852,10 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   // Add in a connection to clear the Error/Warnings table when the thread starts
   //  connect(m_WorkerThread, SIGNAL(started()),
-  //          issuesDockWidget, SLOT( clearIssues() ) );
+  //          issuesWidget, SLOT( clearIssues() ) );
 
   // Tell the Error/Warnings Table that we are finished and to display any cached messages
-  connect(m_WorkerThread, SIGNAL(finished()), issuesDockWidget, SLOT(displayCachedMessages()));
+  connect(m_WorkerThread, SIGNAL(finished()), issuesWidget, SLOT(displayCachedMessages()));
 
   // If the use clicks on the "Cancel" button send a message to the PipelineBuilder object
   connect(this, SIGNAL(pipelineCanceled()), m_PipelineInFlight.get(), SLOT(cancelPipeline()), Qt::DirectConnection);
@@ -907,18 +907,13 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 
     if(stdOutDockWidget->isVisible() == false)
     {
-      stdOutDockWidget->setVisible(true);
-
-      // Update the standard output menu item with the correct value
-      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-      QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
-      menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+      toggleStdOutputDockWidget(true);
     }
 
     QString text = "<span style=\" color:#000000;\" >";
     text.append(msg.getText());
     text.append("</span>");
-    stdOutDockWidget->appendText(text);
+    stdOutWidget->appendText(text);
   }
 }
 
@@ -1109,6 +1104,34 @@ void SIMPLView_UI::cleanupPipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLView_UI::updateAndSyncDockWidgets()
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, issuesDockWidget->toggleViewAction()->isChecked());
+  updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, stdOutDockWidget->toggleViewAction()->isChecked());
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::toggleIssuesDockWidget(bool visible)
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, visible);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::toggleStdOutputDockWidget(bool visible)
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, visible);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLView_UI::updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b)
 {
   action->blockSignals(true);
@@ -1154,22 +1177,6 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 {
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
   return toolbox->getFilterLibraryWidget();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-IssuesDockWidget* SIMPLView_UI::getIssuesDockWidget()
-{
-  return issuesDockWidget;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-StandardOutputDockWidget* SIMPLView_UI::getStandardOutputDockWidget()
-{
-  return stdOutDockWidget;
 }
 
 // -----------------------------------------------------------------------------
@@ -1247,7 +1254,7 @@ void SIMPLView_UI::addStdOutputMessage(const QString& msg)
   QString text = "<span style=\" color:#000000;\" >";
   text.append(msg);
   text.append("</span>");
-  stdOutDockWidget->appendText(text);
+  stdOutWidget->appendText(text);
 }
 
 // -----------------------------------------------------------------------------

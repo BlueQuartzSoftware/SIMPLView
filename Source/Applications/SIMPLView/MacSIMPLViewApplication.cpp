@@ -277,13 +277,8 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   menuItems->getActionShowStdOutput()->setEnabled(true);
 
-  // Update the issues menu item with the correct value
-  QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
-  menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
-
-  // Update the standard output menu item with the correct value
-  QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
-  menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+  // Sync the dock widgets and their menu items
+  m_ActiveWindow->updateAndSyncDockWidgets();
 }
 
 // -----------------------------------------------------------------------------
