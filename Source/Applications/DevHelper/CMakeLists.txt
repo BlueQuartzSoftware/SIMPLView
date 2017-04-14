@@ -72,6 +72,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionAdvancedWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedDoubleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedIntWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.h
@@ -114,6 +115,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionAdvancedWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedDoubleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedIntWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.cpp
