@@ -123,6 +123,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     FilterLibraryToolboxWidget* getFilterLibraryToolboxWidget();
 
     /**
+     * @brief getDataBrowserWidget
+     * @return
+     */
+    DataBrowserWidget* getDataBrowserWidget();
+
+    /**
     * @brief setOpenedFilePath
     * @param path
     */

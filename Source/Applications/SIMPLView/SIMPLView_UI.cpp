@@ -537,6 +537,9 @@ void SIMPLView_UI::setupGui()
   connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
   connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
+  pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
+
+
   // Set the IssuesWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
@@ -1177,6 +1180,14 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 {
   SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
   return toolbox->getFilterLibraryWidget();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+DataBrowserWidget* SIMPLView_UI::getDataBrowserWidget()
+{
+  return dataBrowserWidget;
 }
 
 // -----------------------------------------------------------------------------
