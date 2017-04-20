@@ -177,6 +177,14 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     bool savePipelineAs();
 
+    /**
+     * @brief eventFilter
+     * @param o
+     * @param e
+     * @return
+     */
+    bool eventFilter(QObject* o, QEvent* e);
+
   public slots:
 
     /**

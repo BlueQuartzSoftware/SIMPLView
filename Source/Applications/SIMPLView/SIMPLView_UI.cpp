@@ -537,8 +537,11 @@ void SIMPLView_UI::setupGui()
   connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
   connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
-  pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
+  issuesWidget->installEventFilter(this);
+  stdOutWidget->installEventFilter(this);
 
+  pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
+  dataBrowserWidget->installEventFilter(this);
 
   // Set the IssuesWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
@@ -1113,6 +1116,22 @@ void SIMPLView_UI::updateAndSyncDockWidgets()
   updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, issuesDockWidget->toggleViewAction()->isChecked());
   updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, stdOutDockWidget->toggleViewAction()->isChecked());
   updateAndSyncDockWidget(menuItems->getActionShowDataBrowser(), dataBrowserDockWidget, dataBrowserDockWidget->toggleViewAction()->isChecked());
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool SIMPLView_UI::eventFilter(QObject* o, QEvent* e)
+{
+  if (e->type() == QEvent::Hide)
+  {
+    if (qobject_cast<DataBrowserWidget*>(o) || qobject_cast<IssuesWidget*>(o) || qobject_cast<StandardOutputWidget*>(o))
+    {
+      updateAndSyncDockWidgets();
+    }
+  }
+
+  return QMainWindow::eventFilter(o, e);
 }
 
 // -----------------------------------------------------------------------------
