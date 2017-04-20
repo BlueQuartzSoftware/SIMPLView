@@ -200,6 +200,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instan
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
   QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
+  QAction* actionShowDataBrowser = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
@@ -237,6 +238,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instan
   menuBar->addMenu(menuView);
   menuView->addAction(actionShowIssues);
   menuView->addAction(actionShowStdOutput);
+  menuView->addAction(actionShowDataBrowser);
   menuView->addAction(actionShowToolbox);
 
   // Create Pipeline Menu

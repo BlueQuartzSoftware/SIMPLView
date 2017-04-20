@@ -1112,6 +1112,7 @@ void SIMPLView_UI::updateAndSyncDockWidgets()
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
   updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, issuesDockWidget->toggleViewAction()->isChecked());
   updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, stdOutDockWidget->toggleViewAction()->isChecked());
+  updateAndSyncDockWidget(menuItems->getActionShowDataBrowser(), dataBrowserDockWidget, dataBrowserDockWidget->toggleViewAction()->isChecked());
 }
 
 // -----------------------------------------------------------------------------
@@ -1130,6 +1131,15 @@ void SIMPLView_UI::toggleStdOutputDockWidget(bool visible)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
   updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, visible);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::toggleDataBrowserDockWidget(bool visible)
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  updateAndSyncDockWidget(menuItems->getActionShowDataBrowser(), dataBrowserDockWidget, visible);
 }
 
 // -----------------------------------------------------------------------------

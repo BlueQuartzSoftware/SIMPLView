@@ -225,6 +225,8 @@ void MacSIMPLViewApplication::toToolboxMenuState()
   menuItems->getActionShowIssues()->setChecked(false);
   menuItems->getActionShowStdOutput()->setDisabled(true);
   menuItems->getActionShowStdOutput()->setChecked(false);
+  menuItems->getActionShowDataBrowser()->setDisabled(true);
+  menuItems->getActionShowDataBrowser()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
 
   menuItems->getActionShowFilterList()->setEnabled(true);
@@ -276,6 +278,7 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
   menuItems->getActionCopy()->setEnabled(true);
   menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
   menuItems->getActionShowStdOutput()->setEnabled(true);
+  menuItems->getActionShowDataBrowser()->setEnabled(true);
 
   // Sync the dock widgets and their menu items
   m_ActiveWindow->updateAndSyncDockWidgets();
@@ -299,6 +302,8 @@ void MacSIMPLViewApplication::toEmptyMenuState()
   menuItems->getActionShowIssues()->setChecked(false);
   menuItems->getActionShowStdOutput()->setDisabled(true);
   menuItems->getActionShowStdOutput()->setChecked(false);
+  menuItems->getActionShowDataBrowser()->setDisabled(true);
+  menuItems->getActionShowDataBrowser()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
   menuItems->getActionCut()->setDisabled(true);
   menuItems->getActionCopy()->setDisabled(true);
@@ -356,6 +361,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
   QAction* actionShowIssues = menuItems->getActionShowIssues();
   QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
+  QAction* actionShowDataBrowser = menuItems->getActionShowDataBrowser();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
   QAction* actionShowFilterLibrary = menuItems->getActionShowFilterLibrary();
   QAction* actionShowFilterList = menuItems->getActionShowFilterList();
@@ -400,6 +406,7 @@ void MacSIMPLViewApplication::createGlobalMenu()
   menuView->addSeparator();
   menuView->addAction(actionShowIssues);
   menuView->addAction(actionShowStdOutput);
+  menuView->addAction(actionShowDataBrowser);
 
   // Create Bookmarks Menu
   m_GlobalMenu->addMenu(menuBookmarks);

@@ -152,6 +152,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void toggleStdOutputDockWidget(bool visible);
 
     /**
+     * @brief toggleDataBrowserDockWidget
+     * @param visible
+     */
+    void toggleDataBrowserDockWidget(bool visible);
+
+    /**
     * @brief Reads the preferences from the users pref file
     */
     void readSettings();
