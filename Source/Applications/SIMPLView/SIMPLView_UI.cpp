@@ -1273,7 +1273,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::preflightDidFinish(int err)
 {
-  if(err < 0)
+  if(err < 0 || pipelineViewWidget->getFilterPipeline()->getFilterContainer().size() <= 0)
   {
     startPipelineBtn->setDisabled(true);
   }
