@@ -125,7 +125,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1075</width>
+             <width>1012</width>
              <height>516</height>
             </rect>
            </property>
@@ -269,6 +269,15 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <number>8</number>
    </attribute>
    <widget class="StandardOutputWidget" name="stdOutWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="dataBrowserDockWidget">
+   <property name="windowTitle">
+    <string>Data Browser</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="DataBrowserWidget" name="dataBrowserWidget"/>
   </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
@@ -480,6 +489,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>StandardOutputWidget</class>
    <extends>QWidget</extends>
    <header location="global">StandardOutputWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DataBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">DataBrowserWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
