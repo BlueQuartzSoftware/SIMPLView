@@ -123,6 +123,10 @@ int main(int argc, char* argv[])
     ui->show();
   }
 
+#if defined (Q_OS_MAC)
+  qtapp.initializeDummyDockWidgetActions();
+#endif
+
   int err = qtapp.exec();
   return err;
 }

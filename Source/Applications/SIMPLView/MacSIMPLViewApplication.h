@@ -59,6 +59,11 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
      */
     bool event(QEvent* event);
 
+    /**
+     * @brief initializeDummyDockWidgetActions
+     */
+    void initializeDummyDockWidgetActions();
+
   protected slots:
 
   /**
@@ -86,7 +91,9 @@ private:
   QSharedPointer<QMenuBar>              m_GlobalMenu;
   QSharedPointer<QMenu>                 m_DockMenu;
   QMenu*                                m_MenuEdit;
+  QMenu*                                m_MenuView;
   QAction*                              m_EditSeparator;
+  QList<QAction*>                       m_DummyDockWidgetActions;
 
   void createGlobalMenu();
 

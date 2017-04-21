@@ -164,9 +164,6 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems->getActionShowBookmarks(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowBookmarks_triggered(bool)));
   connect(menuItems->getActionLocateFile(), SIGNAL(triggered()), m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SLOT(on_actionLocateFile_triggered()));
   connect(menuItems->getActionShowToolbox(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowToolbox_triggered(bool)));
-  connect(menuItems->getActionShowIssues(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowIssues_triggered(bool)));
-  connect(menuItems->getActionShowStdOutput(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowStdOutput_triggered(bool)));
-  connect(menuItems->getActionShowDataBrowser(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowDataBrowser_triggered(bool)));
   connect(menuItems->getActionAddBookmark(), SIGNAL(triggered()), this, SLOT(on_actionAddBookmark_triggered()));
   connect(menuItems->getActionNewFolder(), SIGNAL(triggered()), this, SLOT(on_actionNewFolder_triggered()));
   connect(menuItems->getActionCut(), SIGNAL(triggered()), this, SLOT(on_actionCut_triggered()));
@@ -678,39 +675,6 @@ void SIMPLViewApplication::on_actionShowToolbox_triggered(bool visible)
 
   actionShowToolbox->blockSignals(false);
   toolbox->blockSignals(false);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
-{
-  if (nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->toggleIssuesDockWidget(visible);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
-{
-  if (nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->toggleStdOutputDockWidget(visible);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowDataBrowser_triggered(bool visible)
-{
-  if (nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->toggleDataBrowserDockWidget(visible);
-  }
 }
 
 // -----------------------------------------------------------------------------

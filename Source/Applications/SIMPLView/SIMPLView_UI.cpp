@@ -537,11 +537,11 @@ void SIMPLView_UI::setupGui()
   connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
   connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
-  issuesWidget->installEventFilter(this);
-  stdOutWidget->installEventFilter(this);
-
   pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
-  dataBrowserWidget->installEventFilter(this);
+
+  issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
+  stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
+  dataBrowserDockWidget->toggleViewAction()->setText("Show " + dataBrowserDockWidget->toggleViewAction()->text());
 
   // Set the IssuesWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
@@ -913,7 +913,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 
     if(stdOutDockWidget->isVisible() == false)
     {
-      toggleStdOutputDockWidget(true);
+      stdOutDockWidget->toggleViewAction()->toggle();
     }
 
     QString text = "<span style=\" color:#000000;\" >";
@@ -1110,70 +1110,43 @@ void SIMPLView_UI::cleanupPipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::updateAndSyncDockWidgets()
+void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
 {
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, issuesDockWidget->toggleViewAction()->isChecked());
-  updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, stdOutDockWidget->toggleViewAction()->isChecked());
-  updateAndSyncDockWidget(menuItems->getActionShowDataBrowser(), dataBrowserDockWidget, dataBrowserDockWidget->toggleViewAction()->isChecked());
+  menu->addAction(issuesDockWidget->toggleViewAction());
+  menu->addAction(stdOutDockWidget->toggleViewAction());
+  menu->addAction(dataBrowserDockWidget->toggleViewAction());
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool SIMPLView_UI::eventFilter(QObject* o, QEvent* e)
+QList<QAction*> SIMPLView_UI::getDummyDockWidgetActions()
 {
-  if (e->type() == QEvent::Hide)
-  {
-    if (qobject_cast<DataBrowserWidget*>(o) || qobject_cast<IssuesWidget*>(o) || qobject_cast<StandardOutputWidget*>(o))
-    {
-      updateAndSyncDockWidgets();
-    }
-  }
+  QList<QAction*> actions;
 
-  return QMainWindow::eventFilter(o, e);
+  QAction* issuesDummyAction = new QAction(issuesDockWidget->toggleViewAction()->text(), macApp);
+  issuesDummyAction->setDisabled(true);
+  actions.push_back(issuesDummyAction);
+
+  QAction* stdOutDummyAction = new QAction(stdOutDockWidget->toggleViewAction()->text(), macApp);
+  stdOutDummyAction->setDisabled(true);
+  actions.push_back(stdOutDummyAction);
+
+  QAction* dataBrowserDummyAction = new QAction(dataBrowserDockWidget->toggleViewAction()->text(), macApp);
+  dataBrowserDummyAction->setDisabled(true);
+  actions.push_back(dataBrowserDummyAction);
+
+  return actions;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::toggleIssuesDockWidget(bool visible)
+void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
 {
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  updateAndSyncDockWidget(menuItems->getActionShowIssues(), issuesDockWidget, visible);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::toggleStdOutputDockWidget(bool visible)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  updateAndSyncDockWidget(menuItems->getActionShowStdOutput(), stdOutDockWidget, visible);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::toggleDataBrowserDockWidget(bool visible)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  updateAndSyncDockWidget(menuItems->getActionShowDataBrowser(), dataBrowserDockWidget, visible);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b)
-{
-  action->blockSignals(true);
-  dock->blockSignals(true);
-
-  action->setChecked(b);
-  dock->setVisible(b);
-
-  action->blockSignals(false);
-  dock->blockSignals(false);
+  menu->removeAction(issuesDockWidget->toggleViewAction());
+  menu->removeAction(stdOutDockWidget->toggleViewAction());
+  menu->removeAction(dataBrowserDockWidget->toggleViewAction());
 }
 
 // -----------------------------------------------------------------------------

@@ -135,29 +135,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void setOpenDialogLastDirectory(const QString& path);
 
     /**
-     * @brief updateAndSyncDockWidgets
-     */
-    void updateAndSyncDockWidgets();
-
-    /**
-     * @brief toggleIssuesDockWidget
-     * @param visible
-     */
-    void toggleIssuesDockWidget(bool visible);
-
-    /**
-     * @brief toggleStdOutputDockWidget
-     * @param visible
-     */
-    void toggleStdOutputDockWidget(bool visible);
-
-    /**
-     * @brief toggleDataBrowserDockWidget
-     * @param visible
-     */
-    void toggleDataBrowserDockWidget(bool visible);
-
-    /**
     * @brief Reads the preferences from the users pref file
     */
     void readSettings();
@@ -178,12 +155,23 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     bool savePipelineAs();
 
     /**
-     * @brief eventFilter
-     * @param o
-     * @param e
+     * @brief insertDockWidgetActions
+     * @param menu
+     */
+    void insertDockWidgetActions(QMenu* menu);
+
+    /**
+     * @brief removeDockWidgetActions
+     * @param menu
+     */
+    void removeDockWidgetActions(QMenu* menu);
+
+    /**
+     * @brief getDummyDockWidgetActions
+     * @param menu
      * @return
      */
-    bool eventFilter(QObject* o, QEvent* e);
+    QList<QAction*> getDummyDockWidgetActions();
 
   public slots:
 
@@ -402,14 +390,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     QString getStartPipelineIdleStyle();
     QString getStartPipelineInProgressStyle(float percent);
-
-    /**
-     * @brief updateAndSyncDockWidget
-     * @param action
-     * @param dock
-     * @param b
-     */
-    void updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b);
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented
