@@ -57,6 +57,12 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
 )
 
+if(SIMPL_USE_ITK)
+  include_directories( ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
+  include_directories( ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
+endif()
+
+
 # --------------------------------------------------------------------
 # Generate the License File Headers
 set(PROJECT_PREFIX "SIMPLView")
@@ -220,6 +226,11 @@ file(READ "${SIMPLPluginList}" SIMPLView_PLUGINS)
 get_property(QT_PLUGINS_FILE GLOBAL PROPERTY QtPluginsTxtFile)
 file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
+list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
+
+if( "${SIMPL_USE_ITK}" STREQUAL "ON" AND APPLE)
+ list(APPEND ${PROJECT_NAME}_LINK_LIBS SimpleITKExplicit)
+endif()
 
 BuildQtAppBundle(
     TARGET ${SIMPLView_APPLICATION_NAME}
@@ -230,7 +241,7 @@ BuildQtAppBundle(
     VERSION_MINOR ${SIMPLView_VER_MINOR}
     VERSION_PATCH ${SIMPLView_VER_PATCH}
     BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
-    LINK_LIBRARIES SVWidgetsLib
+    LINK_LIBRARIES ${${PROJECT_NAME}_LINK_LIBS}
     LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     QT_PLUGINS    ${QT_PLUGINS}
     QT5_MODULES   ${SIMPLView_Qt5_Components}
