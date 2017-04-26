@@ -43,6 +43,11 @@ if(NOT "${DREAM3D_SDK}" STREQUAL "")
   endif()
 endif()
 
+# Request C++11 standard, using new CMake variables.
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS False)
+
 if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
   # CMake 3.0 introduces VERSION variables for each Project.
   cmake_policy(SET CMP0048 NEW)
@@ -53,7 +58,6 @@ if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
 endif()
 
 cmake_minimum_required(VERSION 3.1.0)
-
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
