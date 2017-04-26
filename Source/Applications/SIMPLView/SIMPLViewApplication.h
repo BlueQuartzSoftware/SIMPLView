@@ -177,8 +177,6 @@ private:
 
   QSharedPointer<QMenu> m_ContextMenu;
 
-  bool m_ShowFilterWidgetDeleteDialog;
-
   int m_minSplashTime;
 
   void readSettings();

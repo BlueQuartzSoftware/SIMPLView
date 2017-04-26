@@ -994,24 +994,6 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
     QList<PipelineFilterObject*> selectedWidgets = widget->getSelectedFilterObjects();
     if (selectedWidgets.size() <= 0) { return; }
 
-    if (m_ShowFilterWidgetDeleteDialog == false) { return; }
-
-    QMessageBox msgBox;
-    msgBox.setParent(m_ActiveWindow);
-    msgBox.setWindowModality(Qt::WindowModal);
-    msgBox.setWindowFlags(msgBox.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    msgBox.setIcon(QMessageBox::Question);
-    msgBox.setText("Are you sure that you want to delete these filters?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    QCheckBox* chkBox = new QCheckBox("Do not show me this again");
-    msgBox.setCheckBox(chkBox);
-    int ret = msgBox.exec();
-
-    m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
-
-    if (ret != QMessageBox::Yes) { return; }
-
     RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
     m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
   }
@@ -1330,8 +1312,6 @@ void SIMPLViewApplication::writeSettings()
 
   prefs->beginGroup("Application Settings");
 
-  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
-
   prefs->endGroup();
 }
 
@@ -1343,8 +1323,6 @@ void SIMPLViewApplication::readSettings()
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   prefs->beginGroup("Application Settings");
-
-  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
 
   prefs->endGroup();
 }
