@@ -156,7 +156,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
-         <normaloff>:/reload@2x.png</normaloff>:/reload@2x.png</iconset>
+         <normaloff>:/reload.png</normaloff>:/reload.png</iconset>
        </property>
        <property name="iconSize">
         <size>

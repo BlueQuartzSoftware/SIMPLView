@@ -749,8 +749,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 {
   if(startPipelineBtn->text().compare("Cancel Pipeline") == 0)
   {
-    qDebug() << "canceling from GUI...."
-             << "\n";
     emit pipelineCanceled();
 
     // Enable FilterListToolboxWidget signals - resume adding filters
