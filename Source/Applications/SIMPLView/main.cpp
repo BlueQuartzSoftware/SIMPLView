@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)
   // let's just use plastique for now
-  QApplication::setStyle(new QPlastiqueStyle);
+  //QApplication::setStyle(new QPlastiqueStyle);
 #endif
 
 #ifdef Q_OS_WIN
