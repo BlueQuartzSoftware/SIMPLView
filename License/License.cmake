@@ -2,7 +2,6 @@
 # create Resource files for the various license files that are used and
 # also create a header file that lists all the License Files
 set(LICENSE_FILES
-                    ${PROJECT_RESOURCES_DIR}/ThirdParty/Boost.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/Eigen.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/HDF5.txt
                     ${PROJECT_RESOURCES_DIR}/ThirdParty/ITK.txt

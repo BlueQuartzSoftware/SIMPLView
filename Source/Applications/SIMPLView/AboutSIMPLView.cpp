@@ -37,8 +37,6 @@
 
 #include "SIMPLib/SIMPLib.h"
 
-#include <boost/version.hpp>
-
 #include <H5public.h>
 
 #include "SIMPLib/SIMPLib.h"
