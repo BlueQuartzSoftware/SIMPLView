@@ -125,6 +125,7 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
+  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.cpp
   )
 
 if(APPLE)
@@ -147,6 +148,8 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
+  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.h
+
 )
 
 if(APPLE)
@@ -161,6 +164,7 @@ cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}"
 SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/StatusBarWidget.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
