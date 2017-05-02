@@ -817,8 +817,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     {
       w->toReadyState();
       w->toRunningState();
-      connect(this, SIGNAL(pipelineCanceled()), w, SLOT(toStoppedState()));
-      connect(this, SIGNAL(pipelineFinished()), w, SLOT(toStoppedState()));
+      connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
   }
 
