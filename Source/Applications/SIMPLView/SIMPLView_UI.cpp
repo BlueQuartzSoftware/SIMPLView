@@ -768,6 +768,10 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     return;
   }
+  else if (startPipelineBtn->text().compare("Canceling...") == 0)
+  {
+    return;
+  }
 
   QMap<QWidget*, QTextEdit*>::iterator iter;
   for(iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); iter++)
