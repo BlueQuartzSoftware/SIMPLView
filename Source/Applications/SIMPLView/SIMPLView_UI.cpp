@@ -751,6 +751,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   {
     emit pipelineCanceled();
 
+    startPipelineBtn->setText("Canceling...");
+
     // Enable FilterListToolboxWidget signals - resume adding filters
     getFilterListToolboxWidget()->blockSignals(false);
 
