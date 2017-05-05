@@ -73,6 +73,7 @@ class UpdateCheck;
 class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
+class StatusBarWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -377,7 +378,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     FilterPipeline::Pointer               m_PipelineInFlight;
     QMenuBar*                             m_InstanceMenuBar = nullptr;
-    bool                                  m_ShouldRestart;
+    StatusBarWidget*                      m_StatusBar = nullptr;
 
     QString                               m_OpenedFilePath;
     static QString                        m_OpenDialogLastDirectory;
@@ -385,6 +386,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
     bool                                  m_ShowFilterWidgetDeleteDialog;
+    bool                                  m_ShouldRestart = false;
 
     void cleanupPipeline();
 

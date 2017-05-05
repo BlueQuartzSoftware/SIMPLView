@@ -91,6 +91,8 @@
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
 #include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
 
+#include "Applications/SIMPLView/StatusBarWidget.h"
+
 #include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -103,18 +105,15 @@ QString SIMPLView_UI::m_OpenDialogLastDirectory = "";
 //
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
-  : QMainWindow(parent)
-  , m_WorkerThread(nullptr)
-  , m_ActivePlugin(nullptr)
-  , m_FilterManager(nullptr)
-  , m_FilterWidgetManager(nullptr)
-  ,
-    #if !defined(Q_OS_MAC)
-    m_InstanceMenuBar(nullptr)
-  ,
-    #endif
-    m_ShouldRestart(false)
-  , m_OpenedFilePath("")
+: QMainWindow(parent)
+, m_WorkerThread(nullptr)
+, m_ActivePlugin(nullptr)
+, m_FilterManager(nullptr)
+, m_FilterWidgetManager(nullptr)
+#if !defined(Q_OS_MAC)
+ ,   m_InstanceMenuBar(nullptr)
+#endif
+, m_OpenedFilePath("")
 {
   m_OpenDialogLastDirectory = QDir::homePath();
 
@@ -547,6 +546,14 @@ void SIMPLView_UI::setupGui()
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
   startPipelineBtn->setDisabled(true);
+
+
+  m_StatusBar = new StatusBarWidget();
+  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
+  m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
+  m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
+  m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataBrowser);
+
 }
 
 // -----------------------------------------------------------------------------
