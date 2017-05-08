@@ -888,12 +888,12 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
-  if(msg.getType() == PipelineMessage::ProgressValue)
+  if(msg.getType() == PipelineMessage::MessageType::ProgressValue)
   {
     float progValue = static_cast<float>(msg.getProgressValue()) / 100;
     startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
   }
-  else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
+  else if(msg.getType() == PipelineMessage::MessageType::StatusMessageAndProgressValue)
   {
     float progValue = static_cast<float>(msg.getProgressValue()) / 100;
     startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
@@ -903,9 +903,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
-  else if(msg.getType() == PipelineMessage::StandardOutputMessage || msg.getType() == PipelineMessage::StatusMessage)
+  else if(msg.getType() == PipelineMessage::MessageType::StandardOutputMessage || msg.getType() == PipelineMessage::MessageType::StatusMessage)
   {
-    if (msg.getType() == PipelineMessage::StatusMessage)
+    if (msg.getType() == PipelineMessage::MessageType::StatusMessage)
     {
       if(nullptr != this->statusBar())
       {
