@@ -71,7 +71,21 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
 
 
   public slots:
-
+    /**
+     * @brief issuesVisibilityChanged
+     * @param b
+     */
+    void issuesVisibilityChanged(bool b);
+    /**
+     * @brief consolVisibilityChanged
+     * @param b
+     */
+    void consolVisibilityChanged(bool b);
+    /**
+     * @brief dataBrowserVisibilityChanged
+     * @param b
+     */
+    void dataBrowserVisibilityChanged(bool b);
 
   protected:
 

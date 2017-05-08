@@ -35,6 +35,7 @@
 
 #include "StatusBarWidget.h"
 
+#include <QtCore/QDebug>
 #include <QtWidgets/QDockWidget>
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -44,7 +45,7 @@
 //
 // -----------------------------------------------------------------------------
 StatusBarWidget::StatusBarWidget(QWidget* parent)
-: QFrame(parent)
+  : QFrame(parent)
 {
   this->setupUi(this);
 }
@@ -59,27 +60,54 @@ StatusBarWidget::~StatusBarWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void StatusBarWidget::issuesVisibilityChanged(bool b)
+{
+  //qDebug() << "issuesVisibilityChanged" << static_cast<int>(b);
+  issuesBtn->blockSignals(true);
+  issuesBtn->setChecked(b);
+  issuesBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::consolVisibilityChanged(bool b)
+{
+  // qDebug() << "consolVisibilityChanged" << static_cast<int>(b);
+  consoleBtn->blockSignals(true);
+  consoleBtn->setChecked(b);
+  consoleBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::dataBrowserVisibilityChanged(bool b)
+{
+  // qDebug() << "dataBrowserVisibilityChanged" << static_cast<int>(b);
+  dataBrowserBtn->blockSignals(true);
+  dataBrowserBtn->setChecked(b);
+  dataBrowserBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
 {
-
   switch(btn)
   {
-
     case Button::Issues:
       connect(issuesBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
-      connect(dock, SIGNAL(visibilityChanged(bool)), issuesBtn, SLOT(setChecked(bool)));
-      //issuesBtn->addAction(action);
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(issuesVisibilityChanged(bool)));
       break;
     case Button::Console:
-      //consoleBtn->addAction(action);
       connect(consoleBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
-      connect(dock, SIGNAL(visibilityChanged(bool)), consoleBtn, SLOT(setChecked(bool)));
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(consolVisibilityChanged(bool)));
       break;
     case Button::DataBrowser:
-      //dataBrowserBtn->addAction(action);
       connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
-      connect(dock, SIGNAL(visibilityChanged(bool)), dataBrowserBtn, SLOT(setChecked(bool)));
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;
-
   }
 }

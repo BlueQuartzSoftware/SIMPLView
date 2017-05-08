@@ -546,14 +546,6 @@ void SIMPLView_UI::setupGui()
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
   startPipelineBtn->setDisabled(true);
-
-
-  m_StatusBar = new StatusBarWidget();
-  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
-  m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
-  m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
-  m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataBrowser);
-
 }
 
 // -----------------------------------------------------------------------------
