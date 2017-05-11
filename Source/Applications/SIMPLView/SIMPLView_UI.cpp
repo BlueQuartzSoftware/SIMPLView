@@ -74,6 +74,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
@@ -89,6 +90,8 @@
 #include "Applications/SIMPLView/MacSIMPLViewApplication.h"
 #include "Applications/SIMPLView/SIMPLViewConstants.h"
 #include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
+
+#include "Applications/SIMPLView/StatusBarWidget.h"
 
 #include "BrandedStrings.h"
 
@@ -107,12 +110,9 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_ActivePlugin(nullptr)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
-,
 #if !defined(Q_OS_MAC)
-    m_InstanceMenuBar(nullptr)
-,
+ ,   m_InstanceMenuBar(nullptr)
 #endif
-    m_ShouldRestart(false)
 , m_OpenedFilePath("")
 {
   m_OpenDialogLastFilePath = QDir::homePath();
@@ -130,7 +130,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
   // using the QDesigner program
   setupUi(this);
 
-// Set up the menu
+  // Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
   m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(this);
@@ -305,7 +305,7 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
   if(dream3dApp->isCurrentlyRunning(this) == true)
   {
     QMessageBox runningPipelineBox;
-    runningPipelineBox.setWindowTitle("Pipeline Is Running");
+    runningPipelineBox.setWindowTitle("Pipeline is Running");
     runningPipelineBox.setText("There is a pipeline currently running.\nPlease cancel the running pipeline and try again.");
     runningPipelineBox.setStandardButtons(QMessageBox::Ok);
     runningPipelineBox.setIcon(QMessageBox::Warning);
@@ -339,11 +339,11 @@ void SIMPLView_UI::readSettings()
   prefs->beginGroup("DockWidgetSettings");
 
   prefs->beginGroup("Issues Dock Widget");
-  issuesDockWidget->readSettings(this, prefs.data());
+  readDockWidgetSettings(prefs.data(), issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
-  stdOutDockWidget->readSettings(this, prefs.data());
+  readDockWidgetSettings(prefs.data(), stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -419,11 +419,11 @@ void SIMPLView_UI::writeSettings()
   prefs->beginGroup("DockWidgetSettings");
 
   prefs->beginGroup("Issues Dock Widget");
-  issuesDockWidget->writeSettings(prefs.data());
+  writeDockWidgetSettings(prefs.data(), issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
-  stdOutDockWidget->writeSettings(prefs.data());
+  writeDockWidgetSettings(prefs.data(), stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -533,21 +533,19 @@ void SIMPLView_UI::setupGui()
   // Tell the Filter Library that we have more Filters (potentially)
   getFilterLibraryToolboxWidget()->refreshFilterGroups();
 
-  connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesDockWidget, SLOT(clearIssues()));
-  connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesDockWidget, SLOT(displayCachedMessages()));
+  connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
+  connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
-  // Set the IssuesDockWidget as a PipelineMessageObserver Object.
-  pipelineViewWidget->addPipelineMessageObserver(issuesDockWidget);
+  pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
 
-  // Add icon to "Start Pipeline" button
-  startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
+  issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
+  stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
+  dataBrowserDockWidget->toggleViewAction()->setText("Show " + dataBrowserDockWidget->toggleViewAction()->text());
 
-  m_ProgressBar->hide();
-  //  horizontalLayout_2->removeWidget(m_ProgressBar);
-  //  horizontalLayout_2->removeWidget(startPipelineBtn);
-  //  horizontalLayout_2->addSpacerItem(progressSpacer);
-  //  horizontalLayout_2->addWidget(startPipelineBtn);
+  // Set the IssuesWidget as a PipelineMessageObserver Object.
+  pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
+  startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
+  startPipelineBtn->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -750,9 +748,9 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 {
   if(startPipelineBtn->text().compare("Cancel Pipeline") == 0)
   {
-    qDebug() << "canceling from GUI...."
-             << "\n";
     emit pipelineCanceled();
+
+    startPipelineBtn->setText("Canceling...");
 
     // Enable FilterListToolboxWidget signals - resume adding filters
     getFilterListToolboxWidget()->blockSignals(false);
@@ -760,6 +758,10 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     // Enable FilterLibraryToolboxWidget signals - resume adding filters
     getFilterLibraryToolboxWidget()->blockSignals(false);
 
+    return;
+  }
+  else if (startPipelineBtn->text().compare("Canceling...") == 0)
+  {
     return;
   }
 
@@ -774,8 +776,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   }
   m_StdOutputTabMap.clear();
 
-  m_ProgressBar->show();
-
   if(m_WorkerThread != nullptr)
   {
     m_WorkerThread->wait(); // Wait until the thread is complete
@@ -788,7 +788,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_WorkerThread = new QThread(); // Create a new Thread Resource
 
   // Clear out the Issues Table
-  issuesDockWidget->clearIssues();
+  issuesWidget->clearIssues();
 
   // Ask the PipelineViewWidget to create a FilterPipeline Object
   // m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
@@ -799,8 +799,16 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   if(err < 0)
   {
     m_PipelineInFlight = FilterPipeline::NullPointer();
-    issuesDockWidget->displayCachedMessages();
+    issuesWidget->displayCachedMessages();
     return;
+  }
+
+  // Save each of the DataContainerArrays from each of the filters for when the pipeline is complete
+  m_PreflightDataContainerArrays.clear();
+  FilterPipeline::FilterContainerType filters = m_PipelineInFlight->getFilterContainer();
+  for(FilterPipeline::FilterContainerType::size_type i = 0; i < filters.size(); i++)
+  {
+    m_PreflightDataContainerArrays.push_back(filters[i]->getDataContainerArray()->deepCopy());
   }
 
   // Save the preferences file NOW in case something happens
@@ -813,9 +821,9 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     if(nullptr != w)
     {
-      connect(this, SIGNAL(pipelineStarted()), w, SLOT(toRunningState()));
-      connect(this, SIGNAL(pipelineCanceled()), w, SLOT(toIdleState()));
-      connect(this, SIGNAL(pipelineFinished()), w, SLOT(toIdleState()));
+      w->toReadyState();
+      w->toRunningState();
+      connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
   }
 
@@ -842,7 +850,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   m_PipelineInFlight->addMessageReceiver(this);
 
   // Clear the Error table
-  issuesDockWidget->clearIssues();
+  issuesWidget->clearIssues();
 
   /* Connect the signal 'started()' from the QThread to the 'run' slot of the
    * PipelineBuilder object. Since the PipelineBuilder object has been moved to another
@@ -860,10 +868,10 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   // Add in a connection to clear the Error/Warnings table when the thread starts
   //  connect(m_WorkerThread, SIGNAL(started()),
-  //          issuesDockWidget, SLOT( clearIssues() ) );
+  //          issuesWidget, SLOT( clearIssues() ) );
 
   // Tell the Error/Warnings Table that we are finished and to display any cached messages
-  connect(m_WorkerThread, SIGNAL(finished()), issuesDockWidget, SLOT(displayCachedMessages()));
+  connect(m_WorkerThread, SIGNAL(finished()), issuesWidget, SLOT(displayCachedMessages()));
 
   // If the use clicks on the "Cancel" button send a message to the PipelineBuilder object
   connect(this, SIGNAL(pipelineCanceled()), m_PipelineInFlight.get(), SLOT(cancelPipeline()), Qt::DirectConnection);
@@ -871,7 +879,9 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   emit pipelineStarted();
   m_WorkerThread->start();
   startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_red.png"));
+  startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
+  addStdOutputMessage("");
+  addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
 
 // -----------------------------------------------------------------------------
@@ -886,28 +896,24 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 {
-  if(msg.getType() == PipelineMessage::ProgressValue)
+  if(msg.getType() == PipelineMessage::MessageType::ProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
+    startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
   }
-//  else if(msg.getType() == PipelineMessage::StatusMessage)
-//  {
-//    if(nullptr != this->statusBar())
-//    {
-//      this->statusBar()->showMessage(msg.generateStatusString());
-//    }
-//  }
-  else if(msg.getType() == PipelineMessage::StatusMessageAndProgressValue)
+  else if(msg.getType() == PipelineMessage::MessageType::StatusMessageAndProgressValue)
   {
-    this->m_ProgressBar->setValue(msg.getProgressValue());
+    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
+    startPipelineBtn->setStyleSheet(getStartPipelineInProgressStyle(progValue));
+
     if(nullptr != this->statusBar())
     {
       this->statusBar()->showMessage(msg.generateStatusString());
     }
   }
-  else if(msg.getType() == PipelineMessage::StandardOutputMessage || msg.getType() == PipelineMessage::StatusMessage)
+  else if(msg.getType() == PipelineMessage::MessageType::StandardOutputMessage || msg.getType() == PipelineMessage::MessageType::StatusMessage)
   {
-    if (msg.getType() == PipelineMessage::StatusMessage)
+    if (msg.getType() == PipelineMessage::MessageType::StatusMessage)
     {
       if(nullptr != this->statusBar())
       {
@@ -917,18 +923,13 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 
     if(stdOutDockWidget->isVisible() == false)
     {
-      stdOutDockWidget->setVisible(true);
-
-      // Update the standard output menu item with the correct value
-      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-      QAction* stdOutToggle = stdOutDockWidget->toggleViewAction();
-      menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+      stdOutDockWidget->toggleViewAction()->toggle();
     }
 
     QString text = "<span style=\" color:#000000;\" >";
     text.append(msg.getText());
     text.append("</span>");
-    stdOutDockWidget->appendText(text);
+    stdOutWidget->appendText(text);
   }
 }
 
@@ -937,12 +938,28 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::pipelineDidFinish()
 {
+  if (m_PipelineInFlight->getCancel() == true)
+  {
+    addStdOutputMessage("<b>*************** PIPELINE CANCELED ***************</b>");
+  }
+  else
+  {
+    addStdOutputMessage("<b>*************** PIPELINE FINISHED ***************</b>");
+  }
+  addStdOutputMessage("");
+
+  // Put back the DataContainerArray for each filter at the conclusion of running
+  // the pipeline. this keeps the data browser current and up to date.
+  FilterPipeline::FilterContainerType filters = m_PipelineInFlight->getFilterContainer();
+  for(FilterPipeline::FilterContainerType::size_type i = 0; i < filters.size(); i++)
+  {
+    filters[i]->setDataContainerArray(m_PreflightDataContainerArrays[i]);
+  }
+
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_play_green.png"));
-  m_ProgressBar->setValue(0);
-
-  m_ProgressBar->hide();
+  startPipelineBtn->setIcon(QIcon(":/media_play_white.png"));
+  startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
 
   // Re-enable FilterListToolboxWidget signals - resume adding filters
   getFilterListToolboxWidget()->blockSignals(false);
@@ -950,7 +967,85 @@ void SIMPLView_UI::pipelineDidFinish()
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
   getFilterLibraryToolboxWidget()->blockSignals(false);
 
+  QList<PipelineFilterObject*> selectedFilters = pipelineViewWidget->getSelectedFilterObjects();
+  foreach(PipelineFilterObject* selectedFilter, selectedFilters)
+  {
+    pipelineViewWidget->setSelectedFilterObject(selectedFilter, Qt::ControlModifier);
+  }
+
   emit pipelineFinished();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString SIMPLView_UI::getStartPipelineIdleStyle()
+{
+
+  QFont font = QtSStyles::GetHumanLabelFont();
+  QString fontString;
+  QTextStream in(&fontString);
+  in << "font: " << font.weight() << " " << 
+#if defined(Q_OS_MAC)
+  font.pointSize() - 2
+#elif defined(Q_OS_WIN)
+  font.pointSize()
+  #else
+  font.pointSize()
+#endif
+  << "pt \"" << font.family()  << "\";"
+  << "font-weight: bold;";
+
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton:enabled { ";
+  ss << "background-color: rgb(0, 118, 6);\n";
+  ss << "color: white;\n";
+  ss << "border-radius: 0px;\n";
+  ss << fontString;
+  ss << "}\n\n";
+
+  ss << "QPushButton:disabled { ";
+  ss << "background-color: rgb(150, 150, 150);\n";
+  ss << "color: rgb(190, 190, 190);\n";
+  ss << "border-radius: 0px;\n";
+  ss << fontString;
+  ss << "}";
+
+  return cssStr;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
+{
+  QFont font = QtSStyles::GetHumanLabelFont();
+  QString fontString;
+  QTextStream in(&fontString);
+  in << "font: " << font.weight() << " " << 
+#if defined(Q_OS_MAC)
+  font.pointSize() - 2
+#elif defined(Q_OS_WIN)
+  font.pointSize()
+  #else
+  font.pointSize()
+#endif
+  << "pt \"" << font.family()  << "\";"
+  << "font-weight: bold;";
+
+
+  QString cssStr;
+  QTextStream ss(&cssStr);
+  ss << "QPushButton { ";
+  ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
+  ss << "color: white;\n";
+  ss << "border-radius: 0px;\n";
+  ss << fontString;
+
+  ss << "}";
+
+  return cssStr;
 }
 
 // -----------------------------------------------------------------------------
@@ -982,7 +1077,7 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
-// Launch the dialog
+  // Launch the dialog
 #ifdef SIMPLView_USE_QtWebEngine
   SIMPLViewUserManualDialog::LaunchHelpDialog(className);
 #else
@@ -1039,16 +1134,43 @@ void SIMPLView_UI::cleanupPipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b)
+void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
 {
-  action->blockSignals(true);
-  dock->blockSignals(true);
+  menu->addAction(issuesDockWidget->toggleViewAction());
+  menu->addAction(stdOutDockWidget->toggleViewAction());
+  menu->addAction(dataBrowserDockWidget->toggleViewAction());
+}
 
-  action->setChecked(b);
-  dock->setVisible(b);
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QList<QAction*> SIMPLView_UI::getDummyDockWidgetActions()
+{
+  QList<QAction*> actions;
 
-  action->blockSignals(false);
-  dock->blockSignals(false);
+  QAction* issuesDummyAction = new QAction(issuesDockWidget->toggleViewAction()->text(), macApp);
+  issuesDummyAction->setDisabled(true);
+  actions.push_back(issuesDummyAction);
+
+  QAction* stdOutDummyAction = new QAction(stdOutDockWidget->toggleViewAction()->text(), macApp);
+  stdOutDummyAction->setDisabled(true);
+  actions.push_back(stdOutDummyAction);
+
+  QAction* dataBrowserDummyAction = new QAction(dataBrowserDockWidget->toggleViewAction()->text(), macApp);
+  dataBrowserDummyAction->setDisabled(true);
+  actions.push_back(dataBrowserDummyAction);
+
+  return actions;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
+{
+  menu->removeAction(issuesDockWidget->toggleViewAction());
+  menu->removeAction(stdOutDockWidget->toggleViewAction());
+  menu->removeAction(dataBrowserDockWidget->toggleViewAction());
 }
 
 // -----------------------------------------------------------------------------
@@ -1089,17 +1211,9 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IssuesDockWidget* SIMPLView_UI::getIssuesDockWidget()
+DataBrowserWidget* SIMPLView_UI::getDataBrowserWidget()
 {
-  return issuesDockWidget;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-StandardOutputDockWidget* SIMPLView_UI::getStandardOutputDockWidget()
-{
-  return stdOutDockWidget;
+  return dataBrowserWidget;
 }
 
 // -----------------------------------------------------------------------------
@@ -1177,7 +1291,7 @@ void SIMPLView_UI::addStdOutputMessage(const QString& msg)
   QString text = "<span style=\" color:#000000;\" >";
   text.append(msg);
   text.append("</span>");
-  stdOutDockWidget->appendText(text);
+  stdOutWidget->appendText(text);
 }
 
 // -----------------------------------------------------------------------------
@@ -1196,7 +1310,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::preflightDidFinish(int err)
 {
-  if(err < 0)
+  if(err < 0 || pipelineViewWidget->getFilterPipeline()->getFilterContainer().size() <= 0)
   {
     startPipelineBtn->setDisabled(true);
   }

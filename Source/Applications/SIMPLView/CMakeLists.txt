@@ -57,6 +57,12 @@ include_directories(${HDF5_INCLUDE_DIR}
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
 )
 
+if(SIMPL_USE_ITK)
+  include_directories( ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
+  include_directories( ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
+endif()
+
+
 # --------------------------------------------------------------------
 # Generate the License File Headers
 set(PROJECT_PREFIX "SIMPLView")
@@ -119,6 +125,7 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
+  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.cpp
   )
 
 if(APPLE)
@@ -141,6 +148,8 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
+  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.h
+
 )
 
 if(APPLE)
@@ -155,6 +164,7 @@ cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}"
 SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/StatusBarWidget.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
@@ -220,6 +230,11 @@ file(READ "${SIMPLPluginList}" SIMPLView_PLUGINS)
 get_property(QT_PLUGINS_FILE GLOBAL PROPERTY QtPluginsTxtFile)
 file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
+list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
+
+if( "${SIMPL_USE_ITK}" STREQUAL "ON" AND APPLE)
+ list(APPEND ${PROJECT_NAME}_LINK_LIBS SimpleITKExplicit)
+endif()
 
 BuildQtAppBundle(
     TARGET ${SIMPLView_APPLICATION_NAME}
@@ -230,7 +245,7 @@ BuildQtAppBundle(
     VERSION_MINOR ${SIMPLView_VER_MINOR}
     VERSION_PATCH ${SIMPLView_VER_PATCH}
     BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
-    LINK_LIBRARIES SVWidgetsLib
+    LINK_LIBRARIES ${${PROJECT_NAME}_LINK_LIBS}
     LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     QT_PLUGINS    ${QT_PLUGINS}
     QT5_MODULES   ${SIMPLView_Qt5_Components}

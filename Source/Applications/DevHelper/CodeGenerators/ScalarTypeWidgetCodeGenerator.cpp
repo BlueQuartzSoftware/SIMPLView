@@ -33,12 +33,12 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "AttributeMatrixSelectionWidgetCodeGenerator.h"
+#include "ScalarTypeWidgetCodeGenerator.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixSelectionWidgetCodeGenerator::AttributeMatrixSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
+ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
   FPCodeGenerator(humanLabel, propertyName, category, initValue)
 {
 
@@ -47,25 +47,24 @@ AttributeMatrixSelectionWidgetCodeGenerator::AttributeMatrixSelectionWidgetCodeG
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixSelectionWidgetCodeGenerator::~AttributeMatrixSelectionWidgetCodeGenerator()
+ScalarTypeWidgetCodeGenerator::~ScalarTypeWidgetCodeGenerator()
 {}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParameters()
+QString ScalarTypeWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;\n";
-  out << "  parameters.push_back(SIMPL_NEW_AM_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amsReq));";
+  out << "  parameters.push_back(SIMPL_NEW_SCALARTYPE_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
   return s;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateDataCheck()
+QString ScalarTypeWidgetCodeGenerator::generateDataCheck()
 {
   return "";
 }
@@ -73,12 +72,12 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateDataCheck()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateFilterParameters()
+QString ScalarTypeWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(DataArrayPath, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(DataArrayPath " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(SIMPL::ScalarTypes::Type, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(SIMPL::ScalarTypes::Type " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -86,9 +85,9 @@ QString AttributeMatrixSelectionWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QString> AttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> ScalarTypeWidgetCodeGenerator::generateCPPIncludes()
 {
   QList<QString> list;
-  list.push_back("#include \"SIMPLib/FilterParameters/AttributeMatrixSelectionFilterParameter.h\"");
+  list.push_back("#include \"SIMPLib/FilterParameters/ScalarTypeFilterParameter.h\"");
   return list;
 }

@@ -33,74 +33,65 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _macsimplviewapplication_h_
-#define _macsimplviewapplication_h_
+#ifndef _StatusBarWidget_h_
+#define _StatusBarWidget_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include <QtWidgets/QFrame>
 
-#define macApp (static_cast<MacSIMPLViewApplication*>(qApp))
+#include "ui_StatusBarWidget.h"
 
-class MacSIMPLViewApplication : public SIMPLViewApplication
+class QDockWidget;
+
+class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
 {
-  Q_OBJECT
+
+    Q_OBJECT
 
   public:
-    MacSIMPLViewApplication(int& argc, char** argv);
-    virtual ~MacSIMPLViewApplication();
+    StatusBarWidget(QWidget* parent = 0);
+    virtual ~StatusBarWidget();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    void toEmptyMenuState();
+    using EnumType = unsigned int;
+
+    enum class Button : EnumType
+    {
+      Issues = 0,
+      Console = 1,
+      DataBrowser = 2
+    };
+
 
     /**
-     * @brief event
-     * @param event
-     * @return
+     * @brief setButtonAction
+     * @param action
+     * @param btn
      */
-    bool event(QEvent* event);
+    void setButtonAction(QDockWidget *dock, Button btn);
 
+
+  public slots:
     /**
-     * @brief initializeDummyDockWidgetActions
+     * @brief issuesVisibilityChanged
+     * @param b
      */
-    void initializeDummyDockWidgetActions();
+    void issuesVisibilityChanged(bool b);
+    /**
+     * @brief consolVisibilityChanged
+     * @param b
+     */
+    void consolVisibilityChanged(bool b);
+    /**
+     * @brief dataBrowserVisibilityChanged
+     * @param b
+     */
+    void dataBrowserVisibilityChanged(bool b);
 
-  protected slots:
+  protected:
 
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
-
-  /**
-  * @brief activeWindowChanged
-  */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-  virtual void toolboxWindowChanged();
-
-  // SIMPLView_UI slots
-  virtual void on_actionClearRecentFiles_triggered();
-
-  void toToolboxMenuState();
-  void toSIMPLViewMenuState(SIMPLView_UI *instance);
-
-private:
-  // The global menu
-  QSharedPointer<QMenuBar>              m_GlobalMenu;
-  QSharedPointer<QMenu>                 m_DockMenu;
-  QMenu*                                m_MenuEdit;
-  QMenu*                                m_MenuView;
-  QAction*                              m_EditSeparator;
-  QList<QAction*>                       m_DummyDockWidgetActions;
-
-  void createGlobalMenu();
-
-  QMenu* createCustomDockMenu();
-
-  MacSIMPLViewApplication(const MacSIMPLViewApplication&); // Copy Constructor Not Implemented
-  void operator=(const MacSIMPLViewApplication&); // Operator '=' Not Implemented
+  private:
+    StatusBarWidget(const StatusBarWidget&); // Copy Constructor Not Implemented
+    void operator=(const StatusBarWidget&); // Operator '=' Not Implemented
 };
 
-#endif /* _MacSIMPLViewApplication_H */
+#endif /* StatusBarWidget_H_ */

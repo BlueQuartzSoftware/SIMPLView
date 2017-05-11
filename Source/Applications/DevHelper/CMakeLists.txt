@@ -69,10 +69,10 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.h
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionAdvancedWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedDoubleWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedIntWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.h
@@ -97,10 +97,12 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiDataArraySelectionWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ScalarTypeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SecondOrderPolynomialWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SeparatorWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.h
@@ -112,10 +114,10 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AttributeMatrixSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/AxisAngleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/BooleanWidgetCodeGenerator.cpp
-  ${DevHelper_SOURCE_DIR}/CodeGenerators/CalculatorWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ChoiceWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/CodeGenFactory.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ComparisonSelectionAdvancedWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedDoubleWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ConstrainedIntWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/DataArrayCreationWidgetCodeGenerator.cpp
@@ -140,10 +142,12 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiDataArraySelectionWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ScalarTypeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SecondOrderPolynomialWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/SeparatorWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.cpp

@@ -151,6 +151,17 @@ bool MacSIMPLViewApplication::event(QEvent* event)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void MacSIMPLViewApplication::initializeDummyDockWidgetActions()
+{
+  if (m_SIMPLViewInstances.size() > 0)
+  {
+    m_DummyDockWidgetActions = m_SIMPLViewInstances[0]->getDummyDockWidgetActions();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
@@ -189,6 +200,8 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     m_MenuEdit->removeAction(viewWidget->getActionRedo());
     m_MenuEdit->removeAction(viewWidget->getActionUndo());
 
+    instance->removeDockWidgetActions(m_MenuView);
+
     m_PreviousActiveWindow = instance;
   }
 }
@@ -221,11 +234,9 @@ void MacSIMPLViewApplication::toToolboxMenuState()
 
   menuItems->getActionSave()->setDisabled(true);
   menuItems->getActionSaveAs()->setDisabled(true);
-  menuItems->getActionShowIssues()->setDisabled(true);
-  menuItems->getActionShowIssues()->setChecked(false);
-  menuItems->getActionShowStdOutput()->setDisabled(true);
-  menuItems->getActionShowStdOutput()->setChecked(false);
   menuItems->getActionClearPipeline()->setDisabled(true);
+
+  m_MenuView->addActions(m_DummyDockWidgetActions);
 
   menuItems->getActionShowFilterList()->setEnabled(true);
   menuItems->getActionShowFilterLibrary()->setEnabled(true);
@@ -263,6 +274,11 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
     menuItems->getActionClearPipeline()->setDisabled(true);
   }
 
+  for (int i = 0; i < m_DummyDockWidgetActions.size(); i++)
+  {
+    m_MenuView->removeAction(m_DummyDockWidgetActions[i]);
+  }
+
   menuItems->getActionShowFilterList()->setDisabled(true);
   menuItems->getActionShowFilterLibrary()->setDisabled(true);
   menuItems->getActionShowBookmarks()->setDisabled(true);
@@ -271,19 +287,11 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
 
   menuItems->getActionSave()->setEnabled(true);
   menuItems->getActionSaveAs()->setEnabled(true);
-  menuItems->getActionShowIssues()->setEnabled(true);
   menuItems->getActionCut()->setEnabled(true);
   menuItems->getActionCopy()->setEnabled(true);
   menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
-  menuItems->getActionShowStdOutput()->setEnabled(true);
 
-  // Update the issues menu item with the correct value
-  QAction* issuesToggle = m_ActiveWindow->getIssuesDockWidget()->toggleViewAction();
-  menuItems->getActionShowIssues()->setChecked(issuesToggle->isChecked());
-
-  // Update the standard output menu item with the correct value
-  QAction* stdOutToggle = m_ActiveWindow->getStandardOutputDockWidget()->toggleViewAction();
-  menuItems->getActionShowStdOutput()->setChecked(stdOutToggle->isChecked());
+  instance->insertDockWidgetActions(m_MenuView);
 }
 
 // -----------------------------------------------------------------------------
@@ -300,10 +308,9 @@ void MacSIMPLViewApplication::toEmptyMenuState()
   menuItems->getActionNewFolder()->setDisabled(true);
   menuItems->getActionSave()->setDisabled(true);
   menuItems->getActionSaveAs()->setDisabled(true);
-  menuItems->getActionShowIssues()->setDisabled(true);
-  menuItems->getActionShowIssues()->setChecked(false);
-  menuItems->getActionShowStdOutput()->setDisabled(true);
-  menuItems->getActionShowStdOutput()->setChecked(false);
+
+  m_MenuView->addActions(m_DummyDockWidgetActions);
+
   menuItems->getActionClearPipeline()->setDisabled(true);
   menuItems->getActionCut()->setDisabled(true);
   menuItems->getActionCopy()->setDisabled(true);
@@ -339,8 +346,8 @@ void MacSIMPLViewApplication::createGlobalMenu()
 
   QMenu* menuFile = new QMenu("File", m_GlobalMenu.data());
   m_MenuEdit = new QMenu("Edit", m_GlobalMenu.data());
-  QMenu* menuView = new QMenu("View", m_GlobalMenu.data());
   QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu.data());
+  m_MenuView = new QMenu("View", m_GlobalMenu.data());
   QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu.data());
   QMenu* menuPipeline = new QMenu("Pipeline", m_GlobalMenu.data());
   QMenu* menuHelp = new QMenu("Help", m_GlobalMenu.data());
@@ -359,8 +366,6 @@ void MacSIMPLViewApplication::createGlobalMenu()
   QAction* actionClearBookmarks = menuItems->getActionClearBookmarks();
   QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
   QAction* actionPluginInformation = menuItems->getActionPluginInformation();
-  QAction* actionShowIssues = menuItems->getActionShowIssues();
-  QAction* actionShowStdOutput = menuItems->getActionShowStdOutput();
   QAction* actionShowToolbox = menuItems->getActionShowToolbox();
   QAction* actionShowFilterLibrary = menuItems->getActionShowFilterLibrary();
   QAction* actionShowFilterList = menuItems->getActionShowFilterList();
@@ -396,15 +401,13 @@ void MacSIMPLViewApplication::createGlobalMenu()
   m_MenuEdit->addAction(actionPaste);
 
   // Create View Menu
-  m_GlobalMenu->addMenu(menuView);
-  menuView->addAction(actionShowToolbox);
-  menuView->addMenu(menuToolbox);
+  m_GlobalMenu->addMenu(m_MenuView);
+  m_MenuView->addAction(actionShowToolbox);
+  m_MenuView->addMenu(menuToolbox);
   menuToolbox->addAction(actionShowFilterList);
   menuToolbox->addAction(actionShowFilterLibrary);
   menuToolbox->addAction(actionShowBookmarks);
-  menuView->addSeparator();
-  menuView->addAction(actionShowIssues);
-  menuView->addAction(actionShowStdOutput);
+  m_MenuView->addSeparator();
 
   // Create Bookmarks Menu
   m_GlobalMenu->addMenu(menuBookmarks);

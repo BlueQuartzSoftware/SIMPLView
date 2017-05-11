@@ -70,10 +70,10 @@ class FilterListWidget;
 class UpdateCheckDialog;
 class UpdateCheckData;
 class UpdateCheck;
-class QtSHelpDialog;
 class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
+class StatusBarWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -124,30 +124,16 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     FilterLibraryToolboxWidget* getFilterLibraryToolboxWidget();
 
     /**
-    * @brief getFilterListToolboxWidget
-    * @param
-    */
-    IssuesDockWidget* getIssuesDockWidget();
-
-    /**
-    * @brief getStandardOutputDockWidget
-    * @param
-    */
-    StandardOutputDockWidget* getStandardOutputDockWidget();
+     * @brief getDataBrowserWidget
+     * @return
+     */
+    DataBrowserWidget* getDataBrowserWidget();
 
     /**
     * @brief setOpenedFilePath
     * @param path
     */
     void setOpenDialogLastFilePath(const QString& path);
-
-    /**
-     * @brief updateAndSyncDockWidget
-     * @param action
-     * @param dock
-     * @param b
-     */
-    void updateAndSyncDockWidget(QAction* action, QDockWidget* dock, bool b);
 
     /**
     * @brief Reads the preferences from the users pref file
@@ -168,6 +154,25 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @brief savePipelineAs Helper function that saves the pipeline
      */
     bool savePipelineAs();
+
+    /**
+     * @brief insertDockWidgetActions
+     * @param menu
+     */
+    void insertDockWidgetActions(QMenu* menu);
+
+    /**
+     * @brief removeDockWidgetActions
+     * @param menu
+     */
+    void removeDockWidgetActions(QMenu* menu);
+
+    /**
+     * @brief getDummyDockWidgetActions
+     * @param menu
+     * @return
+     */
+    QList<QAction*> getDummyDockWidgetActions();
 
   public slots:
 
@@ -372,8 +377,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
 
     FilterPipeline::Pointer               m_PipelineInFlight;
+    QVector<DataContainerArray::Pointer>  m_PreflightDataContainerArrays;
     QMenuBar*                             m_InstanceMenuBar = nullptr;
-    bool                                  m_ShouldRestart;
+    StatusBarWidget*                      m_StatusBar = nullptr;
 
     QString                               m_OpenedFilePath;
     static QString                        m_OpenDialogLastFilePath;
@@ -381,8 +387,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 
     bool                                  m_ShowFilterWidgetDeleteDialog;
+    bool                                  m_ShouldRestart = false;
 
     void cleanupPipeline();
+
+    QString getStartPipelineIdleStyle();
+    QString getStartPipelineInProgressStyle(float percent);
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented

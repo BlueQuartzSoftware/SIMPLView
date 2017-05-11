@@ -1,7 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 <qresource>
-<file>ThirdParty/Boost.txt</file>
 <file>ThirdParty/Eigen.txt</file>
 <file>ThirdParty/HDF5.txt</file>
 <file>ThirdParty/ITK.txt</file>

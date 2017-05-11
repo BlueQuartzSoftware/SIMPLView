@@ -43,6 +43,11 @@ if(NOT "${DREAM3D_SDK}" STREQUAL "")
   endif()
 endif()
 
+# Request C++11 standard, using new CMake variables.
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS False)
+
 if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
   # CMake 3.0 introduces VERSION variables for each Project.
   cmake_policy(SET CMP0048 NEW)
@@ -52,8 +57,7 @@ if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
   cmake_policy(SET CMP0054 NEW)
 endif()
 
-cmake_minimum_required(VERSION 3.1.0)
-
+cmake_minimum_required(VERSION 3.6.0)
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
@@ -276,19 +280,6 @@ set(CMAKE_MODULE_PATH ${CMP_MODULES_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 # up the targets (Exported) that it needs. We just need to find where
 # HDF5 is installed.
 include(${CMP_SOURCE_DIR}/ExtLib/HDF5Support.cmake)
-
-# --------------------------------------------------------------------
-# Find Boost Headers/Libraries
-#set(Boost_FIND_REQUIRED FALSE)
-set(Boost_DEBUG FALSE)
-set(Boost_USE_MULTITHREADED TRUE)
-set(Boost_USE_STATIC_LIBS TRUE)
-set(Boost_ADDITIONAL_VERSIONS 1.57 1.58 1.59 1.60 1.61)
-set(Boost_FIND_COMPONENTS "")
-set(Boost_NO_BOOST_CMAKE 1)
-FIND_PACKAGE(Boost)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 # --------------------------------------------------------------------
 # Should we use Intel Threading Building Blocks

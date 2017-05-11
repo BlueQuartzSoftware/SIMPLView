@@ -33,74 +33,42 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _macsimplviewapplication_h_
-#define _macsimplviewapplication_h_
+#ifndef _scalartypewidgetcodegenerator_h_
+#define _scalartypewidgetcodegenerator_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include "SIMPLib/SIMPLib.h"
+#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
-#define macApp (static_cast<MacSIMPLViewApplication*>(qApp))
+#include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class MacSIMPLViewApplication : public SIMPLViewApplication
+class ScalarTypeWidgetCodeGenerator : public FPCodeGenerator
 {
-  Q_OBJECT
-
   public:
-    MacSIMPLViewApplication(int& argc, char** argv);
-    virtual ~MacSIMPLViewApplication();
+    SIMPL_SHARED_POINTERS(ScalarTypeWidgetCodeGenerator)
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    {
+      Pointer sharedPtr(new ScalarTypeWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+      return sharedPtr;
+    }
 
-    void toEmptyMenuState();
+    virtual ~ScalarTypeWidgetCodeGenerator();
 
-    /**
-     * @brief event
-     * @param event
-     * @return
-     */
-    bool event(QEvent* event);
+    virtual QString generateSetupFilterParameters();
 
-    /**
-     * @brief initializeDummyDockWidgetActions
-     */
-    void initializeDummyDockWidgetActions();
+    virtual QString generateDataCheck();
 
-  protected slots:
+    virtual QString generateFilterParameters();
 
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
+    virtual QList<QString> generateCPPIncludes();
 
-  /**
-  * @brief activeWindowChanged
-  */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  protected:
+    ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  virtual void toolboxWindowChanged();
+  private:
 
-  // SIMPLView_UI slots
-  virtual void on_actionClearRecentFiles_triggered();
-
-  void toToolboxMenuState();
-  void toSIMPLViewMenuState(SIMPLView_UI *instance);
-
-private:
-  // The global menu
-  QSharedPointer<QMenuBar>              m_GlobalMenu;
-  QSharedPointer<QMenu>                 m_DockMenu;
-  QMenu*                                m_MenuEdit;
-  QMenu*                                m_MenuView;
-  QAction*                              m_EditSeparator;
-  QList<QAction*>                       m_DummyDockWidgetActions;
-
-  void createGlobalMenu();
-
-  QMenu* createCustomDockMenu();
-
-  MacSIMPLViewApplication(const MacSIMPLViewApplication&); // Copy Constructor Not Implemented
-  void operator=(const MacSIMPLViewApplication&); // Operator '=' Not Implemented
+    ScalarTypeWidgetCodeGenerator(const ScalarTypeWidgetCodeGenerator&); // Copy Constructor Not Implemented
+    void operator=(const ScalarTypeWidgetCodeGenerator&); // Operator '=' Not Implemented
 };
 
-#endif /* _MacSIMPLViewApplication_H */
+#endif /* ScalarTypeWidgetCodeGenerator_H_ */

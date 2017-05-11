@@ -33,74 +33,44 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _macsimplviewapplication_h_
-#define _macsimplviewapplication_h_
+#ifndef _comparisonSelectionAdvancedWidgetCodeGenerator_h_
+#define _comparisonSelectionAdvancedWidgetCodeGenerator_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include "SIMPLib/SIMPLib.h"
+#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
-#define macApp (static_cast<MacSIMPLViewApplication*>(qApp))
+#include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class MacSIMPLViewApplication : public SIMPLViewApplication
+class ComparisonSelectionAdvancedWidgetCodeGenerator : public FPCodeGenerator
 {
-  Q_OBJECT
-
   public:
-    MacSIMPLViewApplication(int& argc, char** argv);
-    virtual ~MacSIMPLViewApplication();
+    SIMPL_SHARED_POINTERS(ComparisonSelectionAdvancedWidgetCodeGenerator)
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    {
+      Pointer sharedPtr(new ComparisonSelectionAdvancedWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+      return sharedPtr;
+    }
 
-    void toEmptyMenuState();
+    virtual ~ComparisonSelectionAdvancedWidgetCodeGenerator();
 
-    /**
-     * @brief event
-     * @param event
-     * @return
-     */
-    bool event(QEvent* event);
+    virtual QString generateSetupFilterParameters();
 
-    /**
-     * @brief initializeDummyDockWidgetActions
-     */
-    void initializeDummyDockWidgetActions();
+    virtual QString generateDataCheck();
 
-  protected slots:
+    virtual QString generateFilterParameters();
 
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
+    virtual QList<QString> generateHIncludes();
 
-  /**
-  * @brief activeWindowChanged
-  */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+    virtual QList<QString> generateCPPIncludes();
 
-  virtual void toolboxWindowChanged();
+  protected:
+    ComparisonSelectionAdvancedWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  // SIMPLView_UI slots
-  virtual void on_actionClearRecentFiles_triggered();
+  private:
 
-  void toToolboxMenuState();
-  void toSIMPLViewMenuState(SIMPLView_UI *instance);
-
-private:
-  // The global menu
-  QSharedPointer<QMenuBar>              m_GlobalMenu;
-  QSharedPointer<QMenu>                 m_DockMenu;
-  QMenu*                                m_MenuEdit;
-  QMenu*                                m_MenuView;
-  QAction*                              m_EditSeparator;
-  QList<QAction*>                       m_DummyDockWidgetActions;
-
-  void createGlobalMenu();
-
-  QMenu* createCustomDockMenu();
-
-  MacSIMPLViewApplication(const MacSIMPLViewApplication&); // Copy Constructor Not Implemented
-  void operator=(const MacSIMPLViewApplication&); // Operator '=' Not Implemented
+    ComparisonSelectionAdvancedWidgetCodeGenerator(const ComparisonSelectionAdvancedWidgetCodeGenerator&); // Copy Constructor Not Implemented
+    void operator=(const ComparisonSelectionAdvancedWidgetCodeGenerator&); // Operator '=' Not Implemented
 };
 
-#endif /* _MacSIMPLViewApplication_H */
+#endif /* comparisonSelectionAdvancedWidgetCodeGenerator_H_ */

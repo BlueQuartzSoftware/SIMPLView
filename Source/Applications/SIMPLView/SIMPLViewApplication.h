@@ -126,8 +126,6 @@ protected slots:
   void on_actionSave_triggered();
   void on_actionSaveAs_triggered();
   void on_actionShowToolbox_triggered(bool visible);
-  void on_actionShowIssues_triggered(bool visible);
-  void on_actionShowStdOutput_triggered(bool visible);
 
   void on_actionAddBookmark_triggered();
   void on_actionNewFolder_triggered();
@@ -179,7 +177,7 @@ private:
 
   QSharedPointer<QMenu> m_ContextMenu;
 
-  bool m_ShowFilterWidgetDeleteDialog;
+  int m_minSplashTime;
 
   void readSettings();
   void writeSettings();

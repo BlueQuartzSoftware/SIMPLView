@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)
   // let's just use plastique for now
-  QApplication::setStyle(new QPlastiqueStyle);
+  //QApplication::setStyle(new QPlastiqueStyle);
 #endif
 
 #ifdef Q_OS_WIN
@@ -122,6 +122,10 @@ int main(int argc, char* argv[])
     SIMPLView_UI* ui = qtapp.getNewSIMPLViewInstance();
     ui->show();
   }
+
+#if defined (Q_OS_MAC)
+  qtapp.initializeDummyDockWidgetActions();
+#endif
 
   int err = qtapp.exec();
   return err;

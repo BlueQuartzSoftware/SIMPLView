@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,12 +33,12 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "CalculatorWidgetCodeGenerator.h"
+#include "ComparisonSelectionAdvancedWidgetCodeGenerator.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CalculatorWidgetCodeGenerator::CalculatorWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
+ComparisonSelectionAdvancedWidgetCodeGenerator::ComparisonSelectionAdvancedWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
   FPCodeGenerator(humanLabel, propertyName, category, initValue)
 {
 
@@ -47,24 +47,25 @@ CalculatorWidgetCodeGenerator::CalculatorWidgetCodeGenerator(QString humanLabel,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-CalculatorWidgetCodeGenerator::~CalculatorWidgetCodeGenerator()
+ComparisonSelectionAdvancedWidgetCodeGenerator::~ComparisonSelectionAdvancedWidgetCodeGenerator()
 {}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString CalculatorWidgetCodeGenerator::generateSetupFilterParameters()
+QString ComparisonSelectionAdvancedWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  out << "  parameters.push_back(SIMPL_NEW_CALC_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  out << "  // Please fill in the QVariant and QVector parameters to complete the setup\n";
+  out << "  parameters.push_back(SIMPL_NEW_COMP_SEL_ADV_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, QVector<QString>(), true));";
   return s;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString CalculatorWidgetCodeGenerator::generateDataCheck()
+QString ComparisonSelectionAdvancedWidgetCodeGenerator::generateDataCheck()
 {
   return "";
 }
@@ -72,12 +73,12 @@ QString CalculatorWidgetCodeGenerator::generateDataCheck()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString CalculatorWidgetCodeGenerator::generateFilterParameters()
+QString ComparisonSelectionAdvancedWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(QString, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(QString " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(ComparisonInputs, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(ComparisonInputs " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -85,9 +86,19 @@ QString CalculatorWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QString> CalculatorWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> ComparisonSelectionAdvancedWidgetCodeGenerator::generateHIncludes()
 {
   QList<QString> list;
-  list.push_back("#include \"SIMPLib/FilterParameters/CalculatorFilterParameter.h\"");
+  list.push_back("#include \"SIMPLib/Common/ComparisonInputs.h\"");
+  return list;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QList<QString> ComparisonSelectionAdvancedWidgetCodeGenerator::generateCPPIncludes()
+{
+  QList<QString> list;
+  list.push_back("#include \"SIMPLib/FilterParameters/ComparisonSelectionAdvancedFilterParameter.h\"");
   return list;
 }

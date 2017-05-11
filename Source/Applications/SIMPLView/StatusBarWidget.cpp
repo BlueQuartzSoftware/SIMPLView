@@ -33,62 +33,81 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "AttributeMatrixSelectionWidgetCodeGenerator.h"
+#include "StatusBarWidget.h"
+
+#include <QtCore/QDebug>
+#include <QtWidgets/QDockWidget>
+
+// Include the MOC generated CPP file which has all the QMetaObject methods/data
+#include "moc_StatusBarWidget.cpp"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixSelectionWidgetCodeGenerator::AttributeMatrixSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+StatusBarWidget::StatusBarWidget(QWidget* parent)
+  : QFrame(parent)
 {
-
+  this->setupUi(this);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixSelectionWidgetCodeGenerator::~AttributeMatrixSelectionWidgetCodeGenerator()
-{}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateSetupFilterParameters()
+StatusBarWidget::~StatusBarWidget()
 {
-  QString s;
-  QTextStream out(&s);
-  out << "  AttributeMatrixSelectionFilterParameter::RequirementType amsReq;\n";
-  out << "  parameters.push_back(SIMPL_NEW_AM_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, amsReq));";
-  return s;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateDataCheck()
+void StatusBarWidget::issuesVisibilityChanged(bool b)
 {
-  return "";
+  //qDebug() << "issuesVisibilityChanged" << static_cast<int>(b);
+  issuesBtn->blockSignals(true);
+  issuesBtn->setChecked(b);
+  issuesBtn->blockSignals(false);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixSelectionWidgetCodeGenerator::generateFilterParameters()
+void StatusBarWidget::consolVisibilityChanged(bool b)
 {
-  QString contents;
-  QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(DataArrayPath, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(DataArrayPath " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
-
-  return contents;
+  // qDebug() << "consolVisibilityChanged" << static_cast<int>(b);
+  consoleBtn->blockSignals(true);
+  consoleBtn->setChecked(b);
+  consoleBtn->blockSignals(false);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QString> AttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncludes()
+void StatusBarWidget::dataBrowserVisibilityChanged(bool b)
 {
-  QList<QString> list;
-  list.push_back("#include \"SIMPLib/FilterParameters/AttributeMatrixSelectionFilterParameter.h\"");
-  return list;
+  // qDebug() << "dataBrowserVisibilityChanged" << static_cast<int>(b);
+  dataBrowserBtn->blockSignals(true);
+  dataBrowserBtn->setChecked(b);
+  dataBrowserBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
+{
+  switch(btn)
+  {
+    case Button::Issues:
+      connect(issuesBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(issuesVisibilityChanged(bool)));
+      break;
+    case Button::Console:
+      connect(consoleBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(consolVisibilityChanged(bool)));
+      break;
+    case Button::DataBrowser:
+      connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
+      break;
+  }
 }

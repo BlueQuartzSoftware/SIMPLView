@@ -39,9 +39,11 @@
 #endif
 
 #include <iostream>
+#include <ctime>
 
 #include <QtCore/QPluginLoader>
 #include <QtCore/QProcess>
+#include <QtCore/QThread>
 
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QSplashScreen>
@@ -111,7 +113,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_PreviousActiveWindow(nullptr),
   m_OpenDialogLastFilePath(""),
   m_ShowSplash(true),
-  m_SplashScreen(nullptr)
+  m_SplashScreen(nullptr),
+  m_minSplashTime(4)
 {
   m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
@@ -161,8 +164,6 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems->getActionShowBookmarks(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowBookmarks_triggered(bool)));
   connect(menuItems->getActionLocateFile(), SIGNAL(triggered()), m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SLOT(on_actionLocateFile_triggered()));
   connect(menuItems->getActionShowToolbox(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowToolbox_triggered(bool)));
-  connect(menuItems->getActionShowIssues(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowIssues_triggered(bool)));
-  connect(menuItems->getActionShowStdOutput(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowStdOutput_triggered(bool)));
   connect(menuItems->getActionAddBookmark(), SIGNAL(triggered()), this, SLOT(on_actionAddBookmark_triggered()));
   connect(menuItems->getActionNewFolder(), SIGNAL(triggered()), this, SLOT(on_actionNewFolder_triggered()));
   connect(menuItems->getActionCut(), SIGNAL(triggered()), this, SLOT(on_actionCut_triggered()));
@@ -239,6 +240,9 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   this->m_SplashScreen = new QSplashScreen(pixmap);
   this->m_SplashScreen->show();
 
+  // start timer;
+  std::clock_t startClock = std::clock();
+
   QDir dir(QApplication::applicationDirPath());
 
 #if defined (Q_OS_MAC)
@@ -267,6 +271,20 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   if (m_ShowSplash)
   {
 //   delay(1);
+    // if official release, enforce the minimum duration for splash screen
+    QString releaseType = QString::fromLatin1(SIMPLViewProj_RELEASE_TYPE);
+    if(releaseType.compare("Official") == 0)
+    {
+      double splashDuration = (std::clock() - startClock) / (double)CLOCKS_PER_SEC;
+      if(splashDuration < m_minSplashTime)
+      {
+        QString msg = QObject::tr("");
+        this->m_SplashScreen->showMessage(msg, Qt::AlignVCenter | Qt::AlignRight, Qt::white);
+
+        unsigned long extendedDuration = static_cast<unsigned long>((m_minSplashTime - splashDuration) * 1000);
+        QThread::msleep(extendedDuration);
+      }
+    }
     this->m_SplashScreen->finish(nullptr);
   }
   QApplication::instance()->processEvents();
@@ -507,11 +525,11 @@ void SIMPLViewApplication::addFilter(const QString &className)
   {
     AbstractFilter::Pointer filter = AbstractFilter::CreateFilterFromClassName(className);
 
-    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
-    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
-
     m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
     m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
+
+    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
+    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
   }
 }
 
@@ -540,7 +558,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
 {
   QString proposedDir = m_OpenDialogLastFilePath;
   QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"),
-    proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
+    proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;All Files (*.*)"));
   if (filePath.isEmpty())
   {
     return;
@@ -657,40 +675,6 @@ void SIMPLViewApplication::on_actionShowToolbox_triggered(bool visible)
 
   actionShowToolbox->blockSignals(false);
   toolbox->blockSignals(false);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowIssues_triggered(bool visible)
-{
-  if (nullptr != m_ActiveWindow)
-  {
-    QAction* actionShowIssues = qobject_cast<QAction*>(sender());
-    IssuesDockWidget* issuesDockWidget = m_ActiveWindow->getIssuesDockWidget();
-
-    if (nullptr != actionShowIssues && nullptr != issuesDockWidget)
-    {
-      m_ActiveWindow->updateAndSyncDockWidget(actionShowIssues, issuesDockWidget, visible);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowStdOutput_triggered(bool visible)
-{
-  if (nullptr != m_ActiveWindow)
-  {
-    QAction* actionShowStdOutput = qobject_cast<QAction*>(sender());
-    StandardOutputDockWidget* stdOutputDockWidget = m_ActiveWindow->getStandardOutputDockWidget();
-
-    if (nullptr != actionShowStdOutput && nullptr != stdOutputDockWidget)
-    {
-      m_ActiveWindow->updateAndSyncDockWidget(actionShowStdOutput, stdOutputDockWidget, visible);
-    }
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1010,24 +994,6 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
     QList<PipelineFilterObject*> selectedWidgets = widget->getSelectedFilterObjects();
     if (selectedWidgets.size() <= 0) { return; }
 
-    if (m_ShowFilterWidgetDeleteDialog == false) { return; }
-
-    QMessageBox msgBox;
-    msgBox.setParent(m_ActiveWindow);
-    msgBox.setWindowModality(Qt::WindowModal);
-    msgBox.setWindowFlags(msgBox.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    msgBox.setIcon(QMessageBox::Question);
-    msgBox.setText("Are you sure that you want to delete these filters?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    QCheckBox* chkBox = new QCheckBox("Do not show me this again");
-    msgBox.setCheckBox(chkBox);
-    int ret = msgBox.exec();
-
-    m_ShowFilterWidgetDeleteDialog = !chkBox->isChecked();
-
-    if (ret != QMessageBox::Yes) { return; }
-
     RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
     m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
   }
@@ -1346,8 +1312,6 @@ void SIMPLViewApplication::writeSettings()
 
   prefs->beginGroup("Application Settings");
 
-  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
-
   prefs->endGroup();
 }
 
@@ -1359,8 +1323,6 @@ void SIMPLViewApplication::readSettings()
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   prefs->beginGroup("Application Settings");
-
-  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
 
   prefs->endGroup();
 }

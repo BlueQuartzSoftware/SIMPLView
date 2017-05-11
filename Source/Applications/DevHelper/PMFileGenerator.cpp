@@ -357,13 +357,14 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
       replaceStr.append("  {\n");
       replaceStr.append("    const QString TestFile1(\"@TEST_TEMP_DIR@/TestFile1.txt\");\n");
       replaceStr.append("    const QString TestFile2(\"@TEST_TEMP_DIR@/TestFile2.txt\");\n");
-      replaceStr.append("  }");
-
+      replaceStr.append("  }\n");
       if (++iter != names.end())
       {
-        replaceStr.append("\n\n");
+        replaceStr.append("\n");
       }
     }
+
+    replaceStr.append("@FILTER_NAMESPACE@");
   }
 
   return replaceStr;

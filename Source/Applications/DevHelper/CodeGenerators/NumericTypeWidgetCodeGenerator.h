@@ -1,5 +1,5 @@
 /* ============================================================================
-* Copyright (c) 2009-2015 BlueQuartz Software, LLC
+* Copyright (c) 2009-2016 BlueQuartz Software, LLC
 *
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
@@ -33,26 +33,26 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _CalculatorWidgetCodeGenerator_H_
-#define _CalculatorWidgetCodeGenerator_H_
+#ifndef _numerictypewidgetcodegenerator_h_
+#define _numerictypewidgetcodegenerator_h_
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class CalculatorWidgetCodeGenerator : public FPCodeGenerator
+class NumericTypeWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(CalculatorWidgetCodeGenerator)
+    SIMPL_SHARED_POINTERS(NumericTypeWidgetCodeGenerator)
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
-      Pointer sharedPtr(new CalculatorWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+      Pointer sharedPtr(new NumericTypeWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
     }
 
-    virtual ~CalculatorWidgetCodeGenerator();
+    virtual ~NumericTypeWidgetCodeGenerator();
 
     virtual QString generateSetupFilterParameters();
 
@@ -63,12 +63,12 @@ class CalculatorWidgetCodeGenerator : public FPCodeGenerator
     virtual QList<QString> generateCPPIncludes();
 
   protected:
-    CalculatorWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    NumericTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
 
-    CalculatorWidgetCodeGenerator(const CalculatorWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const CalculatorWidgetCodeGenerator&); // Operator '=' Not Implemented
+    NumericTypeWidgetCodeGenerator(const NumericTypeWidgetCodeGenerator&); // Copy Constructor Not Implemented
+    void operator=(const NumericTypeWidgetCodeGenerator&); // Operator '=' Not Implemented
 };
 
-#endif /* CalculatorWidgetCodeGenerator_H_ */
+#endif /* IntWidgetCodeGenerator_H_ */
