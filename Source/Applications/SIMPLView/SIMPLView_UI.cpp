@@ -803,6 +803,14 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     return;
   }
 
+  // Save each of the DataContainerArrays from each of the filters for when the pipeline is complete
+  m_PreflightDataContainerArrays.clear();
+  FilterPipeline::FilterContainerType filters = m_PipelineInFlight->getFilterContainer();
+  for(FilterPipeline::FilterContainerType::size_type i = 0; i < filters.size(); i++)
+  {
+    m_PreflightDataContainerArrays.push_back(filters[i]->getDataContainerArray()->deepCopy());
+  }
+
   // Save the preferences file NOW in case something happens
   writeSettings();
 
@@ -940,6 +948,14 @@ void SIMPLView_UI::pipelineDidFinish()
   }
   addStdOutputMessage("");
 
+  // Put back the DataContainerArray for each filter at the conclusion of running
+  // the pipeline. this keeps the data browser current and up to date.
+  FilterPipeline::FilterContainerType filters = m_PipelineInFlight->getFilterContainer();
+  for(FilterPipeline::FilterContainerType::size_type i = 0; i < filters.size(); i++)
+  {
+    filters[i]->setDataContainerArray(m_PreflightDataContainerArrays[i]);
+  }
+
   m_PipelineInFlight = FilterPipeline::NullPointer(); // This _should_ remove all the filters and deallocate them
   startPipelineBtn->setText("Start Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_play_white.png"));
@@ -950,6 +966,12 @@ void SIMPLView_UI::pipelineDidFinish()
 
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
   getFilterLibraryToolboxWidget()->blockSignals(false);
+
+  QList<PipelineFilterObject*> selectedFilters = pipelineViewWidget->getSelectedFilterObjects();
+  foreach(PipelineFilterObject* selectedFilter, selectedFilters)
+  {
+    pipelineViewWidget->setSelectedFilterObject(selectedFilter, Qt::ControlModifier);
+  }
 
   emit pipelineFinished();
 }

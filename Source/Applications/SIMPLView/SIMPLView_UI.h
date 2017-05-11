@@ -377,6 +377,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
 
     FilterPipeline::Pointer               m_PipelineInFlight;
+    QVector<DataContainerArray::Pointer>  m_PreflightDataContainerArrays;
     QMenuBar*                             m_InstanceMenuBar = nullptr;
     StatusBarWidget*                      m_StatusBar = nullptr;
 
