@@ -133,7 +133,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief setOpenedFilePath
     * @param path
     */
-    void setOpenDialogLastDirectory(const QString& path);
+    void setOpenDialogLastFilePath(const QString& path);
 
     /**
     * @brief Reads the preferences from the users pref file
@@ -382,7 +382,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     StatusBarWidget*                      m_StatusBar = nullptr;
 
     QString                               m_OpenedFilePath;
-    static QString                        m_OpenDialogLastDirectory;
+    static QString                        m_OpenDialogLastFilePath;
 
     QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
 

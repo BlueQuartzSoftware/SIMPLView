@@ -111,7 +111,7 @@ protected:
   SIMPLView_UI* m_ActiveWindow;
   SIMPLView_UI* m_PreviousActiveWindow;
 
-  QString m_OpenDialogLastDirectory;
+  QString m_OpenDialogLastFilePath;
 
   bool m_ShowSplash;
   QSplashScreen* m_SplashScreen;

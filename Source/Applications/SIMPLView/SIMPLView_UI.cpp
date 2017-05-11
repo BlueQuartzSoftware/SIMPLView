@@ -99,7 +99,7 @@
 #include "moc_SIMPLView_UI.cpp"
 
 // Initialize private static member variable
-QString SIMPLView_UI::m_OpenDialogLastDirectory = "";
+QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
 
 // -----------------------------------------------------------------------------
 //
@@ -115,7 +115,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 #endif
 , m_OpenedFilePath("")
 {
-  m_OpenDialogLastDirectory = QDir::homePath();
+  m_OpenDialogLastFilePath = QDir::homePath();
 
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
@@ -241,7 +241,7 @@ bool SIMPLView_UI::savePipeline()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipelineAs()
 {
-  QString proposedFile = m_OpenDialogLastDirectory + QDir::separator() + "Untitled.json";
+  QString proposedFile = m_OpenDialogLastFilePath + QDir::separator() + "Untitled.json";
   QString filePath = QFileDialog::getSaveFileName(this, tr("Save Pipeline To File"), proposedFile, tr("Json File (*.json);;SIMPLView File (*.dream3d);;All Files (*.*)"));
   if(true == filePath.isEmpty())
   {
@@ -279,7 +279,7 @@ bool SIMPLView_UI::savePipelineAs()
   }
 
   // Cache the last directory
-  m_OpenDialogLastDirectory = fi.path();
+  m_OpenDialogLastFilePath = filePath;
 
   QMessageBox bookmarkMsgBox(this);
   bookmarkMsgBox.setWindowTitle("Pipeline Saved");
@@ -675,7 +675,7 @@ void SIMPLView_UI::dragEnterEvent(QDragEnterEvent* e)
   QList<QUrl> urls = dat->urls();
   QString file = urls.count() ? urls[0].toLocalFile() : QString();
   QDir parent(file);
-  this->m_OpenDialogLastDirectory = parent.dirName();
+  this->m_OpenDialogLastFilePath = parent.dirName();
   QFileInfo fi(file);
   QString ext = fi.suffix();
   if(fi.exists() && fi.isFile() && (ext.compare("mxa") || ext.compare("h5") || ext.compare("hdf5")))
@@ -697,7 +697,7 @@ void SIMPLView_UI::dropEvent(QDropEvent* e)
   QList<QUrl> urls = dat->urls();
   QString file = urls.count() ? urls[0].toLocalFile() : QString();
   QDir parent(file);
-  this->m_OpenDialogLastDirectory = parent.dirName();
+  this->m_OpenDialogLastFilePath = parent.dirName();
   QFileInfo fi(file);
   QString ext = fi.suffix();
   file = QDir::toNativeSeparators(file);
@@ -1227,9 +1227,9 @@ void SIMPLView_UI::setOpenedFilePath(const QString& filePath)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::setOpenDialogLastDirectory(const QString& path)
+void SIMPLView_UI::setOpenDialogLastFilePath(const QString& path)
 {
-  m_OpenDialogLastDirectory = path;
+  m_OpenDialogLastFilePath = path;
 }
 
 // -----------------------------------------------------------------------------
