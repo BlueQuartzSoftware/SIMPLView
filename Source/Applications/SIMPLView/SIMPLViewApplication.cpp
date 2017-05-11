@@ -74,6 +74,7 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 
 
 #include "Applications/SIMPLView/SIMPLView_UI.h"
@@ -878,20 +879,18 @@ void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
   {
     QString pipelinePath = model->index(index.row(), BookmarksItem::Path, index.parent()).data().toString();
 
-    QFileInfo pipelinePathInfo(pipelinePath);
-    QString pipelinePathDir = pipelinePathInfo.path();
+    QFileInfo fi(pipelinePath);
+    QString path;
+    if (fi.isFile())
+    {
+      path = fi.absoluteFilePath();
+    }
+    else
+    {
+      path = fi.absolutePath();
+    }
 
-    QString s("file://");
-#if defined(Q_OS_WIN)
-    s = s + "/"; // Need the third slash on windows because file paths start with a drive letter
-#elif defined(Q_OS_MAC)
-
-#else
-    // We are on Linux - I think
-
-#endif
-    s = s + pipelinePathDir;
-    QDesktopServices::openUrl(s);
+    QtSFileUtils::ShowPathInGui(bookmarksToolboxWidget, path);
   }
 }
 
