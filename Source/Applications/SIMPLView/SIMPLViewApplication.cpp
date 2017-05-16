@@ -164,6 +164,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   connect(menuItems->getActionShowFilterList(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowFilterList_triggered(bool)));
   connect(menuItems->getActionShowBookmarks(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowBookmarks_triggered(bool)));
   connect(menuItems->getActionLocateFile(), SIGNAL(triggered()), m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SLOT(on_actionLocateFile_triggered()));
+  connect(menuItems->getActionOpenBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenBookmark_triggered()));
+  connect(menuItems->getActionOpenExecuteBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenExecuteBookmark_triggered()));
   connect(menuItems->getActionShowToolbox(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowToolbox_triggered(bool)));
   connect(menuItems->getActionAddBookmark(), SIGNAL(triggered()), this, SLOT(on_actionAddBookmark_triggered()));
   connect(menuItems->getActionNewFolder(), SIGNAL(triggered()), this, SLOT(on_actionNewFolder_triggered()));
@@ -569,6 +571,69 @@ void SIMPLViewApplication::on_actionOpen_triggered()
 
   // Cache the last directory on old instance
   m_OpenDialogLastFilePath = filePath;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionOpenBookmark_triggered()
+{
+  BookmarksModel* model = BookmarksModel::Instance();
+
+  QModelIndexList indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->selectionModel()->selectedRows(BookmarksItem::Name);
+
+  QModelIndex pathIndex = indexList.at(0);
+  QModelIndex actualIndex = model->index(pathIndex.row(), BookmarksItem::Path, pathIndex.parent());
+
+  QString pipelinePath = actualIndex.data().toString();
+  if(pipelinePath.isEmpty())
+  {
+    return; // The user double clicked a folder, so don't do anything
+  }
+  else
+  {
+    QFileInfo fi(pipelinePath);
+    if(fi.exists())
+    {
+      newInstanceFromFile(pipelinePath, true, true);
+      // Cache the last directory on old instance
+      m_OpenDialogLastFilePath = pipelinePath;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
+{
+  BookmarksModel* model = BookmarksModel::Instance();
+
+  QModelIndexList indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->selectionModel()->selectedRows(BookmarksItem::Name);
+
+  QModelIndex pathIndex = indexList.at(0);
+  QModelIndex actualIndex = model->index(pathIndex.row(), BookmarksItem::Path, pathIndex.parent());
+
+  QString pipelinePath = actualIndex.data().toString();
+  if(pipelinePath.isEmpty())
+  {
+    return; // The user double clicked a folder, so don't do anything
+  }
+  else
+  {
+    QFileInfo fi(pipelinePath);
+    if(fi.exists())
+    {
+      newInstanceFromFile(pipelinePath, true, true);
+      // Cache the last directory on old instance
+      m_OpenDialogLastFilePath = pipelinePath;
+      SIMPLView_UI* ui = getNewSIMPLViewInstance();
+      QString nativeFilePath = QDir::toNativeSeparators(pipelinePath);
+      ui->getPipelineViewWidget()->openPipeline(nativeFilePath, 0, true, true);
+      ui->show();
+      ui->on_startPipelineBtn_clicked();
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------

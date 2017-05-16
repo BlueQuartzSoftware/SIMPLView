@@ -126,6 +126,8 @@ protected slots:
   void on_actionSave_triggered();
   void on_actionSaveAs_triggered();
   void on_actionShowToolbox_triggered(bool visible);
+  void on_actionOpenBookmark_triggered();
+  void on_actionOpenExecuteBookmark_triggered();
 
   void on_actionAddBookmark_triggered();
   void on_actionNewFolder_triggered();
@@ -134,6 +136,7 @@ protected slots:
   void on_actionShowBookmarkInFileSystem_triggered();
   void on_actionClearCache_triggered();
   void on_actionClearBookmarks_triggered();
+
 
   void on_actionCloseWindow_triggered();
   void on_actionExit_triggered();

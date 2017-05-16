@@ -177,6 +177,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
   public slots:
 
     /**
+     * @brief on_startPipelineBtn_clicked
+     */
+    void on_startPipelineBtn_clicked();
+
+    /**
     * @brief setOpenedFilePath
     * @param filePath
     */
@@ -217,9 +222,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void clearFilterInputWidget();
 
   protected slots:
-
-    // Buttons and other widgets that send signals that we want to catch
-    void on_startPipelineBtn_clicked();
 
     /**
     * @brief pipelineDidFinish

@@ -765,6 +765,11 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     return;
   }
 
+  startPipelineBtn->setText("Cancel Pipeline");
+  startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
+  update();
+
+
   QMap<QWidget*, QTextEdit*>::iterator iter;
   for(iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); iter++)
   {
@@ -772,7 +777,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     QTextEdit* textEdit = iter.value();
     delete textEdit;
     delete widget;
-    // tabWidget->removeTab(i);
   }
   m_StdOutputTabMap.clear();
 
@@ -794,6 +798,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   // m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
   m_PipelineInFlight = pipelineViewWidget->getFilterPipeline();
 
+  addStdOutputMessage("<b>Preflight Pipeline.....</b>");
   // Give the pipeline one last chance to preflight and get all the latest values from the GUI
   int err = m_PipelineInFlight->preflightPipeline();
   if(err < 0)
@@ -802,6 +807,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
     issuesWidget->displayCachedMessages();
     return;
   }
+  addStdOutputMessage("    Preflight Results: 0 Errors");
 
   // Save each of the DataContainerArrays from each of the filters for when the pipeline is complete
   m_PreflightDataContainerArrays.clear();
@@ -878,8 +884,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   emit pipelineStarted();
   m_WorkerThread->start();
-  startPipelineBtn->setText("Cancel Pipeline");
-  startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
   addStdOutputMessage("");
   addStdOutputMessage("<b>*************** PIPELINE STARTED ***************</b>");
 }
