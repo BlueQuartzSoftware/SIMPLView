@@ -814,7 +814,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   FilterPipeline::FilterContainerType filters = m_PipelineInFlight->getFilterContainer();
   for(FilterPipeline::FilterContainerType::size_type i = 0; i < filters.size(); i++)
   {
-    m_PreflightDataContainerArrays.push_back(filters[i]->getDataContainerArray()->deepCopy());
+    m_PreflightDataContainerArrays.push_back(filters[i]->getDataContainerArray()->deepCopy(true));
   }
 
   // Save the preferences file NOW in case something happens
