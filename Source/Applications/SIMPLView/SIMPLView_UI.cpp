@@ -989,11 +989,11 @@ QString SIMPLView_UI::getStartPipelineIdleStyle()
   QFont font = QtSStyles::GetHumanLabelFont();
   QString fontString;
   QTextStream in(&fontString);
-  in << "font: " << font.weight() << " " << 
+  in << "font: " << font.weight() << " " <<
 #if defined(Q_OS_MAC)
   font.pointSize() - 2
 #elif defined(Q_OS_WIN)
-  font.pointSize()
+  font.pointSize() - 3
   #else
   font.pointSize()
 #endif
@@ -1027,11 +1027,11 @@ QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
   QFont font = QtSStyles::GetHumanLabelFont();
   QString fontString;
   QTextStream in(&fontString);
-  in << "font: " << font.weight() << " " << 
+  in << "font: " << font.weight() << " " <<
 #if defined(Q_OS_MAC)
   font.pointSize() - 2
 #elif defined(Q_OS_WIN)
-  font.pointSize()
+  font.pointSize() - 3
   #else
   font.pointSize()
 #endif
@@ -1042,7 +1042,7 @@ QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
   QString cssStr;
   QTextStream ss(&cssStr);
   ss << "QPushButton { ";
-  ss << tr("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
+  ss << QString("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
   ss << "color: white;\n";
   ss << "border-radius: 0px;\n";
   ss << fontString;

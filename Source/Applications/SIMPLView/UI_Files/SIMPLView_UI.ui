@@ -125,8 +125,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1012</width>
-             <height>516</height>
+             <width>1016</width>
+             <height>523</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -178,15 +178,8 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>40</height>
+              <height>35</height>
              </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>15</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
             </property>
             <property name="styleSheet">
              <string notr="true"/>
