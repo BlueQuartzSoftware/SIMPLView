@@ -115,7 +115,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv) :
   m_OpenDialogLastFilePath(""),
   m_ShowSplash(true),
   m_SplashScreen(nullptr),
-  m_minSplashTime(4)
+  m_minSplashTime(3)
 {
   m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
   // Create the toolbox
