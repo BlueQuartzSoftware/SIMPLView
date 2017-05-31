@@ -536,7 +536,7 @@ void SIMPLView_UI::setupGui()
   connect(pipelineViewWidget, SIGNAL(pipelineIssuesCleared()), issuesWidget, SLOT(clearIssues()));
   connect(pipelineViewWidget, SIGNAL(preflightPipelineComplete()), issuesWidget, SLOT(displayCachedMessages()));
 
-  pipelineViewWidget->setDataBrowserWidget(dataBrowserWidget);
+  pipelineViewWidget->setDataStructureWidget(dataBrowserWidget);
 
   issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
   stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
@@ -1215,7 +1215,7 @@ FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataBrowserWidget* SIMPLView_UI::getDataBrowserWidget()
+DataStructureWidget* SIMPLView_UI::getDataStructureWidget()
 {
   return dataBrowserWidget;
 }

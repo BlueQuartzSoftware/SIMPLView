@@ -105,7 +105,7 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
       connect(consoleBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
       connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(consolVisibilityChanged(bool)));
       break;
-    case Button::DataBrowser:
+    case Button::DataStructure:
       connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
       connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;

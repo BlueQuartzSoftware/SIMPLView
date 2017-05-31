@@ -58,7 +58,7 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     {
       Issues = 0,
       Console = 1,
-      DataBrowser = 2
+      DataStructure = 2
     };
 
 
