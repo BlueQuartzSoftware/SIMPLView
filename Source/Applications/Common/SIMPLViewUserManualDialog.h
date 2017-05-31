@@ -88,9 +88,9 @@ class  SIMPLViewUserManualDialog : public QDialog, public Ui::SIMPLViewUserManua
     SIMPLViewUserManualDialog(QWidget* parent = nullptr);
 
   protected slots:
-    void on_backBtn_pressed();
-    void on_forwardBtn_pressed();
-    void on_refreshBtn_pressed();
+    void on_backBtn_clicked();
+    void on_forwardBtn_clicked();
+    void on_refreshBtn_clicked();
     void updateButtons(bool ok);
 
   private:

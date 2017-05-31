@@ -150,7 +150,7 @@ void SIMPLViewUserManualDialog::LaunchHelpDialog(QString className)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUserManualDialog::on_backBtn_pressed()
+void SIMPLViewUserManualDialog::on_backBtn_clicked()
 {
   m_WebView->back();
 }
@@ -158,7 +158,7 @@ void SIMPLViewUserManualDialog::on_backBtn_pressed()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUserManualDialog::on_forwardBtn_pressed()
+void SIMPLViewUserManualDialog::on_forwardBtn_clicked()
 {
   m_WebView->forward();
 }
@@ -166,7 +166,7 @@ void SIMPLViewUserManualDialog::on_forwardBtn_pressed()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUserManualDialog::on_refreshBtn_pressed()
+void SIMPLViewUserManualDialog::on_refreshBtn_clicked()
 {
   m_WebView->reload();
 }
