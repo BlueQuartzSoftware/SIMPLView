@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _StatusBarWidget_h_
-#define _StatusBarWidget_h_
+#ifndef _statusBarWidget_h_
+#define _statusBarWidget_h_
 
 #include <QtWidgets/QFrame>
 
@@ -94,4 +94,4 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     void operator=(const StatusBarWidget&); // Operator '=' Not Implemented
 };
 
-#endif /* StatusBarWidget_H_ */
+#endif /* _statusBarWidget_H_ */
