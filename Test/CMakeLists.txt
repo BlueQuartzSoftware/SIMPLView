@@ -55,11 +55,6 @@ configure_file(${SIMPLViewTest_SOURCE_DIR}/TestFileLocations.h.in
 
 include_directories(${SIMPLViewTest_BINARY_DIR})
 
-AddSIMPLUnitTest(TESTNAME MemoryLeakTest
-  SOURCES ${SIMPLViewTest_SOURCE_DIR}/MemoryLeakTest.cpp
-  FOLDER "SIMPLViewProj/Test"
-  LINK_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets H5Support SIMPLib SVWidgetsLib)
-
 #------------------------------------------------------------------------------
 # Example Test code
 # AddSIMPLUnitTest(TESTNAME ConditionalSetValueTest
