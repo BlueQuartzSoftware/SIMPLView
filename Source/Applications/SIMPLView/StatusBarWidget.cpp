@@ -73,7 +73,7 @@ void StatusBarWidget::setupGui()
 #if defined(Q_OS_MAC)
   fontStringStream << font.pointSize();
 #elif defined(Q_OS_WIN)
-  fontStringStream << font.pointSize()-1;
+  fontStringStream << font.pointSize();
 #else
   fontStringStream << font.pointSize();
 #endif
