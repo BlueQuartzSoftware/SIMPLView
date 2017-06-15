@@ -550,6 +550,20 @@ void SIMPLView_UI::setupGui()
 
   m_StatusBar = new StatusBarWidget();
   this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
+#if 0
+  QString styleSheet;
+  QTextStream ss (&styleSheet);
+  ss << "QStatusBar {";
+  ss << "     background: brown;";
+  ss << " }";
+  ss << " QStatusBar::item {";
+  ss << "    border: 1px solid red;";
+  ss << "     border-radius: 3px;";
+  ss << "      margin: 0px;";
+  ss << " }";
+
+  this->statusBar()->setStyleSheet(styleSheet);
+#endif
   m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
@@ -1148,9 +1162,11 @@ void SIMPLView_UI::cleanupPipeline()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
 {
+#if 0
   menu->addAction(issuesDockWidget->toggleViewAction());
   menu->addAction(stdOutDockWidget->toggleViewAction());
   menu->addAction(dataBrowserDockWidget->toggleViewAction());
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1180,9 +1196,11 @@ QList<QAction*> SIMPLView_UI::getDummyDockWidgetActions()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
 {
+#if 0
   menu->removeAction(issuesDockWidget->toggleViewAction());
   menu->removeAction(stdOutDockWidget->toggleViewAction());
   menu->removeAction(dataBrowserDockWidget->toggleViewAction());
+#endif
 }
 
 // -----------------------------------------------------------------------------

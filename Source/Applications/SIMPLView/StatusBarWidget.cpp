@@ -62,7 +62,6 @@ StatusBarWidget::~StatusBarWidget()
 // -----------------------------------------------------------------------------
 void StatusBarWidget::issuesVisibilityChanged(bool b)
 {
-  //qDebug() << "issuesVisibilityChanged" << static_cast<int>(b);
   issuesBtn->blockSignals(true);
   issuesBtn->setChecked(b);
   issuesBtn->blockSignals(false);
@@ -73,7 +72,6 @@ void StatusBarWidget::issuesVisibilityChanged(bool b)
 // -----------------------------------------------------------------------------
 void StatusBarWidget::consolVisibilityChanged(bool b)
 {
-  // qDebug() << "consolVisibilityChanged" << static_cast<int>(b);
   consoleBtn->blockSignals(true);
   consoleBtn->setChecked(b);
   consoleBtn->blockSignals(false);
@@ -84,10 +82,19 @@ void StatusBarWidget::consolVisibilityChanged(bool b)
 // -----------------------------------------------------------------------------
 void StatusBarWidget::dataBrowserVisibilityChanged(bool b)
 {
-  // qDebug() << "dataBrowserVisibilityChanged" << static_cast<int>(b);
   dataBrowserBtn->blockSignals(true);
   dataBrowserBtn->setChecked(b);
   dataBrowserBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::toolboxVisibilityChanged(bool b)
+{
+//  toolboxBtn->blockSignals(true);
+//  toolboxBtn->setChecked(b);
+//  toolboxBtn->blockSignals(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -108,6 +115,10 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
     case Button::DataStructure:
       connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
       connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
+      break;
+    case Button::Toolbox:
+//      connect(toolboxBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+//      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;
   }
 }

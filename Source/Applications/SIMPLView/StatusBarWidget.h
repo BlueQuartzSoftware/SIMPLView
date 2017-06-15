@@ -58,7 +58,8 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     {
       Issues = 0,
       Console = 1,
-      DataStructure = 2
+      DataStructure = 2,
+      Toolbox = 3
     };
 
 
@@ -86,6 +87,12 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      * @param b
      */
     void dataBrowserVisibilityChanged(bool b);
+
+    /**
+     * @brief toolboxVisibilityChanged
+     * @param b
+     */
+    void toolboxVisibilityChanged(bool b);
 
   protected:
 
