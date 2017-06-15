@@ -38,6 +38,8 @@
 #include <QtCore/QDebug>
 #include <QtWidgets/QDockWidget>
 
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
+
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_StatusBarWidget.cpp"
 
@@ -48,6 +50,7 @@ StatusBarWidget::StatusBarWidget(QWidget* parent)
   : QFrame(parent)
 {
   this->setupUi(this);
+  setupGui();
 }
 
 // -----------------------------------------------------------------------------
@@ -55,6 +58,84 @@ StatusBarWidget::StatusBarWidget(QWidget* parent)
 // -----------------------------------------------------------------------------
 StatusBarWidget::~StatusBarWidget()
 {
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::setupGui()
+{
+  QFont font = QtSStyles::GetBrandingLabelFont();
+  QString fontString;
+  QTextStream fontStringStream(&fontString);
+
+  fontStringStream << "font: " << font.weight() << " ";
+#if defined(Q_OS_MAC)
+  fontStringStream << font.pointSize();
+#elif defined(Q_OS_WIN)
+  fontStringStream << font.pointSize()-1;
+#else
+  fontStringStream << font.pointSize();
+#endif
+  fontStringStream << "pt \"" << font.family() << "\";";
+  qDebug() << fontString;
+  QString style;
+  QTextStream ss(&style);
+
+  QColor offBgColor(1, 61, 128);
+  QColor onBgColor(7, 94, 193);
+  QColor offTextColor(240, 240, 240);
+  QColor onTextColor(240, 240, 240);
+  int borderRadius = 3;
+
+  ss << "QPushButton  {";
+  ss << fontString;
+  ss << "background-color: " << offBgColor.name() << ";";
+  ss << "color:" << offTextColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 2 2 2 2px;";
+  ss << "}";
+
+  ss << "QPushButton:hover  {";
+  ss << fontString;
+  ss << "background-color: " << offBgColor.name() << ";";
+  ss << "color:" << offTextColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "border-width: 1px;";
+  ss << "border-style: solid;";
+  ss << "border-color:" << onBgColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 1 1 1 1px;";
+  ss << "}";
+
+  ss << "QPushButton:checked {";
+  ss << fontString;
+  ss << "background-color: " << onBgColor.name() << ";";
+  ss << "color:" << onTextColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 2 2 2 2px;";
+  ss << "}";
+
+  ss << "QPushButton:checked:hover  {";
+  ss << fontString;
+  ss << "background-color: " << onBgColor.name() << ";";
+  ss << "color:" << onTextColor.name() << ";";
+  ss << "border-width: 1px;";
+  ss << "border-style: solid;";
+  ss << "border-color:" << offBgColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 1 1 1 1px;";
+  ss << "}";
+
+  consoleBtn->setStyleSheet(style);
+  issuesBtn->setStyleSheet(style);
+  dataBrowserBtn->setStyleSheet(style);
+
+
 }
 
 // -----------------------------------------------------------------------------

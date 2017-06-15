@@ -96,6 +96,11 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
 
   protected:
 
+    /**
+     * @brief setupGui
+     */
+    void setupGui();
+
   private:
     StatusBarWidget(const StatusBarWidget&); // Copy Constructor Not Implemented
     void operator=(const StatusBarWidget&); // Operator '=' Not Implemented

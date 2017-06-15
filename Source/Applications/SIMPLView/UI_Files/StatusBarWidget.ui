@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
+    <width>346</width>
     <height>24</height>
    </rect>
   </property>
@@ -100,18 +100,19 @@
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
+       <pointsize>9</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
-       <bold>true</bold>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
-	font-weight: bold;
+/*	font-weight: bold; */
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -119,7 +120,8 @@
 
 QPushButton:hover
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
@@ -132,7 +134,8 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-radius: 3px;
@@ -142,7 +145,8 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
@@ -188,18 +192,19 @@ QPushButton:checked:hover
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
+       <pointsize>9</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
-       <bold>true</bold>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
-	font-weight: bold;
+/*	font-weight: bold; */
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -207,7 +212,8 @@ QPushButton:checked:hover
 
 QPushButton:hover
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
@@ -220,7 +226,8 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-radius: 3px;
@@ -230,7 +237,8 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
@@ -276,18 +284,19 @@ QPushButton:checked:hover
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
+       <pointsize>9</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
-       <bold>true</bold>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
-	font-weight: bold;
+/*	font-weight: bold; */
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -295,7 +304,8 @@ QPushButton:checked:hover
 
 QPushButton:hover
 {
-	background-color: rgb(7, 94, 193);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(1, 61, 128);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
@@ -308,7 +318,8 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-radius: 3px;
@@ -318,7 +329,8 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	background-color: rgb(1, 61, 128);
+	font: 9pt &quot;Arial&quot;;
+	background-color: rgb(7, 94, 193);
 	color: rgb(240, 240, 240);
 	font-weight: bold;
 	border-width: 1px;
