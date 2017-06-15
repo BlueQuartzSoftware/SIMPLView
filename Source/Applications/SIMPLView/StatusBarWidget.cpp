@@ -78,7 +78,7 @@ void StatusBarWidget::setupGui()
   fontStringStream << font.pointSize();
 #endif
   fontStringStream << "pt \"" << font.family() << "\";";
-  qDebug() << fontString;
+
   QString style;
   QTextStream ss(&style);
 

@@ -38,6 +38,7 @@
 #include <QtCore/QString>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtGui/QFontDatabase>
 
 #include "MacSIMPLViewApplication.h"
 #include "StandardSIMPLViewApplication.h"
@@ -101,6 +102,7 @@ int main(int argc, char* argv[])
   QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
   setlocale(LC_NUMERIC, "C");
+  QFontDatabase::addApplicationFont(":/fonts/FiraSans-Regular.ttf");
 
   if (!qtapp.initialize(argc, argv))
   {
