@@ -70,6 +70,17 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      */
     void setButtonAction(QDockWidget *dock, Button btn);
 
+    /**
+     * @brief updateStyle
+     */
+    void updateStyle();
+
+    /**
+     * @brief generateStyleSheet
+     * @param error
+     * @return
+     */
+    QString generateStyleSheet(bool error);
 
   public slots:
     /**
@@ -93,6 +104,12 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      * @param b
      */
     void toolboxVisibilityChanged(bool b);
+
+    /**
+     * @brief issuesTableHasErrors
+     * @param b
+     */
+    void issuesTableHasErrors(bool b);
 
   protected:
 

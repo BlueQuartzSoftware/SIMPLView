@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
+    <width>375</width>
     <height>24</height>
    </rect>
   </property>
@@ -36,7 +36,6 @@
 {
 
 }
-
 </string>
   </property>
   <property name="frameShape">
@@ -99,20 +98,21 @@
      </property>
      <property name="font">
       <font>
-       <family>Arial</family>
-       <pointsize>9</pointsize>
-       <weight>50</weight>
+       <family>FiraSans</family>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
        <italic>false</italic>
-       <bold>false</bold>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
-/*	font-weight: bold; */
+	font: 75 11pt &quot;FiraSans&quot;;
+	font-weight: bold;
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 1px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -120,13 +120,11 @@
 
 QPushButton:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(7, 94, 193);
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 2px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
@@ -134,10 +132,11 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 1px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -145,21 +144,20 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(1, 61, 128);
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 2px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
 }
-</string>
+
+/* Comment */</string>
      </property>
      <property name="text">
-      <string>Issues</string>
+      <string>Pipeline Issues</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -191,20 +189,21 @@ QPushButton:checked:hover
      </property>
      <property name="font">
       <font>
-       <family>Arial</family>
-       <pointsize>9</pointsize>
-       <weight>50</weight>
+       <family>FiraSans</family>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
        <italic>false</italic>
-       <bold>false</bold>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
-/*	font-weight: bold; */
+	font: 75 11pt &quot;FiraSans&quot;;
+	font-weight: bold;
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 1px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -212,13 +211,11 @@ QPushButton:checked:hover
 
 QPushButton:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(7, 94, 193);
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 2px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
@@ -226,10 +223,11 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 1px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -237,18 +235,17 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(1, 61, 128);
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 2px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
 }
-</string>
+
+/* Comment */</string>
      </property>
      <property name="text">
       <string>Pipeline Output</string>
@@ -283,20 +280,21 @@ QPushButton:checked:hover
      </property>
      <property name="font">
       <font>
-       <family>Arial</family>
-       <pointsize>9</pointsize>
-       <weight>50</weight>
+       <family>FiraSans</family>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
        <italic>false</italic>
-       <bold>false</bold>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
-/*	font-weight: bold; */
+	font: 75 11pt &quot;FiraSans&quot;;
+	font-weight: bold;
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 1px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -304,13 +302,11 @@ QPushButton:checked:hover
 
 QPushButton:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(1, 61, 128);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(7, 94, 193);
+  	background-color: rgb(200, 200, 200);
+	color: rgb(50, 50, 50);
+	border: 2px solid rgb(120, 120, 120);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
@@ -318,10 +314,11 @@ QPushButton:hover
 
 QPushButton:checked
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 1px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 2 2 2 2px;
@@ -329,18 +326,17 @@ QPushButton:checked
 
 QPushButton:checked:hover
 {
-	font: 9pt &quot;Arial&quot;;
-	background-color: rgb(7, 94, 193);
-	color: rgb(240, 240, 240);
+	font: 75 11pt &quot;FiraSans&quot;;
 	font-weight: bold;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgb(1, 61, 128);
+  	background-color: rgb(120, 120, 120);
+	color: rgb(240, 240, 240);
+	border: 2px solid rgb(200, 200, 200);
 	border-radius: 3px;
  	padding: 1 8 1 8px;
 	margin: 1 1 1 1px;
 }
-</string>
+
+/* Comment */</string>
      </property>
      <property name="text">
       <string>Data Structure</string>

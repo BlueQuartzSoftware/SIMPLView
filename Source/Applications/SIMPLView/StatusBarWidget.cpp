@@ -65,6 +65,24 @@ StatusBarWidget::~StatusBarWidget()
 // -----------------------------------------------------------------------------
 void StatusBarWidget::setupGui()
 {
+  QString style = generateStyleSheet(false);
+  consoleBtn->setStyleSheet(style);
+  issuesBtn->setStyleSheet(style);
+  dataBrowserBtn->setStyleSheet(style);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::updateStyle()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString StatusBarWidget::generateStyleSheet(bool error)
+{
   QFont font = QtSStyles::GetBrandingLabelFont();
   QString fontString;
   QTextStream fontStringStream(&fontString);
@@ -82,16 +100,28 @@ void StatusBarWidget::setupGui()
   QString style;
   QTextStream ss(&style);
 
-  QColor offBgColor(1, 61, 128);
-  QColor onBgColor(7, 94, 193);
-  QColor offTextColor(240, 240, 240);
+  QColor offBgColor(200, 200, 200);
+  QColor onBgColor(90, 90, 90);
+  QColor offTextColor(50, 50, 50);
   QColor onTextColor(240, 240, 240);
+  QColor offBorderColor(120, 120, 120);
+  QColor onBorderColor(200, 200, 200);
+
+  if(error)
+  {
+    offBgColor = QColor(255, 150, 150);
+    onBgColor = QColor(220, 60, 60);
+    offBorderColor = QColor(220, 0, 0);
+    onBorderColor = QColor(200, 0, 0);
+  }
+
   int borderRadius = 3;
 
   ss << "QPushButton  {";
   ss << fontString;
   ss << "background-color: " << offBgColor.name() << ";";
   ss << "color:" << offTextColor.name() << ";";
+  ss << "border: 1px solid " << offBorderColor.name() << ";";
   ss << "border-radius: " << borderRadius << "px;";
   ss << "padding: 1 8 1 8px;";
   ss << "margin: 2 2 2 2px;";
@@ -101,10 +131,7 @@ void StatusBarWidget::setupGui()
   ss << fontString;
   ss << "background-color: " << offBgColor.name() << ";";
   ss << "color:" << offTextColor.name() << ";";
-  ss << "border-radius: " << borderRadius << "px;";
-  ss << "border-width: 1px;";
-  ss << "border-style: solid;";
-  ss << "border-color:" << onBgColor.name() << ";";
+  ss << "border: 2px solid " << offBorderColor.name() << ";";
   ss << "border-radius: " << borderRadius << "px;";
   ss << "padding: 1 8 1 8px;";
   ss << "margin: 1 1 1 1px;";
@@ -114,6 +141,7 @@ void StatusBarWidget::setupGui()
   ss << fontString;
   ss << "background-color: " << onBgColor.name() << ";";
   ss << "color:" << onTextColor.name() << ";";
+  ss << "border: 1px solid " << onBorderColor.name() << ";";
   ss << "border-radius: " << borderRadius << "px;";
   ss << "padding: 1 8 1 8px;";
   ss << "margin: 2 2 2 2px;";
@@ -123,19 +151,13 @@ void StatusBarWidget::setupGui()
   ss << fontString;
   ss << "background-color: " << onBgColor.name() << ";";
   ss << "color:" << onTextColor.name() << ";";
-  ss << "border-width: 1px;";
-  ss << "border-style: solid;";
-  ss << "border-color:" << offBgColor.name() << ";";
+  ss << "border: 1px solid " << onBorderColor.name() << ";";
   ss << "border-radius: " << borderRadius << "px;";
   ss << "padding: 1 8 1 8px;";
   ss << "margin: 1 1 1 1px;";
   ss << "}";
 
-  consoleBtn->setStyleSheet(style);
-  issuesBtn->setStyleSheet(style);
-  dataBrowserBtn->setStyleSheet(style);
-
-
+  return style;
 }
 
 // -----------------------------------------------------------------------------
@@ -202,4 +224,13 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
 //      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::issuesTableHasErrors(bool b)
+{
+  QString style = generateStyleSheet(b);
+  issuesBtn->setStyleSheet(style);
 }

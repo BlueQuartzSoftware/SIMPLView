@@ -550,24 +550,13 @@ void SIMPLView_UI::setupGui()
 
   m_StatusBar = new StatusBarWidget();
   this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
-#if 0
-  QString styleSheet;
-  QTextStream ss (&styleSheet);
-  ss << "QStatusBar {";
-  ss << "     background: brown;";
-  ss << " }";
-  ss << " QStatusBar::item {";
-  ss << "    border: 1px solid red;";
-  ss << "     border-radius: 3px;";
-  ss << "      margin: 0px;";
-  ss << " }";
 
-  this->statusBar()->setStyleSheet(styleSheet);
-#endif
   m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
 
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), m_StatusBar, SLOT(issuesTableHasErrors(bool)));
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), issuesDockWidget, SLOT(setVisible(bool)));
 }
 
 // -----------------------------------------------------------------------------
