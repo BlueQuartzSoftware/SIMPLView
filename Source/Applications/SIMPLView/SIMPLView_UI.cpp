@@ -546,6 +546,17 @@ void SIMPLView_UI::setupGui()
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
   startPipelineBtn->setDisabled(true);
+
+
+  m_StatusBar = new StatusBarWidget();
+  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
+
+  m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
+  m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
+  m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), m_StatusBar, SLOT(issuesTableHasErrors(bool)));
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), issuesDockWidget, SLOT(setVisible(bool)));
 }
 
 // -----------------------------------------------------------------------------
@@ -1140,9 +1151,11 @@ void SIMPLView_UI::cleanupPipeline()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
 {
+#if 0
   menu->addAction(issuesDockWidget->toggleViewAction());
   menu->addAction(stdOutDockWidget->toggleViewAction());
   menu->addAction(dataBrowserDockWidget->toggleViewAction());
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1172,9 +1185,11 @@ QList<QAction*> SIMPLView_UI::getDummyDockWidgetActions()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
 {
+#if 0
   menu->removeAction(issuesDockWidget->toggleViewAction());
   menu->removeAction(stdOutDockWidget->toggleViewAction());
   menu->removeAction(dataBrowserDockWidget->toggleViewAction());
+#endif
 }
 
 // -----------------------------------------------------------------------------

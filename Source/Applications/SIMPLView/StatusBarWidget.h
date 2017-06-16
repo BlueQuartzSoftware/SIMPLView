@@ -33,8 +33,8 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _StatusBarWidget_h_
-#define _StatusBarWidget_h_
+#ifndef _statusBarWidget_h_
+#define _statusBarWidget_h_
 
 #include <QtWidgets/QFrame>
 
@@ -58,7 +58,8 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     {
       Issues = 0,
       Console = 1,
-      DataStructure = 2
+      DataStructure = 2,
+      Toolbox = 3
     };
 
 
@@ -69,6 +70,17 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      */
     void setButtonAction(QDockWidget *dock, Button btn);
 
+    /**
+     * @brief updateStyle
+     */
+    void updateStyle();
+
+    /**
+     * @brief generateStyleSheet
+     * @param error
+     * @return
+     */
+    QString generateStyleSheet(bool error);
 
   public slots:
     /**
@@ -87,11 +99,28 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      */
     void dataBrowserVisibilityChanged(bool b);
 
+    /**
+     * @brief toolboxVisibilityChanged
+     * @param b
+     */
+    void toolboxVisibilityChanged(bool b);
+
+    /**
+     * @brief issuesTableHasErrors
+     * @param b
+     */
+    void issuesTableHasErrors(bool b);
+
   protected:
+
+    /**
+     * @brief setupGui
+     */
+    void setupGui();
 
   private:
     StatusBarWidget(const StatusBarWidget&); // Copy Constructor Not Implemented
     void operator=(const StatusBarWidget&); // Operator '=' Not Implemented
 };
 
-#endif /* StatusBarWidget_H_ */
+#endif /* _statusBarWidget_H_ */

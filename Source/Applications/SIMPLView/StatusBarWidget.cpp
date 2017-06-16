@@ -38,6 +38,8 @@
 #include <QtCore/QDebug>
 #include <QtWidgets/QDockWidget>
 
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
+
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 #include "moc_StatusBarWidget.cpp"
 
@@ -48,6 +50,7 @@ StatusBarWidget::StatusBarWidget(QWidget* parent)
   : QFrame(parent)
 {
   this->setupUi(this);
+  setupGui();
 }
 
 // -----------------------------------------------------------------------------
@@ -60,9 +63,108 @@ StatusBarWidget::~StatusBarWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void StatusBarWidget::setupGui()
+{
+  QString style = generateStyleSheet(false);
+  consoleBtn->setStyleSheet(style);
+  issuesBtn->setStyleSheet(style);
+  dataBrowserBtn->setStyleSheet(style);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::updateStyle()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString StatusBarWidget::generateStyleSheet(bool error)
+{
+  QFont font = QtSStyles::GetBrandingLabelFont();
+  QString fontString;
+  QTextStream fontStringStream(&fontString);
+
+  fontStringStream << "font: " << font.weight() << " ";
+#if defined(Q_OS_MAC)
+  fontStringStream << font.pointSize();
+#elif defined(Q_OS_WIN)
+  fontStringStream << font.pointSize();
+#else
+  fontStringStream << font.pointSize();
+#endif
+  fontStringStream << "pt \"" << font.family() << "\";";
+
+  QString style;
+  QTextStream ss(&style);
+
+  QColor offBgColor(200, 200, 200);
+  QColor onBgColor(90, 90, 90);
+  QColor offTextColor(50, 50, 50);
+  QColor onTextColor(240, 240, 240);
+  QColor offBorderColor(120, 120, 120);
+  QColor onBorderColor(200, 200, 200);
+
+  if(error)
+  {
+    offBgColor = QColor(255, 150, 150);
+    onBgColor = QColor(220, 60, 60);
+    offBorderColor = QColor(220, 0, 0);
+    onBorderColor = QColor(200, 0, 0);
+  }
+
+  int borderRadius = 3;
+
+  ss << "QPushButton  {";
+  ss << fontString;
+  ss << "background-color: " << offBgColor.name() << ";";
+  ss << "color:" << offTextColor.name() << ";";
+  ss << "border: 1px solid " << offBorderColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 2 2 2 2px;";
+  ss << "}";
+
+  ss << "QPushButton:hover  {";
+  ss << fontString;
+  ss << "background-color: " << offBgColor.name() << ";";
+  ss << "color:" << offTextColor.name() << ";";
+  ss << "border: 2px solid " << offBorderColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 1 1 1 1px;";
+  ss << "}";
+
+  ss << "QPushButton:checked {";
+  ss << fontString;
+  ss << "background-color: " << onBgColor.name() << ";";
+  ss << "color:" << onTextColor.name() << ";";
+  ss << "border: 1px solid " << onBorderColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 2 2 2 2px;";
+  ss << "}";
+
+  ss << "QPushButton:checked:hover  {";
+  ss << fontString;
+  ss << "background-color: " << onBgColor.name() << ";";
+  ss << "color:" << onTextColor.name() << ";";
+  ss << "border: 1px solid " << onBorderColor.name() << ";";
+  ss << "border-radius: " << borderRadius << "px;";
+  ss << "padding: 1 8 1 8px;";
+  ss << "margin: 1 1 1 1px;";
+  ss << "}";
+
+  return style;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void StatusBarWidget::issuesVisibilityChanged(bool b)
 {
-  //qDebug() << "issuesVisibilityChanged" << static_cast<int>(b);
   issuesBtn->blockSignals(true);
   issuesBtn->setChecked(b);
   issuesBtn->blockSignals(false);
@@ -73,7 +175,6 @@ void StatusBarWidget::issuesVisibilityChanged(bool b)
 // -----------------------------------------------------------------------------
 void StatusBarWidget::consolVisibilityChanged(bool b)
 {
-  // qDebug() << "consolVisibilityChanged" << static_cast<int>(b);
   consoleBtn->blockSignals(true);
   consoleBtn->setChecked(b);
   consoleBtn->blockSignals(false);
@@ -84,10 +185,19 @@ void StatusBarWidget::consolVisibilityChanged(bool b)
 // -----------------------------------------------------------------------------
 void StatusBarWidget::dataBrowserVisibilityChanged(bool b)
 {
-  // qDebug() << "dataBrowserVisibilityChanged" << static_cast<int>(b);
   dataBrowserBtn->blockSignals(true);
   dataBrowserBtn->setChecked(b);
   dataBrowserBtn->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::toolboxVisibilityChanged(bool b)
+{
+//  toolboxBtn->blockSignals(true);
+//  toolboxBtn->setChecked(b);
+//  toolboxBtn->blockSignals(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -109,5 +219,18 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
       connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
       connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;
+    case Button::Toolbox:
+//      connect(toolboxBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+//      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
+      break;
   }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarWidget::issuesTableHasErrors(bool b)
+{
+  QString style = generateStyleSheet(b);
+  issuesBtn->setStyleSheet(style);
 }
