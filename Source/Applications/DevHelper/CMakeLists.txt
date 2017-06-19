@@ -96,6 +96,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiAttributeMatrixSelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiDataArraySelectionWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.h
@@ -141,6 +142,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiAttributeMatrixSelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/MultiDataArraySelectionWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.cpp
