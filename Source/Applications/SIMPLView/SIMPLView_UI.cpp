@@ -556,7 +556,7 @@ void SIMPLView_UI::setupGui()
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
 
   connect(issuesWidget, SIGNAL(tableHasErrors(bool)), m_StatusBar, SLOT(issuesTableHasErrors(bool)));
-  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), issuesDockWidget, SLOT(setVisible(bool)));
+  connect(issuesWidget, SIGNAL(showTable(bool)), issuesDockWidget, SLOT(setVisible(bool)));
 }
 
 // -----------------------------------------------------------------------------
