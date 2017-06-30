@@ -177,7 +177,7 @@ endif()
 # Development: This is currently in development and probably has bugs.
 get_property(SIMPLViewProj_RELEASE_TYPE GLOBAL PROPERTY PACKAGE_RELEASE_TYPE)
 if("${SIMPLViewProj_RELEASE_TYPE}" STREQUAL "")
-  set(SIMPLViewProj_RELEASE_TYPE "Official")
+  set(SIMPLViewProj_RELEASE_TYPE "Development")
   set_property(GLOBAL PROPERTY PACKAGE_RELEASE_TYPE "${SIMPLViewProj_RELEASE_TYPE}")
 endif()
 
