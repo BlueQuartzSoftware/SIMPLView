@@ -58,10 +58,29 @@ if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
 endif()
 
 cmake_minimum_required(VERSION 3.6.0)
+set(SIMPLViewProjGenerateVersion 0)
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
 project(SIMPLViewProj VERSION 1.0.0.0)
+get_property(SIMPLViewProj_VERSION_MAJOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MAJOR)
+if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
+  set(SIMPLViewProj_VERSION_MAJOR "1")
+  set(SIMPLViewProjGenerateVersion 1)
+endif()
+get_property(SIMPLViewProj_VERSION_MINOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MINOR)
+if("${SIMPLViewProj_VERSION_MINOR}" STREQUAL "")
+  set(SIMPLViewProj_VERSION_MINOR "0")
+endif()
+get_property(SIMPLViewProj_VERSION_PATCH GLOBAL PROPERTY SIMPLViewProj_VERSION_PATCH)
+if("${SIMPLViewProj_VERSION_PATCH}" STREQUAL "")
+  set(SIMPLViewProj_VERSION_PATCH "0")
+endif()
+get_property(SIMPLViewProj_VERSION_TWEAK GLOBAL PROPERTY SIMPLViewProj_VERSION_TWEAK)
+if("${SIMPLViewProj_VERSION_TWEAK}" STREQUAL "")
+  set(SIMPLViewProj_VERSION_TWEAK "0")
+endif()
+
 
 # ---------- Setup output Directories -------------------------
 if(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
@@ -126,17 +145,14 @@ endif()
 
 INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 
-cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
-                        GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
-                        NAMESPACE "SIMPLViewProj"
-                        PROJECT_NAME "${PROJECT_NAME}"
-                        EXPORT_MACRO "SIMPLViewProj_EXPORT")
-
-# cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
-#                         GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
-#                         NAMESPACE "SIMPLViewProj"
-#                         PROJECT_NAME "${PROJECT_NAME}"
-#                         EXPORT_MACRO "SIMPLViewProj_EXPORT")
+# If SIMPLView is being built from another higher level project then this is should be set to 0
+if(SIMPLViewProjGenerateVersion)
+  cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
+                      GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
+                      NAMESPACE "SIMPLViewProj"
+                      PROJECT_NAME "${PROJECT_NAME}"
+                      EXPORT_MACRO "SIMPLViewProj_EXPORT")
+endif()
 
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
