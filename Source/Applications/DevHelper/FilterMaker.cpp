@@ -128,6 +128,9 @@ void FilterMaker::on_pluginDir_textChanged(const QString& text)
 {
   // Check whether or not we need to show an error and disable the Generate button.
   validityCheck();
+
+  // Update the code viewer
+  on_codeChooser_currentIndexChanged(codeChooser->currentIndex());
 }
 
 // -----------------------------------------------------------------------------
