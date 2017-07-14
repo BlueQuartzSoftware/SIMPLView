@@ -58,7 +58,9 @@ foreach(name  ${TEST_NAMES})
      "  ${name}Test()()|\n")
 endforeach()
 
-STRING(REPLACE "|" ";" TestMainFunctors ${TestMainFunctors}   )
+if (NOT ${TestMainFunctors} STREQUAL "")
+  STRING(REPLACE "|" ";" TestMainFunctors ${TestMainFunctors}   )
+endif()
 
 configure_file(${SIMPLProj_SOURCE_DIR}/Test/TestMain.cpp.in
                ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp @ONLY)
