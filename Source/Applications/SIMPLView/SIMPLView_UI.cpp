@@ -54,6 +54,7 @@
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QShortcut>
 
 #include "Applications/SIMPLView/SIMPLView.h"
 
@@ -547,6 +548,8 @@ void SIMPLView_UI::setupGui()
   startPipelineBtn->setStyleSheet(getStartPipelineIdleStyle());
   startPipelineBtn->setDisabled(true);
 
+  // Shortcut to close the window
+  new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
 
   m_StatusBar = new StatusBarWidget();
   this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
