@@ -207,7 +207,6 @@ if("${DREAM3DDocRoot}" STREQUAL "")
 #  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
   set_property(GLOBAL PROPERTY DREAM3DDocRoot "${SIMPLViewProj_BINARY_DIR}")
   get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
-  file(WRITE "${SIMPLViewProj_BINARY_DIR}/DREAM3DDocGroupList" "")
 endif()
 
 get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
