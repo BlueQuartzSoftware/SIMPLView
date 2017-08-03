@@ -37,6 +37,7 @@
 void @ClassName@::initialize()
 {
   setErrorCondition(0);
+  setWarningCondition(0);
   setCancel(false);
 }
 
@@ -56,6 +57,7 @@ void @ClassName@::setupFilterParameters()
 void @ClassName@::dataCheck()
 {
   setErrorCondition(0);
+  setWarningCondition(0);
   @DataCheckContents@
 }
 
@@ -83,6 +85,13 @@ void @ClassName@::execute()
   if(getErrorCondition() < 0) { return; }
 
   if (getCancel() == true) { return; }
+
+  if (getWarningCondition() < 0)
+  {
+    QString ss = QObject::tr("Some warning message");
+    setWarningCondition(-88888888);
+    notifyWarningMessage(getHumanLabel(), ss, getWarningCondition());
+  }
 
   if (getErrorCondition() < 0)
   {
