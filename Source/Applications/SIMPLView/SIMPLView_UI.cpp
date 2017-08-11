@@ -581,6 +581,8 @@ void SIMPLView_UI::disconnectSignalsSlots()
 
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
+  disconnect(pipelineViewWidget, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
+
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
@@ -606,6 +608,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()), this, SLOT(clearFilterInputWidget()));
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
+
+  connect(pipelineViewWidget, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
@@ -841,8 +845,12 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     if(nullptr != w)
     {
-      w->toReadyState();
-      w->toRunningState();
+      if(PipelineFilterObject::WidgetState::Disabled != w->getWidgetState())
+      {
+        w->toReadyState();
+        w->toRunningState();
+      }
+      
       connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
   }
