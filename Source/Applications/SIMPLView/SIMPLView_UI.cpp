@@ -53,8 +53,8 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QScrollBar>
-#include <QtWidgets/QToolButton>
 #include <QtWidgets/QShortcut>
+#include <QtWidgets/QToolButton>
 
 #include "Applications/SIMPLView/SIMPLView.h"
 
@@ -112,7 +112,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
 #if !defined(Q_OS_MAC)
- ,   m_InstanceMenuBar(nullptr)
+, m_InstanceMenuBar(nullptr)
 #endif
 , m_OpenedFilePath("")
 {
@@ -131,7 +131,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
   // using the QDesigner program
   setupUi(this);
 
-  // Set up the menu
+// Set up the menu
 #if !defined(Q_OS_MAC)
   // Create the menu
   m_InstanceMenuBar = standardApp->getSIMPLViewMenuBar(this);
@@ -581,6 +581,8 @@ void SIMPLView_UI::disconnectSignalsSlots()
 
   disconnect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
+  disconnect(pipelineViewWidget, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
+
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
   disconnect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
@@ -606,6 +608,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetNeedsCleared()), this, SLOT(clearFilterInputWidget()));
 
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
+
+  connect(pipelineViewWidget, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
@@ -774,7 +778,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     return;
   }
-  else if (startPipelineBtn->text().compare("Canceling...") == 0)
+  else if(startPipelineBtn->text().compare("Canceling...") == 0)
   {
     return;
   }
@@ -782,7 +786,6 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
   startPipelineBtn->setText("Cancel Pipeline");
   startPipelineBtn->setIcon(QIcon(":/media_stop_white.png"));
   update();
-
 
   QMap<QWidget*, QTextEdit*>::iterator iter;
   for(iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); iter++)
@@ -841,8 +844,12 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
     if(nullptr != w)
     {
-      w->toReadyState();
-      w->toRunningState();
+      if(PipelineFilterObject::WidgetState::Disabled != w->getWidgetState())
+      {
+        w->toReadyState();
+        w->toRunningState();
+      }
+
       connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
   }
@@ -931,7 +938,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
   }
   else if(msg.getType() == PipelineMessage::MessageType::StandardOutputMessage || msg.getType() == PipelineMessage::MessageType::StatusMessage)
   {
-    if (msg.getType() == PipelineMessage::MessageType::StatusMessage)
+    if(msg.getType() == PipelineMessage::MessageType::StatusMessage)
     {
       if(nullptr != this->statusBar())
       {
@@ -956,7 +963,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::pipelineDidFinish()
 {
-  if (m_PipelineInFlight->getCancel() == true)
+  if(m_PipelineInFlight->getCancel() == true)
   {
     addStdOutputMessage("<b>*************** PIPELINE CANCELED ***************</b>");
   }
@@ -1005,14 +1012,14 @@ QString SIMPLView_UI::getStartPipelineIdleStyle()
   QTextStream in(&fontString);
   in << "font: " << font.weight() << " " <<
 #if defined(Q_OS_MAC)
-  font.pointSize() - 2
+      font.pointSize() - 2
 #elif defined(Q_OS_WIN)
-  font.pointSize() - 3
-  #else
-  font.pointSize()
+      font.pointSize() - 3
+#else
+      font.pointSize()
 #endif
-  << "pt \"" << font.family()  << "\";"
-  << "font-weight: bold;";
+     << "pt \"" << font.family() << "\";"
+     << "font-weight: bold;";
 
   QString cssStr;
   QTextStream ss(&cssStr);
@@ -1043,20 +1050,21 @@ QString SIMPLView_UI::getStartPipelineInProgressStyle(float percent)
   QTextStream in(&fontString);
   in << "font: " << font.weight() << " " <<
 #if defined(Q_OS_MAC)
-  font.pointSize() - 2
+      font.pointSize() - 2
 #elif defined(Q_OS_WIN)
-  font.pointSize() - 3
-  #else
-  font.pointSize()
+      font.pointSize() - 3
+#else
+      font.pointSize()
 #endif
-  << "pt \"" << font.family()  << "\";"
-  << "font-weight: bold;";
-
+     << "pt \"" << font.family() << "\";"
+     << "font-weight: bold;";
 
   QString cssStr;
   QTextStream ss(&cssStr);
   ss << "QPushButton { ";
-  ss << QString("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n").arg(percent).arg(percent + 0.001);
+  ss << QString("background: qlineargradient(x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(29, 168, 29), stop:%1 rgb(29, 168, 29), stop:%2 rgb(0, 118, 6), stop:1 rgb(0, 118, 6));\n")
+            .arg(percent)
+            .arg(percent + 0.001);
   ss << "color: white;\n";
   ss << "border-radius: 0px;\n";
   ss << fontString;
@@ -1095,7 +1103,7 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
-  // Launch the dialog
+// Launch the dialog
 #ifdef SIMPLView_USE_QtWebEngine
   SIMPLViewUserManualDialog::LaunchHelpDialog(className);
 #else
