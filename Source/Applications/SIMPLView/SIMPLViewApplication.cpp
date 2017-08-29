@@ -331,12 +331,9 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     // We need this because Apple (in their infinite wisdom) changed how the current working directory is set in OS X 10.9 and above. Thanks Apple.
     chdir(aPluginDir.absolutePath().toLatin1().constData());
   }
-  if(aPluginDir.dirName() == "tools")
+  if(aPluginDir.dirName() == "bin")
   {
     aPluginDir.cdUp();
-    // thePath = aPluginDir.absolutePath() + "/Plugins";
-    // qDebug() << "  Adding Path " << thePath;
-    // m_PluginDirs << thePath;
     // We need this because Apple (in their infinite wisdom) changed how the current working directory is set in OS X 10.9 and above. Thanks Apple.
     chdir(aPluginDir.absolutePath().toLatin1().constData());
   }
@@ -381,6 +378,22 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   }
 #endif
 
+  QByteArray pluginEnvPath = qgetenv("SIMPL_PLUGIN_PATH");
+  qDebug() << "SIMPL_PLUGIN_PATH:" << pluginEnvPath;
+
+  char sep = ';';
+#if defined(Q_OS_WIN)
+  sep = ':';
+#endif
+  QList<QByteArray> envPaths = pluginEnvPath.split(sep);
+  foreach(QByteArray envPath, envPaths)
+  {
+    if(envPath.size() > 0)
+    {
+      pluginDirs << QString::fromLatin1(envPath);
+    }
+  }
+
   int dupes = pluginDirs.removeDuplicates();
   qDebug() << "Removed " << dupes << " duplicate Plugin Paths";
   QStringList pluginFilePaths;
@@ -406,13 +419,13 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     }
   }
 
-  FilterManager* fm = FilterManager::Instance();
+  FilterManager* filterManager = FilterManager::Instance();
   FilterWidgetManager* fwm = FilterWidgetManager::Instance();
 
   // THIS IS A VERY IMPORTANT LINE: It will register all the known filters in the dream3d library. This
   // will NOT however get filters from plugins. We are going to have to figure out how to compile filters
   // into their own plugin and load the plugins from a command line.
-  fm->RegisterKnownFilters(fm);
+  filterManager->RegisterKnownFilters(filterManager);
 
   PluginManager* pluginManager = PluginManager::Instance();
   QList<PluginProxy::Pointer> proxies = AboutPlugins::readPluginCache();
@@ -446,7 +459,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
           this->m_SplashScreen->showMessage(msg, Qt::AlignVCenter | Qt::AlignRight, Qt::white);
           // ISIMPLibPlugin::Pointer ipPluginPtr(ipPlugin);
           ipPlugin->registerFilterWidgets(fwm);
-          ipPlugin->registerFilters(fm);
+          ipPlugin->registerFilters(filterManager);
           ipPlugin->setDidLoad(true);
         }
         else
