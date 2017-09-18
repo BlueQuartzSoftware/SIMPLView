@@ -64,9 +64,9 @@
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 
-#include "Applications/SIMPLView/SIMPLView.h"
+#include "SIMPLView/SIMPLView.h"
 #ifdef SIMPLView_USE_QtWebEngine
-#include "Applications/Common/SIMPLViewUserManualDialog.h"
+#include "Common/SIMPLViewUserManualDialog.h"
 #endif
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
@@ -76,9 +76,9 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
 
-#include "Applications/SIMPLView/AboutSIMPLView.h"
-#include "Applications/SIMPLView/SIMPLViewConstants.h"
-#include "Applications/SIMPLView/SIMPLView_UI.h"
+#include "SIMPLView/AboutSIMPLView.h"
+#include "SIMPLView/SIMPLViewConstants.h"
+#include "SIMPLView/SIMPLView_UI.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"

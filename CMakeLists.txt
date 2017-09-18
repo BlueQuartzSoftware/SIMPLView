@@ -126,24 +126,11 @@ if("${CMP_SOURCE_DIR}" STREQUAL "")
 endif()
 
 if(NOT EXISTS "${CMP_SOURCE_DIR}")
-  if(Git_FOUND)
-    message(STATUS "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}. Attempting to clone it from Github....")
-    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop git://github.com/bluequartzsoftware/CMP.git ${SIMPLView_PARENT}/CMP
-                    OUTPUT_VARIABLE CLONE_OUTPUT
-                    RESULT_VARIABLE did_run
-                    ERROR_VARIABLE git_error
-                    WORKING_DIRECTORY ${SIMPLView_PARENT} )
-  endif()
-  # One last check. If it does not exist at this point then we simply Abort CMake
-  if(NOT EXISTS "${CMP_SOURCE_DIR}")
-    message(FATAL_ERROR "CMP_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
-      to fail. SIMPLView can not proceed without the CMP directory. Please ask a SIMPL developer for more\
-      information about this error. Can you access http://github.com/bluequartzsoftware/CMP.git? is\
-      a firewall blocking the 'git' protocol? ")
-  endif()
+  message(FATAL_ERROR "CMP_SOURCE_DIR does not exist at ${CMP_SOURCE_DIR}.")
 endif()
 
-INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
+include(${CMP_SOURCE_DIR}/cmpProject.cmake)
+include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 
 # If SIMPLView is being built from another higher level project then this is should be set to 0
 if(SIMPLViewProjGenerateVersion)
@@ -165,24 +152,7 @@ if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
 endif()
 
 if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
-  if(Git_FOUND)
-    message(STATUS "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}. Attempting to clone it from Github....")
-    execute_process(COMMAND ${GIT_EXECUTABLE} clone -b develop git://github.com/bluequartzsoftware/SIMPL.git ${SIMPLView_PARENT}/SIMPL
-                    OUTPUT_VARIABLE CLONE_OUTPUT
-                    RESULT_VARIABLE did_run
-                    ERROR_VARIABLE git_error
-                    WORKING_DIRECTORY ${SIMPLView_PARENT}/ )
-    # message(STATUS "CLONE_OUTPUT: ${CLONE_OUTPUT}")
-    # message(STATUS "did_run: ${did_run}")
-    # message(STATUS "git_error: ${git_error}")
-  endif()
-  # One last check. If it does not exist at this point then we simply Abort CMake
-  if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
-    message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist. We attempted to clone it from the GitHub repo but that also seemed\
-      to fail. SIMPLView can not proceed without the SIMPLProj_SOURCE_DIR directory. Please ask a SIMPL developer for more\
-      information about this error. Can you access http://github.com/bluequartzsoftware/SIMPLView.git? is\
-      a firewall blocking the 'git' protocol? ")
-  endif()
+  message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}.")
 endif()
 
 
@@ -429,13 +399,13 @@ endif()
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application
-add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/SIMPLView ${PROJECT_BINARY_DIR}/Applications/SIMPLView)
+add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SIMPLView ${PROJECT_BINARY_DIR}/Applications/SIMPLView)
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application
 option(SIMPLView_BUILD_DevHelper "Build the DevHelper Application" OFF)
 if(SIMPLView_BUILD_DevHelper)
-  add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/DevHelper  ${PROJECT_BINARY_DIR}/Applications/DevHelper)
+  add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/DevHelper  ${PROJECT_BINARY_DIR}/Applications/DevHelper)
 endif()
 
 set(SIMPView_DOCS_ROOT_DIR "${SIMPLViewProj_BINARY_DIR}/Bin/Help/SIMPLView")
@@ -446,47 +416,6 @@ option(SIMPLView_BUILD_CLI_TOOLS "Build the command line versions of the applica
 if( SIMPLView_BUILD_CLI_TOOLS )
     add_subdirectory(${SIMPLViewProj_SOURCE_DIR}/Tools ${SIMPLViewProj_BINARY_DIR}/Tools)
 endif()
-
-if(0)
-  #-------------------------------------------------------------------------------
-  # Should we build the documentation using DOxygen
-  option(SIMPLViewProj_BUILD_DOCUMENTATION "Build the DREAM3D documentation" ON)
-  if(SIMPLViewProj_BUILD_DOCUMENTATION)
-    set(DOCUMENTATION_RESOURCES_DIR ${PROJECT_RESOURCES_DIR}/DocConfigFiles)
-
-    set(DOX_GENERATE_RTF "NO")
-    option(SIMPLViewProj_GENERATE_RTF "Generate RTF Documentation" OFF)
-    if(SIMPLViewProj_GENERATE_RTF STREQUAL "ON")
-      set(DOX_GENERATE_RTF "YES")
-    endif()
-
-    # By default we generate the Documentation in HTML format
-    set(DOX_GENERATE_HTML "NO")
-    option(SIMPLViewProj_GENERATE_HTML "Generate HTML Documentation" ON)
-    if(SIMPLViewProj_GENERATE_HTML STREQUAL "ON")
-      set(DOX_GENERATE_HTML "YES")
-    endif()
-
-    #most windows machines do NOT have LATEX built in so default this to OFF
-    set(DOX_GENERATE_LATEX "NO")
-    option(SIMPLViewProj_GENERATE_LATEX "Generate PDF Documentation" OFF)
-    if(SIMPLViewProj_GENERATE_LATEX STREQUAL "ON")
-      set(DOX_GENERATE_LATEX "YES")
-      # Check for existence of LaTex executable files
-      INCLUDE( ${DOCUMENTATION_RESOURCES_DIR}/CMake/UseLATEX.cmake)
-      if(APPLE)
-        option(AUTO_OPEN_PDF "Automatically open generated PDF files with default PDF reading application" ON)
-      endif()
-    endif()
-
-
-    # Now add each subdirectory that holds our documentation files
-    add_subdirectory(${PROJECT_SOURCE_DIR}/Documentation/ReferenceManual ${SIMPLViewProj_BINARY_DIR}/Documentation/ReferenceManual)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/Documentation/APIDocs ${SIMPLViewProj_BINARY_DIR}/Documentation/APIDocs)
-  endif()
-
-endif()
-
 
 # This should be the last line in this file:
 include(${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)

@@ -33,71 +33,74 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _macsimplviewapplication_h_
+#define _macsimplviewapplication_h_
 
-#include "Applications/SIMPLView/SIMPLViewApplication.h"
+#include "SIMPLView/SIMPLViewApplication.h"
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+#define macApp (static_cast<MacSIMPLViewApplication*>(qApp))
 
-class SIMPLViewToolboxMenu;
-
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class MacSIMPLViewApplication : public SIMPLViewApplication
 {
-    Q_OBJECT
+  Q_OBJECT
 
   public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+    MacSIMPLViewApplication(int& argc, char** argv);
+    virtual ~MacSIMPLViewApplication();
 
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    /**
-     * @brief getSIMPLViewMenuBar Creates the QMenuBar that should be used for
-     * application windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
-     * @return
-     */
-    QMenuBar* getSIMPLViewMenuBar(SIMPLView_UI* instance);
-
+    void toEmptyMenuState();
 
     /**
-     * @brief getToolboxMenuBar Creates the QMenuBar that should be used for
-     * Toolbox windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
+     * @brief event
+     * @param event
      * @return
      */
-    QMenuBar* getToolboxMenuBar();
+    bool event(QEvent* event);
+
+    /**
+     * @brief initializeDummyDockWidgetActions
+     */
+    void initializeDummyDockWidgetActions();
 
   protected slots:
 
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QtSRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
+  /**
+  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+  * should be connected to the Signal QtSRecentFileList->fileListChanged
+  * @param file The newly added file.
+  */
+  virtual void updateRecentFileList(const QString& file);
 
-    /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  /**
+  * @brief activeWindowChanged
+  */
+  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
+  virtual void toolboxWindowChanged();
 
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
+  // SIMPLView_UI slots
+  virtual void on_actionClearRecentFiles_triggered();
 
-  private:
+  void toToolboxMenuState();
+  void toSIMPLViewMenuState(SIMPLView_UI *instance);
 
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+private:
+  // The global menu
+  QSharedPointer<QMenuBar>              m_GlobalMenu;
+  QSharedPointer<QMenu>                 m_DockMenu;
+  QMenu*                                m_MenuEdit;
+  QMenu*                                m_MenuView;
+  QAction*                              m_EditSeparator;
+  QList<QAction*>                       m_DummyDockWidgetActions;
+
+  void createGlobalMenu();
+
+  QMenu* createCustomDockMenu();
+
+  MacSIMPLViewApplication(const MacSIMPLViewApplication&); // Copy Constructor Not Implemented
+  void operator=(const MacSIMPLViewApplication&); // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
-
+#endif /* _MacSIMPLViewApplication_H */

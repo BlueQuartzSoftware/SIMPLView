@@ -41,7 +41,7 @@
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
-#include "Applications/SIMPLView/SIMPLView_UI.h"
+#include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 

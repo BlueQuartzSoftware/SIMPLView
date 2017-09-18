@@ -59,7 +59,7 @@
 #include "SIMPLib/Common/FilterManager.h"
 #include "SIMPLib/SIMPLibVersion.h"
 
-#include "Applications/SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"
+#include "SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"

@@ -19,13 +19,13 @@ endif()
 
 foreach(FPW ${APPS_WIDGETS})
   set(AppsCommon_Widgets_MOC_HDRS ${AppsCommon_Widgets_MOC_HDRS}
-    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.h
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Common/${FPW}.h
     )
   set(AppsCommon_Widgets_SRCS ${AppsCommon_Widgets_SRCS}
-    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/${FPW}.cpp
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Common/${FPW}.cpp
     )
   set(AppsCommon_Widgets_UIS ${AppsCommon_Widgets_UIS}
-    ${SIMPLViewProj_SOURCE_DIR}/Source/Applications/Common/UI_Files/${FPW}.ui
+    ${SIMPLViewProj_SOURCE_DIR}/Source/Common/UI_Files/${FPW}.ui
     )
 endforeach()
 

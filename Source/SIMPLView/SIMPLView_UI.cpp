@@ -56,10 +56,10 @@
 #include <QtWidgets/QShortcut>
 #include <QtWidgets/QToolButton>
 
-#include "Applications/SIMPLView/SIMPLView.h"
+#include "SIMPLView/SIMPLView.h"
 
 #ifdef SIMPLView_USE_QtWebEngine
-#include "Applications/Common/SIMPLViewUserManualDialog.h"
+#include "Common/SIMPLViewUserManualDialog.h"
 #else
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #include <QtGui/QDesktopServices>
@@ -88,11 +88,11 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 
-#include "Applications/SIMPLView/MacSIMPLViewApplication.h"
-#include "Applications/SIMPLView/SIMPLViewConstants.h"
-#include "Applications/SIMPLView/StandardSIMPLViewApplication.h"
+#include "SIMPLView/MacSIMPLViewApplication.h"
+#include "SIMPLView/SIMPLViewConstants.h"
+#include "SIMPLView/StandardSIMPLViewApplication.h"
 
-#include "Applications/SIMPLView/StatusBarWidget.h"
+#include "SIMPLView/StatusBarWidget.h"
 
 #include "BrandedStrings.h"
 
