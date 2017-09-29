@@ -50,7 +50,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtWidgets/QToolBar>
 
-#include "SIMPLib/Common/FilterManager.h"
+#include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"

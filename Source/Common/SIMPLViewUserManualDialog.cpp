@@ -43,7 +43,7 @@
 
 #include <QtWebEngineWidgets/QWebEngineHistory>
 
-#include "SIMPLib/Common/FilterManager.h"
+#include "SIMPLib/Filtering/FilterManager.h"
 
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 

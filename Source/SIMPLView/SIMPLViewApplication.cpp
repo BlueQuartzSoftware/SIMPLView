@@ -56,8 +56,8 @@
 
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
+#include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/SIMPLibVersion.h"
-#include "SIMPLib/Utilities/QMetaObjectUtilities.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"

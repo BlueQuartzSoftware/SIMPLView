@@ -223,7 +223,7 @@ get_property(DREAM3D_PACKAGE_DEST_PREFIX GLOBAL PROPERTY DREAM3D_PACKAGE_DEST_PR
 
 # -----------------------------------------------------------------------
 # Set this to ON because SIMPLView needs the Qt based widgets to be compiled.
-set(SIMPL_BUILD_WIDGETS ON CACHE BOOL "Build the QtWidgets based library")
+set(SIMPL_Group_WIDGETS ON CACHE BOOL "Build the QtWidgets based library")
 
 # -----------------------------------------------------------------------
 # Bring in the SIMPL Project

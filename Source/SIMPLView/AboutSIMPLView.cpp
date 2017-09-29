@@ -55,8 +55,8 @@
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
-#include "SIMPLib/Common/AbstractFilter.h"
-#include "SIMPLib/Common/FilterManager.h"
+#include "SIMPLib/Filtering/AbstractFilter.h"
+#include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"

@@ -69,7 +69,7 @@
 //-- SIMPLView Includes
 #include "SIMPLib/Common/Constants.h"
 #include "SIMPLib/Common/DocRequestManager.h"
-#include "SIMPLib/Common/FilterManager.h"
+#include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"

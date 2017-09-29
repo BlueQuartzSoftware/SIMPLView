@@ -41,7 +41,7 @@ include_directories(${HDF5_INCLUDE_DIR}
 
 #------------------------------------------------------------------------------
 # Include this file from the SIMPL Project
-include(${SIMPLProj_SOURCE_DIR}/Test/SIMPLTestFunctions.cmake)
+include(${SIMPLProj_SOURCE_DIR}/Source/SIMPLib/Testing/SIMPLTestFunctions.cmake)
 
 
 
