@@ -847,8 +847,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
       if(PipelineFilterObject::WidgetState::Disabled != w->getWidgetState())
       {
         w->toReadyState();
-        w->toRunningState();
       }
+      w->toRunningState();
 
       connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
