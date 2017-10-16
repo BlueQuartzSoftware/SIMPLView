@@ -89,6 +89,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     Q_OBJECT
 
   public:
+    enum class HideDockSetting : int
+    {
+      OnError = 0,
+      Ignore
+    };
+
     SIMPLView_UI(QWidget* parent = 0);
     virtual ~SIMPLView_UI();
 
@@ -255,6 +261,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     */
     void markDocumentAsDirty();
 
+    /**
+    * @brief issuesTableHasErrors
+    * @param hasErrors
+    */
+    void issuesTableHasErrors(bool hasErrors);
+
     // Our Signals that we can emit custom for this class
   signals:
 
@@ -351,11 +363,25 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
 
     /**
+    * @brief SIMPLView_UI::setupDockWidget
+    * @param prefs
+    * @param value
+    */
+    void readHideDockSettings(QtSSettings* prefs, HideDockSetting& value);
+
+    /**
      * @brief writeDockWidgetSettings
      * @param prefs
      * @param dw
      */
     void writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
+
+    /**
+    * @brief writeHideDockSettings
+    * @param prefs
+    * @param value
+    */
+    void writeHideDockSettings(QtSSettings* prefs, HideDockSetting value);
 
     /**
      * @brief Checks the currently open file for changes that need to be saved
@@ -390,6 +416,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     bool                                  m_ShowFilterWidgetDeleteDialog;
     bool                                  m_ShouldRestart = false;
+
+    HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
+    HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
 
     void cleanupPipeline();
 
