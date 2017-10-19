@@ -337,10 +337,15 @@ configure_file(${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt
 
 # --------------------------------------------------------------------
 # Generate install rules for the text files
-install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
-        DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
-        COMPONENT Applications)
-
+if(APPLE)
+  install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
+          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}/Resources"
+          COMPONENT Applications)
+else()
+  install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
+          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
+          COMPONENT Applications)
+endif()
 # Include some directories for the compiler
 include_directories(${SIMPLViewProj_BINARY_DIR})
 
