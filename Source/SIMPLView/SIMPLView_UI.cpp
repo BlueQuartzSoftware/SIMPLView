@@ -147,6 +147,14 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 
   // Read various settings
   readSettings();
+  if(HideDockSetting::OnError == m_HideErrorTable)
+  {
+    issuesDockWidget->setHidden(true);
+  }
+  if(HideDockSetting::OnError == m_HideStdOutput)
+  {
+    stdOutDockWidget->setHidden(true);
+  }
 
   // Set window modified to false
   setWindowModified(false);
@@ -341,10 +349,12 @@ void SIMPLView_UI::readSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   readDockWidgetSettings(prefs.data(), issuesDockWidget);
+  readHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
   readDockWidgetSettings(prefs.data(), stdOutDockWidget);
+  readHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -401,6 +411,16 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLView_UI::readHideDockSettings(QtSSettings* prefs, HideDockSetting& value)
+{
+  int showError = static_cast<int>(HideDockSetting::OnError);
+  int hideDockSetting = prefs->value("HideDockSetting", QVariant(showError)).toInt();
+  value = static_cast<HideDockSetting>(hideDockSetting);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
 {
 }
@@ -421,10 +441,12 @@ void SIMPLView_UI::writeSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   writeDockWidgetSettings(prefs.data(), issuesDockWidget);
+  writeHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
   writeDockWidgetSettings(prefs.data(), stdOutDockWidget);
+  writeHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -466,6 +488,15 @@ void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
 void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 {
   prefs->setValue(dw->objectName(), dw->isHidden());
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::writeHideDockSettings(QtSSettings* prefs, HideDockSetting value)
+{
+  int valuei = static_cast<int>(value);
+  prefs->setValue("HideDockSetting", valuei);
 }
 
 // -----------------------------------------------------------------------------
@@ -559,6 +590,7 @@ void SIMPLView_UI::setupGui()
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
 
   connect(issuesWidget, SIGNAL(tableHasErrors(bool)), m_StatusBar, SLOT(issuesTableHasErrors(bool)));
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), this, SLOT(issuesTableHasErrors(bool)));
   connect(issuesWidget, SIGNAL(showTable(bool)), issuesDockWidget, SLOT(setVisible(bool)));
 }
 
@@ -847,8 +879,8 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
       if(PipelineFilterObject::WidgetState::Disabled != w->getWidgetState())
       {
         w->toReadyState();
-        w->toRunningState();
       }
+      w->toRunningState();
 
       connect(m_WorkerThread, SIGNAL(finished()), w, SLOT(toStoppedState()));
     }
@@ -1303,6 +1335,22 @@ void SIMPLView_UI::clearFilterInputWidget()
 void SIMPLView_UI::markDocumentAsDirty()
 {
   setWindowModified(true);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::issuesTableHasErrors(bool hasErrors)
+{
+  if(HideDockSetting::OnError == m_HideErrorTable)
+  {
+    issuesDockWidget->setHidden(!hasErrors);
+  }
+
+  if(HideDockSetting::OnError == m_HideStdOutput)
+  {
+    stdOutDockWidget->setHidden(!hasErrors);
+  }
 }
 
 // -----------------------------------------------------------------------------
