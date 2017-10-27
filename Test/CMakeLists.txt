@@ -41,7 +41,7 @@ include_directories(${HDF5_INCLUDE_DIR}
 
 #------------------------------------------------------------------------------
 # Include this file from the SIMPL Project
-include(${SIMPLProj_SOURCE_DIR}/Source/SIMPLib/Testing/SIMPLTestFunctions.cmake)
+include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake)
 
 
 
@@ -53,7 +53,10 @@ file(MAKE_DIRECTORY ${TEST_TEMP_DIR})
 configure_file(${SIMPLViewTest_SOURCE_DIR}/TestFileLocations.h.in
                ${SIMPLViewTest_BINARY_DIR}/SIMPLViewTestFileLocations.h @ONLY IMMEDIATE)
 
-include_directories(${SIMPLViewTest_BINARY_DIR})
+
+configure_file(${SIMPLProj_SOURCE_DIR}/Resources/UnitTestSupport.hpp
+          ${SIMPLViewTest_BINARY_DIR}/UnitTestSupport.hpp COPYONLY IMMEDIATE)
+
 
 #------------------------------------------------------------------------------
 # Example Test code

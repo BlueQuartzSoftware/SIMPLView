@@ -25,7 +25,7 @@ if(WIN32)
  SET(GUI_TYPE WIN32)
 ENDif(WIN32)
 
-add_definitions(-DSIMPLView_USE_QT)
+
 
 # --------------------------------------------------------------------
 # Generate the License File Headers
@@ -204,28 +204,6 @@ set(${PROJECT_NAME}_PROJECT_SRCS
   ${DevHelper_Generated_MOC_SRCS}
 )
 
-include_directories(${DevHelper_SOURCE_DIR}
-                    ${DevHelper_SOURCE_DIR}/..
-                    ${DevHelper_BINARY_DIR}
-                    ${SIMPLProj_SOURCE_DIR}/Source
-                    ${SIMPLProj_BINARY_DIR}
-
-                    ${SIMPLViewProj_SOURCE_DIR}/Source
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
-  )
-
 
 if(APPLE)
     set(APPLICATION_ICON ${PROJECT_RESOURCES_DIR}/icons/icns/${PROJECT_NAME}.icns)
@@ -255,6 +233,41 @@ BuildQtAppBundle(
     COMPONENT     Applications
     INSTALL_DEST  ${DEST_DIR}
 )
+
+#-- Configure Target Specific Include Directories
+get_filename_component(TARGET_BINARY_DIR_PARENT ${${PROJECT_NAME}_BINARY_DIR} PATH)
+get_filename_component(TARGET_SOURCE_DIR_PARENT ${${PROJECT_NAME}_SOURCE_DIR} PATH)
+CMP_MODULE_INCLUDE_DIRS (TARGET ${PROJECT_NAME} LIBVARS HDF5 Qt5Core Qt5Widgets Qt5Network Qt5Gui Qt5Concurrent Qt5Xml Qt5OpenGL Qt5PrintSupport Qt5Sql)
+target_include_directories(${PROJECT_NAME}
+                  PUBLIC
+                    ${HDF5_INCLUDE_DIR}
+
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+
+                    ${SIMPLView_SOURCE_DIR}
+                    ${SIMPLView_BINARY_DIR}
+
+                    ${SIMPLViewProj_SOURCE_DIR}/Source
+                    ${SIMPLViewProj_BINARY_DIR}
+
+                    ${BrandedSIMPLView_DIR}
+                    
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
+
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
+)
+target_compile_definitions(${PROJECT_NAME} PRIVATE -DSIMPLView_USE_QT)
 
 
 #-------------------------------------------------------------------------------

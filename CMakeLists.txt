@@ -274,7 +274,6 @@ option(SIMPL_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
 if(SIMPL_USE_MULTITHREADED_ALGOS)
     find_package(TBB)
     if(TBB_FOUND)
-        include_directories(${TBB_INCLUDE_DIRS} )
         CMP_COPY_DEPENDENT_LIBRARIES("tbb;tbb_malloc")
         # Append the locations of the TBB libraries to our Library Search Paths
         list(APPEND CMP_LIB_SEARCH_DIRS ${TBB_BINARY_DIR} ${TBB_LIBRARY_DIR} )
@@ -293,7 +292,6 @@ set(SIMPLib_USE_EIGEN "")
 Find_Package(Eigen REQUIRED)
 if(EIGEN_FOUND)
   message(STATUS "Found Eigen Library")
-  include_directories( ${EIGEN_INCLUDE_DIRS} )
   set(SIMPLib_USE_EIGEN "1")
 else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
@@ -346,45 +344,6 @@ else()
           DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
           COMPONENT Applications)
 endif()
-# Include some directories for the compiler
-include_directories(${SIMPLViewProj_BINARY_DIR})
-
-# --------------------------------------------------------------------
-# Add in some compiler definitions
-# --------------------------------------------------------------------
-if( CMAKE_BUILD_TYPE MATCHES Debug )
-  ADD_DEFINITIONS(-DDEBUG)
-ENDif( CMAKE_BUILD_TYPE MATCHES Debug )
-
-if(NOT MSVC)
- # ADD_DEFINITIONS(-Wall)
-endif()
-
-# On linux we need to set this because some of the libraries are Static
-# and some are shared.
-if( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" AND NOT MSVC )
-  ADD_DEFINITIONS(-fPIC)
-ENDif()
-
-# --------------------------------------------------------------------
-# If was are using GCC, make the compiler messages on a single line
-if(CMAKE_COMPILER_IS_GNUCC)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")
-ENDif(CMAKE_COMPILER_IS_GNUCC)
-if(CMAKE_COMPILER_IS_GNUCXX)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
-ENDif(CMAKE_COMPILER_IS_GNUCXX)
-
-if(MSVC)
- add_definitions(-D_CRT_SECURE_NO_WARNINGS)
- add_definitions(-D_SCL_SECURE_NO_WARNINGS)
- option(SIMPL_DISABLE_MSVC_WARNINGS "Disable some MSVC Compiler warnings" OFF)
-endif()
-
-
-include_directories(${SIMPLViewProj_SOURCE_DIR}/Source)
-include_directories(${SIMPLViewProj_BINARY_DIR})
-
 
 #------------------------------------------------------------------------------
 # If we have not defined a "BrandedSIMPLView_DIR" then define it to the default
@@ -392,8 +351,6 @@ include_directories(${SIMPLViewProj_BINARY_DIR})
 if(NOT DEFINED BrandedSIMPLView_DIR)
   set(BrandedSIMPLView_DIR ${SIMPLViewProj_SOURCE_DIR}/Resources/OpenSourceEdition)
 endif()
-
-include_directories(${BrandedSIMPLView_DIR})
 
 # -----------------------------------------------------------------------
 # This needs to be set here as we are going to look for files in this directory
@@ -404,13 +361,13 @@ endif()
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application
-add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SIMPLView ${PROJECT_BINARY_DIR}/Applications/SIMPLView)
+add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/SIMPLView ${PROJECT_BINARY_DIR}/SIMPLView)
 
 # --------------------------------------------------------------------
 #- Add in the Main SIMPLView Application
 option(SIMPLView_BUILD_DevHelper "Build the DevHelper Application" OFF)
 if(SIMPLView_BUILD_DevHelper)
-  add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/DevHelper  ${PROJECT_BINARY_DIR}/Applications/DevHelper)
+  add_subdirectory( ${SIMPLViewProj_SOURCE_DIR}/Source/DevHelper  ${PROJECT_BINARY_DIR}/DevHelper)
 endif()
 
 set(SIMPView_DOCS_ROOT_DIR "${SIMPLViewProj_BINARY_DIR}/Bin/Help/SIMPLView")

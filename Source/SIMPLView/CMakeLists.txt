@@ -31,37 +31,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   "Single Directory for all static libraries."
   )
 
-include_directories(${HDF5_INCLUDE_DIR}
-                    ${QT_INCLUDE_DIR}/..
-                    ${SIMPLView_SOURCE_DIR}
-                    ${SIMPLView_BINARY_DIR}
-                    ${SIMPLView_BINARY_DIR}/SIMPLView
-                    ${PROJECT_CODE_DIR}
-                    ${SIMPLViewProj_BINARY_DIR}/Applications
-                    ${SIMPLProj_SOURCE_DIR}/Source
-                    ${SIMPLProj_BINARY_DIR}
-                    
-                    ${SIMPLViewProj_SOURCE_DIR}/Source
-										${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-
-										${SIMPLProj_BINARY_DIR}/SVWidgetsLib
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
-)
-
-if(SIMPL_USE_ITK)
-  include_directories( ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
-  include_directories( ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
-endif()
-
 
 # --------------------------------------------------------------------
 # Generate the License File Headers
@@ -83,6 +52,7 @@ set(CMP_PROJECT_NAME "${PROJECT_NAME}")
 set(CMP_ENABLE_PLUGINS "0")
 set(CMP_LIB_SEARCH_DIRS "")
 set(CMP_GENERATE_VERSION_STRING ${SIMPLViewProjGenerateVersion})
+
 include(${CMP_SOURCE_DIR}/cmpProject.cmake)
 
 cmpConfigureFileWithMD5Check(CONFIGURED_TEMPLATE_PATH ${SIMPLView_SOURCE_DIR}/SIMPLView.h.in
@@ -115,7 +85,6 @@ include(${SIMPLViewProj_SOURCE_DIR}/License/License.cmake)
 
 #-- Include the Common Code and set an include directory for the MOC generated files
 include(${SIMPLView_SOURCE_DIR}/../Common/SourceList.cmake)
-include_directories(${SIMPLView_BINARY_DIR}/__/Common)
 
 # List the source files here
 set(SIMPLView_SRCS
@@ -254,3 +223,44 @@ BuildQtAppBundle(
     COMPONENT     Applications
     INSTALL_DEST  ${DEST_DIR}
 )
+CMP_MODULE_INCLUDE_DIRS (TARGET ${SIMPLView_APPLICATION_NAME} LIBVARS HDF5 Qt5Core Qt5Widgets Qt5Network Qt5Gui Qt5Concurrent Qt5Xml Qt5OpenGL Qt5PrintSupport Qt5Sql)
+target_include_directories(${SIMPLView_APPLICATION_NAME}
+                  PUBLIC
+                    ${HDF5_INCLUDE_DIR}
+
+                    ${SIMPLProj_SOURCE_DIR}/Source
+                    ${SIMPLProj_BINARY_DIR}
+
+                    ${SIMPLView_SOURCE_DIR}
+                    ${SIMPLView_BINARY_DIR}
+
+                    ${SIMPLViewProj_SOURCE_DIR}/Source
+                    ${SIMPLViewProj_BINARY_DIR}
+
+                    ${BrandedSIMPLView_DIR}
+                    
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
+                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
+
+                    ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
+                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
+)
+
+if(SIMPL_USE_ITK)
+  target_include_directories(${SIMPLView_APPLICATION_NAME}
+                  PUBLIC ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
+  target_include_directories(${SIMPLView_APPLICATION_NAME}
+                  PUBLIC ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
+endif()
+
+target_include_directories(${SIMPLView_APPLICATION_NAME}
+                  PUBLIC 
+                    ${SIMPLView_BINARY_DIR}/__/Common)
