@@ -40,7 +40,7 @@ include_directories(${HDF5_INCLUDE_DIR}
 
 
 #------------------------------------------------------------------------------
-# Include this file from the SIMPL Project
+# Include this file from the CMP Project
 include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake)
 
 
