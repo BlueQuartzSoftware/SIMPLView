@@ -237,11 +237,21 @@ add_custom_target(${PLUGIN_NAME}PipelinesCopy ALL
             COMMENT "Copying ${PLUGIN_NAME} Example Pipelines into Binary Directory")
 set_target_properties(${PLUGIN_NAME}PipelinesCopy PROPERTIES FOLDER ZZ_COPY_FILES)
 
-#- This installs all the Prebuilt Pipeline. Note that we assume a flat directory structure
-#- in the "Help" folder, ie, all html files, images, etc are all in the "Help"
-#- folder and NOT in any subfolders beyond that.
-install(DIRECTORY ${${PLUGIN_NAME}_SOURCE_DIR}/ExamplePipelines/${PLUGIN_NAME}
-        DESTINATION ${DREAM3D_PACKAGE_DEST_PREFIX}/PrebuiltPipelines/Examples/${PLUGIN_NAME}
-        COMPONENT Applications )
+#-------------------------------------------------------------------------------
+#- This installs all the prebuilt pipeline files.
+if(APPLE)
+  install(DIRECTORY ${${PLUGIN_NAME}_SOURCE_DIR}/ExamplePipelines/${PLUGIN_NAME}
+          DESTINATION ${DREAM3D_PACKAGE_DEST_PREFIX}/Resources/PrebuiltPipelines/Examples
+          COMPONENT Applications )
+else()
+  install(DIRECTORY ${${PLUGIN_NAME}_SOURCE_DIR}/ExamplePipelines/${PLUGIN_NAME}
+          DESTINATION ${DREAM3D_PACKAGE_DEST_PREFIX}/PrebuiltPipelines/Examples
+          COMPONENT Applications )
+endif()
 
+#-------------------------------------------------------------------------------
+#- This installs all the Data files.
+install(DIRECTORY ${${PLUGIN_NAME}_SOURCE_DIR}/Data/
+        DESTINATION Data
+        COMPONENT Applications )
 
