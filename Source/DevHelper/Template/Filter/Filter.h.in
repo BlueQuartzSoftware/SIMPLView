@@ -6,7 +6,7 @@
 #define _@ClassNameLowerCase@_h_
 
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/AbstractFilter.h"
+#include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 @Filter_H_Includes@
 /**

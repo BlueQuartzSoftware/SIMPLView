@@ -8,7 +8,9 @@ set(PLUGIN_NAME "@PluginName@")
 set(${PLUGIN_NAME}Test_SOURCE_DIR ${${PLUGIN_NAME}_SOURCE_DIR}/Test)
 set(${PLUGIN_NAME}Test_BINARY_DIR ${${PLUGIN_NAME}_BINARY_DIR}/Test)
 
-include(${SIMPLProj_SOURCE_DIR}/Test/SIMPLTestFunctions.cmake)
+#------------------------------------------------------------------------------
+# Include this file from the CMP Project
+include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake)
 
 #------------------------------------------------------------------------------
 # Set any additional include directories here
@@ -60,8 +62,8 @@ if (NOT ${TestMainFunctors} STREQUAL "")
   STRING(REPLACE "|" ";" TestMainFunctors ${TestMainFunctors}   )
 endif()
 
-configure_file(${SIMPLProj_SOURCE_DIR}/Test/TestMain.cpp.in
-               ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp @ONLY)
+configure_file(${SIMPLProj_SOURCE_DIR}/Source/SIMPLib/Testing/TestMain.cpp.in
+               ${${PLUGIN_NAME}Test_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp @ONLY)
 
 
 # Set the source files properties on each source file.
@@ -72,7 +74,7 @@ endforeach()
 AddSIMPLUnitTest(TESTNAME 
                   ${PLUGIN_NAME}Test
                 SOURCES 
-                  ${${PLUGIN_NAME}_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp ${${PLUGIN_NAME}_TEST_SRCS}
+                  ${${PLUGIN_NAME}Test_BINARY_DIR}/${PLUGIN_NAME}UnitTest.cpp ${${PLUGIN_NAME}_TEST_SRCS}
                 FOLDER 
                   "${PLUGIN_NAME}Plugin/Test"
                 LINK_LIBRARIES 
