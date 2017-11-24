@@ -36,39 +36,38 @@
 #ifndef _paragraphwidgetcodegenerator_h_
 #define _paragraphwidgetcodegenerator_h_
 
-#include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include "SIMPLib/SIMPLib.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class ParagraphWidgetCodeGenerator : public FPCodeGenerator
 {
-  public:
-    SIMPL_SHARED_POINTERS(ParagraphWidgetCodeGenerator)
+public:
+  SIMPL_SHARED_POINTERS(ParagraphWidgetCodeGenerator)
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
-    {
-      Pointer sharedPtr(new ParagraphWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
-      return sharedPtr;
-    }
+  static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+  {
+    Pointer sharedPtr(new ParagraphWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+    return sharedPtr;
+  }
 
-    virtual ~ParagraphWidgetCodeGenerator();
+  virtual ~ParagraphWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+  virtual QString generateSetupFilterParameters();
 
-    virtual QString generateDataCheck();
+  virtual QString generateDataCheck();
 
-    virtual QString generateFilterParameters();
+  virtual QString generateFilterParameters();
 
-    virtual QList<QString> generateCPPIncludes();
+  virtual QList<QString> generateCPPIncludes();
 
-  protected:
-    ParagraphWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+protected:
+  ParagraphWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
-
-    ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const ParagraphWidgetCodeGenerator&); // Operator '=' Not Implemented
+private:
+  ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&); // Copy Constructor Not Implemented
+  void operator=(const ParagraphWidgetCodeGenerator&);               // Operator '=' Not Implemented
 };
 
 #endif /* _paragraphwidgetcodegenerator_h_ */
