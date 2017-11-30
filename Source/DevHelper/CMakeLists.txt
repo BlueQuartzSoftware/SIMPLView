@@ -101,6 +101,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ParagraphWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ScalarTypeWidgetCodeGenerator.h
@@ -147,6 +148,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/NumericTypeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/OutputPathWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/ParagraphWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/PreflightUpdatedValueWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/RangeWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ScalarTypeWidgetCodeGenerator.cpp
