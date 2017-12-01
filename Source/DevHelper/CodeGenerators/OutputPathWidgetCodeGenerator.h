@@ -66,9 +66,8 @@ class OutputPathWidgetCodeGenerator : public FPCodeGenerator
     OutputPathWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    OutputPathWidgetCodeGenerator(const OutputPathWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const OutputPathWidgetCodeGenerator&); // Operator '=' Not Implemented
+    OutputPathWidgetCodeGenerator(const OutputPathWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const OutputPathWidgetCodeGenerator&) = delete;                // Operator '=' Not Implemented
 };
 
 #endif /* OutputPathWidgetCodeGenerator_H_ */

@@ -66,9 +66,8 @@ class SecondOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
     SecondOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    SecondOrderPolynomialWidgetCodeGenerator(const SecondOrderPolynomialWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const SecondOrderPolynomialWidgetCodeGenerator&); // Operator '=' Not Implemented
+    SecondOrderPolynomialWidgetCodeGenerator(const SecondOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const SecondOrderPolynomialWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
 };
 
 #endif /* SecondOrderPolynomialWidgetCodeGenerator_H_ */

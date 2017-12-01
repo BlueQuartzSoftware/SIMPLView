@@ -94,9 +94,8 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
     virtual void on_actionClearRecentFiles_triggered();
 
   private:
-
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&); // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&); // Operator '=' Not Implemented
+    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
+    void operator=(const StandardSIMPLViewApplication&) = delete;               // Operator '=' Not Implemented
 };
 
 #endif /* _StandardSIMPLViewApplication_H */

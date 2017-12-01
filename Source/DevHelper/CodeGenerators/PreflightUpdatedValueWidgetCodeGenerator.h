@@ -66,9 +66,8 @@ class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
     PreflightUpdatedValueWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    PreflightUpdatedValueWidgetCodeGenerator(const PreflightUpdatedValueWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const PreflightUpdatedValueWidgetCodeGenerator&); // Operator '=' Not Implemented
+    PreflightUpdatedValueWidgetCodeGenerator(const PreflightUpdatedValueWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const PreflightUpdatedValueWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
 };
 
 #endif /* PreflightUpdatedValueWidgetCodeGenerator_H_ */

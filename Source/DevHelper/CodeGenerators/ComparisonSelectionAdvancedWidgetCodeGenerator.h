@@ -68,9 +68,8 @@ class ComparisonSelectionAdvancedWidgetCodeGenerator : public FPCodeGenerator
     ComparisonSelectionAdvancedWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    ComparisonSelectionAdvancedWidgetCodeGenerator(const ComparisonSelectionAdvancedWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const ComparisonSelectionAdvancedWidgetCodeGenerator&); // Operator '=' Not Implemented
+    ComparisonSelectionAdvancedWidgetCodeGenerator(const ComparisonSelectionAdvancedWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const ComparisonSelectionAdvancedWidgetCodeGenerator&) = delete;                                 // Operator '=' Not Implemented
 };
 
 #endif /* comparisonSelectionAdvancedWidgetCodeGenerator_H_ */

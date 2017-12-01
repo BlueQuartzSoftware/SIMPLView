@@ -66,9 +66,8 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
     RangeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    RangeWidgetCodeGenerator(const RangeWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const RangeWidgetCodeGenerator&); // Operator '=' Not Implemented
+    RangeWidgetCodeGenerator(const RangeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const RangeWidgetCodeGenerator&) = delete;           // Operator '=' Not Implemented
 };
 
 #endif /* RangeWidgetCodeGenerator_H_ */

@@ -66,9 +66,8 @@ class BooleanWidgetCodeGenerator : public FPCodeGenerator
     BooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    BooleanWidgetCodeGenerator(const BooleanWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const BooleanWidgetCodeGenerator&); // Operator '=' Not Implemented
+    BooleanWidgetCodeGenerator(const BooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const BooleanWidgetCodeGenerator&) = delete;             // Operator '=' Not Implemented
 };
 
 #endif /* BooleanWidgetCodeGenerator_H_ */

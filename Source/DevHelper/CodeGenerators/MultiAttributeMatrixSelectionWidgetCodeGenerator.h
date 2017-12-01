@@ -66,9 +66,8 @@ class MultiAttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
     MultiAttributeMatrixSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    MultiAttributeMatrixSelectionWidgetCodeGenerator(const MultiAttributeMatrixSelectionWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const MultiAttributeMatrixSelectionWidgetCodeGenerator&); // Operator '=' Not Implemented
+    MultiAttributeMatrixSelectionWidgetCodeGenerator(const MultiAttributeMatrixSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const MultiAttributeMatrixSelectionWidgetCodeGenerator&) = delete;                                   // Operator '=' Not Implemented
 };
 
 #endif /* MultiAttributeMatrixSelectionWidgetCodeGenerator_H_ */

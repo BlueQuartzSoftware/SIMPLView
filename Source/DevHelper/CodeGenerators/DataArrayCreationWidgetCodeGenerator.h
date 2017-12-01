@@ -66,9 +66,8 @@ class DataArrayCreationWidgetCodeGenerator : public FPCodeGenerator
     DataArrayCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    DataArrayCreationWidgetCodeGenerator(const DataArrayCreationWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const DataArrayCreationWidgetCodeGenerator&); // Operator '=' Not Implemented
+    DataArrayCreationWidgetCodeGenerator(const DataArrayCreationWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const DataArrayCreationWidgetCodeGenerator&) = delete;                       // Operator '=' Not Implemented
 };
 
 #endif /* DataArrayCreationWidgetCodeGenerator_H_ */

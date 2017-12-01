@@ -66,9 +66,8 @@ class FourthOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
     FourthOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    FourthOrderPolynomialWidgetCodeGenerator(const FourthOrderPolynomialWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const FourthOrderPolynomialWidgetCodeGenerator&); // Operator '=' Not Implemented
+    FourthOrderPolynomialWidgetCodeGenerator(const FourthOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const FourthOrderPolynomialWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
 };
 
 #endif /* FourthOrderPolynomialWidgetCodeGenerator_H_ */

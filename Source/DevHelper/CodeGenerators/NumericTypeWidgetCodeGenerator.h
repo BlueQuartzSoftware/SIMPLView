@@ -66,9 +66,8 @@ class NumericTypeWidgetCodeGenerator : public FPCodeGenerator
     NumericTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    NumericTypeWidgetCodeGenerator(const NumericTypeWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const NumericTypeWidgetCodeGenerator&); // Operator '=' Not Implemented
+    NumericTypeWidgetCodeGenerator(const NumericTypeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const NumericTypeWidgetCodeGenerator&) = delete;                 // Operator '=' Not Implemented
 };
 
 #endif /* IntWidgetCodeGenerator_H_ */

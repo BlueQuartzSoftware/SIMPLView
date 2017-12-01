@@ -66,9 +66,8 @@ class ScalarTypeWidgetCodeGenerator : public FPCodeGenerator
     ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    ScalarTypeWidgetCodeGenerator(const ScalarTypeWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const ScalarTypeWidgetCodeGenerator&); // Operator '=' Not Implemented
+    ScalarTypeWidgetCodeGenerator(const ScalarTypeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const ScalarTypeWidgetCodeGenerator&) = delete;                // Operator '=' Not Implemented
 };
 
 #endif /* ScalarTypeWidgetCodeGenerator_H_ */

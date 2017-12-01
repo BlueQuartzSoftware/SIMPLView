@@ -11,8 +11,6 @@
 #include "@PluginName@/@PluginName@Constants.h"
 #include "@PluginName@/@PluginName@Version.h"
 
-// Include the MOC generated file for this class
-#include "moc_@ClassName@.cpp"
 
 // -----------------------------------------------------------------------------
 //

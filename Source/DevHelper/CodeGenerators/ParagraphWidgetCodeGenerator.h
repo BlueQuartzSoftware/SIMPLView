@@ -64,7 +64,7 @@ protected:
   ParagraphWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
 private:
-  ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&); // Copy Constructor Not Implemented
+  ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
   void operator=(const ParagraphWidgetCodeGenerator&);               // Operator '=' Not Implemented
 };
 

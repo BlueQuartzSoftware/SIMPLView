@@ -150,7 +150,7 @@ QT5_ADD_RESOURCES( SIMPLView_Generated_RC_SRCS ${SIMPLView_RCS} ${QRC_LICENSE_FI
 QT5_WRAP_UI( SIMPLView_Generated_UI_HDRS ${SIMPLView_UIS} ${AppsCommon_Widgets_UIS})
 
 # and finally this will run moc:
-QT5_WRAP_CPP( SIMPLView_Generated_MOC_SRCS ${SIMPLView_MOC_HDRS} )
+# QT5_WRAP_CPP( SIMPLView_Generated_MOC_SRCS ${SIMPLView_MOC_HDRS} )
 # These generated moc files will be #include in the FilterWidget source file that
 # are generated so we need to tell the build system to NOT compile these files
 set_source_files_properties( ${SIMPLView_Generated_MOC_SRCS} PROPERTIES GENERATED TRUE)

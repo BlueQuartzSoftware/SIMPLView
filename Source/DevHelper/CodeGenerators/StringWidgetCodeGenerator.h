@@ -66,9 +66,8 @@ class StringWidgetCodeGenerator : public FPCodeGenerator
     StringWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    StringWidgetCodeGenerator(const StringWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const StringWidgetCodeGenerator&); // Operator '=' Not Implemented
+    StringWidgetCodeGenerator(const StringWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const StringWidgetCodeGenerator&) = delete;            // Operator '=' Not Implemented
 };
 
 #endif /* StringWidgetCodeGenerator_H_ */

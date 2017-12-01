@@ -66,9 +66,8 @@ class MultiDataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
     MultiDataArraySelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    MultiDataArraySelectionWidgetCodeGenerator(const MultiDataArraySelectionWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const MultiDataArraySelectionWidgetCodeGenerator&); // Operator '=' Not Implemented
+    MultiDataArraySelectionWidgetCodeGenerator(const MultiDataArraySelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const MultiDataArraySelectionWidgetCodeGenerator&) = delete;                             // Operator '=' Not Implemented
 };
 
 #endif /* MultiDataArraySelectionWidgetCodeGenerator_H_ */

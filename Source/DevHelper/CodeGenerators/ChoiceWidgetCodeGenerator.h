@@ -66,9 +66,8 @@ class ChoiceWidgetCodeGenerator : public FPCodeGenerator
     ChoiceWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    ChoiceWidgetCodeGenerator(const ChoiceWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const ChoiceWidgetCodeGenerator&); // Operator '=' Not Implemented
+    ChoiceWidgetCodeGenerator(const ChoiceWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const ChoiceWidgetCodeGenerator&) = delete;            // Operator '=' Not Implemented
 };
 
 #endif /* ChoiceWidgetCodeGenerator_H_ */

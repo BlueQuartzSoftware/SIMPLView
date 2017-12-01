@@ -183,7 +183,7 @@ QT5_ADD_RESOURCES( DevHelper_Generated_RC_SRCS ${DevHelper_RCS} ${QRC_LICENSE_FI
 QT5_WRAP_UI( DevHelper_Generated_UI_HDRS ${DevHelper_UIS} )
 
 # and finally this will run moc:
-QT5_WRAP_CPP( DevHelper_Generated_MOC_SRCS ${DevHelper_MOC_HDRS} )
+# QT5_WRAP_CPP( DevHelper_Generated_MOC_SRCS ${DevHelper_MOC_HDRS} )
 set_source_files_properties( ${DevHelper_Generated_MOC_SRCS} PROPERTIES GENERATED TRUE)
 set_source_files_properties( ${DevHelper_Generated_MOC_SRCS} PROPERTIES HEADER_FILE_ONLY TRUE)
 

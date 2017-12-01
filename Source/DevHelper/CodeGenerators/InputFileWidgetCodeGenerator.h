@@ -66,9 +66,8 @@ class InputFileWidgetCodeGenerator : public FPCodeGenerator
     InputFileWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    InputFileWidgetCodeGenerator(const InputFileWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const InputFileWidgetCodeGenerator&); // Operator '=' Not Implemented
+    InputFileWidgetCodeGenerator(const InputFileWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const InputFileWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
 };
 
 #endif /* InputFileWidgetCodeGenerator_H_ */

@@ -97,7 +97,6 @@
 #include "BrandedStrings.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
-#include "moc_SIMPLView_UI.cpp"
 
 // Initialize private static member variable
 QString SIMPLView_UI::m_OpenDialogLastFilePath = "";

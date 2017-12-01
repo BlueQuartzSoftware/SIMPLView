@@ -185,7 +185,7 @@ private:
   void readSettings();
   void writeSettings();
 
-  SIMPLViewApplication(const SIMPLViewApplication&); // Copy Constructor Not Implemented
+  SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const SIMPLViewApplication&);       // Operator '=' Not Implemented
 };
 

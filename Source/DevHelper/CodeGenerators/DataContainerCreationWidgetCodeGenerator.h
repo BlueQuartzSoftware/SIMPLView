@@ -66,9 +66,8 @@ class DataContainerCreationWidgetCodeGenerator : public FPCodeGenerator
     DataContainerCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    DataContainerCreationWidgetCodeGenerator(const DataContainerCreationWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const DataContainerCreationWidgetCodeGenerator&); // Operator '=' Not Implemented
+    DataContainerCreationWidgetCodeGenerator(const DataContainerCreationWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const DataContainerCreationWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
 };
 
 #endif /* DataContainerCreationWidgetCodeGenerator_H_ */

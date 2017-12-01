@@ -57,9 +57,8 @@ class CodeGenFactory
     CodeGenFactory();
 
   private:
-
-    CodeGenFactory(const CodeGenFactory&); // Copy Constructor Not Implemented
-    void operator=(const CodeGenFactory&); // Operator '=' Not Implemented
+    CodeGenFactory(const CodeGenFactory&) = delete; // Copy Constructor Not Implemented
+    void operator=(const CodeGenFactory&) = delete; // Operator '=' Not Implemented
 };
 
 #endif /* _CodeGenFactory_H_ */

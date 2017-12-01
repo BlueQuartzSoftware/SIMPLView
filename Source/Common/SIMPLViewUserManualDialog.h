@@ -100,9 +100,8 @@ class  SIMPLViewUserManualDialog : public QDialog, public Ui::SIMPLViewUserManua
 
     QAction* m_CloseAction = nullptr;
 
-    SIMPLViewUserManualDialog(const SIMPLViewUserManualDialog&); // Copy Constructor Not Implemented
-    void operator=(const SIMPLViewUserManualDialog&); // Operator '=' Not Implemented
-
+    SIMPLViewUserManualDialog(const SIMPLViewUserManualDialog&) = delete; // Copy Constructor Not Implemented
+    void operator=(const SIMPLViewUserManualDialog&) = delete;            // Operator '=' Not Implemented
 };
 
 #endif /* _SIMPLViewUserManualDialog_H */

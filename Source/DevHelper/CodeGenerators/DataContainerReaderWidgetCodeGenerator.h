@@ -68,9 +68,8 @@ class DataContainerReaderWidgetCodeGenerator : public FPCodeGenerator
     DataContainerReaderWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    DataContainerReaderWidgetCodeGenerator(const DataContainerReaderWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const DataContainerReaderWidgetCodeGenerator&); // Operator '=' Not Implemented
+    DataContainerReaderWidgetCodeGenerator(const DataContainerReaderWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const DataContainerReaderWidgetCodeGenerator&) = delete;                         // Operator '=' Not Implemented
 };
 
 #endif /* DataContainerReaderWidgetCodeGenerator_H_ */

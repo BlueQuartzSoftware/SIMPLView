@@ -39,9 +39,6 @@
 #include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
 
-#include "moc_AddFilterParameter.cpp"
-
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------

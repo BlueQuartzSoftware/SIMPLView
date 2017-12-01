@@ -93,8 +93,8 @@ class FPCodeGenerator
     QString m_Category;
     QString m_InitValue;
 
-    FPCodeGenerator(const FPCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const FPCodeGenerator&); // Operator '=' Not Implemented
+    FPCodeGenerator(const FPCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const FPCodeGenerator&) = delete;  // Operator '=' Not Implemented
 };
 
 #endif /* FPCodeGenerator_H_ */

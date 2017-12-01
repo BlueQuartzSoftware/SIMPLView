@@ -68,9 +68,8 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
     SeparatorWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    SeparatorWidgetCodeGenerator(const SeparatorWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const SeparatorWidgetCodeGenerator&); // Operator '=' Not Implemented
+    SeparatorWidgetCodeGenerator(const SeparatorWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const SeparatorWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
 };
 
 #endif /* SeparatorWidgetCodeGenerator_H_ */

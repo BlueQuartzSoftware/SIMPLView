@@ -44,9 +44,7 @@ ParagraphWidgetCodeGenerator::ParagraphWidgetCodeGenerator(QString humanLabel, Q
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ParagraphWidgetCodeGenerator::~ParagraphWidgetCodeGenerator()
-{
-}
+ParagraphWidgetCodeGenerator::~ParagraphWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //

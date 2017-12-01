@@ -66,9 +66,8 @@ class OutputFileWidgetCodeGenerator : public FPCodeGenerator
     OutputFileWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   private:
-
-    OutputFileWidgetCodeGenerator(const OutputFileWidgetCodeGenerator&); // Copy Constructor Not Implemented
-    void operator=(const OutputFileWidgetCodeGenerator&); // Operator '=' Not Implemented
+    OutputFileWidgetCodeGenerator(const OutputFileWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    void operator=(const OutputFileWidgetCodeGenerator&) = delete;                // Operator '=' Not Implemented
 };
 
 #endif /* OutputFileWidgetCodeGenerator_H_ */

@@ -47,7 +47,7 @@ cmp_IDE_GENERATED_PROPERTIES("Applications/Common/UI_Files" "${AppsCommon_Widget
 
 # --------------------------------------------------------------------
 # and finally this will run moc:
-QT5_WRAP_CPP( AppsCommon_Widgets_Generated_MOC_SRCS ${AppsCommon_Widgets_MOC_HDRS} )
+# QT5_WRAP_CPP( AppsCommon_Widgets_Generated_MOC_SRCS ${AppsCommon_Widgets_MOC_HDRS} )
 
 # These generated moc files will be #include in the FilterWidget source file that
 # are generated so we need to tell the build system to NOT compile these files
