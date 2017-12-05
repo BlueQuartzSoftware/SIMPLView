@@ -158,6 +158,9 @@ QT5_ADD_RESOURCES( SIMPLView_Generated_RC_SRCS ${SIMPLView_RCS} ${QRC_LICENSE_FI
 
 # this will run uic on .ui files:
 QT5_WRAP_UI( SIMPLView_Generated_UI_HDRS ${SIMPLView_UIS} ${AppsCommon_Widgets_UIS})
+foreach(h ${SIMPLView_Generated_UI_HDRS} ${SIMPLView_Generated_RC_SRCS})
+  set_property(SOURCE ${h} PROPERTY SKIP_AUTOMOC ON)
+endforeach()
 
 # and finally this will run moc:
 # QT5_WRAP_CPP( SIMPLView_Generated_MOC_SRCS ${SIMPLView_MOC_HDRS} )
