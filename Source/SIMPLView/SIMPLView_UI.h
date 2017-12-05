@@ -98,6 +98,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     SIMPLView_UI(QWidget* parent = 0);
     virtual ~SIMPLView_UI();
 
+    SIMPL_INSTANCE_PROPERTY(PipelineTreeController*, TreeController)
+
     /**
      * @brief setLoadedPlugins This will set the plugins that have already been loaded by another mechanism. The plugins are NOT
      * deleted by this class and the unloading and clean up of the plugin pointers is the responsibility of the caller.
@@ -419,6 +421,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
     HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
+
+    void setupPipelineTreeView();
 
     void cleanupPipeline();
 

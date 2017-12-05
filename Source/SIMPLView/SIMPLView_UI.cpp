@@ -87,6 +87,7 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
+#include "SVWidgetsLib/Widgets/PipelineTreeController.h"
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
@@ -106,6 +107,7 @@ QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
+, m_TreeController(new PipelineTreeController(this))
 , m_WorkerThread(nullptr)
 , m_ActivePlugin(nullptr)
 , m_FilterManager(nullptr)
@@ -542,6 +544,8 @@ void SIMPLView_UI::setupGui()
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
 
+  setupPipelineTreeView();
+
   pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
 
   // Stretch Factors
@@ -596,6 +600,30 @@ void SIMPLView_UI::setupGui()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLView_UI::setupPipelineTreeView()
+{
+  // Connection that allows the Pipeline Tree controller to clear the Issues Table
+  connect(m_TreeController, &PipelineTreeController::pipelineIssuesCleared, issuesWidget, &IssuesWidget::clearIssues);
+
+  // Connection that displays issues in the Issue Table when the preflight is finished
+  connect(m_TreeController, &PipelineTreeController::preflightFinished, [=] { issuesWidget->displayCachedMessages(); });
+
+  // Connection that refreshes the Data Browser when the preflight is finished
+  connect(m_TreeController, &PipelineTreeController::preflightFinished, [=] { dataBrowserWidget->refreshData(); });
+
+  // Connection that does post-preflight updates on this instance of SIMPLView_UI when the preflight is finished
+  connect(m_TreeController, &PipelineTreeController::preflightFinished, this, &SIMPLView_UI::preflightDidFinish);
+
+  // Connection that marks the document dirty whenever a filter is enabled/disabled
+  connect(pipelineTreeView, &PipelineTreeView::filterEnabledStateChanged, this, &SIMPLView_UI::markDocumentAsDirty);
+
+  // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
+  connect(pipelineTreeView, &PipelineTreeView::needsPreflight, m_TreeController, &PipelineTreeController::preflightPipeline);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLView_UI::disconnectSignalsSlots()
 {
   DocRequestManager* docRequester = DocRequestManager::Instance();
@@ -641,8 +669,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
   connect(pipelineViewWidget, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
-
-  connect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 

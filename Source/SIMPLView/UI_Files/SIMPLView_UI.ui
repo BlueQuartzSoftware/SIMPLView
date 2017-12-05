@@ -125,7 +125,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1012</width>
+             <width>755</width>
              <height>516</height>
             </rect>
            </property>
@@ -188,7 +188,7 @@
              <string>Start Pipeline</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc">
+             <iconset>
               <normaloff>:/media_play_white.png</normaloff>:/media_play_white.png</iconset>
             </property>
             <property name="iconSize">
@@ -271,6 +271,33 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <number>2</number>
    </attribute>
    <widget class="DataStructureWidget" name="dataBrowserWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="pipelineDockWidget">
+   <property name="windowTitle">
+    <string>Pipelines</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="pipelineInteralWidget">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="PipelineTreeView" name="pipelineTreeView"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
@@ -489,6 +516,11 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <extends>QWidget</extends>
    <header location="global">DataStructureWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PipelineTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">PipelineTreeView.h</header>
   </customwidget>
  </customwidgets>
  <resources>

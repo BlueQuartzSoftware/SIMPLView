@@ -59,7 +59,8 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
       Issues = 0,
       Console = 1,
       DataStructure = 2,
-      Toolbox = 3
+      Toolbox = 3,
+      PipelineTreeView = 4
     };
 
 

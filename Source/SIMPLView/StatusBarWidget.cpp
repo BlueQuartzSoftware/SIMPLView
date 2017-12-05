@@ -216,6 +216,10 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
       connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
       connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
       break;
+//    case Button::PipelineTreeView:
+//      connect(dataBrowserBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
+//      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
+//      break;
     case Button::Toolbox:
 //      connect(toolboxBtn, SIGNAL(toggled(bool)), dock, SLOT(setVisible(bool)));
 //      connect(dock, SIGNAL(visibilityChanged(bool)), this, SLOT(dataBrowserVisibilityChanged(bool)));
