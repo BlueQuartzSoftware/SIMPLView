@@ -602,6 +602,9 @@ void SIMPLView_UI::setupGui()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setupPipelineTreeView()
 {
+  PipelineTreeModel* model = PipelineTreeModel::Instance();
+  pipelineTreeView->setModel(model);
+
   // Connection that allows the Pipeline Tree controller to clear the Issues Table
   connect(m_TreeController, &PipelineTreeController::pipelineIssuesCleared, issuesWidget, &IssuesWidget::clearIssues);
 
@@ -619,6 +622,22 @@ void SIMPLView_UI::setupPipelineTreeView()
 
   // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
   connect(pipelineTreeView, &PipelineTreeView::needsPreflight, m_TreeController, &PipelineTreeController::preflightPipeline);
+
+  connect(pipelineTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=] {
+    QModelIndexList indexList = pipelineTreeView->selectionModel()->selectedRows();
+    if (indexList.size() == 1)
+    {
+      QModelIndex index = indexList[0];
+      FilterInputWidget* fiw = model->filterInputWidget(index);
+      if (fiw != nullptr)
+      {
+        setFilterInputWidget(fiw);
+        return;
+      }
+    }
+
+    clearFilterInputWidget();
+  });
 }
 
 // -----------------------------------------------------------------------------

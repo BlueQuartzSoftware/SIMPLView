@@ -38,6 +38,7 @@
 
 #include <QtCore/QSet>
 #include <QtCore/QSharedPointer>
+#include <QtCore/QPersistentModelIndex>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
@@ -176,7 +177,8 @@ protected slots:
   void addFilter(const QString& className);
 
 private:
-  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> m_Clipboard;
+  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
+  QPersistentModelIndex                                             m_ActivePipelineIndex;
 
   QSharedPointer<QMenu> m_ContextMenu;
 
