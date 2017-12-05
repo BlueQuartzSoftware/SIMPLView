@@ -95,6 +95,12 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StatusBarWidget.cpp
+  ${SIMPLView_SOURCE_DIR}/StatusBarButton.cpp
+
+  ${VtkSIMPL_Widgets_SRCS}
+  ${VtkSIMPL_VtkFilters_SRCS}
+  ${VtkSIMPL_VtkWidgets_SRCS}
+  ${VtkSIMPL_VtkSupport_SRCS}
   )
 
 if(APPLE)
@@ -118,7 +124,11 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StatusBarWidget.h
-
+  ${SIMPLView_SOURCE_DIR}/StatusBarButton.h
+  
+  ${VtkSIMPL_Widgets_HDRS}
+  ${VtkSIMPL_VtkFilters_HDRS}
+  ${VtkSIMPL_VtkWidgets_HDRS}
 )
 
 if(APPLE)
