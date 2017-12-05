@@ -266,7 +266,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief issuesTableHasErrors
     * @param hasErrors
     */
-    void issuesTableHasErrors(bool hasErrors, int count);
+    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
 
     // Our Signals that we can emit custom for this class
   signals:

@@ -14,6 +14,12 @@
 StatusBarButton::StatusBarButton(QWidget* parent)
 : QToolButton (parent)
 {
+  //  QFont font = QtSStyles::GetHumanLabelFont();
+
+  //  QFontMetrics fontMetrics(font);
+  //  int fontHeight = fontMetrics.height();
+  //  int fontWidth = fontMetrics.width(text());
+  //  setMinimumWidth(m_BadgeDiameter * 2 + fontWidth + m_Spacing * 3);
 }
 
 // -----------------------------------------------------------------------------
@@ -24,9 +30,51 @@ StatusBarButton::~StatusBarButton() = default;
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StatusBarButton::setBadgeCount(int count)
+void StatusBarButton::updateMinimumWidth()
 {
-  m_BadgeCount = count;
+
+  if(m_ErrorBadgeCount + m_WarningBadgeCount > 0)
+  {
+    QFont font = QtSStyles::GetHumanLabelFont();
+
+#if defined(Q_OS_MAC)
+    font.setPointSize(font.pointSize() - 4);
+#elif defined(Q_OS_WIN)
+    font.setPointSize(font.pointSize() - 3);
+#else
+    font.setPointSize(font.pointSize() - 1);
+#endif
+
+    QFontMetrics fontMetrics(font);
+    QString number = QString::number(m_ErrorBadgeCount + m_WarningBadgeCount);
+    int fw = fontMetrics.width(number);
+
+    m_BadgeWidth = fw + (2 * m_BadgeMargin);
+    setMinimumWidth(110 + m_BadgeWidth);
+  }
+  else
+  {
+    setMinimumWidth(0);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarButton::setErrorBadgeCount(int count)
+{
+  m_ErrorBadgeCount = count;
+  updateMinimumWidth();
+  update();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarButton::setWarningBadgeCount(int count)
+{
+  m_WarningBadgeCount = count;
+  updateMinimumWidth();
   update();
 }
 
@@ -51,8 +99,8 @@ void StatusBarButton::mouseReleaseEvent(QMouseEvent* event)
   QToolButton::mouseReleaseEvent(event);
 
   m_Pressed = false;
-  
-    update();
+
+  update();
 }
 
 // -----------------------------------------------------------------------------
@@ -60,11 +108,7 @@ void StatusBarButton::mouseReleaseEvent(QMouseEvent* event)
 // -----------------------------------------------------------------------------
 void StatusBarButton::paintEvent(QPaintEvent* event)
 {
-
- // QToolButton::paintEvent( event);
-
-
-  //qDebug() << "m_Pressed: " << m_Pressed;
+  Q_UNUSED(event)
   QStyleOption opt;
   opt.init(this);
   QPainter painter(this);
@@ -84,22 +128,22 @@ void StatusBarButton::paintEvent(QPaintEvent* event)
   int fontHeight = fontMetrics.height();
   int fontMargin = ((maxHeight - fontHeight) / 2) - 1;
 
-  int indexFontWidth = fontMetrics.width(text());
-
   painter.setFont(font);
 
   QColor backgroundColor(200, 200, 200);
   QColor borderColor(120, 120, 120);
   QColor fontColor(50, 50, 50);
-  QColor badgeBgColor(225, 25, 25); // Mostly Red?
+  QColor badgeBgColor(120, 120, 120);
   QColor badgeFontColor(240, 240, 240);
   qreal borderRadius = 5.0;
 
   if(isChecked())
   {
-    backgroundColor = QColor(120, 120, 120);
+    backgroundColor = QColor(113, 113, 113);
     borderColor = QColor(200, 200, 200);
     fontColor = QColor(240, 240, 240);
+    badgeBgColor = QColor(200, 200, 200);
+    badgeFontColor = QColor(96, 96, 96);
   }
   
   if(m_Pressed && isChecked())
@@ -116,7 +160,7 @@ void StatusBarButton::paintEvent(QPaintEvent* event)
     borderColor = QColor(200, 200, 200);
   }
   QRect rect = this->rect();
-#if 1
+
   QPainterPath buttonPath;
   buttonPath.addRoundedRect(rect, borderRadius, borderRadius);
   QPen pen(borderColor, 2);
@@ -128,30 +172,36 @@ void StatusBarButton::paintEvent(QPaintEvent* event)
   font.setWeight(QFont::Bold);
   painter.setFont(font);
 
-  int textXCoord = (rect.width() - indexFontWidth) / 2;
   int textYCoord = rect.y() + fontMargin + fontHeight;
-  painter.drawText(textXCoord, textYCoord, text());
- #endif
-  // int btnCenterX = rect.width() / 2;
+  painter.drawText(m_TextMargin, textYCoord, text());
+
   int btnCenterY = rect.height() / 2;
- 
-  
-  if(m_BadgeCount > 0)
+
+  if(m_ErrorBadgeCount + m_WarningBadgeCount > 0)
   {
-    m_BadgeDiameter = fontHeight + 3;
+
+    QString number = QString::number(m_ErrorBadgeCount + m_WarningBadgeCount);
+    int fw = fontMetrics.width(number);
+
     QPainterPath badgePath;
-    badgePath.addEllipse(rect.width() - m_BadgeDiameter - 3, btnCenterY - (m_BadgeDiameter / 2), m_BadgeDiameter, m_BadgeDiameter);
+    badgePath.addRoundedRect(rect.width() - m_BadgeWidth - m_TextMargin, // X
+                             4,                                          // Y
+                             m_BadgeWidth,                               // Width
+                             minimumHeight() - 8,                        // Height
+                             7.0, 7.0);                                  // X & Y Radius
+
     QPen pen(badgeBgColor, 2);
     painter.setPen(pen);
     painter.fillPath(badgePath, badgeBgColor);
     painter.drawPath(badgePath);
 
-    painter.setPen(QPen(Qt::white));
+    painter.setPen(QPen(badgeFontColor));
     font.setWeight(QFont::Bold);
     painter.setFont(font);
-    QString number = QString::number(m_BadgeCount);
-    int fw = fontMetrics.width(number);
-    painter.drawText(rect.width() - 3 - (m_BadgeDiameter / 2) - (fw / 2), btnCenterY + (fontHeight / 3), number);
+
+    painter.drawText(rect.width() - m_TextMargin - (m_BadgeWidth / 2) - (fw / 2), btnCenterY + (fontHeight / 3), number);
   }
 
+  QString toolTip = QString("The current pipeline has %1 errors and %2 warnings.").arg(m_ErrorBadgeCount).arg(m_WarningBadgeCount);
+  setToolTip(toolTip);
 }

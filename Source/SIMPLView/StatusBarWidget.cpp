@@ -226,9 +226,10 @@ void StatusBarWidget::setButtonAction(QDockWidget* dock, Button btn)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StatusBarWidget::issuesTableHasErrors(bool b, int count)
+void StatusBarWidget::issuesTableHasErrors(bool b, int errCount, int warnCount)
 {
   //  QString style = generateStyleSheet(b);
   //  issuesBtn->setStyleSheet(style);
-  issuesBtn->setBadgeCount(count);
+  issuesBtn->setErrorBadgeCount(errCount);
+  issuesBtn->setWarningBadgeCount(warnCount);
 }

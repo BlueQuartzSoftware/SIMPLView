@@ -21,9 +21,10 @@ class StatusBarButton : public QToolButton
     void setFlat(bool b){};
     
   public slots:
-    
-    void setBadgeCount(int count);
-    
+
+    void setErrorBadgeCount(int count);
+    void setWarningBadgeCount(int count);
+
   protected:
     
     /**
@@ -37,16 +38,21 @@ class StatusBarButton : public QToolButton
      * @param event
      */
     virtual void mouseReleaseEvent( QMouseEvent* event ) override;
-    
-    
+
+    void updateMinimumWidth();
+
   private:
-    int m_BadgeCount = 0;
+    int m_OriginalWidth = 0;
+    int m_ErrorBadgeCount = 0;
+    int m_WarningBadgeCount = 0;
     int m_TextMargin = 6;
     
     qreal m_BorderThickness = 0.0;
     qreal m_BorderIncrement = 1.0;
-    
-    int m_BadgeDiameter = 20;
+
+    int m_BadgeWidth = 0;
+    int m_BadgeMargin = 4;
+    int m_Spacing = 3;
     bool m_Pressed = false;
 
     /**

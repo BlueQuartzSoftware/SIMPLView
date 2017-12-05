@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>375</width>
+    <width>429</width>
     <height>24</height>
    </rect>
   </property>
@@ -258,7 +258,7 @@ QPushButton:checked:hover
    <item>
     <widget class="StatusBarButton" name="issuesBtn">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -336,7 +336,7 @@ QPushButton:checked:hover
 /* Comment */</string>
      </property>
      <property name="text">
-      <string>Pipeline Issues   </string>
+      <string>Pipeline Issues</string>
      </property>
      <property name="checkable">
       <bool>true</bool>

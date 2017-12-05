@@ -109,7 +109,7 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      * @brief issuesTableHasErrors
      * @param b
      */
-    void issuesTableHasErrors(bool b, int count);
+    void issuesTableHasErrors(bool b, int errCount, int warnCount);
 
   protected:
 
