@@ -1,6 +1,9 @@
 #include "StatusBarButton.h"
 
+
+#include <QtCore/QDebug>
 #include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 #include <QtWidgets/QStyleOption>
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
@@ -9,7 +12,7 @@
 //
 // -----------------------------------------------------------------------------
 StatusBarButton::StatusBarButton(QWidget* parent)
-: QPushButton(parent)
+: QToolButton (parent)
 {
 }
 
@@ -30,8 +33,38 @@ void StatusBarButton::setBadgeCount(int count)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StatusBarButton::paintEvent(QPaintEvent*)
+void StatusBarButton::mousePressEvent(QMouseEvent* event)
 {
+  QToolButton::mousePressEvent(event);
+  if(event->button() == Qt::LeftButton)
+  {
+    m_Pressed = true;
+  }
+  update();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarButton::mouseReleaseEvent(QMouseEvent* event)
+{
+  QToolButton::mouseReleaseEvent(event);
+
+  m_Pressed = false;
+  
+    update();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StatusBarButton::paintEvent(QPaintEvent* event)
+{
+
+ // QToolButton::paintEvent( event);
+
+
+  //qDebug() << "m_Pressed: " << m_Pressed;
   QStyleOption opt;
   opt.init(this);
   QPainter painter(this);
@@ -68,9 +101,22 @@ void StatusBarButton::paintEvent(QPaintEvent*)
     borderColor = QColor(200, 200, 200);
     fontColor = QColor(240, 240, 240);
   }
+  
+  if(m_Pressed && isChecked())
+  {
+    backgroundColor = QColor(200, 200, 200);
+    fontColor = QColor(50, 50, 50);
+    borderColor = QColor(120, 120, 120);
 
+  }
+  if(m_Pressed && !isChecked())
+  {
+    backgroundColor = QColor(120, 120, 120);
+    fontColor = QColor(240, 240, 240);
+    borderColor = QColor(200, 200, 200);
+  }
   QRect rect = this->rect();
-
+#if 1
   QPainterPath buttonPath;
   buttonPath.addRoundedRect(rect, borderRadius, borderRadius);
   QPen pen(borderColor, 2);
@@ -85,10 +131,11 @@ void StatusBarButton::paintEvent(QPaintEvent*)
   int textXCoord = (rect.width() - indexFontWidth) / 2;
   int textYCoord = rect.y() + fontMargin + fontHeight;
   painter.drawText(textXCoord, textYCoord, text());
-
+ #endif
   // int btnCenterX = rect.width() / 2;
   int btnCenterY = rect.height() / 2;
-
+ 
+  
   if(m_BadgeCount > 0)
   {
     m_BadgeDiameter = fontHeight + 3;
@@ -106,4 +153,5 @@ void StatusBarButton::paintEvent(QPaintEvent*)
     int fw = fontMetrics.width(number);
     painter.drawText(rect.width() - 3 - (m_BadgeDiameter / 2) - (fw / 2), btnCenterY + (fontHeight / 3), number);
   }
+
 }

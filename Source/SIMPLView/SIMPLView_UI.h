@@ -74,6 +74,7 @@ class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
 class StatusBarWidget;
+class FilterInputWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h

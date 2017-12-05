@@ -1341,6 +1341,7 @@ void SIMPLView_UI::markDocumentAsDirty()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int count)
 {
+  Q_UNUSED(count)
   if(HideDockSetting::OnError == m_HideErrorTable)
   {
     issuesDockWidget->setHidden(!hasErrors);

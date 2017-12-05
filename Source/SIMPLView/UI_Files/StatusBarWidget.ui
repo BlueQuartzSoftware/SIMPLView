@@ -162,9 +162,6 @@ QPushButton:checked:hover
      <property name="checkable">
       <bool>true</bool>
      </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
    <item>
@@ -254,7 +251,7 @@ QPushButton:checked:hover
       <bool>true</bool>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
