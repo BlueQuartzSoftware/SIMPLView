@@ -87,12 +87,12 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
+#include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/StandardSIMPLViewApplication.h"
 
-#include "SIMPLView/StatusBarWidget.h"
 
 #include "BrandedStrings.h"
 
