@@ -182,6 +182,19 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     QList<QAction*> getDummyDockWidgetActions();
 
+    /**
+     * @brief addFilter
+     * @param filter
+     */
+    void addFilter(AbstractFilter::Pointer filter);
+
+    /**
+     * @brief addPipeline
+     * @param pipelineName
+     * @param setAsActive
+     */
+    void addPipeline(const QString &pipelineName, bool setAsActive);
+
   public slots:
 
     /**

@@ -38,7 +38,6 @@
 
 #include <QtCore/QSet>
 #include <QtCore/QSharedPointer>
-#include <QtCore/QPersistentModelIndex>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
@@ -123,6 +122,7 @@ protected:
 protected slots:
   void on_actionCloseToolbox_triggered();
   void on_actionNew_triggered();
+  void on_actionNewPipeline_triggered();
   void on_actionOpen_triggered();
   void on_actionSave_triggered();
   void on_actionSaveAs_triggered();
@@ -178,7 +178,6 @@ protected slots:
 
 private:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
-  QPersistentModelIndex                                             m_ActivePipelineIndex;
 
   QSharedPointer<QMenu> m_ContextMenu;
 

@@ -142,6 +142,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   // Menu Items Connections
   connect(menuItems, SIGNAL(clipboardHasChanged(bool)), this, SLOT(updatePasteState(bool)));
   connect(menuItems->getActionNew(), SIGNAL(triggered()), this, SLOT(on_actionNew_triggered()));
+  connect(menuItems->getActionNewPipeline(), SIGNAL(triggered()), this, SLOT(on_actionNewPipeline_triggered()));
   connect(menuItems->getActionOpen(), SIGNAL(triggered()), this, SLOT(on_actionOpen_triggered()));
   connect(menuItems->getActionSave(), SIGNAL(triggered()), this, SLOT(on_actionSave_triggered()));
   connect(menuItems->getActionSaveAs(), SIGNAL(triggered()), this, SLOT(on_actionSaveAs_triggered()));
@@ -540,21 +541,7 @@ void SIMPLViewApplication::addFilter(const QString& className)
     m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
     m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
 
-    PipelineTreeModel* model = PipelineTreeModel::Instance();
-    if (m_ActivePipelineIndex.isValid() == false)
-    {
-      int row = model->rowCount();
-      model->insertRow(row);
-      QModelIndex pipelineIndex = model->index(row, PipelineTreeItem::Name);
-      model->setData(pipelineIndex, "Untitled Pipeline", Qt::DisplayRole);
-      m_ActivePipelineIndex = pipelineIndex;
-    }
-
-    int row = model->rowCount(m_ActivePipelineIndex);
-    model->insertRow(row, m_ActivePipelineIndex);
-    QModelIndex filterIndex = model->index(row, PipelineTreeItem::Name, m_ActivePipelineIndex);
-    model->setData(filterIndex, filter->getHumanLabel(), Qt::DisplayRole);
-    model->setFilter(filterIndex, filter);
+    m_PreviousActiveWindow->addFilter(filter);
 
 //    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
 //    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
@@ -577,6 +564,17 @@ void SIMPLViewApplication::on_actionNew_triggered()
 {
   SIMPLView_UI* newInstance = getNewSIMPLViewInstance();
   newInstance->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::on_actionNewPipeline_triggered()
+{
+  if(nullptr != m_ActiveWindow)
+  {
+    m_ActiveWindow->addPipeline("Untitled Pipeline", true);
+  }
 }
 
 // -----------------------------------------------------------------------------

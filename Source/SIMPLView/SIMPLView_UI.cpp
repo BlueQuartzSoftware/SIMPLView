@@ -605,6 +605,22 @@ void SIMPLView_UI::setupPipelineTreeView()
   PipelineTreeModel* model = PipelineTreeModel::Instance();
   pipelineTreeView->setModel(model);
 
+  // Add the Issues widget as the observer of the tree controller
+  m_TreeController->addPipelineMessageObserver(issuesWidget);
+
+  // Connection to preflight both pipelines when moving filters between pipelines
+  connect(model, &PipelineTreeModel::rowsMoved, [=] (const QModelIndex &parent, int start, int end, const QModelIndex &destination, int row) {
+    if (model->itemType(parent) == PipelineTreeItem::ItemType::Pipeline && model->itemType(destination) == PipelineTreeItem::ItemType::Pipeline)
+    {
+      m_TreeController->preflightPipeline(parent);
+
+      if (destination != parent)
+      {
+        m_TreeController->preflightPipeline(destination);
+      }
+    }
+  });
+
   // Connection that allows the Pipeline Tree controller to clear the Issues Table
   connect(m_TreeController, &PipelineTreeController::pipelineIssuesCleared, issuesWidget, &IssuesWidget::clearIssues);
 
@@ -622,6 +638,9 @@ void SIMPLView_UI::setupPipelineTreeView()
 
   // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
   connect(pipelineTreeView, &PipelineTreeView::needsPreflight, m_TreeController, &PipelineTreeController::preflightPipeline);
+
+  // Connection to update the active pipeline when the user decides to change it
+  connect(pipelineTreeView, &PipelineTreeView::activePipelineChanged, m_TreeController, &PipelineTreeController::updateActivePipeline);
 
   connect(pipelineTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=] {
     QModelIndexList indexList = pipelineTreeView->selectionModel()->selectedRows();
@@ -692,6 +711,22 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineViewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
   connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addFilter(AbstractFilter::Pointer filter)
+{
+  m_TreeController->addFilter(filter);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addPipeline(const QString &pipelineName, bool setAsActive)
+{
+  m_TreeController->addPipeline(pipelineName, setAsActive);
 }
 
 // -----------------------------------------------------------------------------
