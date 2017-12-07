@@ -88,12 +88,12 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineTreeController.h"
+#include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/StandardSIMPLViewApplication.h"
 
-#include "SIMPLView/StatusBarWidget.h"
 
 #include "BrandedStrings.h"
 
@@ -592,8 +592,8 @@ void SIMPLView_UI::setupGui()
   m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
 
-  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), m_StatusBar, SLOT(issuesTableHasErrors(bool)));
-  connect(issuesWidget, SIGNAL(tableHasErrors(bool)), this, SLOT(issuesTableHasErrors(bool)));
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
+  connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(issuesWidget, SIGNAL(showTable(bool)), issuesDockWidget, SLOT(setVisible(bool)));
 }
 
@@ -1419,8 +1419,10 @@ void SIMPLView_UI::markDocumentAsDirty()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::issuesTableHasErrors(bool hasErrors)
+void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCount)
 {
+  Q_UNUSED(errCount)
+  Q_UNUSED(warnCount)
   if(HideDockSetting::OnError == m_HideErrorTable)
   {
     issuesDockWidget->setHidden(!hasErrors);

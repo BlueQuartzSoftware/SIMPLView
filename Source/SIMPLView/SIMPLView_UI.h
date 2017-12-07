@@ -74,6 +74,7 @@ class QToolButton;
 class AboutSIMPLView;
 class SVPipelineViewWidget;
 class StatusBarWidget;
+class FilterInputWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -280,7 +281,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief issuesTableHasErrors
     * @param hasErrors
     */
-    void issuesTableHasErrors(bool hasErrors);
+    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
 
     // Our Signals that we can emit custom for this class
   signals:

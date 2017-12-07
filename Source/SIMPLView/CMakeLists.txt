@@ -94,7 +94,11 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
-  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.cpp
+
+  ${VtkSIMPL_Widgets_SRCS}
+  ${VtkSIMPL_VtkFilters_SRCS}
+  ${VtkSIMPL_VtkWidgets_SRCS}
+  ${VtkSIMPL_VtkSupport_SRCS}
   )
 
 if(APPLE)
@@ -117,8 +121,10 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.h
-  ${SIMPLView_SOURCE_DIR}/StatusBarWidget.h
-
+  
+  ${VtkSIMPL_Widgets_HDRS}
+  ${VtkSIMPL_VtkFilters_HDRS}
+  ${VtkSIMPL_VtkWidgets_HDRS}
 )
 
 if(APPLE)
@@ -133,7 +139,6 @@ cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}"
 SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/StatusBarWidget.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
@@ -148,6 +153,9 @@ QT5_ADD_RESOURCES( SIMPLView_Generated_RC_SRCS ${SIMPLView_RCS} ${QRC_LICENSE_FI
 
 # this will run uic on .ui files:
 QT5_WRAP_UI( SIMPLView_Generated_UI_HDRS ${SIMPLView_UIS} ${AppsCommon_Widgets_UIS})
+foreach(h ${SIMPLView_Generated_UI_HDRS} ${SIMPLView_Generated_RC_SRCS})
+  set_property(SOURCE ${h} PROPERTY SKIP_AUTOMOC ON)
+endforeach()
 
 # and finally this will run moc:
 # QT5_WRAP_CPP( SIMPLView_Generated_MOC_SRCS ${SIMPLView_MOC_HDRS} )
