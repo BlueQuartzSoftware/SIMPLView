@@ -42,204 +42,40 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
-     <widget class="QtSSplitter" name="splitter">
+     <widget class="QFrame" name="fiwFrame">
       <property name="styleSheet">
-       <string notr="true">QSplitter::handle {
-    
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:0.166 rgba(255, 255, 0, 255), stop:0.333 rgba(0, 255, 0, 255), stop:0.5 rgba(0, 255, 255, 255), stop:0.666 rgba(0, 0, 255, 255), stop:0.833 rgba(255, 0, 255, 255), stop:1 rgba(255, 0, 0, 255));
+       <string notr="true">PipelineViewWidget
+{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
 }</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
-      <property name="lineWidth">
-       <number>4</number>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="opaqueResize">
-       <bool>false</bool>
-      </property>
-      <property name="handleWidth">
-       <number>5</number>
-      </property>
-      <widget class="QWidget" name="verticalLayoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>1</number>
-        </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QScrollArea" name="pipelineViewScrollArea">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="mouseTracking">
-           <bool>false</bool>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="acceptDrops">
-           <bool>true</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Panel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <property name="lineWidth">
-           <number>1</number>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="SVPipelineViewWidget" name="pipelineViewWidget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>755</width>
-             <height>516</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="acceptDrops">
-            <bool>true</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">PipelineViewWidget
-  {
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
-  }</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QPushButton" name="startPipelineBtn">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>Start Pipeline</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/media_play_white.png</normaloff>:/media_play_white.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QFrame" name="fiwFrame">
-       <property name="styleSheet">
-        <string notr="true">PipelineViewWidget
-{
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
-}</string>
+      <layout class="QVBoxLayout" name="fiwFrameVLayout">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <layout class="QVBoxLayout" name="fiwFrameVLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-       </layout>
-      </widget>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -293,18 +129,59 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item row="0" column="0">
-      <widget class="PipelineTreeView" name="pipelineTreeView">
-       <attribute name="headerVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="headerHighlightSections">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="headerStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="startPipelineBtn">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Start Pipeline</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/media_play_white.png</normaloff>:/media_play_white.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -498,18 +375,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QtSSplitter</class>
-   <extends>QSplitter</extends>
-   <header location="global">SVWidgetsLib/QtSupport/QtSSplitter.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>SVPipelineViewWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">SVPipelineViewWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>IssuesWidget</class>
    <extends>QWidget</extends>
    <header location="global">IssuesWidget.h</header>
@@ -526,11 +391,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <extends>QWidget</extends>
    <header location="global">DataStructureWidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PipelineTreeView</class>
-   <extends>QTreeView</extends>
-   <header location="global">PipelineTreeView.h</header>
   </customwidget>
  </customwidgets>
  <resources>

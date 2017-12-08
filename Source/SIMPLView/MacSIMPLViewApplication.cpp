@@ -43,6 +43,7 @@
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
+#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 
@@ -176,12 +177,11 @@ void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
-  SVPipelineViewWidget* viewWidget = instance->getPipelineViewWidget();
-
   if (instance->isActiveWindow())
   {
-    m_MenuEdit->insertAction(m_EditSeparator, viewWidget->getActionRedo());
-    m_MenuEdit->insertAction(viewWidget->getActionRedo(), viewWidget->getActionUndo());
+    PipelineTreeModel* model = instance->getPipelineTreeModel();
+    m_MenuEdit->insertAction(m_EditSeparator, model->getActionRedo());
+    m_MenuEdit->insertAction(model->getActionRedo(), model->getActionUndo());
 
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
@@ -196,8 +196,10 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   }
   else
   {
-    m_MenuEdit->removeAction(viewWidget->getActionRedo());
-    m_MenuEdit->removeAction(viewWidget->getActionUndo());
+    PipelineTreeModel* model = instance->getPipelineTreeModel();
+
+    m_MenuEdit->removeAction(model->getActionRedo());
+    m_MenuEdit->removeAction(model->getActionUndo());
 
     instance->removeDockWidgetActions(m_MenuView);
 
@@ -264,7 +266,8 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  if (isCurrentlyRunning(instance) == false && instance->getPipelineViewWidget()->getFilterPipeline()->getFilterContainer().size() > 0)
+  PipelineTreeModel* model = instance->getPipelineTreeModel();
+  if (isCurrentlyRunning(instance) == false && model->rowCount() > 0)
   {
     menuItems->getActionClearPipeline()->setEnabled(true);
   }

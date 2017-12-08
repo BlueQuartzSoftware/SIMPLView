@@ -55,7 +55,7 @@ class SIMPLViewToolbox;
 class SVPipelineFilterWidget;
 class SVPipelineViewWidget;
 
-#define USE_PIPELINE_TREE_WIDGET false
+#define USE_PIPELINE_TREE_WIDGET true
 
 class SIMPLViewApplication : public QApplication
 {

@@ -75,6 +75,7 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
+#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
 
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
@@ -553,15 +554,7 @@ void SIMPLViewApplication::addFilter(const QString& className)
     m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
     m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
 
-    if (USE_PIPELINE_TREE_WIDGET)
-    {
-      m_PreviousActiveWindow->addFilter(filter);
-    }
-    else
-    {
-      AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
-      m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
-    }
+    m_PreviousActiveWindow->addFilter(filter);
   }
 }
 
@@ -1007,10 +1000,12 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if(nullptr != m_ActiveWindow)
   {
-    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-    if(viewWidget->filterCount() > 0)
+    PipelineTreeModel* model = m_ActiveWindow->getPipelineTreeModel();
+
+    if(model->rowCount() > 0)
     {
-      viewWidget->clearFilterWidgets();
+      // SIMPL-FIXME: Need to implement "remove" and "clear" functionality in the model
+//      viewWidget->clearFilterWidgets();
       SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
       menuItems->getActionClearPipeline()->setDisabled(true);
     }
@@ -1022,26 +1017,27 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCut_triggered()
 {
+  // SIMPL-FIXME: Implement Cut using one window
   if(nullptr != m_ActiveWindow)
   {
-    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
-    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
+//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
 
-    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    for(int i = 0; i < filterWidgets.size(); i++)
-    {
-      pipeline->pushBack(filterWidgets[i]->getFilter());
-    }
+//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+//    for(int i = 0; i < filterWidgets.size(); i++)
+//    {
+//      pipeline->pushBack(filterWidgets[i]->getFilter());
+//    }
 
-    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-    QString jsonString = jsonWriter->writePipelineToString(pipeline, "Pipeline");
+//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
+//    QString jsonString = jsonWriter->writePipelineToString(pipeline, "Pipeline");
 
-    QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(jsonString);
+//    QClipboard* clipboard = QApplication::clipboard();
+//    clipboard->setText(jsonString);
 
-    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(filterWidgets, viewWidget, "Cut");
-    viewWidget->addUndoCommand(removeCmd);
+//    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(filterWidgets, viewWidget, "Cut");
+//    viewWidget->addUndoCommand(removeCmd);
   }
 }
 
@@ -1050,21 +1046,23 @@ void SIMPLViewApplication::on_actionCut_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionCopy_triggered()
 {
+  // SIMPL-FIXME: Implement Copy using one window
+
   if(nullptr != m_ActiveWindow)
   {
-    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
-    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
-    for(int i = 0; i < filterWidgets.size(); i++)
-    {
-      pipeline->pushBack(filterWidgets[i]->getFilter());
-    }
+//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
+//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
+//    for(int i = 0; i < filterWidgets.size(); i++)
+//    {
+//      pipeline->pushBack(filterWidgets[i]->getFilter());
+//    }
 
-    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-    QString json = jsonWriter->writePipelineToString(pipeline, "Copy - Pipeline");
-    QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(json);
+//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
+//    QString json = jsonWriter->writePipelineToString(pipeline, "Copy - Pipeline");
+//    QClipboard* clipboard = QApplication::clipboard();
+//    clipboard->setText(json);
   }
 }
 
@@ -1073,19 +1071,21 @@ void SIMPLViewApplication::on_actionCopy_triggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionPaste_triggered()
 {
+  // SIMPL-FIXME: Implement Paste using one window
+
   if(nullptr != m_ActiveWindow)
   {
-    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
+//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
 
-    QClipboard* clipboard = QApplication::clipboard();
-    QString jsonString = clipboard->text();
+//    QClipboard* clipboard = QApplication::clipboard();
+//    QString jsonString = clipboard->text();
 
-    JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
-    FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
-    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
+//    JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
+//    FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
+//    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
 
-    AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
-    viewWidget->addUndoCommand(addCmd);
+//    AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
+//    viewWidget->addUndoCommand(addCmd);
   }
 }
 
@@ -1102,8 +1102,9 @@ void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineView
       return;
     }
 
-    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
-    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
+    // SIMPL-FIXME: Implement "remove" functionality in the controller
+//    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
+//    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
   }
 }
 

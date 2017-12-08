@@ -38,12 +38,12 @@
 #include <unistd.h>
 #endif
 
-#include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
+#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
 
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -199,8 +199,10 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instan
   QAction* actionCut = menuItems->getActionCut();
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
-  QAction* actionUndo = instance->getPipelineViewWidget()->getActionUndo();
-  QAction* actionRedo = instance->getPipelineViewWidget()->getActionRedo();
+
+  PipelineTreeModel* model = instance->getPipelineTreeModel();
+  QAction* actionUndo = model->getActionUndo();
+  QAction* actionRedo = model->getActionRedo();
 
   actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
   actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));

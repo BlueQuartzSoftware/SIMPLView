@@ -52,6 +52,7 @@
 
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
+#include "SIMPLib/Filtering/FilterPipeline.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 
@@ -75,6 +76,9 @@ class AboutSIMPLView;
 class SVPipelineViewWidget;
 class StatusBarWidget;
 class FilterInputWidget;
+class PipelineTreeController;
+class PipelineTreeView;
+class PipelineTreeModel;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -107,12 +111,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @param plugins The plugins that adhere to the ISIMPLibPlugin
      */
     void setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins);
-
-    /**
-    * @brief getPipelineViewWidget
-    * @param
-    */
-    SVPipelineViewWidget* getPipelineViewWidget();
 
     /**
     * @brief getBookmarksToolboxWidget
@@ -202,6 +200,12 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @return
      */
     int openPipeline(const QString& filePath);
+
+    /**
+     * @brief getPipelineTreeModel
+     * @return
+     */
+    PipelineTreeModel* getPipelineTreeModel();
 
   public slots:
 
@@ -442,11 +446,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
     HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
 
-    /**
-     * @brief getPipelineTreeModel
-     * @return
-     */
-    PipelineTreeModel* getPipelineTreeModel();
+    SVPipelineViewWidget*                 m_PipelineViewWidget = nullptr;
+    PipelineTreeView*                     m_PipelineTreeView = nullptr;
 
     /**
      * @brief setupPipelineViewWidget
