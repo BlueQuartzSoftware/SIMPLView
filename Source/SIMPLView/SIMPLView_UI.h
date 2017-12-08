@@ -196,6 +196,13 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     void addPipeline(const QString &pipelineName, bool setAsActive);
 
+    /**
+     * @brief openPipeline
+     * @param filePath
+     * @return
+     */
+    int openPipeline(const QString& filePath);
+
   public slots:
 
     /**
@@ -264,7 +271,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void on_pipelineViewWidget_windowNeedsRecheck();
     void on_pipelineViewWidget_pipelineIssuesCleared();
     void on_pipelineViewWidget_pipelineHasNoErrors();
-    void on_pipelineViewWidget_pipelineOpened(QString& file, const bool& setOpenedFilePath, const bool& changeTitle);
 
     /**
     * @brief setFilterInputWidget
@@ -436,6 +442,20 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
     HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
 
+    /**
+     * @brief getPipelineTreeModel
+     * @return
+     */
+    PipelineTreeModel* getPipelineTreeModel();
+
+    /**
+     * @brief setupPipelineViewWidget
+     */
+    void setupPipelineViewWidget();
+
+    /**
+     * @brief setupPipelineTreeView
+     */
     void setupPipelineTreeView();
 
     void cleanupPipeline();

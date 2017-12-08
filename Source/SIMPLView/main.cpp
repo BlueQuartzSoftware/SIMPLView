@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
     QString filePath = QString::fromLatin1(two);
     if (!filePath.isEmpty())
     {
-      qtapp.newInstanceFromFile(filePath, true, true);
+      qtapp.newInstanceFromFile(filePath);
     }
   }
   else

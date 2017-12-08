@@ -141,7 +141,7 @@ bool MacSIMPLViewApplication::event(QEvent* event)
     QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
     QString filePath = openEvent->file();
 
-    newInstanceFromFile(filePath, true, true);
+    newInstanceFromFile(filePath);
   }
 
   return QApplication::event(event);

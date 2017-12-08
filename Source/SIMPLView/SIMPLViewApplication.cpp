@@ -132,10 +132,22 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 
   connect(m_Toolbox->getFilterListWidget(), SIGNAL(filterItemDoubleClicked(const QString&)), this, SLOT(addFilter(const QString&)));
 
-  connect(m_Toolbox->getBookmarksWidget(), SIGNAL(pipelineFileActivated(const QString&, const bool&, const bool&)), this, SLOT(newInstanceFromFile(const QString&, const bool&, const bool&)));
-
   connect(m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), this,
           SLOT(bookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
+
+  connect(m_Toolbox->getBookmarksWidget(), &BookmarksToolboxWidget::pipelineFileActivated, [=] (const QString& filePath) {
+    if (USE_PIPELINE_TREE_WIDGET == true)
+    {
+      if (m_PreviousActiveWindow != nullptr)
+      {
+        m_PreviousActiveWindow->openPipeline(filePath);
+      }
+    }
+    else
+    {
+      newInstanceFromFile(filePath);
+    }
+  });
 
   connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
 
@@ -512,7 +524,7 @@ void SIMPLViewApplication::openRecentFile()
   {
     QString filePath = action->data().toString();
 
-    newInstanceFromFile(filePath, true, true);
+    newInstanceFromFile(filePath);
 
     // Add file path to the recent files list for both instances
     QtSRecentFileList* list = QtSRecentFileList::instance();
@@ -541,10 +553,15 @@ void SIMPLViewApplication::addFilter(const QString& className)
     m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
     m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
 
-    m_PreviousActiveWindow->addFilter(filter);
-
-//    AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
-//    m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
+    if (USE_PIPELINE_TREE_WIDGET)
+    {
+      m_PreviousActiveWindow->addFilter(filter);
+    }
+    else
+    {
+      AddFilterCommand* addCmd = new AddFilterCommand(filter, m_PreviousActiveWindow->getPipelineViewWidget(), "Add", -1);
+      m_PreviousActiveWindow->getPipelineViewWidget()->addUndoCommand(addCmd);
+    }
   }
 }
 
@@ -589,7 +606,7 @@ void SIMPLViewApplication::on_actionOpen_triggered()
     return;
   }
 
-  newInstanceFromFile(filePath, true, true);
+  newInstanceFromFile(filePath);
 
   // Cache the last directory on old instance
   m_OpenDialogLastFilePath = filePath;
@@ -617,7 +634,7 @@ void SIMPLViewApplication::on_actionOpenBookmark_triggered()
     QFileInfo fi(pipelinePath);
     if(fi.exists())
     {
-      newInstanceFromFile(pipelinePath, true, true);
+      newInstanceFromFile(pipelinePath);
       // Cache the last directory on old instance
       m_OpenDialogLastFilePath = pipelinePath;
     }
@@ -646,12 +663,12 @@ void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
     QFileInfo fi(pipelinePath);
     if(fi.exists())
     {
-      newInstanceFromFile(pipelinePath, true, true);
+      newInstanceFromFile(pipelinePath);
       // Cache the last directory on old instance
       m_OpenDialogLastFilePath = pipelinePath;
       SIMPLView_UI* ui = getNewSIMPLViewInstance();
       QString nativeFilePath = QDir::toNativeSeparators(pipelinePath);
-      ui->getPipelineViewWidget()->openPipeline(nativeFilePath, 0, true, true);
+      ui->openPipeline(nativeFilePath);
       ui->show();
       ui->on_startPipelineBtn_clicked();
     }
@@ -1290,20 +1307,17 @@ void SIMPLViewApplication::toPipelineIdleState()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles)
+void SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
 {
   SIMPLView_UI* ui = getNewSIMPLViewInstance();
   QString nativeFilePath = QDir::toNativeSeparators(filePath);
   QFileInfo fi(filePath);
   if(fi.exists())
   {
-    ui->getPipelineViewWidget()->openPipeline(nativeFilePath, 0, setOpenedFilePath, true);
+    ui->openPipeline(nativeFilePath);
+
     QtSRecentFileList* list = QtSRecentFileList::instance();
-    if(addToRecentFiles == true)
-    {
-      // Add file to the recent files list
-      list->addFile(filePath);
-    }
+    list->addFile(filePath);
   }
   ui->show();
 }

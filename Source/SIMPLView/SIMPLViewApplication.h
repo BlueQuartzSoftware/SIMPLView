@@ -55,6 +55,8 @@ class SIMPLViewToolbox;
 class SVPipelineFilterWidget;
 class SVPipelineViewWidget;
 
+#define USE_PIPELINE_TREE_WIDGET false
+
 class SIMPLViewApplication : public QApplication
 {
   Q_OBJECT
@@ -94,7 +96,7 @@ public:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
 public slots:
-  void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
+  void newInstanceFromFile(const QString& filePath);
 
   void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
 

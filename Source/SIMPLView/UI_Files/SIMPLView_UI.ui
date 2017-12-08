@@ -294,7 +294,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="PipelineTreeView" name="pipelineTreeView"/>
+      <widget class="PipelineTreeView" name="pipelineTreeView">
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="headerHighlightSections">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="headerStretchLastSection">
+        <bool>false</bool>
+       </attribute>
+      </widget>
      </item>
     </layout>
    </widget>
