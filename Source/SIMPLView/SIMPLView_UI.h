@@ -73,12 +73,13 @@ class UpdateCheckData;
 class UpdateCheck;
 class QToolButton;
 class AboutSIMPLView;
-class SVPipelineViewWidget;
 class StatusBarWidget;
 class FilterInputWidget;
 class PipelineTreeController;
 class PipelineTreeView;
 class PipelineTreeModel;
+class PipelineListWidget;
+class SVPipelineViewWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -202,17 +203,18 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     int openPipeline(const QString& filePath);
 
     /**
+     * @brief executePipeline
+     * @param pipelineIndex
+     */
+    void executePipeline(const QModelIndex &pipelineIndex);
+
+    /**
      * @brief getPipelineTreeModel
      * @return
      */
     PipelineTreeModel* getPipelineTreeModel();
 
   public slots:
-
-    /**
-     * @brief on_startPipelineBtn_clicked
-     */
-    void on_startPipelineBtn_clicked();
 
     /**
     * @brief setOpenedFilePath
@@ -302,6 +304,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void bookmarkNeedsToBeAdded(const QString& filePath, const QModelIndex& parent);
 
     void parentResized();
+
+    void preflightFinished(bool errors);
 
     /**
      * @brief A signal that is emitted when we want to cancel a process
@@ -422,7 +426,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void resizeEvent ( QResizeEvent* event );
 
   private:
-    QThread*                              m_WorkerThread = nullptr;
     ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
 
@@ -446,13 +449,13 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
     HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
 
-    SVPipelineViewWidget*                 m_PipelineViewWidget = nullptr;
+    PipelineListWidget*                   m_ListWidget = nullptr;
     PipelineTreeView*                     m_PipelineTreeView = nullptr;
 
     /**
      * @brief setupPipelineViewWidget
      */
-    void setupPipelineViewWidget();
+    void setupPipelineListWidget();
 
     /**
      * @brief setupPipelineTreeView
@@ -460,9 +463,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void setupPipelineTreeView();
 
     void cleanupPipeline();
-
-    QString getStartPipelineIdleStyle();
-    QString getStartPipelineInProgressStyle(float percent);
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented

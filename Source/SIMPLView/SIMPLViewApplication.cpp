@@ -651,19 +651,32 @@ void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
   {
     return; // The user double clicked a folder, so don't do anything
   }
+  else if (USE_PIPELINE_TREE_WIDGET == true)
+  {
+    if (m_PreviousActiveWindow != nullptr)
+    {
+      m_PreviousActiveWindow->openPipeline(pipelinePath);
+
+      PipelineTreeModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
+      int row = model->rowCount() - 1;
+      QModelIndex pipelineIndex = model->index(row, PipelineTreeItem::Name);
+
+      m_PreviousActiveWindow->executePipeline(pipelineIndex);
+    }
+  }
   else
   {
     QFileInfo fi(pipelinePath);
     if(fi.exists())
     {
-      newInstanceFromFile(pipelinePath);
+      SIMPLView_UI* ui = newInstanceFromFile(pipelinePath);
+      PipelineTreeModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
+      QModelIndex pipelineIndex = model->index(0, PipelineTreeItem::Name);
+
       // Cache the last directory on old instance
       m_OpenDialogLastFilePath = pipelinePath;
-      SIMPLView_UI* ui = getNewSIMPLViewInstance();
-      QString nativeFilePath = QDir::toNativeSeparators(pipelinePath);
-      ui->openPipeline(nativeFilePath);
-      ui->show();
-      ui->on_startPipelineBtn_clicked();
+
+      ui->executePipeline(pipelineIndex);
     }
   }
 }
@@ -1308,7 +1321,7 @@ void SIMPLViewApplication::toPipelineIdleState()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
+SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
 {
   SIMPLView_UI* ui = getNewSIMPLViewInstance();
   QString nativeFilePath = QDir::toNativeSeparators(filePath);
@@ -1321,6 +1334,7 @@ void SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
     list->addFile(filePath);
   }
   ui->show();
+  return ui;
 }
 
 // -----------------------------------------------------------------------------
