@@ -75,9 +75,9 @@ class QToolButton;
 class AboutSIMPLView;
 class StatusBarWidget;
 class FilterInputWidget;
-class PipelineTreeController;
+class SIMPLController;
 class PipelineTreeView;
-class PipelineTreeModel;
+class PipelineModel;
 class PipelineListWidget;
 class SVPipelineViewWidget;
 
@@ -104,7 +104,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     SIMPLView_UI(QWidget* parent = 0);
     virtual ~SIMPLView_UI();
 
-    SIMPL_INSTANCE_PROPERTY(PipelineTreeController*, TreeController)
+    SIMPL_INSTANCE_PROPERTY(SIMPLController*, SIMPLController)
 
     /**
      * @brief setLoadedPlugins This will set the plugins that have already been loaded by another mechanism. The plugins are NOT
@@ -212,7 +212,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @brief getPipelineTreeModel
      * @return
      */
-    PipelineTreeModel* getPipelineTreeModel();
+    PipelineModel* getPipelineTreeModel();
 
   public slots:
 

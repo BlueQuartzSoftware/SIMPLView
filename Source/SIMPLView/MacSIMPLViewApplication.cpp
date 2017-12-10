@@ -43,7 +43,7 @@
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
-#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
+#include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
 
@@ -179,7 +179,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
   {
-    PipelineTreeModel* model = instance->getPipelineTreeModel();
+    PipelineModel* model = instance->getPipelineTreeModel();
     m_MenuEdit->insertAction(m_EditSeparator, model->getActionRedo());
     m_MenuEdit->insertAction(model->getActionRedo(), model->getActionUndo());
 
@@ -196,7 +196,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   }
   else
   {
-    PipelineTreeModel* model = instance->getPipelineTreeModel();
+    PipelineModel* model = instance->getPipelineTreeModel();
 
     m_MenuEdit->removeAction(model->getActionRedo());
     m_MenuEdit->removeAction(model->getActionUndo());
@@ -266,7 +266,7 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  PipelineTreeModel* model = instance->getPipelineTreeModel();
+  PipelineModel* model = instance->getPipelineTreeModel();
   if (isCurrentlyRunning(instance) == false && model->rowCount() > 0)
   {
     menuItems->getActionClearPipeline()->setEnabled(true);

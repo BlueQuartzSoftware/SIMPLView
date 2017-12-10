@@ -43,7 +43,7 @@
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
-#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
+#include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 
 // Include the MOC generated CPP file which has all the QMetaObject methods/data
@@ -200,7 +200,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instan
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
 
-  PipelineTreeModel* model = instance->getPipelineTreeModel();
+  PipelineModel* model = instance->getPipelineTreeModel();
   QAction* actionUndo = model->getActionUndo();
   QAction* actionRedo = model->getActionRedo();
 

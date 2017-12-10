@@ -75,7 +75,7 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
-#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
+#include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
@@ -657,9 +657,9 @@ void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
     {
       m_PreviousActiveWindow->openPipeline(pipelinePath);
 
-      PipelineTreeModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
+      PipelineModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
       int row = model->rowCount() - 1;
-      QModelIndex pipelineIndex = model->index(row, PipelineTreeItem::Name);
+      QModelIndex pipelineIndex = model->index(row, PipelineItem::Name);
 
       m_PreviousActiveWindow->executePipeline(pipelineIndex);
     }
@@ -670,8 +670,8 @@ void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
     if(fi.exists())
     {
       SIMPLView_UI* ui = newInstanceFromFile(pipelinePath);
-      PipelineTreeModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
-      QModelIndex pipelineIndex = model->index(0, PipelineTreeItem::Name);
+      PipelineModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
+      QModelIndex pipelineIndex = model->index(0, PipelineItem::Name);
 
       // Cache the last directory on old instance
       m_OpenDialogLastFilePath = pipelinePath;
@@ -1013,7 +1013,7 @@ void SIMPLViewApplication::on_actionClearPipeline_triggered()
 {
   if(nullptr != m_ActiveWindow)
   {
-    PipelineTreeModel* model = m_ActiveWindow->getPipelineTreeModel();
+    PipelineModel* model = m_ActiveWindow->getPipelineTreeModel();
 
     if(model->rowCount() > 0)
     {

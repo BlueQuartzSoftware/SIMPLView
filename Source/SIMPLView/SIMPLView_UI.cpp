@@ -87,8 +87,8 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
-#include "SVWidgetsLib/Widgets/PipelineTreeController.h"
-#include "SVWidgetsLib/Widgets/PipelineTreeModel.h"
+#include "SVWidgetsLib/Widgets/SIMPLController.h"
+#include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/PipelineTreeView.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
@@ -107,7 +107,7 @@ QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
-, m_TreeController(new PipelineTreeController(this))
+, m_SIMPLController(new SIMPLController(this))
 , m_ActivePlugin(nullptr)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
@@ -541,7 +541,7 @@ void SIMPLView_UI::setupGui()
   }
 
   // Add the Issues widget as the observer of the controller
-  m_TreeController->addPipelineMessageObserver(issuesWidget);
+  m_SIMPLController->addPipelineMessageObserver(issuesWidget);
 
   // Hook up the signals from the various docks to the PipelineViewWidget that will either add a filter
   // or load an entire pipeline into the view
@@ -552,7 +552,7 @@ void SIMPLView_UI::setupGui()
   getFilterLibraryToolboxWidget()->refreshFilterGroups();
 
   // Setup the undo stack.  This must occur after the connectSignalsSlots function.
-  m_TreeController->setupUndoStack();
+  m_SIMPLController->setupUndoStack();
 
   issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
   stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
@@ -584,7 +584,7 @@ void SIMPLView_UI::setupPipelineListWidget()
   SVPipelineViewWidget* viewWidget = m_ListWidget->getPipelineViewWidget();
 
   // Create the model
-  PipelineTreeModel* model = new PipelineTreeModel(this);
+  PipelineModel* model = new PipelineModel(this);
   model->setMaxNumberOfPipelines(1);
   viewWidget->setModel(model);
 
@@ -604,10 +604,10 @@ void SIMPLView_UI::setupPipelineTreeView()
   m_PipelineTreeView->setAlternatingRowColors(true);
   verticalLayout->insertWidget(0, m_PipelineTreeView);
 
-  PipelineTreeModel* model = new PipelineTreeModel(m_PipelineTreeView);
+  PipelineModel* model = new PipelineModel(m_PipelineTreeView);
   m_PipelineTreeView->setModel(model);
 
-  m_PipelineTreeView->header()->setSectionResizeMode(PipelineTreeItem::TreeItemData::Name, QHeaderView::Stretch);
+  m_PipelineTreeView->header()->setSectionResizeMode(PipelineItem::TreeItemData::Name, QHeaderView::Stretch);
 }
 
 // -----------------------------------------------------------------------------
@@ -616,7 +616,7 @@ void SIMPLView_UI::setupPipelineTreeView()
 void SIMPLView_UI::disconnectSignalsSlots()
 {
   DocRequestManager* docRequester = DocRequestManager::Instance();
-  PipelineTreeModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineTreeModel();
 
   disconnect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
 
@@ -624,24 +624,24 @@ void SIMPLView_UI::disconnectSignalsSlots()
 
   disconnect(this, SIGNAL(bookmarkNeedsToBeAdded(const QString&, const QModelIndex&)), getBookmarksToolboxWidget(), SLOT(addBookmark(const QString&, const QModelIndex&)));
 
-  disconnect(m_TreeController, &PipelineTreeController::statusMessageGenerated, 0, 0);
-  disconnect(m_TreeController, &PipelineTreeController::standardOutputMessageGenerated, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::statusMessageGenerated, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::standardOutputMessageGenerated, 0, 0);
 
-  disconnect(m_TreeController, &PipelineTreeController::undoActionGenerated, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::undoActionGenerated, 0, 0);
 
-  disconnect(m_TreeController, &PipelineTreeController::redoActionGenerated, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::redoActionGenerated, 0, 0);
 
   // Connection that allows the Pipeline Tree controller to clear the Issues Table
-  disconnect(m_TreeController, &PipelineTreeController::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
+  disconnect(m_SIMPLController, &SIMPLController::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
 
   // Connection that displays issues in the Issue Table when the preflight is finished
-  disconnect(m_TreeController, &PipelineTreeController::preflightFinished, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::preflightFinished, 0, 0);
 
   // Connection that refreshes the Data Browser when the preflight is finished
-  disconnect(m_TreeController, &PipelineTreeController::preflightFinished, 0, 0);
+  disconnect(m_SIMPLController, &SIMPLController::preflightFinished, 0, 0);
 
   // Connection that does post-preflight updates on this instance of SIMPLView_UI when the preflight is finished
-  disconnect(m_TreeController, &PipelineTreeController::preflightFinished, this, &SIMPLView_UI::preflightDidFinish);
+  disconnect(m_SIMPLController, &SIMPLController::preflightFinished, this, &SIMPLView_UI::preflightDidFinish);
 
   if (USE_PIPELINE_TREE_WIDGET == false)
   {
@@ -657,9 +657,9 @@ void SIMPLView_UI::disconnectSignalsSlots()
 
     disconnect(viewWidget, SIGNAL(preflightFinished(int)), this, SLOT(preflightDidFinish(int)));
 
-    disconnect(viewWidget, &SVPipelineViewWidget::undoCommandCreated, m_TreeController, &PipelineTreeController::addUndoCommand);
+    disconnect(viewWidget, &SVPipelineViewWidget::undoCommandCreated, m_SIMPLController, &SIMPLController::addUndoCommand);
 
-    disconnect(viewWidget, &SVPipelineViewWidget::undoRequested, m_TreeController, &PipelineTreeController::undo);
+    disconnect(viewWidget, &SVPipelineViewWidget::undoRequested, m_SIMPLController, &SIMPLController::undo);
 
     disconnect(viewWidget, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
 
@@ -672,16 +672,16 @@ void SIMPLView_UI::disconnectSignalsSlots()
   else
   {
     // Connection to preflight both pipelines when moving filters between pipelines
-    disconnect(model, &PipelineTreeModel::rowsMoved, 0, 0);
+    disconnect(model, &PipelineModel::rowsMoved, 0, 0);
 
     // Connection that marks the document dirty whenever a filter is enabled/disabled
     disconnect(m_PipelineTreeView, &PipelineTreeView::filterEnabledStateChanged, this, &SIMPLView_UI::markDocumentAsDirty);
 
     // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
-    disconnect(m_PipelineTreeView, &PipelineTreeView::needsPreflight, m_TreeController, &PipelineTreeController::preflightPipeline);
+    disconnect(m_PipelineTreeView, &PipelineTreeView::needsPreflight, m_SIMPLController, &SIMPLController::preflightPipeline);
 
     // Connection to update the active pipeline when the user decides to change it
-    disconnect(m_PipelineTreeView, &PipelineTreeView::activePipelineChanged, m_TreeController, &PipelineTreeController::updateActivePipeline);
+    disconnect(m_PipelineTreeView, &PipelineTreeView::activePipelineChanged, m_SIMPLController, &SIMPLController::updateActivePipeline);
 
     disconnect(m_PipelineTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, 0, 0);
   }
@@ -693,7 +693,7 @@ void SIMPLView_UI::disconnectSignalsSlots()
 void SIMPLView_UI::connectSignalsSlots()
 {
   DocRequestManager* docRequester = DocRequestManager::Instance();
-  PipelineTreeModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineTreeModel();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
 
@@ -701,48 +701,48 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(this, SIGNAL(bookmarkNeedsToBeAdded(const QString&, const QModelIndex&)), getBookmarksToolboxWidget(), SLOT(addBookmark(const QString&, const QModelIndex&)));
 
-  connect(m_TreeController, &PipelineTreeController::statusMessageGenerated, [=] (const QString &msg) { statusBar()->showMessage(msg); });
-  connect(m_TreeController, &PipelineTreeController::standardOutputMessageGenerated, [=] (const QString &msg) { addStdOutputMessage(msg); });
+  connect(m_SIMPLController, &SIMPLController::statusMessageGenerated, [=] (const QString &msg) { statusBar()->showMessage(msg); });
+  connect(m_SIMPLController, &SIMPLController::standardOutputMessageGenerated, [=] (const QString &msg) { addStdOutputMessage(msg); });
 
-  connect(m_TreeController, &PipelineTreeController::undoActionGenerated, [=] (QAction* actionUndo) {
-    PipelineTreeModel* model = getPipelineTreeModel();
+  connect(m_SIMPLController, &SIMPLController::undoActionGenerated, [=] (QAction* actionUndo) {
+    PipelineModel* model = getPipelineTreeModel();
     model->setActionUndo(actionUndo);
   });
 
-  connect(m_TreeController, &PipelineTreeController::redoActionGenerated, [=] (QAction* actionRedo) {
-    PipelineTreeModel* model = getPipelineTreeModel();
+  connect(m_SIMPLController, &SIMPLController::redoActionGenerated, [=] (QAction* actionRedo) {
+    PipelineModel* model = getPipelineTreeModel();
     model->setActionRedo(actionRedo);
   });
 
   // Connection that allows the Pipeline Tree controller to clear the Issues Table
-  connect(m_TreeController, &PipelineTreeController::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
+  connect(m_SIMPLController, &SIMPLController::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
 
   // Connection that allows the Pipeline Tree controller to display cached issues in the table
-  connect(m_TreeController, &PipelineTreeController::displayIssuesTriggered, issuesWidget, &IssuesWidget::displayCachedMessages);
+  connect(m_SIMPLController, &SIMPLController::displayIssuesTriggered, issuesWidget, &IssuesWidget::displayCachedMessages);
 
-  connect(m_TreeController, &PipelineTreeController::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
+  connect(m_SIMPLController, &SIMPLController::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
-  connect(m_TreeController, &PipelineTreeController::preflightFinished, [=] { issuesWidget->displayCachedMessages(); });
+  connect(m_SIMPLController, &SIMPLController::preflightFinished, [=] { issuesWidget->displayCachedMessages(); });
 
   // Connection that refreshes the Data Browser when the preflight is finished
-  connect(m_TreeController, &PipelineTreeController::preflightFinished, [=] { dataBrowserWidget->refreshData(); });
+  connect(m_SIMPLController, &SIMPLController::preflightFinished, [=] { dataBrowserWidget->refreshData(); });
 
   // Connection that does post-preflight updates on this instance of SIMPLView_UI when the preflight is finished
-  connect(m_TreeController, &PipelineTreeController::preflightFinished, this, &SIMPLView_UI::preflightDidFinish);
+  connect(m_SIMPLController, &SIMPLController::preflightFinished, this, &SIMPLView_UI::preflightDidFinish);
 
   // Connection that passes pipeline messages from the controller to this instance of SIMPLView_UI during pipeline execution
-  connect(m_TreeController, &PipelineTreeController::pipelineMessageGenerated, this, &SIMPLView_UI::processPipelineMessage);
+  connect(m_SIMPLController, &SIMPLController::pipelineMessageGenerated, this, &SIMPLView_UI::processPipelineMessage);
 
-  connect(m_TreeController, &PipelineTreeController::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
+  connect(m_SIMPLController, &SIMPLController::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
 
   if (USE_PIPELINE_TREE_WIDGET == false)
   {
     SVPipelineViewWidget* viewWidget = m_ListWidget->getPipelineViewWidget();
 
-    connect(m_ListWidget, &PipelineListWidget::pipelineStarted, m_TreeController, &PipelineTreeController::runPipeline);
+    connect(m_ListWidget, &PipelineListWidget::pipelineStarted, m_SIMPLController, &SIMPLController::runPipeline);
 
-    connect(m_ListWidget, &PipelineListWidget::pipelineCanceled, m_TreeController, &PipelineTreeController::cancelPipeline);
+    connect(m_ListWidget, &PipelineListWidget::pipelineCanceled, m_SIMPLController, &SIMPLController::cancelPipeline);
 
     connect(viewWidget, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)), this, SLOT(setFilterInputWidget(FilterInputWidget*)));
 
@@ -756,9 +756,9 @@ void SIMPLView_UI::connectSignalsSlots()
 
     connect(this, &SIMPLView_UI::preflightFinished, m_ListWidget, &PipelineListWidget::preflightFinished);
 
-    connect(viewWidget, &SVPipelineViewWidget::undoCommandCreated, m_TreeController, &PipelineTreeController::addUndoCommand);
+    connect(viewWidget, &SVPipelineViewWidget::undoCommandCreated, m_SIMPLController, &SIMPLController::addUndoCommand);
 
-    connect(viewWidget, &SVPipelineViewWidget::undoRequested, m_TreeController, &PipelineTreeController::undo);
+    connect(viewWidget, &SVPipelineViewWidget::undoRequested, m_SIMPLController, &SIMPLController::undo);
 
     connect(viewWidget, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
 
@@ -766,31 +766,31 @@ void SIMPLView_UI::connectSignalsSlots()
 
     connect(viewWidget, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)), this, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)));
 
-    connect(viewWidget, &SVPipelineViewWidget::pipelineDropped, m_TreeController, &PipelineTreeController::addPipelineToModelFromFile);
+    connect(viewWidget, &SVPipelineViewWidget::pipelineDropped, m_SIMPLController, &SIMPLController::addPipelineToModelFromFile);
 
     connect(getBookmarksToolboxWidget(), SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
-    connect(m_TreeController, &PipelineTreeController::filtersAddedToModel, viewWidget, &SVPipelineViewWidget::addFiltersFromIndices);
+    connect(m_SIMPLController, &SIMPLController::filtersAddedToModel, viewWidget, &SVPipelineViewWidget::addFiltersFromIndices);
 
-    connect(m_TreeController, &PipelineTreeController::pipelineEnteringReadyState, viewWidget, &SVPipelineViewWidget::toReadyState);
+    connect(m_SIMPLController, &SIMPLController::pipelineEnteringReadyState, viewWidget, &SVPipelineViewWidget::toReadyState);
 
-    connect(m_TreeController, &PipelineTreeController::pipelineEnteringRunningState, viewWidget, &SVPipelineViewWidget::toRunningState);
+    connect(m_SIMPLController, &SIMPLController::pipelineEnteringRunningState, viewWidget, &SVPipelineViewWidget::toRunningState);
 
-    connect(m_TreeController, &PipelineTreeController::pipelineEnteringStoppedState, viewWidget, &SVPipelineViewWidget::toStoppedState);
+    connect(m_SIMPLController, &SIMPLController::pipelineEnteringStoppedState, viewWidget, &SVPipelineViewWidget::toStoppedState);
 
-    connect(m_TreeController, &PipelineTreeController::pipelineFinished, m_ListWidget, &PipelineListWidget::pipelineFinished);
+    connect(m_SIMPLController, &SIMPLController::pipelineFinished, m_ListWidget, &PipelineListWidget::pipelineFinished);
   }
   else
   {
     // Connection to preflight both pipelines when moving filters between pipelines
-    connect(model, &PipelineTreeModel::rowsMoved, [=] (const QModelIndex &parent, int start, int end, const QModelIndex &destination, int row) {
-      if (model->itemType(parent) == PipelineTreeItem::ItemType::Pipeline && model->itemType(destination) == PipelineTreeItem::ItemType::Pipeline)
+    connect(model, &PipelineModel::rowsMoved, [=] (const QModelIndex &parent, int start, int end, const QModelIndex &destination, int row) {
+      if (model->itemType(parent) == PipelineItem::ItemType::Pipeline && model->itemType(destination) == PipelineItem::ItemType::Pipeline)
       {
-        m_TreeController->preflightPipeline(parent, model);
+        m_SIMPLController->preflightPipeline(parent, model);
 
         if (destination != parent)
         {
-          m_TreeController->preflightPipeline(destination, model);
+          m_SIMPLController->preflightPipeline(destination, model);
         }
       }
     });
@@ -799,10 +799,10 @@ void SIMPLView_UI::connectSignalsSlots()
     connect(m_PipelineTreeView, &PipelineTreeView::filterEnabledStateChanged, this, &SIMPLView_UI::markDocumentAsDirty);
 
     // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
-    connect(m_PipelineTreeView, &PipelineTreeView::needsPreflight, m_TreeController, &PipelineTreeController::preflightPipeline);
+    connect(m_PipelineTreeView, &PipelineTreeView::needsPreflight, m_SIMPLController, &SIMPLController::preflightPipeline);
 
     // Connection to update the active pipeline when the user decides to change it
-    connect(m_PipelineTreeView, &PipelineTreeView::activePipelineChanged, m_TreeController, &PipelineTreeController::updateActivePipeline);
+    connect(m_PipelineTreeView, &PipelineTreeView::activePipelineChanged, m_SIMPLController, &SIMPLController::updateActivePipeline);
 
     connect(m_PipelineTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=] {
       QModelIndexList indexList = m_PipelineTreeView->selectionModel()->selectedRows();
@@ -827,8 +827,8 @@ void SIMPLView_UI::connectSignalsSlots()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::addFilter(AbstractFilter::Pointer filter)
 {
-  PipelineTreeModel* model = getPipelineTreeModel();
-  m_TreeController->addFilterToModel(filter, model);
+  PipelineModel* model = getPipelineTreeModel();
+  m_SIMPLController->addFilterToModel(filter, model);
 }
 
 // -----------------------------------------------------------------------------
@@ -836,8 +836,8 @@ void SIMPLView_UI::addFilter(AbstractFilter::Pointer filter)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::addPipeline(const QString &pipelineName, bool setAsActive)
 {
-  PipelineTreeModel* model = getPipelineTreeModel();
-  m_TreeController->addPipelineToModel(pipelineName, FilterPipeline::New(), model, setAsActive);
+  PipelineModel* model = getPipelineTreeModel();
+  m_SIMPLController->addPipelineToModel(pipelineName, FilterPipeline::New(), model, setAsActive);
 }
 
 // -----------------------------------------------------------------------------
@@ -845,7 +845,7 @@ void SIMPLView_UI::addPipeline(const QString &pipelineName, bool setAsActive)
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  int result = m_TreeController->addPipelineToModelFromFile(filePath, getPipelineTreeModel());
+  int result = m_SIMPLController->addPipelineToModelFromFile(filePath, getPipelineTreeModel());
   if (result < 0)
   {
     return result;
@@ -869,7 +869,7 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::executePipeline(const QModelIndex &pipelineIndex)
 {
-  m_TreeController->runPipeline(pipelineIndex, getPipelineTreeModel());
+  m_SIMPLController->runPipeline(pipelineIndex, getPipelineTreeModel());
 }
 
 // -----------------------------------------------------------------------------
@@ -1329,8 +1329,8 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::preflightDidFinish(int err)
 {
-  PipelineTreeModel* model = getPipelineTreeModel();
-  QModelIndex pipelineIndex = m_TreeController->getActivePipelineIndex();
+  PipelineModel* model = getPipelineTreeModel();
+  QModelIndex pipelineIndex = m_SIMPLController->getActivePipelineIndex();
   if (pipelineIndex.isValid() == false)
   {
     emit preflightFinished(true);
@@ -1351,9 +1351,9 @@ void SIMPLView_UI::preflightDidFinish(int err)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PipelineTreeModel* SIMPLView_UI::getPipelineTreeModel()
+PipelineModel* SIMPLView_UI::getPipelineTreeModel()
 {
-  PipelineTreeModel* model;
+  PipelineModel* model;
   if (USE_PIPELINE_TREE_WIDGET == true)
   {
     model = m_PipelineTreeView->getPipelineTreeModel();
