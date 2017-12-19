@@ -387,11 +387,6 @@ void SIMPLView_UI::readWindowSettings(QtSSettings* prefs)
     restoreState(layout_data);
   }
 
-  QByteArray splitterGeometry = prefs->value("Splitter_Geometry", QByteArray());
-  splitter->restoreGeometry(splitterGeometry);
-  QByteArray splitterSizes = prefs->value("Splitter_Sizes", QByteArray());
-  splitter->restoreState(splitterSizes);
-
   prefs->endGroup();
 }
 
@@ -473,11 +468,6 @@ void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
   prefs->setValue(QString("MainWindowGeometry"), geo_data);
   prefs->setValue(QString("MainWindowState"), layout_data);
 
-  QByteArray splitterGeometry = splitter->saveGeometry();
-  QByteArray splitterSizes = splitter->saveState();
-  prefs->setValue(QString("Splitter_Geometry"), splitterGeometry);
-  prefs->setValue(QString("Splitter_Sizes"), splitterSizes);
-
   prefs->endGroup();
 }
 
@@ -543,12 +533,7 @@ void SIMPLView_UI::setupGui()
   checkForUpdatesAtStartup();
 
   pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
-
-  // Stretch Factors
-  splitter->setStretchFactor(0, 0);
-  splitter->setStretchFactor(1, 1);
-  splitter->setOpaqueResize(true);
-
+  
   pipelineViewScrollArea->verticalScrollBar()->setSingleStep(5);
 
   // Hook up the signals from the various docks to the PipelineViewWidget that will either add a filter
@@ -572,6 +557,7 @@ void SIMPLView_UI::setupGui()
   issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
   stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
   dataBrowserDockWidget->toggleViewAction()->setText("Show " + dataBrowserDockWidget->toggleViewAction()->text());
+  pipelineViewDockWidget->toggleViewAction()->setText("Show " + pipelineViewDockWidget->toggleViewAction()->text());
 
   // Set the IssuesWidget as a PipelineMessageObserver Object.
   pipelineViewWidget->addPipelineMessageObserver(issuesWidget);
@@ -587,6 +573,7 @@ void SIMPLView_UI::setupGui()
   m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+  m_StatusBar->setButtonAction(pipelineViewDockWidget, StatusBarWidget::Button::Pipeline);
 
   connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
@@ -841,6 +828,7 @@ void SIMPLView_UI::on_startPipelineBtn_clicked()
 
   // Clear out the Issues Table
   issuesWidget->clearIssues();
+  m_StatusBar->issuesTableHasErrors(false, 0, 0);
 
   // Ask the PipelineViewWidget to create a FilterPipeline Object
   // m_PipelineInFlight = pipelineViewWidget->getCopyOfFilterPipeline();
