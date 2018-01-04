@@ -181,7 +181,9 @@ QT5_ADD_RESOURCES( DevHelper_Generated_RC_SRCS ${DevHelper_RCS} ${QRC_LICENSE_FI
 
 # this will run uic on .ui files:
 QT5_WRAP_UI( DevHelper_Generated_UI_HDRS ${DevHelper_UIS} )
-
+foreach(h ${DevHelper_Generated_UI_HDRS} ${DevHelper_Generated_RC_SRCS})
+  set_property(SOURCE ${h} PROPERTY SKIP_AUTOMOC ON)
+endforeach()
 # and finally this will run moc:
 # QT5_WRAP_CPP( DevHelper_Generated_MOC_SRCS ${DevHelper_MOC_HDRS} )
 set_source_files_properties( ${DevHelper_Generated_MOC_SRCS} PROPERTIES GENERATED TRUE)
@@ -243,31 +245,14 @@ CMP_MODULE_INCLUDE_DIRS (TARGET ${PROJECT_NAME} LIBVARS HDF5 Qt5Core Qt5Widgets 
 target_include_directories(${PROJECT_NAME}
                   PUBLIC
                     ${HDF5_INCLUDE_DIR}
-
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
-
                     ${SIMPLView_SOURCE_DIR}
                     ${SIMPLView_BINARY_DIR}
-
                     ${SIMPLViewProj_SOURCE_DIR}/Source
                     ${SIMPLViewProj_BINARY_DIR}
-
                     ${BrandedSIMPLView_DIR}
-                    
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
 )
 target_compile_definitions(${PROJECT_NAME} PRIVATE -DSIMPLView_USE_QT)
 
