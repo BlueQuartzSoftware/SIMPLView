@@ -93,10 +93,11 @@
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/StandardSIMPLViewApplication.h"
 
-
 #include "BrandedStrings.h"
 
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
+#if defined(SIMPL_DISCOUNT_DOCUMENTATION) && defined(SIMPL_DOXYGEN_DOCUMENTATION)
+#error Both SIMPL_DISCOUNT_DOCUMENTATION and SIMPL_DOXYGEN_DOCUMENTATION are both defined and this can not happen.
+#endif
 
 // Initialize private static member variable
 QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
@@ -1126,8 +1127,16 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 #ifdef SIMPLView_USE_QtWebEngine
   SIMPLViewUserManualDialog::LaunchHelpDialog(className);
 #else
-  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(className.toLower());
 
+#ifdef SIMPL_DISCOUNT_DOCUMENTATION
+	QString adjustedClassName = className;
+#endif
+
+#if SIMPL_DOXYGEN_DOCUMENTATION
+  QString adjustedClassName = className.toLower();
+#endif
+  
+  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(adjustedClassName);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
   {
