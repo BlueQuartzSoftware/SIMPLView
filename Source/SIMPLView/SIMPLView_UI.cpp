@@ -1132,7 +1132,7 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 	QString adjustedClassName = className;
 #endif
 
-#if SIMPL_DOXYGEN_DOCUMENTATION
+#ifdef SIMPL_DOXYGEN_DOCUMENTATION
   QString adjustedClassName = className.toLower();
 #endif
   
