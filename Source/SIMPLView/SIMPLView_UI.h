@@ -92,8 +92,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
   public:
     enum class HideDockSetting : int
     {
-      OnError = 0,
-      Ignore
+      Ignore = 0,
+      OnError = 1
     };
 
     SIMPLView_UI(QWidget* parent = 0);
@@ -418,8 +418,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     bool                                  m_ShowFilterWidgetDeleteDialog;
     bool                                  m_ShouldRestart = false;
 
-    HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
-    HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
+    HideDockSetting                       m_HideErrorTable = HideDockSetting::Ignore;
+    HideDockSetting                       m_HideStdOutput = HideDockSetting::Ignore;
 
     void cleanupPipeline();
 
