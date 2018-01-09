@@ -93,7 +93,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     enum class HideDockSetting : int
     {
       Ignore = 0,
-      OnError = 1
+      OnError = 1,
+      OnStatusAndError = 2
     };
 
     SIMPLView_UI(QWidget* parent = 0);

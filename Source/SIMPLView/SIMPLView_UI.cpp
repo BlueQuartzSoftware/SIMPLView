@@ -966,14 +966,26 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
-#if 0
-    if(stdOutDockWidget->isVisible() == false)
+    // Allow status messages to open the standard output widget
+    if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
     {
-      // This does not actually do anything.
-      // Use stdOutDockWidget->setVisible(bool) instead
-      stdOutDockWidget->toggleViewAction()->toggle();
-    }
+      stdOutDockWidget->setVisible(true);
+
+#if 0
+      if(stdOutDockWidget->isVisible() == false)
+      {
+        // This does not actually do anything.
+        // Use stdOutDockWidget->setVisible(bool) instead
+        stdOutDockWidget->toggleViewAction()->toggle();
+      }
 #endif
+    }
+
+    // Allow status messages to open the issuesDockWidget as well
+    if(HideDockSetting::OnStatusAndError == m_HideErrorTable)
+    {
+      issuesDockWidget->setVisible(true);
+    }
 
     QString text = "<span style=\" color:#000000;\" >";
     text.append(msg.getText());
@@ -1344,12 +1356,14 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable)
+  if(HideDockSetting::OnError == m_HideErrorTable
+    || HideDockSetting::OnStatusAndError == m_HideErrorTable)
   {
     issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput)
+  if(HideDockSetting::OnError == m_HideStdOutput
+    || HideDockSetting::OnStatusAndError == m_HideStdOutput)
   {
     stdOutDockWidget->setVisible(hasErrors);
   }
