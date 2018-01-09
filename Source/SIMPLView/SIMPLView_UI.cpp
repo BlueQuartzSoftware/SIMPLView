@@ -1356,14 +1356,12 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable
-    || HideDockSetting::OnStatusAndError == m_HideErrorTable)
+  if(HideDockSetting::OnError == m_HideErrorTable || HideDockSetting::OnStatusAndError == m_HideErrorTable)
   {
     issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput
-    || HideDockSetting::OnStatusAndError == m_HideStdOutput)
+  if(HideDockSetting::OnError == m_HideStdOutput || HideDockSetting::OnStatusAndError == m_HideStdOutput)
   {
     stdOutDockWidget->setVisible(hasErrors);
   }
