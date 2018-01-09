@@ -970,15 +970,6 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
     {
       stdOutDockWidget->setVisible(true);
-
-#if 0
-      if(stdOutDockWidget->isVisible() == false)
-      {
-        // This does not actually do anything.
-        // Use stdOutDockWidget->setVisible(bool) instead
-        stdOutDockWidget->toggleViewAction()->toggle();
-      }
-#endif
     }
 
     // Allow status messages to open the issuesDockWidget as well
