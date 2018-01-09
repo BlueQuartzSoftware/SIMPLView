@@ -408,8 +408,8 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::readHideDockSettings(QtSSettings* prefs, HideDockSetting& value)
 {
-  int showError = static_cast<int>(HideDockSetting::OnError);
-  int hideDockSetting = prefs->value("HideDockSetting", QVariant(showError)).toInt();
+  int showError = static_cast<int>(HideDockSetting::Ignore);
+  int hideDockSetting = prefs->value("Show / Hide On Error", QVariant(showError)).toInt();
   value = static_cast<HideDockSetting>(hideDockSetting);
 }
 
@@ -486,7 +486,7 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 void SIMPLView_UI::writeHideDockSettings(QtSSettings* prefs, HideDockSetting value)
 {
   int valuei = static_cast<int>(value);
-  prefs->setValue("HideDockSetting", valuei);
+  prefs->setValue("Show / Hide On Error", valuei);
 }
 
 // -----------------------------------------------------------------------------
@@ -966,9 +966,16 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
-    if(stdOutDockWidget->isVisible() == false)
+    // Allow status messages to open the standard output widget
+    if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
     {
-      stdOutDockWidget->toggleViewAction()->toggle();
+      stdOutDockWidget->setVisible(true);
+    }
+
+    // Allow status messages to open the issuesDockWidget as well
+    if(HideDockSetting::OnStatusAndError == m_HideErrorTable)
+    {
+      issuesDockWidget->setVisible(true);
     }
 
     QString text = "<span style=\" color:#000000;\" >";
@@ -1340,14 +1347,14 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable)
+  if(HideDockSetting::OnError == m_HideErrorTable || HideDockSetting::OnStatusAndError == m_HideErrorTable)
   {
-    issuesDockWidget->setHidden(!hasErrors);
+    issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput)
+  if(HideDockSetting::OnError == m_HideStdOutput || HideDockSetting::OnStatusAndError == m_HideStdOutput)
   {
-    stdOutDockWidget->setHidden(!hasErrors);
+    stdOutDockWidget->setVisible(hasErrors);
   }
 }
 
