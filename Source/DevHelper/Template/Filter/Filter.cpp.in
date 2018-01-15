@@ -119,7 +119,9 @@ AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters
 //
 // -----------------------------------------------------------------------------
 const QString @ClassName@::getCompiledLibraryName()
-{ return @PluginName@Constants::@PluginName@BaseName; }
+{ 
+  return @PluginName@Constants::@PluginName@BaseName;
+}
 
 // -----------------------------------------------------------------------------
 //
@@ -144,17 +146,32 @@ const QString @ClassName@::getFilterVersion()
 //
 // -----------------------------------------------------------------------------
 const QString @ClassName@::getGroupName()
-{ return SIMPL::FilterGroups::Unsupported; }
+{ 
+  return SIMPL::FilterGroups::Unsupported; 
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 const QString @ClassName@::getSubGroupName()
-{ return "@PluginName@"; }
+{ 
+  return "@PluginName@"; 
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 const QString @ClassName@::getHumanLabel()
-{ return "@ClassName@"; }
+{ 
+  return "@ClassName@"; 
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+const QUuid @ClassName@::getUuid()
+{
+  return QUuid("@Uuid@");
+}
 
