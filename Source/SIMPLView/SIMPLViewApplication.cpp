@@ -451,7 +451,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
       ISIMPLibPlugin* ipPlugin = qobject_cast<ISIMPLibPlugin*>(plugin);
       if(ipPlugin)
       {
-        QString pluginName = ipPlugin->getPluginName();
+        QString pluginName = ipPlugin->getPluginFileName();
         if(loadingMap.value(pluginName, true) == true)
         {
           QString msg = QObject::tr("Loading Plugin %1  ").arg(fileName);
