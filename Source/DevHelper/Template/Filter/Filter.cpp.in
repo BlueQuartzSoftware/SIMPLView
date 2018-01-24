@@ -105,7 +105,7 @@ void @ClassName@::execute()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters)
+AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters) const
 {
   @ClassName@::Pointer filter = @ClassName@::New();
   if(true == copyFilterParameters)
@@ -118,7 +118,7 @@ AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getCompiledLibraryName()
+const QString @ClassName@::getCompiledLibraryName() const
 { 
   return @PluginName@Constants::@PluginName@BaseName;
 }
@@ -126,7 +126,7 @@ const QString @ClassName@::getCompiledLibraryName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getBrandingString()
+const QString @ClassName@::getBrandingString() const
 {
   return "@PluginName@";
 }
@@ -134,7 +134,7 @@ const QString @ClassName@::getBrandingString()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getFilterVersion()
+const QString @ClassName@::getFilterVersion() const
 {
   QString version;
   QTextStream vStream(&version);
@@ -145,7 +145,7 @@ const QString @ClassName@::getFilterVersion()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getGroupName()
+const QString @ClassName@::getGroupName() const
 { 
   return SIMPL::FilterGroups::Unsupported; 
 }
@@ -153,7 +153,7 @@ const QString @ClassName@::getGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getSubGroupName()
+const QString @ClassName@::getSubGroupName() const
 { 
   return "@PluginName@"; 
 }
@@ -161,7 +161,7 @@ const QString @ClassName@::getSubGroupName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getHumanLabel()
+const QString @ClassName@::getHumanLabel() const
 { 
   return "@ClassName@"; 
 }
