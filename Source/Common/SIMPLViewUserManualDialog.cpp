@@ -141,14 +141,16 @@ void SIMPLViewUserManualDialog::LaunchHelpDialog(QUrl url)
 // -----------------------------------------------------------------------------
 void SIMPLViewUserManualDialog::LaunchHelpDialog(QString className)
 {
+  QString adjustedClassName;
   // Generate help page
   #ifdef SIMPL_DOXYGEN_DOCUMENTATION
-  QString adjustedClassName = className.toLower();
+  adjustedClassName = className.toLower();
   #endif
   
   #ifdef SIMPL_DISCOUNT_DOCUMENTATION
-    QString adjustedClassName = className;
+  adjustedClassName = className;
   #endif
+  
   QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(adjustedClassName);
   SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
 }
