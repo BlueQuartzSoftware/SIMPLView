@@ -73,7 +73,11 @@ SIMPLViewUserManualDialog::SIMPLViewUserManualDialog(QWidget* parent) :
   m_WebView->setUrl(QUrl(QStringLiteral("about:blank")));
   gridLayout->addWidget(m_WebView, 2, 0, 1, 1);
 
-  self->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+  Qt::WindowFlags newWindowFlags = this->windowFlags();
+  newWindowFlags |= Qt::WindowMinimizeButtonHint;
+  newWindowFlags |= Qt::WindowMaximizeButtonHint;
+  newWindowFlags &= ~Qt::WindowContextHelpButtonHint;
+  self->setWindowFlags(newWindowFlags);
 
 #if defined (Q_OS_MAC)
   m_CloseAction = new QAction(this);
