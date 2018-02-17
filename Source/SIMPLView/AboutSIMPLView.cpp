@@ -41,7 +41,7 @@
 
 #include "SIMPLib/SIMPLib.h"
 
-#if SIMPLib_USE_PARALLEL_ALGORITHMS
+#if SIMPL_USE_PARALLEL_ALGORITHMS
 #include <tbb/tbb_stddef.h>
 #endif
 

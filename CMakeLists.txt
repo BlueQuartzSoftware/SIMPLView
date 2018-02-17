@@ -1,37 +1,3 @@
-# ============================================================================
-# Copyright (c) 2009-2015 BlueQuartz Software, LLC
-#
-# Redistribution and use in source and binary forms, with or without modification,
-# are permitted provided that the following conditions are met:
-#
-# Redistributions of source code must retain the above copyright notice, this
-# list of conditions and the following disclaimer.
-#
-# Redistributions in binary form must reproduce the above copyright notice, this
-# list of conditions and the following disclaimer in the documentation and/or
-# other materials provided with the distribution.
-#
-# Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
-# contributors may be used to endorse or promote products derived from this software
-# without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-# USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# The code contained herein was partially funded by the followig contracts:
-#    United States Air Force Prime Contract FA8650-07-D-5800
-#    United States Air Force Prime Contract FA8650-10-D-5210
-#    United States Prime Contract Navy N00173-07-C-2068
-#
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
 if(NOT "${DREAM3D_SDK}" STREQUAL "")
@@ -155,6 +121,12 @@ if(NOT EXISTS "${SIMPLProj_SOURCE_DIR}")
   message(FATAL_ERROR "SIMPLProj_SOURCE_DIR does not exist at ${SIMPLProj_SOURCE_DIR}.")
 endif()
 
+set(LIB_TYPE STATIC)
+if(BUILD_SHARED_LIBS)
+    set(LIB_TYPE SHARED)
+endif(BUILD_SHARED_LIBS)
+
+
 
 #------------------------------------------------------------------------------
 # There are several different Release Types that we are going to use.
@@ -169,19 +141,22 @@ endif()
 
 include(CMakeParseArguments)
 
+option(SIMPLView_BUILD_DOCUMENTATION "Build the SIMPLView documentation" ON)
+set_property(GLOBAL PROPERTY SIMPLView_BUILD_DOCUMENTATION "${SIMPLView_BUILD_DOCUMENTATION}")
+
 # -----------------------------------------------------------------------
 # Setup a Global property that is used to gather Documentation Information
 # into a single known location
 get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
 if("${DREAM3DDocRoot}" STREQUAL "")
-#  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
+  message(STATUS "Setting GLOBAL PROPERTY DREAM3DDocRoot")
   set_property(GLOBAL PROPERTY DREAM3DDocRoot "${SIMPLViewProj_BINARY_DIR}")
   get_property(DREAM3DDocRoot GLOBAL PROPERTY DREAM3DDocRoot)
 endif()
 
 get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
 if("${SIMPLPluginList}" STREQUAL "")
-#  message(STATUS "Setting GLOBAL PROPERTY SIMPLPluginList")
+  # message(STATUS "Setting GLOBAL PROPERTY SIMPLPluginList")
   set_property(GLOBAL PROPERTY SIMPLPluginList "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt")
   get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/SIMPLPluginList.txt" "")
@@ -189,7 +164,7 @@ endif()
 
 get_property(SIMPLibSearchDirs GLOBAL PROPERTY SIMPLibSearchDirs)
 if("${SIMPLibSearchDirs}" STREQUAL "")
-#  message(STATUS "Setting GLOBAL PROPERTY SIMPLibSearchDirs")
+  # message(STATUS "Setting GLOBAL PROPERTY SIMPLibSearchDirs")
   set_property(GLOBAL PROPERTY SIMPLibSearchDirs "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt")
   get_property(SIMPLibSearchDirs GLOBAL PROPERTY SIMPLibSearchDirs)
   file(WRITE "${SIMPLViewProj_BINARY_DIR}/LibSearchDirs.txt" "")
@@ -206,6 +181,13 @@ else()
   set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
 endif()
 get_property(CMP_PROJECT_INSTALL_HEADERS GLOBAL PROPERTY CMP_PROJECT_INSTALL_HEADERS)
+
+# -----------------------------------------------------------------------
+# This needs to be set here because it is used in the next section....
+set(EXE_DEBUG_EXTENSION "_debug")
+if( "${SIMPLView_APPLICATION_NAME}" STREQUAL "")
+  set(SIMPLView_APPLICATION_NAME "SIMPLView")
+endif()
 
 # -----------------------------------------------------------------------
 # Set a Global Prefix where everthing is going to get intalled. For OS X we are
@@ -236,7 +218,6 @@ add_subdirectory( ${SIMPLProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPL)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(PROJECT_CODE_DIR ${PROJECT_SOURCE_DIR}/Source)
 set(PROJECT_RESOURCES_DIR ${SIMPLViewProj_SOURCE_DIR}/Resources)
-set(EXE_DEBUG_EXTENSION "_debug")
 set(PROJECT_INSTALL_HEADERS "${CMP_PROJECT_INSTALL_HEADERS}")
 set(PROJECT_INSTALL_EXECUTABLES "1")
 
@@ -269,7 +250,7 @@ include(${CMP_SOURCE_DIR}/ExtLib/HDF5Support.cmake)
 # --------------------------------------------------------------------
 # Should we use Intel Threading Building Blocks
 # --------------------------------------------------------------------
-set(SIMPLib_USE_PARALLEL_ALGORITHMS "")
+set(SIMPL_USE_PARALLEL_ALGORITHMS "")
 option(SIMPL_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
 if(SIMPL_USE_MULTITHREADED_ALGOS)
     find_package(TBB)
@@ -282,48 +263,34 @@ if(SIMPL_USE_MULTITHREADED_ALGOS)
     else()
         message(FATAL_ERROR "The Intel Threading Building Blocks library is needed to enable the multithreaded algorithms. Please make sure it is installed properly")
     endif()
-    set(SIMPLib_USE_PARALLEL_ALGORITHMS "1")
+    set(SIMPL_USE_PARALLEL_ALGORITHMS "1")
 endif()
 
 # --------------------------------------------------------------------
 # SIMPL needs the Eigen library for Least Squares fit and Eigen
 # value/vector calculations.
-set(SIMPLib_USE_EIGEN "")
+set(SIMPL_USE_EIGEN "")
 Find_Package(Eigen REQUIRED)
 if(EIGEN_FOUND)
   message(STATUS "Found Eigen Library")
-  set(SIMPLib_USE_EIGEN "1")
+  set(SIMPL_USE_EIGEN "1")
 else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
 endif()
 
 
 # --------------------------------------------------------------------
-# Find the Doxygen package
-FIND_PACKAGE(Doxygen)
-if(DOXYGEN_FOUND)
-  get_property(Doxygen_STATUS_PRINTED GLOBAL PROPERTY Doxygen_STATUS_PRINTED)
-  if(NOT Doxygen_STATUS_PRINTED)
-    message(STATUS "Doxygen Found at ${DOXYGEN_EXECUTABLE}")
-    set_property(GLOBAL PROPERTY Doxygen_STATUS_PRINTED TRUE)
-  endif()
-else()
-  message(FATAL_ERROR "Doxygen is needed to build the documentation. Please install it correctly")
-endif()
-
-# --------------------------------------------------------------------
 # Find and Use the Qt5 Libraries
 include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
 set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Svg Xml OpenGL PrintSupport )
-option(SIMPLView_USE_QtWebEngine "Use QWebEngine to display Help. OFF=Use default web browser" ON)
 CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
-                    "${SIMPLView_USE_QtWebEngine}"
+                    "${SIMPL_USE_QtWebEngine}"
                     "${SIMPLViewProj_BINARY_DIR}"
                     "SIMPLView")
 
 # --------------------------------------------------------------------
-# Now that we have found all of our required libraries and packages we can start the all
-# the tests
+# Now that we have found all of our required libraries and packages we
+# we can start finding targets to compile
 
 # We do NOT want to install any of the headers
 set(SIMPLViewProj_INSTALL_FILES "${PROJECT_INSTALL_HEADERS}")

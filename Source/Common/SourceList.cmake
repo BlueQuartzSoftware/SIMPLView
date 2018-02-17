@@ -12,11 +12,6 @@ set(APPS_WIDGETS
 
 set(SIMPLView_AppsCommon_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-#-- Only include this widget if we are compiling against QtWebEngine
-if(SIMPLView_USE_QtWebEngine)
-  set(APPS_WIDGETS ${APPS_WIDGETS} SIMPLViewUserManualDialog)
-endif()
-
 foreach(FPW ${APPS_WIDGETS})
   set(AppsCommon_Widgets_MOC_HDRS ${AppsCommon_Widgets_MOC_HDRS}
     ${SIMPLViewProj_SOURCE_DIR}/Source/Common/${FPW}.h
