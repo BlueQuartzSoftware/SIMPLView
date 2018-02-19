@@ -45,13 +45,15 @@
 #include "SIMPLView_UI.h"
 #include "StandardSIMPLViewApplication.h"
 
+#include "SVWidgetsLib/SVWidgetsLib.h"
+
 #ifdef Q_WS_X11
 #include <QPlastiqueStyle>
 #endif
 
 #include <clocale>
 
-#ifdef SIMPL_USE_QtWebEngine
+#ifdef SIMPL_USE_MKDOCS
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #endif
 
@@ -67,8 +69,8 @@ int main(int argc, char* argv[])
   QFileInfo fi(argv[0]);
   QString absPathExe = fi.absolutePath();
   QString cwd = QDir::currentPath();
-  qDebug() << "argv[0]0 = " << absPathExe;
-  qDebug() << "        cwd: " << cwd;
+  qDebug() << "argv[0]: " << absPathExe;
+  qDebug() << "    cwd: " << cwd;
 
 #ifdef Q_OS_WIN
   // Some where Visual Studio wants to set the Current Working Directory (cwd)
@@ -136,7 +138,7 @@ int main(int argc, char* argv[])
   qtapp.initializeDummyDockWidgetActions();
 #endif
 
-#ifdef SIMPL_USE_QtWebEngine
+#ifdef SIMPL_USE_MKDOCS
   QtSDocServer* docServer = QtSDocServer::Instance();
 #endif
 

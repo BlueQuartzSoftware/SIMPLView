@@ -68,7 +68,6 @@
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
-
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
@@ -83,10 +82,20 @@
 #ifdef SIMPL_USE_QtWebEngine
 #include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
 #else
-#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #include <QtGui/QDesktopServices>
 #include <QtWidgets/QMessageBox>
 #endif
+
+#ifdef SIMPL_USE_MKDOCS
+#define URL_GENERATOR QtSDocServer
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
+
+#ifdef SIMPL_USE_DISCOUNT
+#define URL_GENERATOR QtSHelpUrlGenerator
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
+#endif
+
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/SIMPLView.h"
@@ -1131,7 +1140,7 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 #ifdef SIMPL_USE_QtWebEngine
   SVUserManualDialog::LaunchHelpDialog(className);
 #else
-  QUrl helpURL = QtSHelpUrlGenerator::GenerateHTMLUrl(className);
+  QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
   {
