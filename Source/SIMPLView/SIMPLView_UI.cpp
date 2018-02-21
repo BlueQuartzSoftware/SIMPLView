@@ -56,15 +56,7 @@
 #include <QtWidgets/QShortcut>
 #include <QtWidgets/QToolButton>
 
-#include "SIMPLView/SIMPLView.h"
 
-#ifdef SIMPLView_USE_QtWebEngine
-#include "Common/SIMPLViewUserManualDialog.h"
-#else
-#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
-#include <QtGui/QDesktopServices>
-#include <QtWidgets/QMessageBox>
-#endif
 
 //-- SIMPLView Includes
 #include "SIMPLib/Common/Constants.h"
@@ -76,7 +68,6 @@
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
-
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
@@ -88,16 +79,31 @@
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
+#ifdef SIMPL_USE_QtWebEngine
+#include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
+#else
+#include <QtGui/QDesktopServices>
+#include <QtWidgets/QMessageBox>
+#endif
+
+#ifdef SIMPL_USE_MKDOCS
+#define URL_GENERATOR QtSDocServer
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
+
+#ifdef SIMPL_USE_DISCOUNT
+#define URL_GENERATOR QtSHelpUrlGenerator
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
+#endif
+
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
+#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/StandardSIMPLViewApplication.h"
 
 #include "BrandedStrings.h"
 
-#if defined(SIMPL_DISCOUNT_DOCUMENTATION) && defined(SIMPL_DOXYGEN_DOCUMENTATION)
-#error Both SIMPL_DISCOUNT_DOCUMENTATION and SIMPL_DOXYGEN_DOCUMENTATION are both defined and this can not happen.
-#endif
 
 // Initialize private static member variable
 QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
@@ -1131,19 +1137,10 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
 // Launch the dialog
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog::LaunchHelpDialog(className);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(className);
 #else
-
-#ifdef SIMPL_DISCOUNT_DOCUMENTATION
-	QString adjustedClassName = className;
-#endif
-
-#ifdef SIMPL_DOXYGEN_DOCUMENTATION
-  QString adjustedClassName = className.toLower();
-#endif
-  
-  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(adjustedClassName);
+  QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
   {
@@ -1163,8 +1160,8 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 {
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(helpURL);
 #else
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
