@@ -195,10 +195,6 @@ file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
 list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
 
-if( "${SIMPL_USE_ITK}" STREQUAL "ON" AND APPLE)
- list(APPEND ${PROJECT_NAME}_LINK_LIBS SimpleITKExplicit)
-endif()
-
 #------------------------------------------------------------------
 # Add QtWebApp library if needed
 if(SIMPL_USE_QtWebEngine)
@@ -242,13 +238,6 @@ if(SIMPL_USE_QtWebEngine)
   target_include_directories(${SIMPLView_APPLICATION_NAME}
                               PUBLIC 
                                 ${SIMPLViewProj_SOURCE_DIR}/3rdParty)
-endif()
-
-if(SIMPL_USE_ITK)
-  target_include_directories(${SIMPLView_APPLICATION_NAME}
-                  PUBLIC ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
-  target_include_directories(${SIMPLView_APPLICATION_NAME}
-                  PUBLIC ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
 endif()
 
 target_include_directories(${SIMPLView_APPLICATION_NAME}
