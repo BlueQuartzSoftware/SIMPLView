@@ -1,0 +1,5 @@
+include(${SIMPLView_SOURCE_DIR}/VtkSIMPL/QtWidgets/SourceList.cmake)
+#include(${SIMPLView_SOURCE_DIR}/VtkSIMPL/VtkFilters/SourceList.cmake)
+include(${SIMPLView_SOURCE_DIR}/VtkSIMPL/VtkSupport/SourceList.cmake)
+#include(${SIMPLView_SOURCE_DIR}/VtkSIMPL/VtkWidgets/SourceList.cmake)
+include(${SIMPLView_SOURCE_DIR}/VtkSIMPL/VTKExtensions/Rendering/SourceList.cmake)
