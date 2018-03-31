@@ -18,7 +18,7 @@ class @ClassName@ : public AbstractFilter
 
   public:
     SIMPL_SHARED_POINTERS(@ClassName@)
-    SIMPL_STATIC_NEW_MACRO(@ClassName@)
+    SIMPL_FILTER_NEW_MACRO(@ClassName@)
     SIMPL_TYPE_MACRO_SUPER(@ClassName@, AbstractFilter)
 
     ~@ClassName@() override;
