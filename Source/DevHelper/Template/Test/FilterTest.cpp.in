@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 // Insert your license & copyright information here
 // -----------------------------------------------------------------------------
+#pragma once
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>

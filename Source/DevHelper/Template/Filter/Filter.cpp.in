@@ -15,8 +15,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-@ClassName@::@ClassName@() :
-@InitList@
+@ClassName@::@ClassName@()@InitList@
 {
   initialize();
   setupFilterParameters();
@@ -25,9 +24,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-@ClassName@::~@ClassName@()
-{
-}
+@ClassName@::~@ClassName@() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -82,7 +79,7 @@ void @ClassName@::execute()
   dataCheck();
   if(getErrorCondition() < 0) { return; }
 
-  if (getCancel() == true) { return; }
+  if (getCancel()) { return; }
 
   if (getWarningCondition() < 0)
   {
@@ -108,7 +105,7 @@ void @ClassName@::execute()
 AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters) const
 {
   @ClassName@::Pointer filter = @ClassName@::New();
-  if(true == copyFilterParameters)
+  if(copyFilterParameters)
   {
     copyFilterParameterInstanceVariables(filter.get());
   }
