@@ -67,7 +67,7 @@ class AttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     AttributeMatrixSelectionWidgetCodeGenerator(const AttributeMatrixSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const AttributeMatrixSelectionWidgetCodeGenerator&) = delete;                              // Operator '=' Not Implemented
+    void operator=(const AttributeMatrixSelectionWidgetCodeGenerator&) = delete;                              // Move assignment Not Implemented
 };
 
 #endif /* AttributeMatrixSelectionWidgetCodeGenerator_H_ */

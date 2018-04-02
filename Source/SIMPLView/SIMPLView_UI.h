@@ -428,8 +428,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QString getStartPipelineInProgressStyle(float percent);
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
-    void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented
-
+    void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
 };
 
 #endif /* _SIMPLView_UI_H_ */

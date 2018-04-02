@@ -95,7 +95,7 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
 
   private:
     StandardSIMPLViewApplication(const StandardSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&) = delete;               // Operator '=' Not Implemented
+    void operator=(const StandardSIMPLViewApplication&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* _StandardSIMPLViewApplication_H */

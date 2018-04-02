@@ -67,7 +67,7 @@ class DoubleWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DoubleWidgetCodeGenerator(const DoubleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DoubleWidgetCodeGenerator&) = delete;            // Operator '=' Not Implemented
+    void operator=(const DoubleWidgetCodeGenerator&) = delete;            // Move assignment Not Implemented
 };
 
 #endif /* DoubleWidgetCodeGenerator_H_ */

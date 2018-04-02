@@ -67,7 +67,7 @@ class OutputFileWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     OutputFileWidgetCodeGenerator(const OutputFileWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const OutputFileWidgetCodeGenerator&) = delete;                // Operator '=' Not Implemented
+    void operator=(const OutputFileWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
 };
 
 #endif /* OutputFileWidgetCodeGenerator_H_ */

@@ -67,7 +67,7 @@ class FourthOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     FourthOrderPolynomialWidgetCodeGenerator(const FourthOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FourthOrderPolynomialWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
+    void operator=(const FourthOrderPolynomialWidgetCodeGenerator&) = delete;                           // Move assignment Not Implemented
 };
 
 #endif /* FourthOrderPolynomialWidgetCodeGenerator_H_ */

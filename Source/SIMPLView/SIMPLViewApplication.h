@@ -186,7 +186,7 @@ private:
   void writeSettings();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-  void operator=(const SIMPLViewApplication&);       // Operator '=' Not Implemented
+  void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
 };
 
 #endif /* _SIMPLViewApplication_H */

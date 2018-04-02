@@ -67,7 +67,7 @@ class DataArrayCreationWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DataArrayCreationWidgetCodeGenerator(const DataArrayCreationWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataArrayCreationWidgetCodeGenerator&) = delete;                       // Operator '=' Not Implemented
+    void operator=(const DataArrayCreationWidgetCodeGenerator&) = delete;                       // Move assignment Not Implemented
 };
 
 #endif /* DataArrayCreationWidgetCodeGenerator_H_ */

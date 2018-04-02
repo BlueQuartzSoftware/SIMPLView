@@ -67,7 +67,7 @@ class NumericTypeWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     NumericTypeWidgetCodeGenerator(const NumericTypeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const NumericTypeWidgetCodeGenerator&) = delete;                 // Operator '=' Not Implemented
+    void operator=(const NumericTypeWidgetCodeGenerator&) = delete;                 // Move assignment Not Implemented
 };
 
 #endif /* IntWidgetCodeGenerator_H_ */
