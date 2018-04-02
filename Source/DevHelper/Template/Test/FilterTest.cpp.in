@@ -25,9 +25,12 @@ class @ClassName@
 {
 
   public:
-    @ClassName@() {}
-    virtual ~@ClassName@() {}
-
+    @ClassName@() = default;
+    ~@ClassName@() = default;
+    @ClassName@(const @ClassName@&) = delete;            // Copy Constructor
+    @ClassName@(@ClassName@&&) = delete;                 // Move Constructor
+    @ClassName@& operator=(const @ClassName@&) = delete; // Copy Assignment
+    @ClassName@& operator=(@ClassName@&&) = delete;      // Move Assignment
 
   // -----------------------------------------------------------------------------
   //
@@ -52,7 +55,8 @@ class @ClassName@
     if (nullptr == filterFactory.get())
     {
       std::stringstream ss;
-      ss << "The @PluginName@ Requires the use of the " << filtName.toStdString() << " filter which is found in the @PluginName@ Plugin";
+      ss << "The @ClassName@ Requires the use of the " << filtName.toStdString()
+         << " filter which is found in the @PluginName@ Plugin";
       DREAM3D_TEST_THROW_EXCEPTION(ss.str())
     }
     return 0;
@@ -103,8 +107,6 @@ class @ClassName@
   }
 
   private:
-    @ClassName@(const @ClassName@&); // Copy Constructor Not Implemented
-    void operator=(const @ClassName@&); // Operator '=' Not Implemented
 
 
 };
