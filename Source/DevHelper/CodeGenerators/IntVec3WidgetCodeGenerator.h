@@ -67,7 +67,7 @@ class IntVec3WidgetCodeGenerator : public FPCodeGenerator
 
   private:
     IntVec3WidgetCodeGenerator(const IntVec3WidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const IntVec3WidgetCodeGenerator&) = delete;             // Operator '=' Not Implemented
+    void operator=(const IntVec3WidgetCodeGenerator&) = delete;             // Move assignment Not Implemented
 };
 
 #endif /* IntVec3WidgetCodeGenerator_H_ */

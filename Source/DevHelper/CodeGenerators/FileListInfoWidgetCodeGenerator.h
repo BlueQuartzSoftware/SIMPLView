@@ -67,7 +67,7 @@ class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     FileListInfoWidgetCodeGenerator(const FileListInfoWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FileListInfoWidgetCodeGenerator&) = delete;                  // Operator '=' Not Implemented
+    void operator=(const FileListInfoWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
 };
 
 #endif /* FileListInfoWidgetCodeGenerator_H_ */

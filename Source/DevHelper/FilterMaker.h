@@ -125,7 +125,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     QMap<QString, QString> getFunctionContents();
 
     FilterMaker(const FilterMaker&);    // Copy Constructor Not Implemented
-    void operator=(const FilterMaker&);  // Operator '=' Not Implemented
+    void operator=(const FilterMaker&); // Move assignment Not Implemented
 };
 
 #endif

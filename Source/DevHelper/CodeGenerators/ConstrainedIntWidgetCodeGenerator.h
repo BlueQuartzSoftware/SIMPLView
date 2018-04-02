@@ -67,7 +67,7 @@ class ConstrainedIntWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     ConstrainedIntWidgetCodeGenerator(const ConstrainedIntWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ConstrainedIntWidgetCodeGenerator&) = delete;                    // Operator '=' Not Implemented
+    void operator=(const ConstrainedIntWidgetCodeGenerator&) = delete;                    // Move assignment Not Implemented
 };
 
 #endif /* _constrainedintwidgetcodegenerator_h_ */

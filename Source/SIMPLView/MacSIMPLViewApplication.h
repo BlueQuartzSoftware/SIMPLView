@@ -100,7 +100,7 @@ private:
   QMenu* createCustomDockMenu();
 
   MacSIMPLViewApplication(const MacSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-  void operator=(const MacSIMPLViewApplication&) = delete;          // Operator '=' Not Implemented
+  void operator=(const MacSIMPLViewApplication&) = delete;          // Move assignment Not Implemented
 };
 
 #endif /* _MacSIMPLViewApplication_H */

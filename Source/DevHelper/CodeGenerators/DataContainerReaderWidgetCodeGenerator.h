@@ -69,7 +69,7 @@ class DataContainerReaderWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DataContainerReaderWidgetCodeGenerator(const DataContainerReaderWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataContainerReaderWidgetCodeGenerator&) = delete;                         // Operator '=' Not Implemented
+    void operator=(const DataContainerReaderWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
 };
 
 #endif /* DataContainerReaderWidgetCodeGenerator_H_ */

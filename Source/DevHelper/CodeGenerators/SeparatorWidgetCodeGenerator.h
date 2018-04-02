@@ -69,7 +69,7 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     SeparatorWidgetCodeGenerator(const SeparatorWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const SeparatorWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
+    void operator=(const SeparatorWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* SeparatorWidgetCodeGenerator_H_ */

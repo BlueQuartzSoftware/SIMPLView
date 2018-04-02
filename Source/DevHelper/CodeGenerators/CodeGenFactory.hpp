@@ -62,6 +62,6 @@ class CodeGenFactory
   private:
 
     CodeGenFactory(const CodeGenFactory&); // Copy Constructor Not Implemented
-    void operator=(const CodeGenFactory&); // Operator '=' Not Implemented
+    void operator=(const CodeGenFactory&); // Move assignment Not Implemented
 };
 #endif /* FilterFACTORY_H_ */

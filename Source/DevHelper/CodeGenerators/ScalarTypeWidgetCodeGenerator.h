@@ -67,7 +67,7 @@ class ScalarTypeWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     ScalarTypeWidgetCodeGenerator(const ScalarTypeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ScalarTypeWidgetCodeGenerator&) = delete;                // Operator '=' Not Implemented
+    void operator=(const ScalarTypeWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
 };
 
 #endif /* ScalarTypeWidgetCodeGenerator_H_ */

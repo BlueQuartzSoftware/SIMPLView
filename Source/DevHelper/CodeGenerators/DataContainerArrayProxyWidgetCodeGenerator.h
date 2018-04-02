@@ -68,7 +68,7 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DataContainerArrayProxyWidgetCodeGenerator(const DataContainerArrayProxyWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete;                             // Operator '=' Not Implemented
+    void operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
 };
 
 #endif /* DataContainerArrayProxyWidgetCodeGenerator_H_ */

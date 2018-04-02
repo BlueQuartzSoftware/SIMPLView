@@ -67,7 +67,7 @@ class InputFileWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     InputFileWidgetCodeGenerator(const InputFileWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const InputFileWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
+    void operator=(const InputFileWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* InputFileWidgetCodeGenerator_H_ */

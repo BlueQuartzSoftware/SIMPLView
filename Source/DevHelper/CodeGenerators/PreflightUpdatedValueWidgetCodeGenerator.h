@@ -67,7 +67,7 @@ class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     PreflightUpdatedValueWidgetCodeGenerator(const PreflightUpdatedValueWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const PreflightUpdatedValueWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
+    void operator=(const PreflightUpdatedValueWidgetCodeGenerator&) = delete;                           // Move assignment Not Implemented
 };
 
 #endif /* PreflightUpdatedValueWidgetCodeGenerator_H_ */
