@@ -2,12 +2,12 @@
  * Your License or Copyright can go here
  */
 
-#ifndef _@ClassNameLowerCase@_h_
-#define _@ClassNameLowerCase@_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include "SIMPLib/Filtering/AbstractFilter.h"
+
 @Filter_H_Includes@
 /**
  * @brief The @ClassName@ class. See [Filter documentation](@ref @ClassNameLowerCase@) for details.
@@ -18,72 +18,72 @@ class @ClassName@ : public AbstractFilter
 
   public:
     SIMPL_SHARED_POINTERS(@ClassName@)
-    SIMPL_STATIC_NEW_MACRO(@ClassName@)
+    SIMPL_FILTER_NEW_MACRO(@ClassName@)
     SIMPL_TYPE_MACRO_SUPER(@ClassName@, AbstractFilter)
 
-    virtual ~@ClassName@();
+    ~@ClassName@() override;
 
 @FPContents@
 
     /**
      * @brief getCompiledLibraryName Reimplemented from @see AbstractFilter class
      */
-    virtual const QString getCompiledLibraryName() const override;
+    const QString getCompiledLibraryName() const override;
 
     /**
      * @brief getBrandingString Returns the branding string for the filter, which is a tag
      * used to denote the filter's association with specific plugins
      * @return Branding string
     */
-    virtual const QString getBrandingString() const override;
+    const QString getBrandingString() const override;
 
     /**
      * @brief getFilterVersion Returns a version string for this filter. Default
      * value is an empty string.
      * @return
      */
-    virtual const QString getFilterVersion() const override;
+    const QString getFilterVersion() const override;
 
     /**
      * @brief newFilterInstance Reimplemented from @see AbstractFilter class
      */
-    virtual AbstractFilter::Pointer newFilterInstance(bool copyFilterParameters) const override;
+    AbstractFilter::Pointer newFilterInstance(bool copyFilterParameters) const override;
 
     /**
      * @brief getGroupName Reimplemented from @see AbstractFilter class
      */
-    virtual const QString getGroupName() const override;
+    const QString getGroupName() const override;
 
     /**
      * @brief getSubGroupName Reimplemented from @see AbstractFilter class
      */
-    virtual const QString getSubGroupName() const override;
+    const QString getSubGroupName() const override;
 
     /**
      * @brief getUuid Return the unique identifier for this filter.
      * @return A QUuid object.
      */
-    virtual const QUuid getUuid() override;
+    const QUuid getUuid() override;
   
     /**
      * @brief getHumanLabel Reimplemented from @see AbstractFilter class
      */
-    virtual const QString getHumanLabel() const override;
+    const QString getHumanLabel() const override;
 
     /**
      * @brief setupFilterParameters Reimplemented from @see AbstractFilter class
      */
-    virtual void setupFilterParameters() override;
+    void setupFilterParameters() override;
 
     /**
      * @brief execute Reimplemented from @see AbstractFilter class
      */
-    virtual void execute() override;
+    void execute() override;
 
     /**
     * @brief preflight Reimplemented from @see AbstractFilter class
     */
-    virtual void preflight() override;
+    void preflight() override;
 
   signals:
     /**
@@ -120,10 +120,18 @@ class @ClassName@ : public AbstractFilter
     * @brief Initializes all the private instance variables.
     */
     void initialize();
-
   private:
-    @ClassName@(const @ClassName@&); // Copy Constructor Not Implemented
-    void operator=(const @ClassName@&); // Operator '=' Not Implemented
+
+  
+  public:
+    /* Rule of 5: All special member functions should be defined if any are defined.
+    * https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c21-if-you-define-or-delete-any-default-operation-define-or-delete-them-all
+    */
+    @ClassName@(const @ClassName@&) = delete;             // Copy Constructor
+    @ClassName@& operator=(const @ClassName@&) = delete;  // Copy Assignment
+    @ClassName@(@ClassName@&&) = delete;                  // Move Constructor
+    @ClassName@& operator=(@ClassName@&&) = delete;       // Move Assignment
+
+
 };
 
-#endif /* _@ClassName@_H_ */
