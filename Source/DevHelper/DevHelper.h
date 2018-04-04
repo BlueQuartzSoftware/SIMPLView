@@ -74,7 +74,7 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
     void writeWindowSettings(QtSSettings& prefs);
 
     DevHelper(const DevHelper&);    // Copy Constructor Not Implemented
-    void operator=(const DevHelper&);  // Operator '=' Not Implemented
+    void operator=(const DevHelper&); // Move assignment Not Implemented
 };
 
 #endif

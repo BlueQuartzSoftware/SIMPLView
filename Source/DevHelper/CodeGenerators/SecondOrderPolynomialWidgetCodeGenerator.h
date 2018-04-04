@@ -67,7 +67,7 @@ class SecondOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     SecondOrderPolynomialWidgetCodeGenerator(const SecondOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const SecondOrderPolynomialWidgetCodeGenerator&) = delete;                           // Operator '=' Not Implemented
+    void operator=(const SecondOrderPolynomialWidgetCodeGenerator&) = delete;                           // Move assignment Not Implemented
 };
 
 #endif /* SecondOrderPolynomialWidgetCodeGenerator_H_ */

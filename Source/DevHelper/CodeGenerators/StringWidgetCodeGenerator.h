@@ -67,7 +67,7 @@ class StringWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     StringWidgetCodeGenerator(const StringWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const StringWidgetCodeGenerator&) = delete;            // Operator '=' Not Implemented
+    void operator=(const StringWidgetCodeGenerator&) = delete;            // Move assignment Not Implemented
 };
 
 #endif /* StringWidgetCodeGenerator_H_ */

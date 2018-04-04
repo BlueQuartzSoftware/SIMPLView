@@ -67,7 +67,7 @@ class BooleanWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     BooleanWidgetCodeGenerator(const BooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const BooleanWidgetCodeGenerator&) = delete;             // Operator '=' Not Implemented
+    void operator=(const BooleanWidgetCodeGenerator&) = delete;             // Move assignment Not Implemented
 };
 
 #endif /* BooleanWidgetCodeGenerator_H_ */

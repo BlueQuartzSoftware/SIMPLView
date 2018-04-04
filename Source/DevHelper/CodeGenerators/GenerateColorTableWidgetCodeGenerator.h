@@ -69,7 +69,7 @@ class GenerateColorTableWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     GenerateColorTableWidgetCodeGenerator(const GenerateColorTableWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const GenerateColorTableWidgetCodeGenerator&) = delete;                        // Operator '=' Not Implemented
+    void operator=(const GenerateColorTableWidgetCodeGenerator&) = delete;                        // Move assignment Not Implemented
 };
 
 #endif /* _generatecolortablewidgetcodegenerator_h_ */

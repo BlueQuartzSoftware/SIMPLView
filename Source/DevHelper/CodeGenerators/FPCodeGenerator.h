@@ -94,7 +94,7 @@ class FPCodeGenerator
     QString m_InitValue;
 
     FPCodeGenerator(const FPCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FPCodeGenerator&) = delete;  // Operator '=' Not Implemented
+    void operator=(const FPCodeGenerator&) = delete;  // Move assignment Not Implemented
 };
 
 #endif /* FPCodeGenerator_H_ */

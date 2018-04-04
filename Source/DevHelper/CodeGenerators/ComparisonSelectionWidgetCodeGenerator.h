@@ -69,7 +69,7 @@ class ComparisonSelectionWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     ComparisonSelectionWidgetCodeGenerator(const ComparisonSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ComparisonSelectionWidgetCodeGenerator&) = delete;                         // Operator '=' Not Implemented
+    void operator=(const ComparisonSelectionWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
 };
 
 #endif /* ComparisonSelectionWidgetCodeGenerator_H_ */

@@ -67,7 +67,7 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     RangeWidgetCodeGenerator(const RangeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const RangeWidgetCodeGenerator&) = delete;           // Operator '=' Not Implemented
+    void operator=(const RangeWidgetCodeGenerator&) = delete;           // Move assignment Not Implemented
 };
 
 #endif /* RangeWidgetCodeGenerator_H_ */

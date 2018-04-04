@@ -67,7 +67,7 @@ class FloatWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     FloatWidgetCodeGenerator(const FloatWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FloatWidgetCodeGenerator&) = delete;           // Operator '=' Not Implemented
+    void operator=(const FloatWidgetCodeGenerator&) = delete;           // Move assignment Not Implemented
 };
 
 #endif /* FloatWidgetCodeGenerator_H_ */

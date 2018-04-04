@@ -69,7 +69,7 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     AxisAngleWidgetCodeGenerator(const AxisAngleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const AxisAngleWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
+    void operator=(const AxisAngleWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* AxisAngleWidgetCodeGenerator_H_ */

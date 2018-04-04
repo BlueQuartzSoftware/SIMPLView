@@ -67,7 +67,7 @@ class ChoiceWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     ChoiceWidgetCodeGenerator(const ChoiceWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ChoiceWidgetCodeGenerator&) = delete;            // Operator '=' Not Implemented
+    void operator=(const ChoiceWidgetCodeGenerator&) = delete;            // Move assignment Not Implemented
 };
 
 #endif /* ChoiceWidgetCodeGenerator_H_ */
