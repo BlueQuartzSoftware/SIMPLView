@@ -65,7 +65,7 @@ protected:
 
 private:
   ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-  void operator=(const ParagraphWidgetCodeGenerator&);               // Operator '=' Not Implemented
+  void operator=(const ParagraphWidgetCodeGenerator&);                        // Move assignment Not Implemented
 };
 
 #endif /* _paragraphwidgetcodegenerator_h_ */

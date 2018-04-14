@@ -56,15 +56,7 @@
 #include <QtWidgets/QShortcut>
 #include <QtWidgets/QToolButton>
 
-#include "SIMPLView/SIMPLView.h"
 
-#ifdef SIMPLView_USE_QtWebEngine
-#include "Common/SIMPLViewUserManualDialog.h"
-#else
-#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
-#include <QtGui/QDesktopServices>
-#include <QtWidgets/QMessageBox>
-#endif
 
 //-- SIMPLView Includes
 #include "SIMPLib/Common/Constants.h"
@@ -76,7 +68,6 @@
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
-
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
@@ -92,8 +83,26 @@
 #include "SVWidgetsLib/Widgets/PipelineTreeView.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
+#ifdef SIMPL_USE_QtWebEngine
+#include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
+#else
+#include <QtGui/QDesktopServices>
+#include <QtWidgets/QMessageBox>
+#endif
+
+#ifdef SIMPL_USE_MKDOCS
+#define URL_GENERATOR QtSDocServer
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
+
+#ifdef SIMPL_USE_DISCOUNT
+#define URL_GENERATOR QtSHelpUrlGenerator
+#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
+#endif
+
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
+#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/StandardSIMPLViewApplication.h"
 
@@ -406,8 +415,8 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::readHideDockSettings(QtSSettings* prefs, HideDockSetting& value)
 {
-  int showError = static_cast<int>(HideDockSetting::OnError);
-  int hideDockSetting = prefs->value("HideDockSetting", QVariant(showError)).toInt();
+  int showError = static_cast<int>(HideDockSetting::Ignore);
+  int hideDockSetting = prefs->value("Show / Hide On Error", QVariant(showError)).toInt();
   value = static_cast<HideDockSetting>(hideDockSetting);
 }
 
@@ -484,7 +493,7 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 void SIMPLView_UI::writeHideDockSettings(QtSSettings* prefs, HideDockSetting value)
 {
   int valuei = static_cast<int>(value);
-  prefs->setValue("HideDockSetting", valuei);
+  prefs->setValue("Show / Hide On Error", valuei);
 }
 
 // -----------------------------------------------------------------------------
@@ -542,6 +551,10 @@ void SIMPLView_UI::setupGui()
 
   // Add the Issues widget as the observer of the controller
   m_SIMPLController->addPipelineMessageObserver(issuesWidget);
+    
+  // pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
+  
+  // pipelineViewScrollArea->verticalScrollBar()->setSingleStep(5);
 
   // Hook up the signals from the various docks to the PipelineViewWidget that will either add a filter
   // or load an entire pipeline into the view
@@ -557,6 +570,7 @@ void SIMPLView_UI::setupGui()
   issuesDockWidget->toggleViewAction()->setText("Show " + issuesDockWidget->toggleViewAction()->text());
   stdOutDockWidget->toggleViewAction()->setText("Show " + stdOutDockWidget->toggleViewAction()->text());
   dataBrowserDockWidget->toggleViewAction()->setText("Show " + dataBrowserDockWidget->toggleViewAction()->text());
+  pipelineDockWidget->toggleViewAction()->setText("Show " + pipelineDockWidget->toggleViewAction()->text());
 
   // Shortcut to close the window
   new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
@@ -567,6 +581,7 @@ void SIMPLView_UI::setupGui()
   m_StatusBar->setButtonAction(issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+  m_StatusBar->setButtonAction(pipelineDockWidget, StatusBarWidget::Button::Pipeline);
 
   connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
@@ -1028,9 +1043,16 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
-    if(stdOutDockWidget->isVisible() == false)
+    // Allow status messages to open the standard output widget
+    if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
     {
-      stdOutDockWidget->toggleViewAction()->toggle();
+      stdOutDockWidget->setVisible(true);
+    }
+
+    // Allow status messages to open the issuesDockWidget as well
+    if(HideDockSetting::OnStatusAndError == m_HideErrorTable)
+    {
+      issuesDockWidget->setVisible(true);
     }
 
     QString text = "<span style=\" color:#000000;\" >";
@@ -1082,11 +1104,10 @@ void SIMPLView_UI::versionCheckReply(UpdateCheckData* dataObj)
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
 // Launch the dialog
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog::LaunchHelpDialog(className);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(className);
 #else
-  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl(className.toLower());
-
+  QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
   {
@@ -1106,8 +1127,8 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 {
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(helpURL);
 #else
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)
@@ -1283,14 +1304,14 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable)
+  if(HideDockSetting::OnError == m_HideErrorTable || HideDockSetting::OnStatusAndError == m_HideErrorTable)
   {
-    issuesDockWidget->setHidden(!hasErrors);
+    issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput)
+  if(HideDockSetting::OnError == m_HideStdOutput || HideDockSetting::OnStatusAndError == m_HideStdOutput)
   {
-    stdOutDockWidget->setHidden(!hasErrors);
+    stdOutDockWidget->setVisible(hasErrors);
   }
 }
 

@@ -67,7 +67,7 @@ class DynamicChoiceWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DynamicChoiceWidgetCodeGenerator(const DynamicChoiceWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DynamicChoiceWidgetCodeGenerator&) = delete;                   // Operator '=' Not Implemented
+    void operator=(const DynamicChoiceWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
 };
 
 #endif /* DynamicChoiceWidgetCodeGenerator_H_ */

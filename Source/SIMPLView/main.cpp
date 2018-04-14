@@ -33,23 +33,29 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-
-
-#include <QtCore/QString>
-#include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QSettings>
+#include <QtCore/QString>
 #include <QtGui/QFontDatabase>
 
-#include "MacSIMPLViewApplication.h"
-#include "StandardSIMPLViewApplication.h"
-#include "SIMPLView_UI.h"
 #include "BrandedStrings.h"
+#include "MacSIMPLViewApplication.h"
+#include "SIMPLView.h"
+#include "SIMPLView_UI.h"
+#include "StandardSIMPLViewApplication.h"
+
+#include "SVWidgetsLib/SVWidgetsLib.h"
 
 #ifdef Q_WS_X11
 #include <QPlastiqueStyle>
 #endif
 
 #include <clocale>
+
+#ifdef SIMPL_USE_MKDOCS
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -60,15 +66,18 @@ int main(int argc, char* argv[])
   //QApplication::setStyle(new QPlastiqueStyle);
 #endif
 
+  QFileInfo fi(argv[0]);
+  QString absPathExe = fi.absolutePath();
+  QString cwd = QDir::currentPath();
+  qDebug() << "argv[0]: " << absPathExe;
+  qDebug() << "    cwd: " << cwd;
+
 #ifdef Q_OS_WIN
   // Some where Visual Studio wants to set the Current Working Directory (cwd)
   // to the subfolder BUILD/Applications/SIMPLView instead of our true binary
   // directory where everything is built. This wreaks havoc on the prebuilt
   // pipelines not being able to find the data folder. This _should_ fix things
   // for debugging and hopefully NOT effect any type of release
-  QFileInfo fi(argv[0]);
-  QString absPathExe = fi.absolutePath();
-  QString cwd = QDir::currentPath();
 
   if (absPathExe != cwd)
   {
@@ -127,6 +136,10 @@ int main(int argc, char* argv[])
 
 #if defined (Q_OS_MAC)
   qtapp.initializeDummyDockWidgetActions();
+#endif
+
+#ifdef SIMPL_USE_MKDOCS
+  QtSDocServer* docServer = QtSDocServer::Instance();
 #endif
 
   int err = qtapp.exec();

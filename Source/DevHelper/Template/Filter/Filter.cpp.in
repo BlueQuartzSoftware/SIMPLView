@@ -15,19 +15,15 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-@ClassName@::@ClassName@() :
-@InitList@
+@ClassName@::@ClassName@()@InitList@
 {
   initialize();
-  setupFilterParameters();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-@ClassName@::~@ClassName@()
-{
-}
+@ClassName@::~@ClassName@() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -82,7 +78,7 @@ void @ClassName@::execute()
   dataCheck();
   if(getErrorCondition() < 0) { return; }
 
-  if (getCancel() == true) { return; }
+  if (getCancel()) { return; }
 
   if (getWarningCondition() < 0)
   {
@@ -105,10 +101,10 @@ void @ClassName@::execute()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters)
+AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters) const
 {
   @ClassName@::Pointer filter = @ClassName@::New();
-  if(true == copyFilterParameters)
+  if(copyFilterParameters)
   {
     copyFilterParameterInstanceVariables(filter.get());
   }
@@ -118,13 +114,15 @@ AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getCompiledLibraryName()
-{ return @PluginName@Constants::@PluginName@BaseName; }
+const QString @ClassName@::getCompiledLibraryName() const
+{ 
+  return @PluginName@Constants::@PluginName@BaseName;
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getBrandingString()
+const QString @ClassName@::getBrandingString() const
 {
   return "@PluginName@";
 }
@@ -132,7 +130,7 @@ const QString @ClassName@::getBrandingString()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getFilterVersion()
+const QString @ClassName@::getFilterVersion() const
 {
   QString version;
   QTextStream vStream(&version);
@@ -143,18 +141,33 @@ const QString @ClassName@::getFilterVersion()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getGroupName()
-{ return SIMPL::FilterGroups::Unsupported; }
+const QString @ClassName@::getGroupName() const
+{ 
+  return SIMPL::FilterGroups::Unsupported; 
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getSubGroupName()
-{ return "@PluginName@"; }
+const QString @ClassName@::getSubGroupName() const
+{ 
+  return "@PluginName@"; 
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getHumanLabel()
-{ return "@ClassName@"; }
+const QString @ClassName@::getHumanLabel() const
+{ 
+  return "@ClassName@"; 
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+const QUuid @ClassName@::getUuid()
+{
+  return QUuid("@Uuid@");
+}
 

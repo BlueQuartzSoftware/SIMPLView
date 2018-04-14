@@ -50,7 +50,7 @@
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
 
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
+
 
 // -----------------------------------------------------------------------------
 //
@@ -467,7 +467,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   QString setupFPContents = "";
   QString dataCheckContents = "";
   QString FPContents = "";
-  QString initListContents = "  AbstractFilter(),\n";
+  QString initListContents = "\n";
   QString filterHIncludes = "";
   QString filterCPPIncludes = "";
 
@@ -501,7 +501,12 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
 
     if (generator->generateInitializationList().isEmpty() == false)
     {
-      initListContents.append(generator->generateInitializationList() + "\n");
+      QString initEntry = generator->generateInitializationList();
+      if(row == 0)
+      {
+        initEntry = initEntry.replace(",", ":");
+      }
+      initListContents.append(initEntry + "\n");
     }
 
     if (generator->generateHIncludes().isEmpty() == false)
@@ -537,7 +542,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   setupFPContents.chop(1);
   dataCheckContents.chop(1);
   FPContents.chop(1);
-  initListContents.chop(1);
+  // initListContents.chop(1);
   filterHIncludes.chop(1);
   filterCPPIncludes.chop(1);
 
@@ -659,7 +664,7 @@ void FilterMaker::updateTestLocations()
   QStringList outLines;
   QStringList list = contents.split(QRegExp("\\n"));
   QStringListIterator sourceLines(list);
-  QString searchString = "@FILTER_NAMESPACE@";
+  QString searchString = "#endif";
 
   while (sourceLines.hasNext())
   {
@@ -668,7 +673,9 @@ void FilterMaker::updateTestLocations()
     {
       QString str;
       QTextStream outStream(&str);
+      outStream << "namespace UnitTest\n{";
       outStream << namespaceStr << "\n";
+      outStream << "}\n\n";
       outLines.push_back(str);
       outLines.push_back(line);
     }
@@ -703,8 +710,8 @@ void FilterMaker::updateTestList()
   source.open(QFile::ReadOnly);
 
   QString text = source.readAll();
-  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n" + filterName + "\r\n");
-  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n" + filterName + "\n");
+  text.replace("set(TEST_NAMES\r\n", "set(TEST_NAMES\r\n  " + filterName + "Test\r\n");
+  text.replace("set(TEST_NAMES\n", "set(TEST_NAMES\n  " + filterName + "Test\n");
   source.remove();
 
   source.open(QFile::WriteOnly);

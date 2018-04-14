@@ -132,7 +132,7 @@ QString FPCodeGenerator::generateInitializationList()
   if (getInitValue().isEmpty() == false)
   {
     QTextStream ss(&contents);
-    ss << "  m_" + getPropertyName() + "(" + getInitValue() + "),";
+    ss << ",  m_" + getPropertyName() + "(" + getInitValue() + ")";
   }
 
   return contents;

@@ -67,7 +67,7 @@ class LinkedBooleanWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     LinkedBooleanWidgetCodeGenerator(const LinkedBooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const LinkedBooleanWidgetCodeGenerator&) = delete;                   // Operator '=' Not Implemented
+    void operator=(const LinkedBooleanWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
 };
 
 #endif /* LinkedBooleanWidgetCodeGenerator_H_ */

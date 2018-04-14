@@ -67,7 +67,7 @@ class FloatVec2WidgetCodeGenerator : public FPCodeGenerator
 
   private:
     FloatVec2WidgetCodeGenerator(const FloatVec2WidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FloatVec2WidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
+    void operator=(const FloatVec2WidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* _floatvec2widgetcodegenerator_h_ */

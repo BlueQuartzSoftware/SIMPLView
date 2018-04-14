@@ -67,7 +67,7 @@ class ConstrainedDoubleWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     ConstrainedDoubleWidgetCodeGenerator(const ConstrainedDoubleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ConstrainedDoubleWidgetCodeGenerator&) = delete;                       // Operator '=' Not Implemented
+    void operator=(const ConstrainedDoubleWidgetCodeGenerator&) = delete;                       // Move assignment Not Implemented
 };
 
 #endif /* _constraineddoublewidgetcodegenerator_h_ */

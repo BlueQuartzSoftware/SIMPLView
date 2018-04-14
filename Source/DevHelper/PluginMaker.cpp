@@ -62,7 +62,7 @@
 #include "PMGeneratorTreeItem.h"
 #include "BrandedStrings.h"
 
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
+
 
 // -----------------------------------------------------------------------------
 //
@@ -516,7 +516,7 @@ void PluginMaker::setupGui()
   cppFilterGen->setDisplaySuffix("Filter.cpp");
   cppFilterGen->setDoesGenerateOutput(true);
   cppFilterGen->setNameChangeable(true);
-  cppFilterGen->setInitListContents("  AbstractFilter()");
+  cppFilterGen->setInitListContents("");
   connect(m_PluginName, SIGNAL(textChanged(const QString&)),
           cppFilterGen, SLOT(pluginNameChanged(const QString&)));
   connect(m_OutputDir, SIGNAL(textChanged(const QString&)),
@@ -871,7 +871,7 @@ void PluginMaker::on_addFilterBtn_clicked()
     cppgen->setNameChangeable(false);
     QString tempPluginName = cppgen->cleanName(m_PluginName->text());
     cppgen->setPluginName(tempPluginName);
-    cppgen->setInitListContents("  AbstractFilter()");
+    cppgen->setInitListContents("");
     filt2cpp->setFileGenPtr(cppgen);
 
     //m_itemMap[filt2cpp] = cppgen;

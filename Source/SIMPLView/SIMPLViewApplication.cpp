@@ -60,13 +60,13 @@
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
-#include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 
 #include "SIMPLView/SIMPLView.h"
-#ifdef SIMPLView_USE_QtWebEngine
-#include "Common/SIMPLViewUserManualDialog.h"
+#ifdef SIMPL_USE_QtWebEngine
+#include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
 #endif
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
@@ -84,7 +84,7 @@
 
 #include "BrandedStrings.h"
 
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
+
 
 namespace Detail
 {
@@ -465,7 +465,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
       ISIMPLibPlugin* ipPlugin = qobject_cast<ISIMPLibPlugin*>(plugin);
       if(ipPlugin)
       {
-        QString pluginName = ipPlugin->getPluginName();
+        QString pluginName = ipPlugin->getPluginFileName();
         if(loadingMap.value(pluginName, true) == true)
         {
           QString msg = QObject::tr("Loading Plugin %1  ").arg(fileName);
@@ -796,10 +796,53 @@ void SIMPLViewApplication::on_actionShowToolbox_triggered(bool visible)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
 {
-  // Generate help page
-  QUrl helpURL = QtSHelpUrlGenerator::generateHTMLUrl("index");
-#ifdef SIMPLView_USE_QtWebEngine
-  SIMPLViewUserManualDialog::LaunchHelpDialog(helpURL);
+  QString appPath = QApplication::applicationDirPath();
+
+  QDir helpDir = QDir(appPath);
+  QString s("file://");
+
+#if defined(Q_OS_WIN)
+  s = s + "/"; // Need the third slash on windows because file paths start with a drive letter
+#elif defined(Q_OS_MAC)
+  if(helpDir.dirName() == "MacOS")
+  {
+    helpDir.cdUp();
+    // Check if we are running from a .app installation where the Help dir is embeded in the app bundle.
+    QFileInfo fi(helpDir.absolutePath() + "/Resources/Help");
+
+    if(fi.exists())
+    {
+      helpDir.cd("Resources");
+    }
+    else
+    {
+      helpDir.cdUp();
+      helpDir.cdUp();
+    }
+  }
+#endif
+
+#ifdef SIMPL_USE_MKDOCS
+  s = QString("http://%1:%2/index.html").arg(QtSDocServer::GetIPAddress()).arg(QtSDocServer::GetPort());
+#endif
+
+#ifdef SIMPL_USE_DISCOUNT
+  QString helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
+  QFileInfo fi(helpFilePath);
+  if(fi.exists() == false)
+  {
+    // The help file does not exist at the default location because we are probably running from Visual Studio or Xcode
+    // Try up one more directory
+    helpDir.cdUp();
+    helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
+  }
+
+  s = s + helpFilePath;
+#endif
+
+  QUrl helpURL(s);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(helpURL);
 #else
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(false == didOpen)

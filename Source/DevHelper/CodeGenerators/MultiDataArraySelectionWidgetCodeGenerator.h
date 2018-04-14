@@ -67,7 +67,7 @@ class MultiDataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     MultiDataArraySelectionWidgetCodeGenerator(const MultiDataArraySelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const MultiDataArraySelectionWidgetCodeGenerator&) = delete;                             // Operator '=' Not Implemented
+    void operator=(const MultiDataArraySelectionWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
 };
 
 #endif /* MultiDataArraySelectionWidgetCodeGenerator_H_ */

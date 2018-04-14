@@ -97,8 +97,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
   public:
     enum class HideDockSetting : int
     {
-      OnError = 0,
-      Ignore
+      Ignore = 0,
+      OnError = 1,
+      OnStatusAndError = 2
     };
 
     SIMPLView_UI(QWidget* parent = 0);
@@ -446,8 +447,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     bool                                  m_ShowFilterWidgetDeleteDialog;
     bool                                  m_ShouldRestart = false;
 
-    HideDockSetting                       m_HideErrorTable = HideDockSetting::OnError;
-    HideDockSetting                       m_HideStdOutput = HideDockSetting::OnError;
+    HideDockSetting                       m_HideErrorTable = HideDockSetting::Ignore;
+    HideDockSetting                       m_HideStdOutput = HideDockSetting::Ignore;
 
     PipelineListWidget*                   m_ListWidget = nullptr;
     PipelineTreeView*                     m_PipelineTreeView = nullptr;
@@ -465,8 +466,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void cleanupPipeline();
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
-    void operator=(const SIMPLView_UI&);  // Operator '=' Not Implemented
-
+    void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
 };
 
 #endif /* _SIMPLView_UI_H_ */

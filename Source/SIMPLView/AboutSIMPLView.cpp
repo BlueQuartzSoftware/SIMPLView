@@ -41,7 +41,7 @@
 
 #include "SIMPLib/SIMPLib.h"
 
-#if SIMPLib_USE_PARALLEL_ALGORITHMS
+#if SIMPL_USE_PARALLEL_ALGORITHMS
 #include <tbb/tbb_stddef.h>
 #endif
 
@@ -64,7 +64,7 @@
 
 #include "BrandedStrings.h"
 
-// Include the MOC generated CPP file which has all the QMetaObject methods/data
+
 
 // -----------------------------------------------------------------------------
 //

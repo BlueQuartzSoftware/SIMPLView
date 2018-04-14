@@ -67,7 +67,7 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     InputPathWidgetCodeGenerator(const InputPathWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const InputPathWidgetCodeGenerator&) = delete;               // Operator '=' Not Implemented
+    void operator=(const InputPathWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
 #endif /* InputPathWidgetCodeGenerator_H_ */

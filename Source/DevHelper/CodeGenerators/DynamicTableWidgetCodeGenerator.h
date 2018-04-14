@@ -69,7 +69,7 @@ class DynamicTableWidgetCodeGenerator : public FPCodeGenerator
 
   private:
     DynamicTableWidgetCodeGenerator(const DynamicTableWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DynamicTableWidgetCodeGenerator&) = delete;                  // Operator '=' Not Implemented
+    void operator=(const DynamicTableWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
 };
 
 #endif /* DynamicTableWidgetCodeGenerator_H_ */

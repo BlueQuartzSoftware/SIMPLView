@@ -1,13 +1,4 @@
-#--////////////////////////////////////////////////////////////////////////////
-#--
-#--  Copyright (c) 2015 BlueQuartz Software, LLC
-#--  All rights reserved.
-#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
-#--
-#-- This code was partly written under US Air Force Contract FA8650-07-D-5800
-#--
-#--////////////////////////////////////////////////////////////////////////////
-# set project's name
+
 PROJECT( SIMPLView VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR}.${SIMPLViewProj_VERSION_PATCH})
 
 # ---------- Setup output Directories -------------------------
@@ -38,7 +29,7 @@ set(PROJECT_PREFIX "SIMPLView")
 set(CMP_HEADER_DIR ${SIMPLView_BINARY_DIR})
 set(CMP_CONFIGURATION_FILE_NAME "SIMPLViewConfiguration.h")
 set(CMP_TYPES_FILE_NAME "SIMPLViewTypes.h")
-if(NOT DEFINED SIMPLView_APPLICATION_NAME)
+if( "${SIMPLView_APPLICATION_NAME}" STREQUAL "SIMPLView")
   set(CMP_VERSION_HEADER_FILE_NAME "SIMPLViewVersion.h")
   set(CMP_VERSION_SOURCE_FILE_NAME "SIMPLViewVersion.cpp")
 else()
@@ -64,7 +55,7 @@ set(SIMPLView_CMP_FILES
         ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE}
 )
 
-if(NOT DEFINED SIMPLView_APPLICATION_NAME)
+if( "${SIMPLView_APPLICATION_NAME}" STREQUAL "SIMPLView")
   set(SIMPLView_APPLICATION_NAME "SIMPLView")
   set(SIMPLView_CMP_FILES ${SIMPLView_CMP_FILES}
         ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
@@ -94,11 +85,6 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/StandardSIMPLViewApplication.cpp
-
-  ${VtkSIMPL_Widgets_SRCS}
-  ${VtkSIMPL_VtkFilters_SRCS}
-  ${VtkSIMPL_VtkWidgets_SRCS}
-  ${VtkSIMPL_VtkSupport_SRCS}
   )
 
 if(APPLE)
@@ -209,8 +195,10 @@ file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
 list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
 
-if( "${SIMPL_USE_ITK}" STREQUAL "ON" AND APPLE)
- list(APPEND ${PROJECT_NAME}_LINK_LIBS SimpleITKExplicit)
+#------------------------------------------------------------------
+# Add QtWebApp library if needed
+if(SIMPL_USE_QtWebEngine)
+  list(APPEND ${PROJECT_NAME}_LINK_LIBS QtWebAppLib)
 endif()
 
 BuildQtAppBundle(
@@ -235,40 +223,30 @@ CMP_MODULE_INCLUDE_DIRS (TARGET ${SIMPLView_APPLICATION_NAME} LIBVARS HDF5 Qt5Co
 target_include_directories(${SIMPLView_APPLICATION_NAME}
                   PUBLIC
                     ${HDF5_INCLUDE_DIR}
-
                     ${SIMPLProj_SOURCE_DIR}/Source
                     ${SIMPLProj_BINARY_DIR}
-
                     ${SIMPLView_SOURCE_DIR}
                     ${SIMPLView_BINARY_DIR}
-
                     ${SIMPLViewProj_SOURCE_DIR}/Source
                     ${SIMPLViewProj_BINARY_DIR}
-
                     ${BrandedSIMPLView_DIR}
-                    
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Core
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Dialogs
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/FilterParameterWidgets
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/QtSupport
-                    # ${SIMPLProj_SOURCE_DIR}/Source/SVWidgetsLib/Widgets
-
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Core
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Dialogs
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/FilterParameterWidgets
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/QtSupport
-                    # ${SIMPLProj_BINARY_DIR}/SVWidgetsLib/Widgets
 )
-
-if(SIMPL_USE_ITK)
+#------------------------------------------------------------------
+# Add QtWebApp include path if needed
+if(SIMPL_USE_QtWebEngine)
   target_include_directories(${SIMPLView_APPLICATION_NAME}
-                  PUBLIC ${SIMPLProj_SOURCE_DIR}/Source/SimpleITKExplicit/Explicit/include)
-  target_include_directories(${SIMPLView_APPLICATION_NAME}
-                  PUBLIC ${SIMPLProj_BINARY_DIR}/SimpleITKExplicit/Common/include)
+                              PUBLIC 
+                                ${SIMPLViewProj_SOURCE_DIR}/3rdParty)
 endif()
 
 target_include_directories(${SIMPLView_APPLICATION_NAME}
                   PUBLIC 
                     ${SIMPLView_BINARY_DIR}/__/Common)
+
+if( SIMPLView_BUILD_DOCUMENTATION)
+  message(STATUS "DREAM3D_PACKAGE_DEST_PREFIX: ${DREAM3D_PACKAGE_DEST_PREFIX}")
+  if(APPLE)
+    file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${DREAM3D_PACKAGE_DEST_PREFIX}/Resources/Help/${SIMPLView_APPLICATION_NAME})
+  endif()
+endif()

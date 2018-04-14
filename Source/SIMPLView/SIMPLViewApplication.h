@@ -55,7 +55,7 @@ class SIMPLViewToolbox;
 class SVPipelineFilterWidget;
 class SVPipelineViewWidget;
 
-#define USE_PIPELINE_TREE_WIDGET false
+#define USE_PIPELINE_TREE_WIDGET true
 
 class SIMPLViewApplication : public QApplication
 {
@@ -189,7 +189,7 @@ private:
   void writeSettings();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-  void operator=(const SIMPLViewApplication&);       // Operator '=' Not Implemented
+  void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
 };
 
 #endif /* _SIMPLViewApplication_H */
