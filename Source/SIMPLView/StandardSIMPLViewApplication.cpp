@@ -54,7 +54,7 @@
 StandardSIMPLViewApplication::StandardSIMPLViewApplication(int& argc, char** argv) :
   SIMPLViewApplication(argc, argv)
 {
-  m_Toolbox->setMenuBar(getToolboxMenuBar());
+
 }
 
 // -----------------------------------------------------------------------------
@@ -97,31 +97,6 @@ void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardSIMPLViewApplication::on_actionClearRecentFiles_triggered()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
-
-  // Clear the Recent Items Menu
-  recentFilesMenu->clear();
-  recentFilesMenu->addSeparator();
-  recentFilesMenu->addAction(clearRecentFilesAction);
-
-  // Clear the actual list
-  QtSRecentFileList* recents = QtSRecentFileList::instance();
-  recents->clear();
-
-  // Write out the empty list
-  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
-  recents->writeList(prefs.data());
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
@@ -135,17 +110,6 @@ void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   else
   {
     m_PreviousActiveWindow = instance;
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void StandardSIMPLViewApplication::toolboxWindowChanged()
-{
-  if (m_Toolbox->isActiveWindow())
-  {
-    m_ActiveWindow = nullptr;
   }
 }
 

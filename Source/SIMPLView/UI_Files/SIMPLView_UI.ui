@@ -22,14 +22,14 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="fiwFrame">
+  <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
     <size>
      <width>16777215</width>
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QGridLayout" name="fiwFrameVLayout">
+   <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -133,6 +133,80 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <number>0</number>
      </property>
     </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="bookmarksDockWidget">
+   <property name="windowTitle">
+    <string>Bookmarks</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="bookmarksInternalWidget">
+    <layout class="QGridLayout" name="gridLayout_5">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="BookmarksToolboxWidget" name="bookmarksWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="filterLibraryDockWidget">
+   <property name="windowTitle">
+    <string>Filter Library</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="filterLibraryInternalWidget">
+    <layout class="QGridLayout" name="gridLayout_6">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="filterListDockWidget">
+   <property name="windowTitle">
+    <string>Filter List</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="filterListInternalWidget">
+    <widget class="FilterListToolboxWidget" name="filterListWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>240</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <action name="actionShow_Filter_Library">
@@ -341,8 +415,27 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <header location="global">DataStructureWidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>FilterLibraryToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">FilterLibraryToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BookmarksToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">BookmarksToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FilterListToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">FilterListToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
   <include location="../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
  </resources>
  <connections/>

@@ -86,10 +86,6 @@ public:
 
   virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-  SIMPLView_UI* getNewSIMPLViewInstance();
-
-  SIMPLView_UI* newInstanceFromFile(const QString& filePath);
-
   SIMPLView_UI* getActiveWindow();
   void setActiveWindow(SIMPLView_UI* instance);
 
@@ -100,9 +96,11 @@ public:
 public slots:
   void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
 
-protected:
-  SIMPLViewToolbox* m_Toolbox;
+  SIMPLView_UI* getNewSIMPLViewInstance();
 
+  SIMPLView_UI* newInstanceFromFile(const QString& filePath);
+
+protected:
   // This is a set of all SIMPLView instances currently available
   QList<SIMPLView_UI*> m_SIMPLViewInstances;
 
@@ -122,44 +120,7 @@ protected:
   QVector<ISIMPLibPlugin*> loadPlugins();
 
 protected slots:
-  void on_actionCloseToolbox_triggered();
-  void on_actionNew_triggered();
-  void on_actionNewPipeline_triggered();
-  void on_actionOpen_triggered();
-  void on_actionSave_triggered();
-  void on_actionSaveAs_triggered();
-  void on_actionShowToolbox_triggered(bool visible);
-  void on_actionOpenBookmark_triggered();
-  void on_actionOpenExecuteBookmark_triggered();
-
-  void on_actionAddBookmark_triggered();
-  void on_actionNewFolder_triggered();
-  void on_actionRenameBookmark_triggered();
-  void on_actionRemoveBookmark_triggered();
-  void on_actionShowBookmarkInFileSystem_triggered();
-  void on_actionClearCache_triggered();
-  void on_actionClearBookmarks_triggered();
-
-
-  void on_actionCloseWindow_triggered();
-  void on_actionExit_triggered();
-  void on_actionShowSIMPLViewHelp_triggered();
-  void on_actionCheckForUpdates_triggered();
-  void on_actionPluginInformation_triggered();
-  void on_actionAboutSIMPLView_triggered();
-
-  void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
-  void bookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
-
-  void toPipelineRunningState();
-  void toPipelineIdleState();
-
-  void on_actionCut_triggered();
-  void on_actionCopy_triggered();
-  void on_actionPaste_triggered();
-  void on_actionClearPipeline_triggered();
-
-  void updatePasteState(bool canPaste);
+  void listenExitApplicationTriggered();
 
   /**
   * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
@@ -169,19 +130,12 @@ protected slots:
   virtual void updateRecentFileList(const QString& file);
 
   virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-  virtual void toolboxWindowChanged();
-
-  virtual void on_actionClearRecentFiles_triggered();
 
   // SIMPLView_UI slots
   void openRecentFile();
 
-  void addFilter(const QString& className);
-
 private:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
-
-  QSharedPointer<QMenu> m_ContextMenu;
 
   int m_minSplashTime;
 

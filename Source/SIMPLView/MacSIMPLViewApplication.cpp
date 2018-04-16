@@ -51,12 +51,8 @@
 //
 // -----------------------------------------------------------------------------
 MacSIMPLViewApplication::MacSIMPLViewApplication(int& argc, char** argv) :
-SIMPLViewApplication(argc, argv),
-m_GlobalMenu(nullptr)
+SIMPLViewApplication(argc, argv)
 {
-  // Create the global menu
-  createGlobalMenu();
-
   // Add custom actions to a dock menu
   m_DockMenu = QSharedPointer<QMenu>(createCustomDockMenu());
   m_DockMenu.data()->setAsDockMenu();
@@ -94,30 +90,6 @@ void MacSIMPLViewApplication::updateRecentFileList(const QString& file)
 
   recentFilesMenu->addSeparator();
   recentFilesMenu->addAction(clearRecentFilesAction);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::on_actionClearRecentFiles_triggered()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
-
-  // Clear the Recent Items Menu
-  recentFilesMenu->clear();
-  recentFilesMenu->addSeparator();
-  recentFilesMenu->addAction(clearRecentFilesAction);
-
-  // Clear the actual list
-  QtSRecentFileList* recents = QtSRecentFileList::instance();
-  recents->clear();
-
-  // Write out the empty list
-  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
-  recents->writeList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -186,7 +158,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
     m_ActiveWindow = instance;
     toSIMPLViewMenuState(instance);
   }
-  else if (m_SIMPLViewInstances.size() == 1 && m_Toolbox->isHidden() == true)
+  else if (m_SIMPLViewInstances.size() == 1)
   {
     /* If the inactive signal got fired and there are no more windows,
      * this means that the last window has been closed. */
@@ -205,58 +177,6 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 
     m_PreviousActiveWindow = instance;
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::toolboxWindowChanged()
-{
-  if (m_Toolbox->isActiveWindow())
-  {
-    toToolboxMenuState();
-    m_ActiveWindow = nullptr;
-  }
-  else if (m_SIMPLViewInstances.size() <= 0)
-  {
-    toEmptyMenuState();
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::toToolboxMenuState()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  BookmarksModel* model = BookmarksModel::Instance();
-
-  QModelIndex currentBookmark = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->currentIndex();
-
-  menuItems->getActionSave()->setDisabled(true);
-  menuItems->getActionSaveAs()->setDisabled(true);
-  menuItems->getActionClearPipeline()->setDisabled(true);
-
-  m_MenuView->addActions(m_DummyDockWidgetActions);
-
-  menuItems->getActionShowFilterList()->setEnabled(true);
-  menuItems->getActionShowFilterLibrary()->setEnabled(true);
-  menuItems->getActionShowBookmarks()->setEnabled(true);
-
-  if (currentBookmark.isValid() == false || model->index(currentBookmark.row(), BookmarksItem::Path, currentBookmark.parent()).data().toString().isEmpty() == true)
-  {
-    menuItems->getActionAddBookmark()->setEnabled(true);
-    menuItems->getActionNewFolder()->setEnabled(true);
-  }
-  else
-  {
-    menuItems->getActionAddBookmark()->setDisabled(true);
-    menuItems->getActionNewFolder()->setDisabled(true);
-  }
-
-  menuItems->getActionCut()->setDisabled(true);
-  menuItems->getActionCopy()->setDisabled(true);
-  menuItems->getActionPaste()->setDisabled(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -337,101 +257,4 @@ QMenu* MacSIMPLViewApplication::createCustomDockMenu()
   dockMenu->addAction(menuItems->getActionPluginInformation());
 
   return dockMenu;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::createGlobalMenu()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenu* menuFile = new QMenu("File", m_GlobalMenu.data());
-  m_MenuEdit = new QMenu("Edit", m_GlobalMenu.data());
-  QMenu* menuToolbox = new QMenu("Toolbox", m_GlobalMenu.data());
-  m_MenuView = new QMenu("View", m_GlobalMenu.data());
-  QMenu* menuBookmarks = new QMenu("Bookmarks", m_GlobalMenu.data());
-  QMenu* menuPipeline = new QMenu("Pipeline", m_GlobalMenu.data());
-  QMenu* menuHelp = new QMenu("Help", m_GlobalMenu.data());
-  QMenu* menuAdvanced = new QMenu("Advanced", m_GlobalMenu.data());
-  QAction* actionNew = menuItems->getActionNew();
-  QAction* actionOpen = menuItems->getActionOpen();
-  QAction* actionSave = menuItems->getActionSave();
-  QAction* actionSaveAs = menuItems->getActionSaveAs();
-  QMenu* menuRecentFiles = menuItems->getMenuRecentFiles();
-  QAction* actionClearRecentFiles = menuItems->getActionClearRecentFiles();
-  QAction* actionExit = menuItems->getActionExit();
-  QAction* actionClearPipeline = menuItems->getActionClearPipeline();
-  QAction* actionShowSIMPLViewHelp = menuItems->getActionShowSIMPLViewHelp();
-  QAction* actionCheckForUpdates = menuItems->getActionCheckForUpdates();
-  QAction* actionClearCache = menuItems->getActionClearCache();
-  QAction* actionClearBookmarks = menuItems->getActionClearBookmarks();
-  QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
-  QAction* actionPluginInformation = menuItems->getActionPluginInformation();
-  QAction* actionShowToolbox = menuItems->getActionShowToolbox();
-  QAction* actionShowFilterLibrary = menuItems->getActionShowFilterLibrary();
-  QAction* actionShowFilterList = menuItems->getActionShowFilterList();
-  QAction* actionShowBookmarks = menuItems->getActionShowBookmarks();
-  QAction* actionAddBookmark = menuItems->getActionAddBookmark();
-  QAction* actionNewFolder = menuItems->getActionNewFolder();
-
-  QAction* actionCut = menuItems->getActionCut();
-  QAction* actionCopy = menuItems->getActionCopy();
-  QAction* actionPaste = menuItems->getActionPaste();
-
-  m_GlobalMenu = QSharedPointer<QMenuBar>(new QMenuBar());
-
-  // Create File Menu
-  m_GlobalMenu->addMenu(menuFile);
-  menuFile->addAction(actionNew);
-  menuFile->addAction(actionOpen);
-  menuFile->addSeparator();
-  menuFile->addAction(actionSave);
-  menuFile->addAction(actionSaveAs);
-  menuFile->addSeparator();
-  menuFile->addAction(menuRecentFiles->menuAction());
-  menuRecentFiles->addSeparator();
-  menuRecentFiles->addAction(actionClearRecentFiles);
-  menuFile->addSeparator();
-  menuFile->addAction(actionExit);
-
-  // Create Edit Menu
-  m_GlobalMenu->addMenu(m_MenuEdit);
-  m_EditSeparator = m_MenuEdit->addSeparator();
-  m_MenuEdit->addAction(actionCut);
-  m_MenuEdit->addAction(actionCopy);
-  m_MenuEdit->addAction(actionPaste);
-
-  // Create View Menu
-  m_GlobalMenu->addMenu(m_MenuView);
-  m_MenuView->addAction(actionShowToolbox);
-  m_MenuView->addMenu(menuToolbox);
-  menuToolbox->addAction(actionShowFilterList);
-  menuToolbox->addAction(actionShowFilterLibrary);
-  menuToolbox->addAction(actionShowBookmarks);
-  m_MenuView->addSeparator();
-
-  // Create Bookmarks Menu
-  m_GlobalMenu->addMenu(menuBookmarks);
-  menuBookmarks->addAction(actionAddBookmark);
-  menuBookmarks->addSeparator();
-  menuBookmarks->addAction(actionNewFolder);
-
-  // Create Pipeline Menu
-  m_GlobalMenu->addMenu(menuPipeline);
-  menuPipeline->addAction(actionClearPipeline);
-
-  // Create Help Menu
-  m_GlobalMenu->addMenu(menuHelp);
-  menuHelp->addAction(actionShowSIMPLViewHelp);
-  menuHelp->addSeparator();
-  menuHelp->addAction(actionCheckForUpdates);
-  menuHelp->addSeparator();
-  menuHelp->addMenu(menuAdvanced);
-  menuAdvanced->addAction(actionClearCache);
-  menuAdvanced->addSeparator();
-  menuAdvanced->addAction(actionClearBookmarks);
-  menuHelp->addSeparator();
-  menuHelp->addAction(actionAboutSIMPLView);
-  menuHelp->addAction(actionPluginInformation);
 }

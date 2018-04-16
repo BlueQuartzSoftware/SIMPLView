@@ -57,6 +57,8 @@
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
+#include "SIMPLib/Plugin/PluginManager.h"
+#include "SIMPLib/Plugin/PluginProxy.h"
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
@@ -68,9 +70,8 @@
 #ifdef SIMPL_USE_QtWebEngine
 #include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
 #endif
-#include "SVWidgetsLib/Dialogs/AboutPlugins.h"
-#include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
+#include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
@@ -78,33 +79,11 @@
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 #include "SIMPLView/AboutSIMPLView.h"
-#include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"
 
-
-
-namespace Detail
-{
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void fillVersionData(UpdateCheck::SIMPLVersionData_t& data)
-{
-  data.complete = SIMPLView::Version::Complete();
-  data.major = SIMPLView::Version::Major();
-  data.minor = SIMPLView::Version::Minor();
-  data.patch = SIMPLView::Version::Patch();
-  data.package = SIMPLView::Version::Package();
-  data.revision = SIMPLView::Version::Revision();
-  data.packageComplete = SIMPLView::Version::PackageComplete();
-  data.buildDate = SIMPLView::Version::BuildDate();
-  data.appName = BrandedStrings::ApplicationName;
-}
-}
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -117,73 +96,6 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 , m_SplashScreen(nullptr)
 , m_minSplashTime(3)
 {
-  m_ContextMenu = QSharedPointer<QMenu>(new QMenu(nullptr));
-  // Create the toolbox
-  m_Toolbox = SIMPLViewToolbox::Instance();
-  m_Toolbox->setWindowTitle(BrandedStrings::ApplicationName + " Toolbox");
-
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  m_Toolbox->setActionShowToolbox(menuItems->getActionShowToolbox());
-  m_Toolbox->setActionShowBookmarks(menuItems->getActionShowBookmarks());
-  m_Toolbox->setActionShowFilterList(menuItems->getActionShowFilterList());
-  m_Toolbox->setActionShowFilterLibrary(menuItems->getActionShowFilterLibrary());
-
-  // Toolbox Connections
-  connect(m_Toolbox->getFilterLibraryWidget(), SIGNAL(filterItemDoubleClicked(const QString&)), this, SLOT(addFilter(const QString&)));
-
-  connect(m_Toolbox->getFilterListWidget(), SIGNAL(filterItemDoubleClicked(const QString&)), this, SLOT(addFilter(const QString&)));
-
-  connect(m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), this,
-          SLOT(bookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
-
-  connect(m_Toolbox->getBookmarksWidget(), &BookmarksToolboxWidget::pipelineFileActivated, [=] (const QString& filePath) {
-    if (USE_PIPELINE_TREE_WIDGET == true)
-    {
-      if (m_PreviousActiveWindow != nullptr)
-      {
-        m_PreviousActiveWindow->openPipeline(filePath);
-      }
-    }
-    else
-    {
-      newInstanceFromFile(filePath);
-    }
-  });
-
-  connect(m_Toolbox, SIGNAL(toolboxChangedState()), this, SLOT(toolboxWindowChanged()));
-
-  // Menu Items Connections
-  connect(menuItems, SIGNAL(clipboardHasChanged(bool)), this, SLOT(updatePasteState(bool)));
-  connect(menuItems->getActionNew(), SIGNAL(triggered()), this, SLOT(on_actionNew_triggered()));
-  connect(menuItems->getActionNewPipeline(), SIGNAL(triggered()), this, SLOT(on_actionNewPipeline_triggered()));
-  connect(menuItems->getActionOpen(), SIGNAL(triggered()), this, SLOT(on_actionOpen_triggered()));
-  connect(menuItems->getActionSave(), SIGNAL(triggered()), this, SLOT(on_actionSave_triggered()));
-  connect(menuItems->getActionSaveAs(), SIGNAL(triggered()), this, SLOT(on_actionSaveAs_triggered()));
-  connect(menuItems->getActionExit(), SIGNAL(triggered()), this, SLOT(on_actionExit_triggered()));
-  connect(menuItems->getActionClearRecentFiles(), SIGNAL(triggered()), this, SLOT(on_actionClearRecentFiles_triggered()));
-  connect(menuItems->getActionAboutSIMPLView(), SIGNAL(triggered()), this, SLOT(on_actionAboutSIMPLView_triggered()));
-  connect(menuItems->getActionCheckForUpdates(), SIGNAL(triggered()), this, SLOT(on_actionCheckForUpdates_triggered()));
-  connect(menuItems->getActionShowSIMPLViewHelp(), SIGNAL(triggered()), this, SLOT(on_actionShowSIMPLViewHelp_triggered()));
-  connect(menuItems->getActionPluginInformation(), SIGNAL(triggered()), this, SLOT(on_actionPluginInformation_triggered()));
-  connect(menuItems->getActionClearPipeline(), SIGNAL(triggered()), this, SLOT(on_actionClearPipeline_triggered()));
-  connect(menuItems->getActionShowBookmarkInFileSystem(), SIGNAL(triggered()), this, SLOT(on_actionShowBookmarkInFileSystem_triggered()));
-  connect(menuItems->getActionRenameBookmark(), SIGNAL(triggered()), this, SLOT(on_actionRenameBookmark_triggered()));
-  connect(menuItems->getActionRemoveBookmark(), SIGNAL(triggered()), this, SLOT(on_actionRemoveBookmark_triggered()));
-  connect(menuItems->getActionClearCache(), SIGNAL(triggered()), this, SLOT(on_actionClearCache_triggered()));
-  connect(menuItems->getActionClearBookmarks(), SIGNAL(triggered()), this, SLOT(on_actionClearBookmarks_triggered()));
-  connect(menuItems->getActionShowFilterLibrary(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowFilterLibrary_triggered(bool)));
-  connect(menuItems->getActionShowFilterList(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowFilterList_triggered(bool)));
-  connect(menuItems->getActionShowBookmarks(), SIGNAL(triggered(bool)), m_Toolbox, SLOT(actionShowBookmarks_triggered(bool)));
-  connect(menuItems->getActionLocateFile(), SIGNAL(triggered()), m_Toolbox->getBookmarksWidget()->getBookmarksTreeView(), SLOT(on_actionLocateFile_triggered()));
-  connect(menuItems->getActionOpenBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenBookmark_triggered()));
-  connect(menuItems->getActionOpenExecuteBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenExecuteBookmark_triggered()));
-  connect(menuItems->getActionShowToolbox(), SIGNAL(triggered(bool)), this, SLOT(on_actionShowToolbox_triggered(bool)));
-  connect(menuItems->getActionAddBookmark(), SIGNAL(triggered()), this, SLOT(on_actionAddBookmark_triggered()));
-  connect(menuItems->getActionNewFolder(), SIGNAL(triggered()), this, SLOT(on_actionNewFolder_triggered()));
-  connect(menuItems->getActionCut(), SIGNAL(triggered()), this, SLOT(on_actionCut_triggered()));
-  connect(menuItems->getActionCopy(), SIGNAL(triggered()), this, SLOT(on_actionCopy_triggered()));
-  connect(menuItems->getActionPaste(), SIGNAL(triggered()), this, SLOT(on_actionPaste_triggered()));
-
   // Connection to update the recent files list on all windows when it changes
   QtSRecentFileList* recentsList = QtSRecentFileList::instance();
   connect(recentsList, SIGNAL(fileListChanged(const QString&)), this, SLOT(updateRecentFileList(const QString&)));
@@ -301,14 +213,6 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
     this->m_SplashScreen->finish(nullptr);
   }
   QApplication::instance()->processEvents();
-
-  // Read the toolbox settings and update the filter list
-  m_Toolbox->readSettings();
-  m_Toolbox->getFilterListWidget()->updateFilterList(true);
-
-  // Set the "Show Toolbox" action to the correct state
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionShowToolbox()->setChecked(m_Toolbox->isVisible());
 
   return true;
 }
@@ -508,6 +412,51 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
+{
+  SIMPLView_UI* ui = getNewSIMPLViewInstance();
+  QString nativeFilePath = QDir::toNativeSeparators(filePath);
+  QFileInfo fi(filePath);
+  if(fi.exists())
+  {
+    ui->openPipeline(nativeFilePath);
+
+    QtSRecentFileList* list = QtSRecentFileList::instance();
+    list->addFile(filePath);
+  }
+  ui->show();
+  return ui;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
+{
+  PluginManager* pluginManager = PluginManager::Instance();
+  QVector<ISIMPLibPlugin*> plugins = pluginManager->getPluginsVector();
+
+  // Create new SIMPLView instance
+  SIMPLView_UI* newInstance = new SIMPLView_UI(nullptr);
+  newInstance->setLoadedPlugins(plugins);
+  newInstance->setAttribute(Qt::WA_DeleteOnClose);
+  newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
+
+  if (m_ActiveWindow)
+  {
+    newInstance->move(m_ActiveWindow->x() + 45, m_ActiveWindow->y() + 45);
+  }
+
+  m_ActiveWindow = newInstance;
+
+  connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*)));
+
+  return newInstance;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::updateRecentFileList(const QString& file)
 {
   // This should never be executed
@@ -536,340 +485,6 @@ void SIMPLViewApplication::openRecentFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionClearRecentFiles_triggered()
-{
-  // This should never be executed
-  return;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::addFilter(const QString& className)
-{
-  if(nullptr != m_PreviousActiveWindow)
-  {
-    AbstractFilter::Pointer filter = AbstractFilter::CreateFilterFromClassName(className);
-
-    m_PreviousActiveWindow->setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
-    m_PreviousActiveWindow->addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
-
-    m_PreviousActiveWindow->addFilter(filter);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionCloseToolbox_triggered()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  toolbox->close();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionNew_triggered()
-{
-  SIMPLView_UI* newInstance = getNewSIMPLViewInstance();
-  newInstance->show();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionNewPipeline_triggered()
-{
-  if(nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->addPipeline("Untitled Pipeline", true);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionOpen_triggered()
-{
-  QString proposedDir = m_OpenDialogLastFilePath;
-  QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"), proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;All Files (*.*)"));
-  if(filePath.isEmpty())
-  {
-    return;
-  }
-
-  newInstanceFromFile(filePath);
-
-  // Cache the last directory on old instance
-  m_OpenDialogLastFilePath = filePath;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionOpenBookmark_triggered()
-{
-  BookmarksModel* model = BookmarksModel::Instance();
-
-  QModelIndexList indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->selectionModel()->selectedRows(BookmarksItem::Name);
-
-  QModelIndex pathIndex = indexList.at(0);
-  QModelIndex actualIndex = model->index(pathIndex.row(), BookmarksItem::Path, pathIndex.parent());
-
-  QString pipelinePath = actualIndex.data().toString();
-  if(pipelinePath.isEmpty())
-  {
-    return; // The user double clicked a folder, so don't do anything
-  }
-  else
-  {
-    QFileInfo fi(pipelinePath);
-    if(fi.exists())
-    {
-      newInstanceFromFile(pipelinePath);
-      // Cache the last directory on old instance
-      m_OpenDialogLastFilePath = pipelinePath;
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionOpenExecuteBookmark_triggered()
-{
-  BookmarksModel* model = BookmarksModel::Instance();
-
-  QModelIndexList indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->selectionModel()->selectedRows(BookmarksItem::Name);
-
-  QModelIndex pathIndex = indexList.at(0);
-  QModelIndex actualIndex = model->index(pathIndex.row(), BookmarksItem::Path, pathIndex.parent());
-
-  QString pipelinePath = actualIndex.data().toString();
-  if(pipelinePath.isEmpty())
-  {
-    return; // The user double clicked a folder, so don't do anything
-  }
-  else if (USE_PIPELINE_TREE_WIDGET == true)
-  {
-    if (m_PreviousActiveWindow != nullptr)
-    {
-      m_PreviousActiveWindow->openPipeline(pipelinePath);
-
-      PipelineModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
-      int row = model->rowCount() - 1;
-      QModelIndex pipelineIndex = model->index(row, PipelineItem::Name);
-
-      m_PreviousActiveWindow->executePipeline(pipelineIndex);
-    }
-  }
-  else
-  {
-    QFileInfo fi(pipelinePath);
-    if(fi.exists())
-    {
-      SIMPLView_UI* ui = newInstanceFromFile(pipelinePath);
-      PipelineModel* model = m_PreviousActiveWindow->getPipelineTreeModel();
-      QModelIndex pipelineIndex = model->index(0, PipelineItem::Name);
-
-      // Cache the last directory on old instance
-      m_OpenDialogLastFilePath = pipelinePath;
-
-      ui->executePipeline(pipelineIndex);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionSave_triggered()
-{
-  if(nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->savePipeline();
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionSaveAs_triggered()
-{
-  if(nullptr != m_ActiveWindow)
-  {
-    m_ActiveWindow->savePipelineAs();
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionAddBookmark_triggered()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-
-  toolbox->setCurrentTab(SIMPLViewToolbox::Bookmarks);
-
-  BookmarksToolboxWidget* bookmarksToolboxWidget = toolbox->getBookmarksWidget();
-
-  if(nullptr != bookmarksToolboxWidget)
-  {
-    QString proposedDir = m_OpenDialogLastFilePath;
-    QList<QString> newPrefPaths;
-
-    newPrefPaths =
-        QFileDialog::getOpenFileNames(toolbox, tr("Choose Pipeline File(s)"), proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;Text File (*.txt);;Ini File (*.ini);;All Files (*.*)"));
-    if(true == newPrefPaths.isEmpty())
-    {
-      return;
-    }
-
-    QModelIndex parent = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->currentIndex();
-
-    if(parent.isValid() == false)
-    {
-      parent = QModelIndex();
-    }
-
-    for(int i = 0; i < newPrefPaths.size(); i++)
-    {
-      QString newPrefPath = newPrefPaths[i];
-      newPrefPath = QDir::toNativeSeparators(newPrefPath);
-      bookmarksToolboxWidget->addBookmark(newPrefPath, parent);
-    }
-
-    if(newPrefPaths.size() > 0)
-    {
-      // Cache the directory from the last path added
-      m_OpenDialogLastFilePath = newPrefPaths[newPrefPaths.size() - 1];
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionNewFolder_triggered()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-
-  toolbox->setCurrentTab(SIMPLViewToolbox::Bookmarks);
-
-  BookmarksModel* model = BookmarksModel::Instance();
-  BookmarksToolboxWidget* bookmarksToolboxWidget = toolbox->getBookmarksWidget();
-
-  QModelIndex parent = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->currentIndex();
-
-  if(parent.isValid() == false)
-  {
-    parent = QModelIndex();
-  }
-
-  QString name = "New Folder";
-
-  bookmarksToolboxWidget->addTreeItem(parent, name, QIcon(":/folder_blue.png"), "", model->rowCount(parent), true, true, false);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowToolbox_triggered(bool visible)
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  QAction* actionShowToolbox = menuItems->getActionShowToolbox();
-
-  actionShowToolbox->blockSignals(true);
-  toolbox->blockSignals(true);
-
-  actionShowToolbox->setChecked(visible);
-  toolbox->setVisible(visible);
-
-  actionShowToolbox->blockSignals(false);
-  toolbox->blockSignals(false);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowSIMPLViewHelp_triggered()
-{
-  QString appPath = QApplication::applicationDirPath();
-
-  QDir helpDir = QDir(appPath);
-  QString s("file://");
-
-#if defined(Q_OS_WIN)
-  s = s + "/"; // Need the third slash on windows because file paths start with a drive letter
-#elif defined(Q_OS_MAC)
-  if(helpDir.dirName() == "MacOS")
-  {
-    helpDir.cdUp();
-    // Check if we are running from a .app installation where the Help dir is embeded in the app bundle.
-    QFileInfo fi(helpDir.absolutePath() + "/Resources/Help");
-
-    if(fi.exists())
-    {
-      helpDir.cd("Resources");
-    }
-    else
-    {
-      helpDir.cdUp();
-      helpDir.cdUp();
-    }
-  }
-#endif
-
-#ifdef SIMPL_USE_MKDOCS
-  s = QString("http://%1:%2/index.html").arg(QtSDocServer::GetIPAddress()).arg(QtSDocServer::GetPort());
-#endif
-
-#ifdef SIMPL_USE_DISCOUNT
-  QString helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
-  QFileInfo fi(helpFilePath);
-  if(fi.exists() == false)
-  {
-    // The help file does not exist at the default location because we are probably running from Visual Studio or Xcode
-    // Try up one more directory
-    helpDir.cdUp();
-    helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
-  }
-
-  s = s + helpFilePath;
-#endif
-
-  QUrl helpURL(s);
-#ifdef SIMPL_USE_QtWebEngine
-  SVUserManualDialog::LaunchHelpDialog(helpURL);
-#else
-  bool didOpen = QDesktopServices::openUrl(helpURL);
-  if(false == didOpen)
-  {
-    QMessageBox msgBox;
-    msgBox.setText(QString("Error Opening Help File"));
-    msgBox.setInformativeText(QString::fromLatin1("%1 could not open the help file path ").arg(BrandedStrings::ApplicationName) + helpURL.path());
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setIcon(QMessageBox::Critical);
-    msgBox.exec();
-  }
-#endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionAboutSIMPLView_triggered()
-{
-  AboutSIMPLView d(nullptr);
-  d.exec();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 UpdateCheck::SIMPLVersionData_t SIMPLViewApplication::FillVersionData()
 {
   UpdateCheck::SIMPLVersionData_t data;
@@ -887,358 +502,8 @@ UpdateCheck::SIMPLVersionData_t SIMPLViewApplication::FillVersionData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionCheckForUpdates_triggered()
+void SIMPLViewApplication::listenExitApplicationTriggered()
 {
-
-  UpdateCheck::SIMPLVersionData_t data;
-  Detail::fillVersionData(data);
-  UpdateCheckDialog d(data, nullptr);
-
-  // d.setCurrentVersion(SIMPLib::Version::Complete());
-  d.setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
-  d.setApplicationName(BrandedStrings::ApplicationName);
-
-  // Read from the QtSSettings Pref file the information that we need
-  QtSSettings prefs;
-  prefs.beginGroup(SIMPLView::UpdateWebsite::VersionCheckGroupName);
-  QDateTime dateTime = prefs.value(SIMPLView::UpdateWebsite::LastVersionCheck, QDateTime::currentDateTime()).toDateTime();
-  d.setLastCheckDateTime(dateTime);
-  prefs.endGroup();
-
-  // Now display the dialog box
-  d.exec();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionPluginInformation_triggered()
-{
-  AboutPlugins dialog(nullptr);
-  dialog.exec();
-
-  // Write cache on exit
-  dialog.writePluginCache();
-
-  /* If any of the load checkboxes were changed, display a dialog warning
-  * the user that they must restart SIMPLView to see the changes.
-  */
-  if(dialog.getLoadPreferencesDidChange() == true)
-  {
-    QMessageBox msgBox;
-    msgBox.setText(QString("%1 must be restarted to allow these changes to take effect.").arg(BrandedStrings::ApplicationName));
-    msgBox.setInformativeText("Restart?");
-    msgBox.setWindowTitle("Restart Needed");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    int choice = msgBox.exec();
-
-    if(choice == QMessageBox::Yes)
-    {
-      for(int i = 0; i < m_SIMPLViewInstances.size(); i++)
-      {
-        SIMPLView_UI* dream3d = m_SIMPLViewInstances[i];
-        dream3d->close();
-      }
-
-      // Restart SIMPLView
-      QProcess::startDetached(QApplication::applicationFilePath());
-      dream3dApp->quit();
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionRenameBookmark_triggered()
-{
-  BookmarksTreeView* bookmarksTreeView = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView();
-  QModelIndex index = bookmarksTreeView->currentIndex();
-  bookmarksTreeView->edit(index);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionRemoveBookmark_triggered()
-{
-  BookmarksToolboxWidget* bookmarksToolboxWidget = m_Toolbox->getBookmarksWidget();
-
-  BookmarksModel* model = BookmarksModel::Instance();
-
-  QModelIndexList indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->selectionModel()->selectedRows(BookmarksItem::Name);
-
-  indexList = m_Toolbox->getBookmarksWidget()->getBookmarksTreeView()->filterOutDescendants(indexList);
-
-  if(indexList.size() <= 0)
-  {
-    return;
-  }
-
-  QList<QPersistentModelIndex> persistentList;
-  for(int i = 0; i < indexList.size(); i++)
-  {
-    persistentList.push_back(indexList[i]);
-  }
-
-  QModelIndex singleIndex = model->index(indexList[0].row(), BookmarksItem::Name, indexList[0].parent());
-
-  QMessageBox msgBox;
-  if(indexList.size() > 1)
-  {
-    msgBox.setWindowTitle("Remove Bookmark Items");
-    msgBox.setText("Are you sure that you want to remove these bookmark items? The original bookmark files will not be removed.");
-  }
-  else if(model->flags(singleIndex).testFlag(Qt::ItemIsDropEnabled) == false)
-  {
-    msgBox.setWindowTitle("Remove Bookmark");
-    msgBox.setText("Are you sure that you want to remove the bookmark \"" + singleIndex.data().toString() + "\"? The original file will not be removed.");
-  }
-  else
-  {
-    msgBox.setWindowTitle("Remove Folder");
-    msgBox.setText("Are you sure that you want to remove the folder \"" + singleIndex.data().toString() + "\"? The folder's contents will also be removed.");
-  }
-  msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-  msgBox.setDefaultButton(QMessageBox::Yes);
-  int ret = msgBox.exec();
-
-  if(ret == QMessageBox::Yes)
-  {
-    for(int i = 0; i < persistentList.size(); i++)
-    {
-      QModelIndex nameIndex = model->index(persistentList[i].row(), BookmarksItem::Name, persistentList[i].parent());
-      QString name = nameIndex.data().toString();
-
-      // Remove bookmark from the SIMPLView interface
-      model->removeRow(persistentList[i].row(), persistentList[i].parent());
-    }
-
-    // Write these changes out to the preferences file
-    emit bookmarksToolboxWidget->fireWriteSettings();
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionShowBookmarkInFileSystem_triggered()
-{
-  BookmarksModel* model = BookmarksModel::Instance();
-  BookmarksToolboxWidget* bookmarksToolboxWidget = m_Toolbox->getBookmarksWidget();
-  BookmarksTreeView* bookmarksTreeView = bookmarksToolboxWidget->getBookmarksTreeView();
-
-  QModelIndex index = bookmarksTreeView->currentIndex();
-  if(index.isValid())
-  {
-    QString pipelinePath = model->index(index.row(), BookmarksItem::Path, index.parent()).data().toString();
-
-    QFileInfo fi(pipelinePath);
-    QString path;
-    if(fi.isFile())
-    {
-      path = fi.absoluteFilePath();
-    }
-    else
-    {
-      path = fi.absolutePath();
-    }
-
-    QtSFileUtils::ShowPathInGui(bookmarksToolboxWidget, path);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionClearPipeline_triggered()
-{
-  if(nullptr != m_ActiveWindow)
-  {
-    PipelineModel* model = m_ActiveWindow->getPipelineTreeModel();
-
-    if(model->rowCount() > 0)
-    {
-      // SIMPL-FIXME: Need to implement "remove" and "clear" functionality in the model
-//      viewWidget->clearFilterWidgets();
-      SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-      menuItems->getActionClearPipeline()->setDisabled(true);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionCut_triggered()
-{
-  // SIMPL-FIXME: Implement Cut using one window
-  if(nullptr != m_ActiveWindow)
-  {
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
-
-//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-//    for(int i = 0; i < filterWidgets.size(); i++)
-//    {
-//      pipeline->pushBack(filterWidgets[i]->getFilter());
-//    }
-
-//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-//    QString jsonString = jsonWriter->writePipelineToString(pipeline, "Pipeline");
-
-//    QClipboard* clipboard = QApplication::clipboard();
-//    clipboard->setText(jsonString);
-
-//    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(filterWidgets, viewWidget, "Cut");
-//    viewWidget->addUndoCommand(removeCmd);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionCopy_triggered()
-{
-  // SIMPL-FIXME: Implement Copy using one window
-
-  if(nullptr != m_ActiveWindow)
-  {
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
-//    for(int i = 0; i < filterWidgets.size(); i++)
-//    {
-//      pipeline->pushBack(filterWidgets[i]->getFilter());
-//    }
-
-//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-//    QString json = jsonWriter->writePipelineToString(pipeline, "Copy - Pipeline");
-//    QClipboard* clipboard = QApplication::clipboard();
-//    clipboard->setText(json);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionPaste_triggered()
-{
-  // SIMPL-FIXME: Implement Paste using one window
-
-  if(nullptr != m_ActiveWindow)
-  {
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    QClipboard* clipboard = QApplication::clipboard();
-//    QString jsonString = clipboard->text();
-
-//    JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
-//    FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
-//    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
-
-//    AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
-//    viewWidget->addUndoCommand(addCmd);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget)
-{
-  if(m_ActiveWindow)
-  {
-    QList<PipelineFilterObject*> selectedWidgets = widget->getSelectedFilterObjects();
-    if(selectedWidgets.size() <= 0)
-    {
-      return;
-    }
-
-    // SIMPL-FIXME: Implement "remove" functionality in the controller
-//    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
-//    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionClearBookmarks_triggered()
-{
-  QMessageBox msgBox;
-  QString title = QString("Clear %1 Bookmarks").arg(BrandedStrings::ApplicationName);
-  msgBox.setWindowTitle(title);
-  msgBox.setText(QString("Are you sure that you want to clear all %1 bookmarks?").arg(BrandedStrings::ApplicationName));
-
-  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::Yes);
-  int response = msgBox.exec();
-
-  if(response == QMessageBox::Yes)
-  {
-    BookmarksModel* model = BookmarksModel::Instance();
-    if(model->isEmpty() == false)
-    {
-      model->removeRows(0, model->rowCount(QModelIndex()));
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionClearCache_triggered()
-{
-
-  QMessageBox msgBox;
-
-  QString title = QString("Clear %1 Cache").arg(BrandedStrings::ApplicationName);
-  msgBox.setWindowTitle(title);
-
-  QString text = QString("Clearing the %1 cache will clear the %1 window settings, and will restore %1 back to its default settings on the program's next run.").arg(BrandedStrings::ApplicationName);
-  msgBox.setText(text);
-
-  QString infoText = QString("Clear the %1 cache?").arg(BrandedStrings::ApplicationName);
-  msgBox.setInformativeText(infoText);
-  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::Yes);
-  int response = msgBox.exec();
-
-  if(response == QMessageBox::Yes)
-  {
-    QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
-
-    // Set a flag in the preferences file, so that we know that we are in "Clear Cache" mode
-    prefs->setValue("Program Mode", QString("Clear Cache"));
-
-    if(nullptr != m_ActiveWindow)
-    {
-      m_ActiveWindow->setStatusBarMessage(QString("The cache has been cleared successfully. Please restart %1.").arg(BrandedStrings::ApplicationName));
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionCloseWindow_triggered()
-{
-  m_ActiveWindow->close();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::on_actionExit_triggered()
-{
-  // Write Toolbox Settings
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  toolbox->writeSettings();
-
   bool shouldReallyClose = true;
   for(int i = 0; i < m_SIMPLViewInstances.size(); i++)
   {
@@ -1261,38 +526,7 @@ void SIMPLViewApplication::on_actionExit_triggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::bookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
-{
-  BookmarksModel* model = BookmarksModel::Instance();
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  QAction* actionAddBookmark = menuItems->getActionAddBookmark();
-  QAction* actionNewFolder = menuItems->getActionNewFolder();
-
-  if(model->index(current.row(), BookmarksItem::Path, current.parent()).data().toString().isEmpty() == true)
-  {
-    actionAddBookmark->setEnabled(true);
-    actionNewFolder->setEnabled(true);
-  }
-  else
-  {
-    actionAddBookmark->setDisabled(true);
-    actionNewFolder->setDisabled(true);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
-{
-  // This should never be executed
-  return;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::toolboxWindowChanged()
 {
   // This should never be executed
   return;
@@ -1334,86 +568,6 @@ void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::toPipelineRunningState()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionClearPipeline()->setDisabled(true);
-
-  SIMPLView_UI* runningInstance = qobject_cast<SIMPLView_UI*>(sender());
-  if(nullptr != runningInstance)
-  {
-    m_CurrentlyRunningInstances.insert(runningInstance);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::toPipelineIdleState()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  menuItems->getActionClearPipeline()->setEnabled(true);
-
-  SIMPLView_UI* runningInstance = qobject_cast<SIMPLView_UI*>(sender());
-  if(nullptr != runningInstance)
-  {
-    m_CurrentlyRunningInstances.remove(runningInstance);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
-{
-  SIMPLView_UI* ui = getNewSIMPLViewInstance();
-  QString nativeFilePath = QDir::toNativeSeparators(filePath);
-  QFileInfo fi(filePath);
-  if(fi.exists())
-  {
-    ui->openPipeline(nativeFilePath);
-
-    QtSRecentFileList* list = QtSRecentFileList::instance();
-    list->addFile(filePath);
-  }
-  ui->show();
-  return ui;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
-{
-  PluginManager* pluginManager = PluginManager::Instance();
-  QVector<ISIMPLibPlugin*> plugins = pluginManager->getPluginsVector();
-
-  // Create new SIMPLView instance
-  SIMPLView_UI* newInstance = new SIMPLView_UI(nullptr);
-  newInstance->setLoadedPlugins(plugins);
-  newInstance->setAttribute(Qt::WA_DeleteOnClose);
-  newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
-
-  if(nullptr != m_ActiveWindow)
-  {
-    newInstance->move(m_ActiveWindow->x() + 45, m_ActiveWindow->y() + 45);
-  }
-  else if(nullptr != m_PreviousActiveWindow)
-  {
-    newInstance->move(m_PreviousActiveWindow->x() + 45, m_PreviousActiveWindow->y() + 45);
-  }
-
-  m_ActiveWindow = newInstance;
-
-  connect(newInstance, SIGNAL(dream3dWindowChangedState(SIMPLView_UI*)), this, SLOT(dream3dWindowChanged(SIMPLView_UI*)));
-  connect(newInstance, SIGNAL(deleteKeyPressed(SVPipelineViewWidget*)), this, SLOT(on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget*)));
-
-  return newInstance;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::setActiveWindow(SIMPLView_UI* instance)
 {
   m_ActiveWindow = instance;
@@ -1448,23 +602,6 @@ void SIMPLViewApplication::setClipboard(QPair<QList<SVPipelineFilterWidget*>, SV
 
   // Assign new clipboard values to the clipboard
   m_Clipboard = clipboard;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::updatePasteState(bool canPaste)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  if(nullptr != m_ActiveWindow)
-  {
-    menuItems->getActionPaste()->setEnabled(canPaste);
-  }
-  else
-  {
-    menuItems->getActionPaste()->setDisabled(true);
-  }
 }
 
 // -----------------------------------------------------------------------------

@@ -78,24 +78,14 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
   */
   virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
-  virtual void toolboxWindowChanged();
-
-  // SIMPLView_UI slots
-  virtual void on_actionClearRecentFiles_triggered();
-
-  void toToolboxMenuState();
   void toSIMPLViewMenuState(SIMPLView_UI *instance);
 
 private:
-  // The global menu
-  QSharedPointer<QMenuBar>              m_GlobalMenu;
   QSharedPointer<QMenu>                 m_DockMenu;
   QMenu*                                m_MenuEdit;
   QMenu*                                m_MenuView;
   QAction*                              m_EditSeparator;
   QList<QAction*>                       m_DummyDockWidgetActions;
-
-  void createGlobalMenu();
 
   QMenu* createCustomDockMenu();
 

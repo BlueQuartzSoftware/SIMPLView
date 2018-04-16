@@ -257,82 +257,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     */
     void clearFilterInputWidget();
 
-  protected slots:
-
-    /**
-    * @brief pipelineDidFinish
-    */
-    void preflightDidFinish(int err);
-
-    /**
-     * @brief pipelineDidFinish
-     */
-    void pipelineDidFinish();
-
-    /**
-     * @brief processPipelineMessage
-     * @param msg
-     */
-    void processPipelineMessage(const PipelineMessage& msg);
-
-    void on_pipelineViewWidget_windowNeedsRecheck();
-    void on_pipelineViewWidget_pipelineIssuesCleared();
-    void on_pipelineViewWidget_pipelineHasNoErrors();
-
-    /**
-    * @brief setFilterInputWidget
-    * @param widget
-    */
-    void setFilterInputWidget(FilterInputWidget* widget);
-
-    /**
-    * @brief markDocumentAsDirty
-    */
-    void markDocumentAsDirty();
-
-    /**
-    * @brief issuesTableHasErrors
-    * @param hasErrors
-    */
-    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
-
-    // Our Signals that we can emit custom for this class
-  signals:
-
-    /**
-    * @brief bookmarkNeedsToBeAdded
-    */
-    void bookmarkNeedsToBeAdded(const QString& filePath, const QModelIndex& parent);
-
-    void parentResized();
-
-    void preflightFinished(bool errors);
-
-    /**
-     * @brief A signal that is emitted when we want to cancel a process
-     */
-    void pipelineCanceled();
-
-    /**
-     * @brief pipelineStarted
-     */
-    void pipelineStarted();
-
-    /**
-    * @brief pipelineFinished
-    */
-    void pipelineFinished();
-
-    /**
-    * @brief dream3dWindowChangedState
-    */
-    void dream3dWindowChangedState(SIMPLView_UI* self);
-
-    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
-    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
-
-    void deleteKeyPressed(SVPipelineViewWidget* viewWidget);
-
   protected:
 
     /**
@@ -426,7 +350,122 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     void resizeEvent ( QResizeEvent* event );
 
+  protected slots:
+
+    /**
+    * @brief pipelineDidFinish
+    */
+    void preflightDidFinish(int err);
+
+    /**
+     * @brief pipelineDidFinish
+     */
+    void pipelineDidFinish();
+
+    /**
+     * @brief processPipelineMessage
+     * @param msg
+     */
+    void processPipelineMessage(const PipelineMessage& msg);
+
+    void listenNewInstanceTriggered();
+    void listenNewPipelineTriggered();
+    void listenOpenPipelineTriggered();
+    void listenSavePipelineTriggered();
+    void listenSavePipelineAsTriggered();
+    void listenExecuteBookmarkTriggered();
+    void listenAddBookmarkTriggered();
+    void listenAddBookmarkFolderTriggered();
+    void listenRenameBookmarkTriggered();
+    void listenRemoveBookmarkTriggered();
+    void listenShowBookmarkInFileSystemTriggered();
+    void listenClearCacheTriggered();
+    void listenClearBookmarksTriggered();
+    void listenCloseWindowTriggered();
+    void listenShowSIMPLViewHelpTriggered();
+    void listenCheckForUpdatesTriggered();
+    void listenPluginInfoTriggered();
+    void listenAboutSIMPLViewTriggered();
+    void listenCutTriggered();
+    void listenCopyTriggered();
+    void listenPasteTriggered();
+    void listenClearPipelineTriggered();
+    void listenClearRecentFilesTriggered();
+    void listenDeleteKeyTriggered();
+    void listenBookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
+    void listenOpenBookmarkTriggered();
+
+    void on_pipelineViewWidget_windowNeedsRecheck();
+    void on_pipelineViewWidget_pipelineIssuesCleared();
+    void on_pipelineViewWidget_pipelineHasNoErrors();
+
+    /**
+     * @brief updatePasteAvailability
+     */
+    void updatePasteAvailability();
+
+    /**
+    * @brief setFilterInputWidget
+    * @param widget
+    */
+    void setFilterInputWidget(FilterInputWidget* widget);
+
+    /**
+    * @brief markDocumentAsDirty
+    */
+    void markDocumentAsDirty();
+
+    /**
+    * @brief issuesTableHasErrors
+    * @param hasErrors
+    */
+    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
+
+    // Our Signals that we can emit custom for this class
+  signals:
+
+    /**
+    * @brief bookmarkNeedsToBeAdded
+    */
+    void bookmarkNeedsToBeAdded(const QString& filePath, const QModelIndex& parent);
+
+    void parentResized();
+
+    void preflightFinished(bool errors);
+
+    /**
+     * @brief A signal that is emitted when we want to cancel a process
+     */
+    void pipelineCanceled();
+
+    /**
+     * @brief pipelineStarted
+     */
+    void pipelineStarted();
+
+    /**
+    * @brief pipelineFinished
+    */
+    void pipelineFinished();
+
+    /**
+    * @brief dream3dWindowChangedState
+    */
+    void dream3dWindowChangedState(SIMPLView_UI* self);
+
+    void applicationExitTriggered();
+
+    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
+    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
+
+    void deleteKeyPressed();
+
+  private slots:
+    void listenPipelineTreeViewMenuRequested(const QPoint &pos);
+
   private:
+    QSharedPointer<QMenuBar>              m_SIMPLViewMenu;
+
     ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
 
@@ -462,6 +501,14 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @brief setupPipelineTreeView
      */
     void setupPipelineTreeView();
+
+    /**
+     * @brief createSIMPLViewMenu
+     */
+    void createSIMPLViewMenu();
+
+    void toPipelineRunningState();
+    void toPipelineIdleState();
 
     void cleanupPipeline();
 

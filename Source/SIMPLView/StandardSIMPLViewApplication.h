@@ -85,14 +85,6 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
     */
     virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
-    /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
-
   private:
     StandardSIMPLViewApplication(const StandardSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
     void operator=(const StandardSIMPLViewApplication&) = delete;               // Move assignment Not Implemented
