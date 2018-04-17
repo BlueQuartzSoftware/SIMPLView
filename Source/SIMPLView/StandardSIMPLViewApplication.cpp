@@ -164,7 +164,7 @@ QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instan
   QAction* actionCopy = menuItems->getActionCopy();
   QAction* actionPaste = menuItems->getActionPaste();
 
-  PipelineModel* model = instance->getPipelineTreeModel();
+  PipelineModel* model = instance->getPipelineModel();
   QAction* actionUndo = model->getActionUndo();
   QAction* actionRedo = model->getActionRedo();
 

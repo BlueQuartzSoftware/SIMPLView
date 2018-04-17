@@ -80,6 +80,7 @@ class PipelineTreeView;
 class PipelineModel;
 class PipelineListWidget;
 class SVPipelineViewWidget;
+class SIMPLViewMenuItems;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -190,13 +191,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void addFilter(AbstractFilter::Pointer filter);
 
     /**
-     * @brief addPipeline
-     * @param pipelineName
-     * @param setAsActive
-     */
-    void addPipeline(const QString &pipelineName, bool setAsActive);
-
-    /**
      * @brief openPipeline
      * @param filePath
      * @return
@@ -213,9 +207,15 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @brief getPipelineTreeModel
      * @return
      */
-    PipelineModel* getPipelineTreeModel();
+    PipelineModel* getPipelineModel();
 
   public slots:
+    /**
+     * @brief addPipeline
+     * @param pipelineName
+     * @param setAsActive
+     */
+    void addPipeline(const QString &pipelineName, bool setAsActive);
 
     /**
     * @brief setOpenedFilePath
@@ -369,7 +369,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void processPipelineMessage(const PipelineMessage& msg);
 
     void listenNewInstanceTriggered();
-    void listenNewPipelineTriggered();
     void listenOpenPipelineTriggered();
     void listenSavePipelineTriggered();
     void listenSavePipelineAsTriggered();
@@ -386,10 +385,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void listenCheckForUpdatesTriggered();
     void listenPluginInfoTriggered();
     void listenAboutSIMPLViewTriggered();
-    void listenCutTriggered();
-    void listenCopyTriggered();
-    void listenPasteTriggered();
-    void listenClearPipelineTriggered();
     void listenClearRecentFilesTriggered();
     void listenDeleteKeyTriggered();
     void listenBookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
@@ -461,10 +456,11 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void deleteKeyPressed();
 
   private slots:
-    void listenPipelineTreeViewMenuRequested(const QPoint &pos);
+    void listenBookmarksContextMenuRequested(const QModelIndex &currentIndex, QModelIndexList selectedIndexes, const QPoint &mappedPos);
 
   private:
     QSharedPointer<QMenuBar>              m_SIMPLViewMenu;
+    SIMPLViewMenuItems*                   m_MenuItems;
 
     ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
@@ -505,7 +501,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     /**
      * @brief createSIMPLViewMenu
      */
-    void createSIMPLViewMenu();
+    void createSIMPLViewMenuSystem();
 
     void toPipelineRunningState();
     void toPipelineIdleState();

@@ -565,7 +565,7 @@ void SIMPLView_UI::setupGui()
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
 
-  createSIMPLViewMenu();
+  createSIMPLViewMenuSystem();
 
   if (USE_PIPELINE_TREE_WIDGET)
   {
@@ -578,9 +578,9 @@ void SIMPLView_UI::setupGui()
 
   // Add the Issues widget as the observer of the controller
   m_SIMPLController->addPipelineMessageObserver(issuesWidget);
-    
+
   // pipelineViewWidget->setScrollArea(pipelineViewScrollArea);
-  
+
   // pipelineViewScrollArea->verticalScrollBar()->setSingleStep(5);
 
   // Hook up the signals from the various docks to the PipelineViewWidget that will either add a filter
@@ -649,7 +649,7 @@ void SIMPLView_UI::setupPipelineTreeView()
   m_PipelineTreeView->setAlternatingRowColors(true);
   verticalLayout->insertWidget(0, m_PipelineTreeView);
 
-  connect(m_PipelineTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(listenPipelineTreeViewMenuRequested(const QPoint&)));
+  connect(m_PipelineTreeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(listenPipelineContextMenuRequested(const QPoint&)));
 
   PipelineModel* model = new PipelineModel(m_PipelineTreeView);
   m_PipelineTreeView->setModel(model);
@@ -660,108 +660,170 @@ void SIMPLView_UI::setupPipelineTreeView()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::listenPipelineTreeViewMenuRequested(const QPoint& pos)
+void SIMPLView_UI::listenBookmarksContextMenuRequested(const QModelIndex &currentIndex, QModelIndexList selectedIndexes, const QPoint &mappedPos)
 {
-  activateWindow();
+  BookmarksModel* model = BookmarksModel::Instance();
 
-  QModelIndex index = indexAt(pos);
+  QAction* actionAddBookmark = m_MenuItems->getActionAddBookmark();
+  QAction* actionNewFolder = m_MenuItems->getActionNewFolder();
+  QAction* actionRenameBookmark = m_MenuItems->getActionRenameBookmark();
+  QAction* actionRemoveBookmark = m_MenuItems->getActionRemoveBookmark();
+  QAction* actionLocateFile = m_MenuItems->getActionLocateFile();
+  QAction* actionShowBookmarkInFileSystem = m_MenuItems->getActionShowBookmarkInFileSystem();
+  QAction* actionOpenBookmark = m_MenuItems->getActionOpenBookmark();
+  QAction* actionExecuteBookmark = m_MenuItems->getActionOpenExecuteBookmark();
 
-  PipelineModel* model = getPipelineTreeModel();
-
-  QPoint mapped;
-  if(model->itemType(index) == PipelineItem::ItemType::Filter)
+  QMenu menu;
+  if(currentIndex.isValid() == false)
   {
-    mapped = viewport()->mapToGlobal(pos);
-
-    requestFilterContextMenu(mapped, index);
-  }
-  else if (model->itemType(index) == PipelineItem::ItemType::Pipeline)
-  {
-    mapped = viewport()->mapToGlobal(pos);
-
-    requestPipelineContextMenu(mapped, index);
+    menu.addAction(actionAddBookmark);
+    {
+      QAction* separator = new QAction(this);
+      separator->setSeparator(true);
+      menu.addAction(separator);
+    }
+    menu.addAction(actionNewFolder);
   }
   else
   {
-    mapped = mapToGlobal(pos);
-    requestDefaultContextMenu(mapped);
+    QModelIndex actualIndex = model->index(currentIndex.row(), BookmarksItem::Path, currentIndex.parent());
+    QString path = actualIndex.data().toString();
+    if(selectedIndexes.size() > 1)
+    {
+      actionRemoveBookmark->setText("Remove Items");
+      menu.addAction(actionRemoveBookmark);
+    }
+    else if(path.isEmpty() == false)
+    {
+      bool itemHasErrors = model->data(actualIndex, Qt::UserRole).value<bool>();
+      if(itemHasErrors == true)
+      {
+        menu.addAction(actionLocateFile);
+
+        {
+          QAction* separator = new QAction(this);
+          separator->setSeparator(true);
+          menu.addAction(separator);
+        }
+
+        actionRemoveBookmark->setText("Remove Bookmark");
+        menu.addAction(actionRemoveBookmark);
+      }
+      else
+      {
+        menu.addAction(actionOpenBookmark);
+        menu.addAction(actionExecuteBookmark);
+        {
+          QAction* separator = new QAction(this);
+          separator->setSeparator(true);
+          menu.addAction(separator);
+        }
+        actionRenameBookmark->setText("Rename Bookmark");
+        menu.addAction(actionRenameBookmark);
+        actionRemoveBookmark->setText("Remove Bookmark");
+        menu.addAction(actionRemoveBookmark);
+        {
+          QAction* separator = new QAction(this);
+          separator->setSeparator(true);
+          menu.addAction(separator);
+        }
+
+        menu.addAction(actionShowBookmarkInFileSystem);
+      }
+    }
+    else if(path.isEmpty())
+    {
+      menu.addAction(actionAddBookmark);
+
+      actionRenameBookmark->setText("Rename Folder");
+      menu.addAction(actionRenameBookmark);
+
+      {
+        QAction* separator = new QAction(this);
+        separator->setSeparator(true);
+        menu.addAction(separator);
+      }
+
+      actionRemoveBookmark->setText("Remove Folder");
+      menu.addAction(actionRemoveBookmark);
+
+      {
+        QAction* separator = new QAction(this);
+        separator->setSeparator(true);
+        menu.addAction(separator);
+      }
+
+      menu.addAction(actionNewFolder);
+    }
   }
+
+  menu.exec(mappedPos);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::createSIMPLViewMenu()
+void SIMPLView_UI::createSIMPLViewMenuSystem()
 {
   m_SIMPLViewMenu = QSharedPointer<QMenuBar>(new QMenuBar());
+  m_MenuItems = new SIMPLViewMenuItems(this);
 
-  QMenu* menuFile = new QMenu("File", m_SIMPLViewMenu.data());
-  QMenu* menuEdit = new QMenu("Edit", m_SIMPLViewMenu.data());
-  QMenu* menuToolbox = new QMenu("Toolbox", m_SIMPLViewMenu.data());
-  QMenu* menuView = new QMenu("View", m_SIMPLViewMenu.data());
-  QMenu* menuBookmarks = new QMenu("Bookmarks", m_SIMPLViewMenu.data());
-  QMenu* menuPipeline = new QMenu("Pipeline", m_SIMPLViewMenu.data());
-  QMenu* menuHelp = new QMenu("Help", m_SIMPLViewMenu.data());
-  QMenu* menuAdvanced = new QMenu("Advanced", m_SIMPLViewMenu.data());
-  QAction* actionNew = new QAction("New...", this);
-  QAction* actionOpen = new QAction("Open...", this);
-  QAction* actionSave = new QAction("Save", this);
-  QAction* actionSaveAs = new QAction("Save As...", this);
-  QMenu* menuRecentFiles = new QMenu("Recent Files");
-  QAction* actionClearRecentFiles = new QAction("Clear Recent Files", this);
-  QAction* actionExit = new QAction("Exit " + QApplication::applicationName(), this);
-  QAction* actionClearPipeline = new QAction("Clear Pipeline", this);
-  QAction* actionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
-  QAction* actionCheckForUpdates = new QAction("Check For Updates", this);
-  QAction* actionClearCache = new QAction("Clear Cache", this);
-  QAction* actionClearBookmarks = new QAction("Clear Bookmarks", this);
-  QAction* actionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
-  QAction* actionPluginInformation = new QAction("Plugin Information", this);
-  QAction* actionAddBookmark = new QAction("Add Bookmark", this);
-  QAction* actionNewFolder = new QAction("New Folder", this);
+  QMenu* menuFile = m_MenuItems->getMenuFile();
+  QMenu* menuEdit = m_MenuItems->getMenuEdit();
+  QMenu* menuView = m_MenuItems->getMenuView();
+  QMenu* menuBookmarks = m_MenuItems->getMenuBookmarks();
+  QMenu* menuPipeline = m_MenuItems->getMenuPipeline();
+  QMenu* menuHelp = m_MenuItems->getMenuHelp();
+  QMenu* menuAdvanced = m_MenuItems->getMenuAdvanced();
+  QAction* actionNew = m_MenuItems->getActionNew();
+  QAction* actionOpen = m_MenuItems->getActionOpen();
+  QAction* actionSave = m_MenuItems->getActionSave();
+  QAction* actionSaveAs = m_MenuItems->getActionSaveAs();
+  QMenu* menuRecentFiles = m_MenuItems->getMenuRecentFiles();
+  QAction* actionClearRecentFiles = m_MenuItems->getActionClearRecentFiles();
+  QAction* actionExit = m_MenuItems->getActionExit();
+  QAction* actionClearPipeline = m_MenuItems->getActionClearPipeline();
+  QAction* actionShowSIMPLViewHelp = m_MenuItems->getActionShowSIMPLViewHelp();
+  QAction* actionCheckForUpdates = m_MenuItems->getActionCheckForUpdates();
+  QAction* actionClearCache = m_MenuItems->getActionClearCache();
+  QAction* actionClearBookmarks = m_MenuItems->getActionClearBookmarks();
+  QAction* actionAboutSIMPLView = m_MenuItems->getActionAboutSIMPLView();
+  QAction* actionPluginInformation = m_MenuItems->getActionPluginInformation();
+  QAction* actionAddBookmark = m_MenuItems->getActionAddBookmark();
+  QAction* actionNewFolder = m_MenuItems->getActionNewFolder();
+  QAction* actionNewPipeline = m_MenuItems->getActionNewPipeline();
+  QAction* actionShowBookmarkInFileSystem = m_MenuItems->getActionShowBookmarkInFileSystem();
+  QAction* actionRenameBookmark = m_MenuItems->getActionRenameBookmark();
+  QAction* actionRemoveBookmark = m_MenuItems->getActionRemoveBookmark();
+  QAction* actionOpenBookmark = m_MenuItems->getActionOpenBookmark();
+  QAction* actionOpenExecuteBookmark = m_MenuItems->getActionOpenExecuteBookmark();
 
-  QAction* actionCut = new QAction("Cut", this);
-  QAction* actionCopy = new QAction("Copy", this);
-  QAction* actionPaste = new QAction("Paste", this);
-
-//  m_ActionClearPipeline->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
-  actionOpen->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
-  actionNew->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
-//  m_ActionNewPipeline->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
-//  m_ActionExit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
-  actionShowSIMPLViewHelp->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
-  actionCheckForUpdates->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
-  actionPluginInformation->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-  actionSave->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
-  actionSaveAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
-//  m_ActionAddBookmark->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
-//  m_ActionNewFolder->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
-  actionCut->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
-  actionCopy->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
-  actionPaste->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
+  QAction* actionCut = m_MenuItems->getActionCut();
+  QAction* actionCopy = m_MenuItems->getActionCopy();
+  QAction* actionPaste = m_MenuItems->getActionPaste();
 
   // Menu Items Connections
   connect(actionNew, SIGNAL(triggered()), this, SLOT(listenNewInstanceTriggered()));
-//  connect(menuItems->getActionNewPipeline(), SIGNAL(triggered()), this, SLOT(on_actionNewPipeline_triggered()));
+  connect(actionNewPipeline, SIGNAL(triggered()), this, SLOT(listenNewPipelineTriggered()));
   connect(actionOpen, SIGNAL(triggered()), this, SLOT(listenOpenPipelineTriggered()));
   connect(actionSave, SIGNAL(triggered()), this, SLOT(listenSavePipelineTriggered()));
   connect(actionSaveAs, SIGNAL(triggered()), this, SLOT(listenSavePipelineAsTriggered()));
-//  connect(menuItems->getActionExit(), SIGNAL(triggered()), this, SLOT(listenExitApplicationTriggered()));
+  connect(actionExit, SIGNAL(triggered()), this, SLOT(listenExitApplicationTriggered()));
   connect(actionClearRecentFiles, SIGNAL(triggered()), this, SLOT(listenClearRecentFilesTriggered()));
   connect(actionAboutSIMPLView, SIGNAL(triggered()), this, SLOT(listenAboutSIMPLViewTriggered()));
   connect(actionCheckForUpdates, SIGNAL(triggered()), this, SLOT(listenCheckForUpdatesTriggered()));
   connect(actionShowSIMPLViewHelp, SIGNAL(triggered()), this, SLOT(listenShowSIMPLViewHelpTriggered()));
   connect(actionPluginInformation, SIGNAL(triggered()), this, SLOT(listenPluginInfoTriggered()));
-//  connect(menuItems->getActionClearPipeline(), SIGNAL(triggered()), this, SLOT(on_actionClearPipeline_triggered()));
-//  connect(menuItems->getActionShowBookmarkInFileSystem(), SIGNAL(triggered()), this, SLOT(on_actionShowBookmarkInFileSystem_triggered()));
-//  connect(menuItems->getActionRenameBookmark(), SIGNAL(triggered()), this, SLOT(on_actionRenameBookmark_triggered()));
-//  connect(menuItems->getActionRemoveBookmark(), SIGNAL(triggered()), this, SLOT(on_actionRemoveBookmark_triggered()));
+  connect(actionClearPipeline, SIGNAL(triggered()), this, SLOT(listenClearPipelineTriggered()));
+  connect(actionShowBookmarkInFileSystem, SIGNAL(triggered()), this, SLOT(listenShowBookmarkInFileSystemTriggered()));
+  connect(actionRenameBookmark, SIGNAL(triggered()), this, SLOT(listenRenameBookmarkTriggered()));
+  connect(actionRemoveBookmark, SIGNAL(triggered()), this, SLOT(listenRemoveBookmarkTriggered()));
   connect(actionClearCache, SIGNAL(triggered()), this, SLOT(listenClearCacheTriggered()));
   connect(actionClearBookmarks, SIGNAL(triggered()), this, SLOT(listenClearBookmarksTriggered()));
-//  connect(menuItems->getActionOpenBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenBookmark_triggered()));
-//  connect(menuItems->getActionOpenExecuteBookmark(), SIGNAL(triggered()), this, SLOT(on_actionOpenExecuteBookmark_triggered()));
-//  connect(menuItems->getActionAddBookmark(), SIGNAL(triggered()), this, SLOT(on_actionAddBookmark_triggered()));
-//  connect(menuItems->getActionNewFolder(), SIGNAL(triggered()), this, SLOT(on_actionNewFolder_triggered()));
+  connect(actionOpenBookmark, SIGNAL(triggered()), this, SLOT(listenOpenBookmarkTriggered()));
+  connect(actionOpenExecuteBookmark, SIGNAL(triggered()), this, SLOT(listenOpenExecuteBookmarkTriggered()));
+  connect(actionAddBookmark, SIGNAL(triggered()), this, SLOT(listenAddBookmarkTriggered()));
+  connect(actionNewFolder, SIGNAL(triggered()), this, SLOT(listenNewFolderTriggered()));
   connect(actionCut, SIGNAL(triggered()), this, SLOT(listenCutTriggered()));
   connect(actionCopy, SIGNAL(triggered()), this, SLOT(listenCopyTriggered()));
   connect(actionPaste, SIGNAL(triggered()), this, SLOT(listenPasteTriggered()));
@@ -855,7 +917,7 @@ void SIMPLView_UI::updatePasteAvailability()
 void SIMPLView_UI::disconnectSignalsSlots()
 {
   DocRequestManager* docRequester = DocRequestManager::Instance();
-  PipelineModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineModel();
 
   disconnect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
 
@@ -932,7 +994,7 @@ void SIMPLView_UI::disconnectSignalsSlots()
 void SIMPLView_UI::connectSignalsSlots()
 {
   DocRequestManager* docRequester = DocRequestManager::Instance();
-  PipelineModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineModel();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
 
@@ -944,17 +1006,14 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_SIMPLController, &SIMPLController::standardOutputMessageGenerated, [=] (const QString &msg) { addStdOutputMessage(msg); });
 
   connect(m_SIMPLController, &SIMPLController::undoActionGenerated, [=] (QAction* actionUndo) {
-    PipelineModel* model = getPipelineTreeModel();
+    PipelineModel* model = getPipelineModel();
     model->setActionUndo(actionUndo);
   });
 
   connect(m_SIMPLController, &SIMPLController::redoActionGenerated, [=] (QAction* actionRedo) {
-    PipelineModel* model = getPipelineTreeModel();
+    PipelineModel* model = getPipelineModel();
     model->setActionRedo(actionRedo);
   });
-
-  // Connection that allows the Pipeline Tree controller to clear the Issues Table
-  connect(m_SIMPLController, &SIMPLController::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
 
   // Connection that allows the Pipeline Tree controller to display cached issues in the table
   connect(m_SIMPLController, &SIMPLController::displayIssuesTriggered, issuesWidget, &IssuesWidget::displayCachedMessages);
@@ -981,6 +1040,9 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(bookmarksWidget->getBookmarksTreeView(), SIGNAL(currentIndexChanged(const QModelIndex&, const QModelIndex&)), this,
           SLOT(listenBookmarkSelectionChanged(const QModelIndex&, const QModelIndex&)));
+
+  connect(bookmarksWidget->getBookmarksTreeView(), &BookmarksTreeView::contextMenuRequested, this,
+          &SIMPLView_UI::listenBookmarksContextMenuRequested);
 
   connect(bookmarksWidget, &BookmarksToolboxWidget::pipelineFileActivated, [=] (const QString& filePath) {
     if (USE_PIPELINE_TREE_WIDGET == true)
@@ -1061,8 +1123,11 @@ void SIMPLView_UI::connectSignalsSlots()
     // Connection that allows the view to call for a preflight, which gets picked up by the Pipeline Tree controller
     connect(m_PipelineTreeView, &PipelineTreeView::needsPreflight, m_SIMPLController, &SIMPLController::preflightPipeline);
 
-    // Connection to update the active pipeline when the user decides to change it
-    connect(m_PipelineTreeView, &PipelineTreeView::activePipelineChanged, m_SIMPLController, &SIMPLController::updateActivePipeline);
+    // Connection that allows the Pipeline Tree view to clear the Issues Table
+    connect(m_PipelineTreeView, &PipelineTreeView::clearIssuesTriggered, issuesWidget, &IssuesWidget::clearIssues);
+
+    // Connection that enables the pipeline tree view to create a new pipeline
+    connect(m_PipelineTreeView, &PipelineTreeView::needsNewPipeline, this, &SIMPLView_UI::addPipeline);
 
     connect(m_PipelineTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=] {
       QModelIndexList indexList = m_PipelineTreeView->selectionModel()->selectedRows();
@@ -1090,7 +1155,7 @@ void SIMPLView_UI::addFilter(AbstractFilter::Pointer filter)
   setStatusBarMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
   addStdOutputMessage(tr("Added \"%1\" filter").arg(filter->getHumanLabel()));
 
-  PipelineModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineModel();
   m_SIMPLController->addFilterToModel(filter, model);
 }
 
@@ -1099,7 +1164,7 @@ void SIMPLView_UI::addFilter(AbstractFilter::Pointer filter)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::addPipeline(const QString &pipelineName, bool setAsActive)
 {
-  PipelineModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineModel();
   m_SIMPLController->addPipelineToModel(pipelineName, FilterPipeline::New(), model, setAsActive);
 }
 
@@ -1108,7 +1173,7 @@ void SIMPLView_UI::addPipeline(const QString &pipelineName, bool setAsActive)
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  int result = m_SIMPLController->addPipelineToModelFromFile(filePath, getPipelineTreeModel());
+  int result = m_SIMPLController->addPipelineToModelFromFile(filePath, getPipelineModel());
   if (result < 0)
   {
     return result;
@@ -1132,7 +1197,7 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::executePipeline(const QModelIndex &pipelineIndex)
 {
-  m_SIMPLController->runPipeline(pipelineIndex, getPipelineTreeModel());
+  m_SIMPLController->runPipeline(pipelineIndex, getPipelineModel());
 }
 
 // -----------------------------------------------------------------------------
@@ -1171,14 +1236,6 @@ void SIMPLView_UI::listenDeleteKeyTriggered()
     //    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(selectedWidgets, m_ActiveWindow->getPipelineViewWidget(), "Remove");
     //    m_ActiveWindow->getPipelineViewWidget()->addUndoCommand(removeCmd);
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenNewPipelineTriggered()
-{
-  addPipeline("Untitled Pipeline", true);
 }
 
 // -----------------------------------------------------------------------------
@@ -1236,7 +1293,7 @@ void SIMPLView_UI::listenExecuteBookmarkTriggered()
   {
     openPipeline(pipelinePath);
 
-    PipelineModel* model = getPipelineTreeModel();
+    PipelineModel* model = getPipelineModel();
     int row = model->rowCount() - 1;
     QModelIndex pipelineIndex = model->index(row, PipelineItem::Name);
 
@@ -1248,7 +1305,7 @@ void SIMPLView_UI::listenExecuteBookmarkTriggered()
     if(fi.exists())
     {
       SIMPLView_UI* ui = dream3dApp->newInstanceFromFile(pipelinePath);
-      PipelineModel* model = getPipelineTreeModel();
+      PipelineModel* model = getPipelineModel();
       QModelIndex pipelineIndex = model->index(0, PipelineItem::Name);
 
       // Cache the last directory on old instance
@@ -1606,91 +1663,6 @@ void SIMPLView_UI::listenAboutSIMPLViewTriggered()
 {
   AboutSIMPLView d(nullptr);
   d.exec();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenCutTriggered()
-{
-  // SIMPL-FIXME: Implement Cut using one window
-
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
-
-//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-//    for(int i = 0; i < filterWidgets.size(); i++)
-//    {
-//      pipeline->pushBack(filterWidgets[i]->getFilter());
-//    }
-
-//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-//    QString jsonString = jsonWriter->writePipelineToString(pipeline, "Pipeline");
-
-//    QClipboard* clipboard = QApplication::clipboard();
-//    clipboard->setText(jsonString);
-
-//    RemoveFilterCommand* removeCmd = new RemoveFilterCommand(filterWidgets, viewWidget, "Cut");
-//    viewWidget->addUndoCommand(removeCmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenCopyTriggered()
-{
-  // SIMPL-FIXME: Implement Copy using one window
-
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    FilterPipeline::Pointer pipeline = FilterPipeline::New();
-//    QList<PipelineFilterObject*> filterWidgets = viewWidget->getSelectedFilterObjects();
-//    for(int i = 0; i < filterWidgets.size(); i++)
-//    {
-//      pipeline->pushBack(filterWidgets[i]->getFilter());
-//    }
-
-//    JsonFilterParametersWriter::Pointer jsonWriter = JsonFilterParametersWriter::New();
-//    QString json = jsonWriter->writePipelineToString(pipeline, "Copy - Pipeline");
-//    QClipboard* clipboard = QApplication::clipboard();
-//    clipboard->setText(json);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenPasteTriggered()
-{
-  // SIMPL-FIXME: Implement Paste using one window
-
-//    SVPipelineViewWidget* viewWidget = m_ActiveWindow->getPipelineViewWidget();
-
-//    QClipboard* clipboard = QApplication::clipboard();
-//    QString jsonString = clipboard->text();
-
-//    JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
-//    FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromString(jsonString);
-//    FilterPipeline::FilterContainerType container = pipeline->getFilterContainer();
-
-//    AddFilterCommand* addCmd = new AddFilterCommand(container, viewWidget, "Paste", -1);
-//    viewWidget->addUndoCommand(addCmd);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenClearPipelineTriggered()
-{
-  PipelineModel* model = getPipelineTreeModel();
-
-  if(model->rowCount() > 0)
-  {
-    // SIMPL-FIXME: Need to implement "remove" and "clear" functionality in the model
-    //      viewWidget->clearFilterWidgets();
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-    menuItems->getActionClearPipeline()->setDisabled(true);
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -2242,7 +2214,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::preflightDidFinish(int err)
 {
-  PipelineModel* model = getPipelineTreeModel();
+  PipelineModel* model = getPipelineModel();
   QModelIndex pipelineIndex = m_SIMPLController->getActivePipelineIndex();
   if (pipelineIndex.isValid() == false)
   {
@@ -2264,17 +2236,17 @@ void SIMPLView_UI::preflightDidFinish(int err)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PipelineModel* SIMPLView_UI::getPipelineTreeModel()
+PipelineModel* SIMPLView_UI::getPipelineModel()
 {
   PipelineModel* model;
   if (USE_PIPELINE_TREE_WIDGET == true)
   {
-    model = m_PipelineTreeView->getPipelineTreeModel();
+    model = m_PipelineTreeView->getPipelineModel();
   }
   else
   {
     SVPipelineViewWidget* viewWidget = m_ListWidget->getPipelineViewWidget();
-    model = viewWidget->getPipelineTreeModel();
+    model = viewWidget->getPipelineModel();
   }
   return model;
 }

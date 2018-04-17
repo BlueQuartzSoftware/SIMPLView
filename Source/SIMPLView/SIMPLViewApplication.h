@@ -104,9 +104,6 @@ protected:
   // This is a set of all SIMPLView instances currently available
   QList<SIMPLView_UI*> m_SIMPLViewInstances;
 
-  // This is the set of SIMPLView instances that are currently running a pipeline
-  QSet<SIMPLView_UI*> m_CurrentlyRunningInstances;
-
   // The currently active SIMPLView instance
   SIMPLView_UI* m_ActiveWindow;
   SIMPLView_UI* m_PreviousActiveWindow;

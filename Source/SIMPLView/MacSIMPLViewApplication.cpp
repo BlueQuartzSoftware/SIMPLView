@@ -151,7 +151,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
   {
-    PipelineModel* model = instance->getPipelineTreeModel();
+    PipelineModel* model = instance->getPipelineModel();
     m_MenuEdit->insertAction(m_EditSeparator, model->getActionRedo());
     m_MenuEdit->insertAction(model->getActionRedo(), model->getActionUndo());
 
@@ -168,7 +168,7 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   }
   else
   {
-    PipelineModel* model = instance->getPipelineTreeModel();
+    PipelineModel* model = instance->getPipelineModel();
 
     m_MenuEdit->removeAction(model->getActionRedo());
     m_MenuEdit->removeAction(model->getActionUndo());
@@ -186,7 +186,7 @@ void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
 {
   SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
 
-  PipelineModel* model = instance->getPipelineTreeModel();
+  PipelineModel* model = instance->getPipelineModel();
   if (isCurrentlyRunning(instance) == false && model->rowCount() > 0)
   {
     menuItems->getActionClearPipeline()->setEnabled(true);
