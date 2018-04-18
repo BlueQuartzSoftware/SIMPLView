@@ -203,12 +203,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     void executePipeline(const QModelIndex &pipelineIndex);
 
-    /**
-     * @brief getPipelineTreeModel
-     * @return
-     */
-    PipelineModel* getPipelineModel();
-
   public slots:
     /**
      * @brief addPipeline
@@ -372,14 +366,7 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void listenOpenPipelineTriggered();
     void listenSavePipelineTriggered();
     void listenSavePipelineAsTriggered();
-    void listenExecuteBookmarkTriggered();
-    void listenAddBookmarkTriggered();
-    void listenAddBookmarkFolderTriggered();
-    void listenRenameBookmarkTriggered();
-    void listenRemoveBookmarkTriggered();
-    void listenShowBookmarkInFileSystemTriggered();
     void listenClearCacheTriggered();
-    void listenClearBookmarksTriggered();
     void listenCloseWindowTriggered();
     void listenShowSIMPLViewHelpTriggered();
     void listenCheckForUpdatesTriggered();
@@ -388,9 +375,9 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void listenClearRecentFilesTriggered();
     void listenDeleteKeyTriggered();
     void listenBookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
-    void listenOpenBookmarkTriggered();
 
-    void on_pipelineViewWidget_windowNeedsRecheck();
+    void refreshWindowTitle();
+
     void on_pipelineViewWidget_pipelineIssuesCleared();
     void on_pipelineViewWidget_pipelineHasNoErrors();
 
@@ -418,12 +405,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     // Our Signals that we can emit custom for this class
   signals:
-
-    /**
-    * @brief bookmarkNeedsToBeAdded
-    */
-    void bookmarkNeedsToBeAdded(const QString& filePath, const QModelIndex& parent);
-
     void parentResized();
 
     void preflightFinished(bool errors);
@@ -455,9 +436,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void deleteKeyPressed();
 
-  private slots:
-    void listenBookmarksContextMenuRequested(const QModelIndex &currentIndex, QModelIndexList selectedIndexes, const QPoint &mappedPos);
-
   private:
     QSharedPointer<QMenuBar>              m_SIMPLViewMenu;
     SIMPLViewMenuItems*                   m_MenuItems;
@@ -488,6 +466,29 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     PipelineListWidget*                   m_ListWidget = nullptr;
     PipelineTreeView*                     m_PipelineTreeView = nullptr;
 
+    QMenu*                                m_MenuRecentFiles = new QMenu("Recent Files", this);
+    QMenu*                                m_MenuFile = new QMenu("File", this);
+    QMenu*                                m_MenuEdit = new QMenu("Edit", this);
+    QMenu*                                m_MenuView = new QMenu("View", this);
+    QMenu*                                m_MenuBookmarks = new QMenu("Bookmarks", this);
+    QMenu*                                m_MenuPipeline = new QMenu("Pipeline", this);
+    QMenu*                                m_MenuHelp = new QMenu("Help", this);
+    QMenu*                                m_MenuAdvanced = new QMenu("Advanced", this);
+
+    QAction*                              m_ActionNew = new QAction("New...", this);
+    QAction*                              m_ActionOpen = new QAction("Open...", this);
+    QAction*                              m_ActionSave = new QAction("Save", this);
+    QAction*                              m_ActionSaveAs = new QAction("Save As...", this);
+    QAction*                              m_ActionLoadTheme = new QAction("Load Theme", this);
+    QAction*                              m_ActionSaveTheme = new QAction("Save Theme", this);
+    QAction*                              m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
+    QAction*                              m_ActionExit = new QAction("Exit " + QApplication::applicationName(), this);
+    QAction*                              m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
+    QAction*                              m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
+    QAction*                              m_ActionCheckForUpdates = new QAction("Check For Updates", this);
+    QAction*                              m_ActionPluginInformation = new QAction("Plugin Information", this);
+    QAction*                              m_ActionClearCache = new QAction("Clear Cache", this);
+
     /**
      * @brief setupPipelineViewWidget
      */
@@ -502,6 +503,15 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
+
+    /**
+    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+    * should be connected to the Signal QtSRecentFileList->fileListChanged
+    * @param file The newly added file.
+    */
+    void updateRecentFileList(const QString& file);
+
+    void openRecentFile();
 
     void toPipelineRunningState();
     void toPipelineIdleState();

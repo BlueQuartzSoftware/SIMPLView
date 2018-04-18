@@ -52,33 +52,7 @@ class StandardSIMPLViewApplication : public SIMPLViewApplication
 
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    /**
-     * @brief getSIMPLViewMenuBar Creates the QMenuBar that should be used for
-     * application windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
-     * @return
-     */
-    QMenuBar* getSIMPLViewMenuBar(SIMPLView_UI* instance);
-
-
-    /**
-     * @brief getToolboxMenuBar Creates the QMenuBar that should be used for
-     * Toolbox windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
-     * @return
-     */
-    QMenuBar* getToolboxMenuBar();
-
   protected slots:
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QtSRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
 
     /**
     * @brief activeWindowChanged

@@ -73,7 +73,6 @@
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
@@ -90,7 +89,6 @@
 SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 : QApplication(argc, argv)
 , m_ActiveWindow(nullptr)
-, m_PreviousActiveWindow(nullptr)
 , m_OpenDialogLastFilePath("")
 , m_ShowSplash(true)
 , m_SplashScreen(nullptr)
@@ -99,6 +97,12 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   // Connection to update the recent files list on all windows when it changes
   QtSRecentFileList* recentsList = QtSRecentFileList::instance();
   connect(recentsList, SIGNAL(fileListChanged(const QString&)), this, SLOT(updateRecentFileList(const QString&)));
+
+  // If on Mac, add custom actions to a dock menu
+#if defined(Q_OS_MAC)
+  m_DockMenu = QSharedPointer<QMenu>(createMacDockMenu());
+  m_DockMenu.data()->setAsDockMenu();
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -457,34 +461,6 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::updateRecentFileList(const QString& file)
-{
-  // This should never be executed
-  return;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLViewApplication::openRecentFile()
-{
-  QAction* action = qobject_cast<QAction*>(sender());
-
-  if(action)
-  {
-    QString filePath = action->data().toString();
-
-    newInstanceFromFile(filePath);
-
-    // Add file path to the recent files list for both instances
-    QtSRecentFileList* list = QtSRecentFileList::instance();
-    list->addFile(filePath);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 UpdateCheck::SIMPLVersionData_t SIMPLViewApplication::FillVersionData()
 {
   UpdateCheck::SIMPLVersionData_t data;
@@ -626,4 +602,87 @@ void SIMPLViewApplication::readSettings()
   prefs->beginGroup("Application Settings");
 
   prefs->endGroup();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QMenuBar* SIMPLViewApplication::createDefaultMenuBar()
+{
+  m_DefaultMenuBar = new QMenuBar();
+
+  m_ActionAddBookmark->setDisabled(true);
+  m_ActionAddBookmarkFolder->setDisabled(true);
+  m_ActionSave->setDisabled(true);
+  m_ActionSaveAs->setDisabled(true);
+
+  m_ActionClearPipeline->setDisabled(true);
+  m_ActionCut->setDisabled(true);
+  m_ActionCopy->setDisabled(true);
+  m_ActionPaste->setDisabled(true);
+
+  // Create File Menu
+  m_DefaultMenuBar->addMenu(m_MenuFile);
+  m_MenuFile->addAction(m_ActionNew);
+  m_MenuFile->addAction(m_ActionOpen);
+  m_MenuFile->addSeparator();
+  m_MenuFile->addAction(m_ActionSave);
+  m_MenuFile->addAction(m_ActionSaveAs);
+  m_MenuFile->addSeparator();
+  m_MenuFile->addAction(m_MenuRecentFiles->menuAction());
+  m_MenuRecentFiles->addSeparator();
+  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
+  m_MenuFile->addSeparator();
+  m_MenuFile->addAction(m_ActionExit);
+
+  // Create Edit Menu
+  m_DefaultMenuBar->addMenu(m_MenuEdit);
+  m_MenuEdit->addSeparator();
+  m_MenuEdit->addAction(m_ActionCut);
+  m_MenuEdit->addAction(m_ActionCopy);
+  m_MenuEdit->addAction(m_ActionPaste);
+
+  // Create Bookmarks Menu
+  m_DefaultMenuBar->addMenu(m_MenuBookmarks);
+  m_MenuBookmarks->addAction(m_ActionAddBookmark);
+  m_MenuBookmarks->addSeparator();
+  m_MenuBookmarks->addAction(m_ActionAddBookmarkFolder);
+
+  // Create Pipeline Menu
+  m_DefaultMenuBar->addMenu(m_MenuPipeline);
+  m_MenuPipeline->addAction(m_ActionClearPipeline);
+
+  // Create Help Menu
+  m_DefaultMenuBar->addMenu(m_MenuHelp);
+  m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addAction(m_ActionCheckForUpdates);
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addMenu(m_MenuAdvanced);
+  m_MenuAdvanced->addAction(m_ActionClearCache);
+  m_MenuAdvanced->addSeparator();
+  m_MenuAdvanced->addAction(m_ActionClearBookmarks);
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addAction(m_ActionAboutSIMPLView);
+  m_MenuHelp->addAction(m_ActionPluginInformation);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QMenu* SIMPLViewApplication::createMacDockMenu()
+{
+  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+
+  QMenu* dockMenu = new QMenu();
+  dockMenu->addAction(menuItems->getActionNew());
+  dockMenu->addAction(menuItems->getActionOpen());
+  dockMenu->addSeparator();
+  dockMenu->addAction(menuItems->getActionShowSIMPLViewHelp());
+  dockMenu->addSeparator();
+  dockMenu->addAction(menuItems->getActionCheckForUpdates());
+  dockMenu->addSeparator();
+  dockMenu->addAction(menuItems->getActionPluginInformation());
+
+  return dockMenu;
 }

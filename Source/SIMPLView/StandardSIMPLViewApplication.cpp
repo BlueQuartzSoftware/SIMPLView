@@ -42,11 +42,7 @@
 
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
-
-
-
 
 // -----------------------------------------------------------------------------
 //
@@ -69,47 +65,11 @@ StandardSIMPLViewApplication::~StandardSIMPLViewApplication()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void StandardSIMPLViewApplication::updateRecentFileList(const QString& file)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
-
-  // Clear the Recent Items Menu
-  recentFilesMenu->clear();
-
-  // Get the list from the static object
-  QStringList files = QtSRecentFileList::instance()->fileList();
-  foreach(QString file, files)
-  {
-    QAction* action = recentFilesMenu->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
-    action->setData(file);
-    action->setVisible(true);
-    connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
-  }
-
-  recentFilesMenu->addSeparator();
-  recentFilesMenu->addAction(clearRecentFilesAction);
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void StandardSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
   {
-    SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
     m_ActiveWindow = instance;
-
-    menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
-  }
-  else
-  {
-    m_PreviousActiveWindow = instance;
   }
 }
 
@@ -120,135 +80,9 @@ void StandardSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* windo
 {
   m_SIMPLViewInstances.removeAll(window);
 
-  if (m_PreviousActiveWindow == window)
-  {
-    m_PreviousActiveWindow = nullptr;
-  }
-
   if (m_SIMPLViewInstances.size() <= 0)
   {
     quit();
   }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QMenuBar* StandardSIMPLViewApplication::getSIMPLViewMenuBar(SIMPLView_UI* instance)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenuBar* menuBar = new QMenuBar();
-  QMenu* menuFile = new QMenu("File", menuBar);
-  QMenu* menuEdit = new QMenu("Edit", menuBar);
-  QMenu* menuView = new QMenu("View", menuBar);
-  QMenu* menuPipeline = new QMenu("Pipeline", menuBar);
-  QMenu* menuHelp = new QMenu("Help", menuBar);
-  QMenu* menuAdvanced = new QMenu("Advanced", menuBar);
-  QAction* actionNew = menuItems->getActionNew();
-  QAction* actionOpen = menuItems->getActionOpen();
-  QAction* actionSave = menuItems->getActionSave();
-  QAction* actionSaveAs = menuItems->getActionSaveAs();
-  QMenu* menuRecentFiles = menuItems->getMenuRecentFiles();
-  QAction* actionClearRecentFiles = menuItems->getActionClearRecentFiles();
-  QAction* actionExit = menuItems->getActionExit();
-  QAction* actionClearPipeline = menuItems->getActionClearPipeline();
-  QAction* actionShowSIMPLViewHelp = menuItems->getActionShowSIMPLViewHelp();
-  QAction* actionCheckForUpdates = menuItems->getActionCheckForUpdates();
-  QAction* actionClearCache = menuItems->getActionClearCache();
-  QAction* actionClearBookmarks = menuItems->getActionClearBookmarks();
-  QAction* actionAboutSIMPLView = menuItems->getActionAboutSIMPLView();
-  QAction* actionPluginInformation = menuItems->getActionPluginInformation();
-  QAction* actionShowToolbox = menuItems->getActionShowToolbox();
-  QAction* actionCut = menuItems->getActionCut();
-  QAction* actionCopy = menuItems->getActionCopy();
-  QAction* actionPaste = menuItems->getActionPaste();
-
-  PipelineModel* model = instance->getPipelineModel();
-  QAction* actionUndo = model->getActionUndo();
-  QAction* actionRedo = model->getActionRedo();
-
-  actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-  actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Z));
-
-  // Create File Menu
-  menuBar->addMenu(menuFile);
-  menuFile->addAction(actionNew);
-  menuFile->addAction(actionOpen);
-  menuFile->addSeparator();
-  menuFile->addAction(actionSave);
-  menuFile->addAction(actionSaveAs);
-  menuFile->addSeparator();
-  menuFile->addAction(menuRecentFiles->menuAction());
-  menuFile->addSeparator();
-  menuFile->addAction(actionExit);
-  menuRecentFiles->addSeparator();
-  menuRecentFiles->addAction(actionClearRecentFiles);
-
-  // Create Edit Menu
-  menuBar->addMenu(menuEdit);
-  menuEdit->addAction(actionUndo);
-  menuEdit->addAction(actionRedo);
-  menuEdit->addSeparator();
-  menuEdit->addAction(actionCut);
-  menuEdit->addAction(actionCopy);
-  menuEdit->addAction(actionPaste);
-
-  // Create View Menu
-  menuBar->addMenu(menuView);
-  menuView->addAction(actionShowToolbox);
-  menuView->addSeparator();
-  instance->insertDockWidgetActions(menuView);
-
-  // Create Pipeline Menu
-  menuBar->addMenu(menuPipeline);
-  menuPipeline->addAction(actionClearPipeline);
-
-  // Create Help Menu
-  menuBar->addMenu(menuHelp);
-  menuHelp->addAction(actionShowSIMPLViewHelp);
-  menuHelp->addSeparator();
-  menuHelp->addAction(actionCheckForUpdates);
-  menuHelp->addSeparator();
-  menuHelp->addMenu(menuAdvanced);
-  menuAdvanced->addAction(actionClearCache);
-  menuAdvanced->addSeparator();
-  menuAdvanced->addAction(actionClearBookmarks);
-  menuHelp->addSeparator();
-  menuHelp->addAction(actionAboutSIMPLView);
-  menuHelp->addAction(actionPluginInformation);
-
-  return menuBar;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QMenuBar* StandardSIMPLViewApplication::getToolboxMenuBar()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenuBar* menuBar = new QMenuBar();
-  QMenu* menuView = new QMenu("View", menuBar);
-  QMenu* menuBookmarks = new QMenu("Bookmarks", menuBar);
-  QAction* actionShowFilterLibrary = menuItems->getActionShowFilterLibrary();
-  QAction* actionShowFilterList = menuItems->getActionShowFilterList();
-  QAction* actionShowBookmarks = menuItems->getActionShowBookmarks();
-  QAction* actionAddBookmark = menuItems->getActionAddBookmark();
-  QAction* actionNewFolder = menuItems->getActionNewFolder();
-
-  // Add the actions to their respective menus
-  menuBar->addAction(menuView->menuAction());
-  menuBar->addAction(menuBookmarks->menuAction());
-
-  menuView->addAction(actionShowFilterList);
-  menuView->addAction(actionShowFilterLibrary);
-  menuView->addAction(actionShowBookmarks);
-
-  menuBookmarks->addAction(actionAddBookmark);
-  menuBookmarks->addSeparator();
-  menuBookmarks->addAction(actionNewFolder);
-
-  return menuBar;
 }
 

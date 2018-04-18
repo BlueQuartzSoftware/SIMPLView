@@ -196,18 +196,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="filterListInternalWidget">
-    <widget class="FilterListToolboxWidget" name="filterListWidget" native="true">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>240</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
+   <widget class="QWidget" name="filterListInternalWidget"/>
   </widget>
   <action name="actionShow_Filter_Library">
    <property name="text">
@@ -425,12 +414,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>BookmarksToolboxWidget</class>
    <extends>QWidget</extends>
    <header location="global">BookmarksToolboxWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>FilterListToolboxWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">FilterListToolboxWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

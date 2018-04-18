@@ -55,8 +55,9 @@ class SIMPLViewToolbox;
 class SVPipelineFilterWidget;
 class SVPipelineViewWidget;
 
-#define USE_PIPELINE_TREE_WIDGET true
-
+/**
+ * @brief The SIMPLViewApplication class
+ */
 class SIMPLViewApplication : public QApplication
 {
   Q_OBJECT
@@ -106,7 +107,6 @@ protected:
 
   // The currently active SIMPLView instance
   SIMPLView_UI* m_ActiveWindow;
-  SIMPLView_UI* m_PreviousActiveWindow;
 
   QString m_OpenDialogLastFilePath;
 
@@ -119,22 +119,51 @@ protected:
 protected slots:
   void listenExitApplicationTriggered();
 
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
-
   virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-
-  // SIMPLView_UI slots
-  void openRecentFile();
 
 private:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
 
+  QMenuBar*                             m_DefaultMenuBar = new QMenuBar();
+  QSharedPointer<QMenu>                 m_DockMenu;
+
+  QMenu*                                m_MenuRecentFiles = new QMenu("Recent Files", m_DefaultMenuBar);
+  QMenu*                                m_MenuFile = new QMenu("File", m_DefaultMenuBar);
+  QMenu*                                m_MenuEdit = new QMenu("Edit", m_DefaultMenuBar);
+  QMenu*                                m_MenuView = new QMenu("View", m_DefaultMenuBar);
+  QMenu*                                m_MenuBookmarks = new QMenu("Bookmarks", m_DefaultMenuBar);
+  QMenu*                                m_MenuPipeline = new QMenu("Pipeline", m_DefaultMenuBar);
+  QMenu*                                m_MenuHelp = new QMenu("Help", m_DefaultMenuBar);
+  QMenu*                                m_MenuAdvanced = new QMenu("Advanced", m_DefaultMenuBar);
+
+  QAction*                              m_ActionNew = new QAction("New...", m_DefaultMenuBar);
+  QAction*                              m_ActionOpen = new QAction("Open...", m_DefaultMenuBar);
+  QAction*                              m_ActionSave = new QAction("Save", m_DefaultMenuBar);
+  QAction*                              m_ActionSaveAs = new QAction("Save As...", m_DefaultMenuBar);
+  QAction*                              m_ActionLoadTheme = new QAction("Load Theme", m_DefaultMenuBar);
+  QAction*                              m_ActionSaveTheme = new QAction("Save Theme", m_DefaultMenuBar);
+  QAction*                              m_ActionClearRecentFiles = new QAction("Clear Recent Files", m_DefaultMenuBar);
+  QAction*                              m_ActionExit = new QAction("Exit " + QApplication::applicationName(), m_DefaultMenuBar);
+  QAction*                              m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", m_DefaultMenuBar);
+  QAction*                              m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), m_DefaultMenuBar);
+  QAction*                              m_ActionCheckForUpdates = new QAction("Check For Updates", m_DefaultMenuBar);
+  QAction*                              m_ActionPluginInformation = new QAction("Plugin Information", m_DefaultMenuBar);
+  QAction*                              m_ActionClearCache = new QAction("Clear Cache", m_DefaultMenuBar);
+
+  QAction*                              m_ActionCut = new QAction("Cut", m_DefaultMenuBar);
+  QAction*                              m_ActionCopy = new QAction("Copy", m_DefaultMenuBar);
+  QAction*                              m_ActionPaste = new QAction("Paste", m_DefaultMenuBar);
+  QAction*                              m_ActionClearPipeline = new QAction("Clear Pipeline", m_DefaultMenuBar);
+
+  QAction*                              m_ActionAddBookmark = new QAction("Add Bookmark", m_DefaultMenuBar);
+  QAction*                              m_ActionAddBookmarkFolder = new QAction("Add Bookmark Folder", m_DefaultMenuBar);
+  QAction*                              m_ActionClearBookmarks = new QAction("Clear Bookmarks", m_DefaultMenuBar);
+
   int m_minSplashTime;
+
+  void createDefaultMenuBar();
+
+  QMenu* createMacDockMenu();
 
   void readSettings();
   void writeSettings();

@@ -42,10 +42,7 @@
 
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewMenuItems.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
-
-
 
 // -----------------------------------------------------------------------------
 //
@@ -53,9 +50,7 @@
 MacSIMPLViewApplication::MacSIMPLViewApplication(int& argc, char** argv) :
 SIMPLViewApplication(argc, argv)
 {
-  // Add custom actions to a dock menu
-  m_DockMenu = QSharedPointer<QMenu>(createCustomDockMenu());
-  m_DockMenu.data()->setAsDockMenu();
+
 }
 
 // -----------------------------------------------------------------------------
@@ -64,32 +59,6 @@ SIMPLViewApplication(argc, argv)
 MacSIMPLViewApplication::~MacSIMPLViewApplication()
 {
 
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::updateRecentFileList(const QString& file)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-  QMenu* recentFilesMenu = menuItems->getMenuRecentFiles();
-  QAction* clearRecentFilesAction = menuItems->getActionClearRecentFiles();
-
-  // Clear the Recent Items Menu
-  recentFilesMenu->clear();
-
-  // Get the list from the static object
-  QStringList files = QtSRecentFileList::instance()->fileList();
-  foreach(QString file, files)
-  {
-    QAction* action = recentFilesMenu->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
-    action->setData(file);
-    action->setVisible(true);
-    connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
-  }
-
-  recentFilesMenu->addSeparator();
-  recentFilesMenu->addAction(clearRecentFilesAction);
 }
 
 // -----------------------------------------------------------------------------
@@ -137,11 +106,6 @@ void MacSIMPLViewApplication::initializeDummyDockWidgetActions()
 void MacSIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
-
-  if (m_PreviousActiveWindow == window)
-  {
-    m_PreviousActiveWindow = nullptr;
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -151,110 +115,12 @@ void MacSIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
   if (instance->isActiveWindow())
   {
-    PipelineModel* model = instance->getPipelineModel();
-    m_MenuEdit->insertAction(m_EditSeparator, model->getActionRedo());
-    m_MenuEdit->insertAction(model->getActionRedo(), model->getActionUndo());
-
     m_ActiveWindow = instance;
-    toSIMPLViewMenuState(instance);
   }
   else if (m_SIMPLViewInstances.size() == 1)
   {
     /* If the inactive signal got fired and there are no more windows,
      * this means that the last window has been closed. */
     m_ActiveWindow = nullptr;
-    m_PreviousActiveWindow = nullptr;
-    toEmptyMenuState();
   }
-  else
-  {
-    PipelineModel* model = instance->getPipelineModel();
-
-    m_MenuEdit->removeAction(model->getActionRedo());
-    m_MenuEdit->removeAction(model->getActionUndo());
-
-    instance->removeDockWidgetActions(m_MenuView);
-
-    m_PreviousActiveWindow = instance;
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::toSIMPLViewMenuState(SIMPLView_UI* instance)
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  PipelineModel* model = instance->getPipelineModel();
-  if (isCurrentlyRunning(instance) == false && model->rowCount() > 0)
-  {
-    menuItems->getActionClearPipeline()->setEnabled(true);
-  }
-  else
-  {
-    menuItems->getActionClearPipeline()->setDisabled(true);
-  }
-
-  for (int i = 0; i < m_DummyDockWidgetActions.size(); i++)
-  {
-    m_MenuView->removeAction(m_DummyDockWidgetActions[i]);
-  }
-
-  menuItems->getActionShowFilterList()->setDisabled(true);
-  menuItems->getActionShowFilterLibrary()->setDisabled(true);
-  menuItems->getActionShowBookmarks()->setDisabled(true);
-  menuItems->getActionAddBookmark()->setDisabled(true);
-  menuItems->getActionNewFolder()->setDisabled(true);
-
-  menuItems->getActionSave()->setEnabled(true);
-  menuItems->getActionSaveAs()->setEnabled(true);
-  menuItems->getActionCut()->setEnabled(true);
-  menuItems->getActionCopy()->setEnabled(true);
-  menuItems->getActionPaste()->setEnabled(menuItems->getCanPaste());
-
-  instance->insertDockWidgetActions(m_MenuView);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::toEmptyMenuState()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  menuItems->getActionShowFilterList()->setDisabled(true);
-  menuItems->getActionShowFilterLibrary()->setDisabled(true);
-  menuItems->getActionShowBookmarks()->setDisabled(true);
-  menuItems->getActionAddBookmark()->setDisabled(true);
-  menuItems->getActionNewFolder()->setDisabled(true);
-  menuItems->getActionSave()->setDisabled(true);
-  menuItems->getActionSaveAs()->setDisabled(true);
-
-  m_MenuView->addActions(m_DummyDockWidgetActions);
-
-  menuItems->getActionClearPipeline()->setDisabled(true);
-  menuItems->getActionCut()->setDisabled(true);
-  menuItems->getActionCopy()->setDisabled(true);
-  menuItems->getActionPaste()->setDisabled(true);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QMenu* MacSIMPLViewApplication::createCustomDockMenu()
-{
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
-
-  QMenu* dockMenu = new QMenu();
-  dockMenu->addAction(menuItems->getActionNew());
-  dockMenu->addAction(menuItems->getActionOpen());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionShowSIMPLViewHelp());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionCheckForUpdates());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionPluginInformation());
-
-  return dockMenu;
 }

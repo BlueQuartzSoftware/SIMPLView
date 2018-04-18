@@ -50,8 +50,6 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
 
     virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-    void toEmptyMenuState();
-
     /**
      * @brief event
      * @param event
@@ -64,30 +62,13 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
      */
     void initializeDummyDockWidgetActions();
 
-  protected slots:
-
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
-
   /**
   * @brief activeWindowChanged
   */
   virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
-  void toSIMPLViewMenuState(SIMPLView_UI *instance);
-
 private:
-  QSharedPointer<QMenu>                 m_DockMenu;
-  QMenu*                                m_MenuEdit;
-  QMenu*                                m_MenuView;
-  QAction*                              m_EditSeparator;
   QList<QAction*>                       m_DummyDockWidgetActions;
-
-  QMenu* createCustomDockMenu();
 
   MacSIMPLViewApplication(const MacSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const MacSIMPLViewApplication&) = delete;          // Move assignment Not Implemented
