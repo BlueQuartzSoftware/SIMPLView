@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
 #endif
 
 #ifdef SIMPL_USE_MKDOCS
-  QtSDocServer* docServer = QtSDocServer::Instance();
+  QtSDocServer::Instance();
 #endif
 
   int err = qtapp.exec();

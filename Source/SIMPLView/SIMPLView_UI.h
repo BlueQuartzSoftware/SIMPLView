@@ -156,16 +156,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void writeSettings();
 
     /**
-     * @brief savePipeline Helper function that saves the pipeline
-     */
-    bool savePipeline();
-
-    /**
-     * @brief savePipelineAs Helper function that saves the pipeline
-     */
-    bool savePipelineAs();
-
-    /**
      * @brief insertDockWidgetActions
      * @param menu
      */
@@ -185,12 +175,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     QList<QAction*> getDummyDockWidgetActions();
 
     /**
-     * @brief addFilter
-     * @param filter
-     */
-    void addFilter(AbstractFilter::Pointer filter);
-
-    /**
      * @brief openPipeline
      * @param filePath
      * @return
@@ -204,13 +188,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void executePipeline(const QModelIndex &pipelineIndex);
 
   public slots:
-    /**
-     * @brief addPipeline
-     * @param pipelineName
-     * @param setAsActive
-     */
-    void addPipeline(const QString &pipelineName, bool setAsActive);
-
     /**
     * @brief setOpenedFilePath
     * @param filePath
@@ -250,6 +227,18 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief clearFilterInputWidget
     */
     void clearFilterInputWidget();
+
+    void createNewSIMPLViewInstance();
+    void openPipeline();
+    void listenSavePipelineTriggered();
+    void listenSavePipelineAsTriggered();
+    void clearSIMPLViewCache();
+    void closeSIMPLViewWindow();
+    void showSIMPLViewHelp();
+    void checkForUpdates();
+    void displayPluginInfoDialog();
+    void displayAboutSIMPLViewDialog();
+    void clearRecentFiles();
 
   protected:
 
@@ -345,12 +334,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void resizeEvent ( QResizeEvent* event );
 
   protected slots:
-
-    /**
-    * @brief pipelineDidFinish
-    */
-    void preflightDidFinish(int err);
-
     /**
      * @brief pipelineDidFinish
      */
@@ -361,20 +344,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @param msg
      */
     void processPipelineMessage(const PipelineMessage& msg);
-
-    void listenNewInstanceTriggered();
-    void listenOpenPipelineTriggered();
-    void listenSavePipelineTriggered();
-    void listenSavePipelineAsTriggered();
-    void listenClearCacheTriggered();
-    void listenCloseWindowTriggered();
-    void listenShowSIMPLViewHelpTriggered();
-    void listenCheckForUpdatesTriggered();
-    void listenPluginInfoTriggered();
-    void listenAboutSIMPLViewTriggered();
-    void listenClearRecentFilesTriggered();
-    void listenDeleteKeyTriggered();
-    void listenBookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
     void refreshWindowTitle();
 
@@ -406,8 +375,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     // Our Signals that we can emit custom for this class
   signals:
     void parentResized();
-
-    void preflightFinished(bool errors);
 
     /**
      * @brief A signal that is emitted when we want to cancel a process
@@ -495,11 +462,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void setupPipelineListWidget();
 
     /**
-     * @brief setupPipelineTreeView
-     */
-    void setupPipelineTreeView();
-
-    /**
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
@@ -513,10 +475,32 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void openRecentFile();
 
-    void toPipelineRunningState();
-    void toPipelineIdleState();
+    /**
+     * @brief savePipeline
+     * @return
+     */
+    bool savePipeline();
+
+    /**
+     * @brief saveAsPipeline
+     * @return
+     */
+    bool savePipelineAs();
 
     void cleanupPipeline();
+
+    /**
+     * @brief getPipelineFromFile
+     * @param filePath
+     * @return
+     */
+    FilterPipeline::Pointer getPipelineFromFile(const QString& filePath);
+
+    /**
+     * @brief getPipelineModel
+     * @return
+     */
+    PipelineModel* getPipelineModel();
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented

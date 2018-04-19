@@ -64,7 +64,6 @@
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-#include "SVWidgetsLib/Widgets/SVPipelineViewWidget.h"
 
 #include "SIMPLView/SIMPLView.h"
 #ifdef SIMPL_USE_QtWebEngine
@@ -100,8 +99,7 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 
   // If on Mac, add custom actions to a dock menu
 #if defined(Q_OS_MAC)
-  m_DockMenu = QSharedPointer<QMenu>(createMacDockMenu());
-  m_DockMenu.data()->setAsDockMenu();
+  createMacDockMenu();
 #endif
 }
 
@@ -552,14 +550,6 @@ void SIMPLViewApplication::setActiveWindow(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool SIMPLViewApplication::isCurrentlyRunning(SIMPLView_UI* instance)
-{
-  return m_CurrentlyRunningInstances.contains(instance);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> SIMPLViewApplication::getClipboard()
 {
   return m_Clipboard;
@@ -607,9 +597,58 @@ void SIMPLViewApplication::readSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenuBar* SIMPLViewApplication::createDefaultMenuBar()
+void SIMPLViewApplication::createDefaultMenuBar()
 {
   m_DefaultMenuBar = new QMenuBar();
+
+  m_ActionCut = new QAction("Cut", m_DefaultMenuBar);
+  m_ActionCopy = new QAction("Copy", m_DefaultMenuBar);
+  m_ActionPaste = new QAction("Paste", m_DefaultMenuBar);
+  m_ActionClearPipeline = new QAction("Clear Pipeline", m_DefaultMenuBar);
+
+  m_ActionAddBookmark = new QAction("Add Bookmark", m_DefaultMenuBar);
+  m_ActionAddBookmarkFolder = new QAction("Add Bookmark Folder", m_DefaultMenuBar);
+  m_ActionClearBookmarks = new QAction("Clear Bookmarks", m_DefaultMenuBar);
+
+  m_ActionSave = new QAction("Save", m_DefaultMenuBar);
+  m_ActionSaveAs = new QAction("Save As...", m_DefaultMenuBar);
+
+  m_MenuRecentFiles = new QMenu("Recent Files", m_DefaultMenuBar);
+  m_MenuFile = new QMenu("File", m_DefaultMenuBar);
+  m_MenuEdit = new QMenu("Edit", m_DefaultMenuBar);
+  m_MenuView = new QMenu("View", m_DefaultMenuBar);
+  m_MenuBookmarks = new QMenu("Bookmarks", m_DefaultMenuBar);
+  m_MenuPipeline = new QMenu("Pipeline", m_DefaultMenuBar);
+  m_MenuHelp = new QMenu("Help", m_DefaultMenuBar);
+  m_MenuAdvanced = new QMenu("Advanced", m_DefaultMenuBar);
+
+  m_ActionNew = new QAction("New...", m_DefaultMenuBar);
+  m_ActionNew->setShortcut(QKeySequence::New);
+
+  m_ActionOpen = new QAction("Open...", m_DefaultMenuBar);
+  m_ActionOpen->setShortcut(QKeySequence::Open);
+
+  m_ActionLoadTheme = new QAction("Load Theme", m_DefaultMenuBar);
+
+  m_ActionSaveTheme = new QAction("Save Theme", m_DefaultMenuBar);
+
+  m_ActionClearRecentFiles = new QAction("Clear Recent Files", m_DefaultMenuBar);
+
+  m_ActionExit = new QAction("Exit " + QApplication::applicationName(), m_DefaultMenuBar);
+  m_ActionExit->setShortcut(QKeySequence::Quit);
+
+  m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", m_DefaultMenuBar);
+  m_ActionShowSIMPLViewHelp->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+
+  m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), m_DefaultMenuBar);
+
+  m_ActionCheckForUpdates = new QAction("Check For Updates", m_DefaultMenuBar);
+  m_ActionCheckForUpdates->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+
+  m_ActionPluginInformation = new QAction("Plugin Information", m_DefaultMenuBar);
+  m_ActionPluginInformation->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+
+  m_ActionClearCache = new QAction("Clear Cache", m_DefaultMenuBar);
 
   m_ActionAddBookmark->setDisabled(true);
   m_ActionAddBookmarkFolder->setDisabled(true);
@@ -670,19 +709,18 @@ QMenuBar* SIMPLViewApplication::createDefaultMenuBar()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QMenu* SIMPLViewApplication::createMacDockMenu()
+void SIMPLViewApplication::createMacDockMenu()
 {
-  SIMPLViewMenuItems* menuItems = SIMPLViewMenuItems::Instance();
+  m_DockMenu = new QMenu();
 
-  QMenu* dockMenu = new QMenu();
-  dockMenu->addAction(menuItems->getActionNew());
-  dockMenu->addAction(menuItems->getActionOpen());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionShowSIMPLViewHelp());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionCheckForUpdates());
-  dockMenu->addSeparator();
-  dockMenu->addAction(menuItems->getActionPluginInformation());
+  m_DockMenu->addAction(m_ActionNew);
+  m_DockMenu->addAction(m_ActionOpen);
+  m_DockMenu->addSeparator();
+  m_DockMenu->addAction(m_ActionShowSIMPLViewHelp);
+  m_DockMenu->addSeparator();
+  m_DockMenu->addAction(m_ActionCheckForUpdates);
+  m_DockMenu->addSeparator();
+  m_DockMenu->addAction(m_ActionPluginInformation);
 
-  return dockMenu;
+  m_DockMenu->setAsDockMenu();
 }
