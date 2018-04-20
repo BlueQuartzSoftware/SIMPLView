@@ -405,10 +405,10 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     {
 //   qDebug() << "File: " << fileName() << "\n";
 #ifdef QT_DEBUG
-      if(fileName.endsWith("_debug.plugin", Qt::CaseSensitive))
+      if(fileName.endsWith("_debug.guiplugin", Qt::CaseSensitive))
 #else
-      if(fileName.endsWith(".plugin", Qt::CaseSensitive)            // We want ONLY Release plugins
-         && !fileName.endsWith("_debug.plugin", Qt::CaseSensitive)) // so ignore these plugins
+      if(fileName.endsWith(".guiplugin", Qt::CaseSensitive)            // We want ONLY Release plugins
+         && !fileName.endsWith("_debug.guiplugin", Qt::CaseSensitive)) // so ignore these plugins
 #endif
       {
         pluginFilePaths << aPluginDir.absoluteFilePath(fileName);
