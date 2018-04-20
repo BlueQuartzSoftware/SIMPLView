@@ -1035,6 +1035,7 @@ void SIMPLViewApplication::createDefaultMenuBar()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::createMacDockMenu()
 {
+#if defined(Q_OS_MAC)
   m_DockMenu = new QMenu();
 
   m_DockMenu->addAction(m_ActionNew);
@@ -1047,4 +1048,5 @@ void SIMPLViewApplication::createMacDockMenu()
   m_DockMenu->addAction(m_ActionPluginInformation);
 
   m_DockMenu->setAsDockMenu();
+#endif
 }
