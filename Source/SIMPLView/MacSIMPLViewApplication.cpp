@@ -66,19 +66,7 @@ MacSIMPLViewApplication::~MacSIMPLViewApplication()
 // -----------------------------------------------------------------------------
 bool MacSIMPLViewApplication::event(QEvent* event)
 {
-  if (event->type() == QEvent::Close)
-  {
-    /* We need to write the toolbox's settings here, because we need to write
-     * whether the toolbox is showing or not, and that can only be done before
-     * the toolbox enters its closeEvent function (the toolbox is already hidden
-     * when the closeEvent occurs) */
-    SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-    toolbox->writeSettings();
-
-    // We are already handling this event past this point, so don't pass it on
-    return false;
-  }
-  else if (event->type() == QEvent::FileOpen)
+  if (event->type() == QEvent::FileOpen)
   {
     QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
     QString filePath = openEvent->file();

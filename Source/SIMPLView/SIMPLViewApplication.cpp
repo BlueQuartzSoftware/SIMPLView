@@ -71,6 +71,9 @@
 #endif
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheck.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
+#include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
@@ -79,8 +82,29 @@
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLView_UI.h"
 #include "SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLViewConstants.h"
 
 #include "BrandedStrings.h"
+
+namespace Detail
+{
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void fillVersionData(UpdateCheck::SIMPLVersionData_t& data)
+{
+  data.complete = SIMPLView::Version::Complete();
+  data.major = SIMPLView::Version::Major();
+  data.minor = SIMPLView::Version::Minor();
+  data.patch = SIMPLView::Version::Patch();
+  data.package = SIMPLView::Version::Package();
+  data.revision = SIMPLView::Version::Revision();
+  data.packageComplete = SIMPLView::Version::PackageComplete();
+  data.buildDate = SIMPLView::Version::BuildDate();
+  data.appName = BrandedStrings::ApplicationName;
+}
+}
 
 // -----------------------------------------------------------------------------
 //
@@ -93,9 +117,14 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 , m_SplashScreen(nullptr)
 , m_minSplashTime(3)
 {
+  // Automatically check for updates at startup if the user has indicated that preference before
+  checkForUpdatesAtStartup();
+
   // Connection to update the recent files list on all windows when it changes
   QtSRecentFileList* recentsList = QtSRecentFileList::instance();
   connect(recentsList, SIGNAL(fileListChanged(const QString&)), this, SLOT(updateRecentFileList(const QString&)));
+
+  createDefaultMenuBar();
 
   // If on Mac, add custom actions to a dock menu
 #if defined(Q_OS_MAC)
@@ -414,6 +443,288 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenNewInstanceTriggered()
+{
+  SIMPLView_UI* newInstance = getNewSIMPLViewInstance();
+  newInstance->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenOpenPipelineTriggered()
+{
+  QString proposedDir = m_OpenDialogLastFilePath;
+  QString filePath = QFileDialog::getOpenFileName(nullptr, tr("Open Pipeline"), proposedDir, tr("Json File (*.json);;DREAM3D File (*.dream3d);;All Files (*.*)"));
+  if(filePath.isEmpty())
+  {
+    return;
+  }
+
+  newInstanceFromFile(filePath);
+
+  // Cache the last directory on old instance
+  m_OpenDialogLastFilePath = filePath;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenClearRecentFilesTriggered()
+{
+  // Clear the Recent Items Menu
+  m_MenuRecentFiles->clear();
+  m_MenuRecentFiles->addSeparator();
+  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
+
+  // Clear the actual list
+  QtSRecentFileList* recents = QtSRecentFileList::instance();
+  recents->clear();
+
+  // Write out the empty list
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+  recents->writeList(prefs.data());
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
+{
+  QMessageBox msgBox;
+
+  QString title = QString("Clear %1 Cache").arg(BrandedStrings::ApplicationName);
+  msgBox.setWindowTitle(title);
+
+  QString text = QString("Clearing the %1 cache will clear the %1 window settings, and will restore %1 back to its default settings on the program's next run.").arg(BrandedStrings::ApplicationName);
+  msgBox.setText(text);
+
+  QString infoText = QString("Clear the %1 cache?").arg(BrandedStrings::ApplicationName);
+  msgBox.setInformativeText(infoText);
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::Yes);
+  int response = msgBox.exec();
+
+  if(response == QMessageBox::Yes)
+  {
+    QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+
+    // Set a flag in the preferences file, so that we know that we are in "Clear Cache" mode
+    prefs->setValue("Program Mode", QString("Clear Cache"));
+
+    QMessageBox cacheClearedBox;
+    QString title = "Cache Cleared";
+    QString informativeText = QString("The cache has been cleared successfully. Please restart %1 for the changes to take effect.").arg(BrandedStrings::ApplicationName);
+
+    cacheClearedBox.setText(title);
+    cacheClearedBox.setDetailedText(informativeText);
+    QAbstractButton* restartBtn = cacheClearedBox.addButton("Restart Now", QMessageBox::YesRole);
+    cacheClearedBox.addButton("Restart Later", QMessageBox::NoRole);
+    cacheClearedBox.setIcon(QMessageBox::Information);
+    cacheClearedBox.exec();
+
+    if (cacheClearedBox.clickedButton() == restartBtn)
+    {
+      listenExitApplicationTriggered();
+      QProcess::startDetached(arguments()[0], arguments());
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenShowSIMPLViewHelpTriggered()
+{
+  QString appPath = QApplication::applicationDirPath();
+
+  QDir helpDir = QDir(appPath);
+  QString s("file://");
+
+#if defined(Q_OS_WIN)
+  s = s + "/"; // Need the third slash on windows because file paths start with a drive letter
+#elif defined(Q_OS_MAC)
+  if(helpDir.dirName() == "MacOS")
+  {
+    helpDir.cdUp();
+    // Check if we are running from a .app installation where the Help dir is embeded in the app bundle.
+    QFileInfo fi(helpDir.absolutePath() + "/Resources/Help");
+
+    if(fi.exists())
+    {
+      helpDir.cd("Resources");
+    }
+    else
+    {
+      helpDir.cdUp();
+      helpDir.cdUp();
+    }
+  }
+#endif
+
+#ifdef SIMPL_USE_MKDOCS
+  s = QString("http://%1:%2/index.html").arg(QtSDocServer::GetIPAddress()).arg(QtSDocServer::GetPort());
+#endif
+
+#ifdef SIMPL_USE_DISCOUNT
+  QString helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
+  QFileInfo fi(helpFilePath);
+  if(fi.exists() == false)
+  {
+    // The help file does not exist at the default location because we are probably running from Visual Studio or Xcode
+    // Try up one more directory
+    helpDir.cdUp();
+    helpFilePath = QString("%1/Help/%2/index.html").arg(helpDir.absolutePath()).arg(QCoreApplication::instance()->applicationName());
+  }
+
+  s = s + helpFilePath;
+#endif
+
+  QUrl helpURL(s);
+#ifdef SIMPL_USE_QtWebEngine
+  SVUserManualDialog::LaunchHelpDialog(helpURL);
+#else
+  bool didOpen = QDesktopServices::openUrl(helpURL);
+  if(false == didOpen)
+  {
+    QMessageBox msgBox;
+    msgBox.setText(QString("Error Opening Help File"));
+    msgBox.setInformativeText(QString::fromLatin1("%1 could not open the help file path ").arg(BrandedStrings::ApplicationName) + helpURL.path());
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.exec();
+  }
+#endif
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenCheckForUpdatesTriggered()
+{
+  UpdateCheck::SIMPLVersionData_t data;
+  Detail::fillVersionData(data);
+  UpdateCheckDialog d(data, nullptr);
+
+  // d.setCurrentVersion(SIMPLib::Version::Complete());
+  d.setUpdateWebSite(SIMPLView::UpdateWebsite::UpdateWebSite);
+  d.setApplicationName(BrandedStrings::ApplicationName);
+
+  // Read from the QtSSettings Pref file the information that we need
+  QtSSettings prefs;
+  prefs.beginGroup(SIMPLView::UpdateWebsite::VersionCheckGroupName);
+  QDateTime dateTime = prefs.value(SIMPLView::UpdateWebsite::LastVersionCheck, QDateTime::currentDateTime()).toDateTime();
+  d.setLastCheckDateTime(dateTime);
+  prefs.endGroup();
+
+  // Now display the dialog box
+  d.exec();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::checkForUpdatesAtStartup()
+{
+  UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
+  UpdateCheckDialog d(data);
+  if(d.getAutomaticallyBtn()->isChecked())
+  {
+    QtSSettings updatePrefs;
+
+    updatePrefs.beginGroup(UpdateCheckDialog::GetUpdatePreferencesGroup());
+    QDate lastUpdateCheckDate = updatePrefs.value(UpdateCheckDialog::GetUpdateCheckKey(), QString("")).toDate();
+    updatePrefs.endGroup();
+
+    QDate systemDate;
+    QDate currentDateToday = systemDate.currentDate();
+
+    QDate dailyThreshold = lastUpdateCheckDate.addDays(1);
+    QDate weeklyThreshold = lastUpdateCheckDate.addDays(7);
+    QDate monthlyThreshold = lastUpdateCheckDate.addMonths(1);
+
+    if((d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckDaily && currentDateToday >= dailyThreshold) ||
+       (d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckWeekly && currentDateToday >= weeklyThreshold) ||
+       (d.getHowOftenComboBox()->currentIndex() == UpdateCheckDialog::UpdateCheckMonthly && currentDateToday >= monthlyThreshold))
+    {
+      m_UpdateCheck = QSharedPointer<UpdateCheck>(new UpdateCheck(data, this));
+
+      connect(m_UpdateCheck.data(), SIGNAL(latestVersion(UpdateCheckData*)), this, SLOT(versionCheckReply(UpdateCheckData*)));
+
+      m_UpdateCheck->checkVersion(SIMPLView::UpdateWebsite::UpdateWebSite);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::versionCheckReply(UpdateCheckData* dataObj)
+{
+  UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
+
+  UpdateCheckDialog d(data);
+  // d->setCurrentVersion(data.complete);
+  d.setApplicationName(BrandedStrings::ApplicationName);
+
+  if(dataObj->hasUpdate() && !dataObj->hasError())
+  {
+    QString message = dataObj->getMessageDescription();
+    QLabel* feedbackTextLabel = d.getFeedbackTextLabel();
+    d.toSimpleUpdateCheckDialog();
+    feedbackTextLabel->setText(message);
+    d.getCurrentVersionLabel()->setText(dataObj->getAppString());
+    // d->setCurrentVersion( dataObj->getAppString() );
+    d.getLatestVersionLabel()->setText(dataObj->getServerString());
+    d.exec();
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
+{
+  AboutPlugins dialog(nullptr);
+  dialog.exec();
+
+  // Write cache on exit
+  dialog.writePluginCache();
+
+  /* If any of the load checkboxes were changed, display a dialog warning
+  * the user that they must restart SIMPLView to see the changes.
+  */
+  if(dialog.getLoadPreferencesDidChange() == true)
+  {
+    QMessageBox msgBox;
+    msgBox.setText(QString("%1 must be restarted to allow these changes to take effect.").arg(BrandedStrings::ApplicationName));
+    msgBox.setInformativeText("Restart?");
+    msgBox.setWindowTitle("Restart Needed");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    int choice = msgBox.exec();
+
+    if(choice == QMessageBox::Yes)
+    {
+      listenExitApplicationTriggered();
+      QProcess::startDetached(arguments()[0], arguments());
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenDisplayAboutSIMPLViewDialogTriggered()
+{
+  AboutSIMPLView d(nullptr);
+  d.exec();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
 {
   SIMPLView_UI* ui = getNewSIMPLViewInstance();
@@ -580,6 +891,9 @@ void SIMPLViewApplication::writeSettings()
   prefs->beginGroup("Application Settings");
 
   prefs->endGroup();
+
+  BookmarksModel* model = BookmarksModel::Instance();
+  model->writeBookmarksToPrefsFile();
 }
 
 // -----------------------------------------------------------------------------
@@ -649,6 +963,16 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_ActionPluginInformation->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 
   m_ActionClearCache = new QAction("Clear Cache", m_DefaultMenuBar);
+
+  connect(m_ActionNew, &QAction::triggered, this, &SIMPLViewApplication::listenNewInstanceTriggered);
+  connect(m_ActionOpen, &QAction::triggered, this, &SIMPLViewApplication::listenOpenPipelineTriggered);
+  connect(m_ActionExit, &QAction::triggered, this, &SIMPLViewApplication::listenExitApplicationTriggered);
+  connect(m_ActionClearRecentFiles, &QAction::triggered, this, &SIMPLViewApplication::listenClearRecentFilesTriggered);
+  connect(m_ActionAboutSIMPLView, &QAction::triggered, this, &SIMPLViewApplication::listenDisplayAboutSIMPLViewDialogTriggered);
+  connect(m_ActionCheckForUpdates, &QAction::triggered, this, &SIMPLViewApplication::listenCheckForUpdatesTriggered);
+  connect(m_ActionShowSIMPLViewHelp, &QAction::triggered, this, &SIMPLViewApplication::listenShowSIMPLViewHelpTriggered);
+  connect(m_ActionPluginInformation, &QAction::triggered, this, &SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered);
+  connect(m_ActionClearCache, &QAction::triggered, this, &SIMPLViewApplication::listenClearSIMPLViewCacheTriggered);
 
   m_ActionAddBookmark->setDisabled(true);
   m_ActionAddBookmarkFolder->setDisabled(true);

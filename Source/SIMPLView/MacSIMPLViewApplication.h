@@ -62,10 +62,11 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
      */
     void initializeDummyDockWidgetActions();
 
-  /**
-  * @brief activeWindowChanged
-  */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  protected slots:
+    /**
+    * @brief activeWindowChanged
+    */
+    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
 
 private:
   QList<QAction*>                       m_DummyDockWidgetActions;

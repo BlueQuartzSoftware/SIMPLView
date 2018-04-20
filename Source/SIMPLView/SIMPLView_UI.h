@@ -58,7 +58,6 @@
 
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
-
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"
 
@@ -91,7 +90,7 @@ class SIMPLViewMenuItems;
 * @date Oct 19, 2009
 * @version 1.0
 */
-class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
+class SIMPLView_UI : public QMainWindow
 {
     Q_OBJECT
 
@@ -207,11 +206,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void addStdOutputMessage(const QString& msg);
 
     /**
-    * @brief versionCheckReply
-    */
-    void versionCheckReply(UpdateCheckData*);
-
-    /**
      * @brief showFilterHelp
      * @param className
      */
@@ -228,17 +222,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     */
     void clearFilterInputWidget();
 
-    void createNewSIMPLViewInstance();
-    void openPipeline();
     void listenSavePipelineTriggered();
     void listenSavePipelineAsTriggered();
-    void clearSIMPLViewCache();
-    void closeSIMPLViewWindow();
-    void showSIMPLViewHelp();
-    void checkForUpdates();
-    void displayPluginInfoDialog();
-    void displayAboutSIMPLViewDialog();
-    void clearRecentFiles();
 
   protected:
 
@@ -252,11 +237,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief
     */
     void connectSignalsSlots();
-
-    /**
-    * @brief
-    */
-    void disconnectSignalsSlots();
 
     /**
      * @brief Implements the CloseEvent to Quit the application and write settings
@@ -285,8 +265,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void readWindowSettings(QtSSettings* prefs);
     void readVersionSettings(QtSSettings* prefs);
-
-    void checkForUpdatesAtStartup();
 
     /**
      * @brief Initializes some of the GUI elements with selections or other GUI related items
@@ -347,14 +325,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void refreshWindowTitle();
 
-    void on_pipelineViewWidget_pipelineIssuesCleared();
-    void on_pipelineViewWidget_pipelineHasNoErrors();
-
-    /**
-     * @brief updatePasteAvailability
-     */
-    void updatePasteAvailability();
-
     /**
     * @brief setFilterInputWidget
     * @param widget
@@ -404,62 +374,53 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void deleteKeyPressed();
 
   private:
-    QSharedPointer<QMenuBar>              m_SIMPLViewMenu;
-    SIMPLViewMenuItems*                   m_MenuItems;
+    QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
+    QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
-    ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
-    QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
+    ISIMPLibPlugin*                         m_ActivePlugin = nullptr;
+    QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
 
-    QSharedPointer<UpdateCheck>           m_UpdateCheck;
-    FilterManager*                        m_FilterManager = nullptr;
-    FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
+    FilterManager*                          m_FilterManager = nullptr;
+    FilterWidgetManager*                    m_FilterWidgetManager = nullptr;
 
-    FilterPipeline::Pointer               m_PipelineInFlight;
-    QVector<DataContainerArray::Pointer>  m_PreflightDataContainerArrays;
-    QMenuBar*                             m_InstanceMenuBar = nullptr;
-    StatusBarWidget*                      m_StatusBar = nullptr;
+    FilterPipeline::Pointer                 m_PipelineInFlight;
+    QVector<DataContainerArray::Pointer>    m_PreflightDataContainerArrays;
+    QMenuBar*                               m_InstanceMenuBar = nullptr;
+    StatusBarWidget*                        m_StatusBar = nullptr;
 
-    QString                               m_OpenedFilePath;
-    static QString                        m_OpenDialogLastFilePath;
+    QString                                 m_OpenedFilePath;
+    static QString                          m_OpenDialogLastFilePath;
 
-    QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
+    QMap<QWidget*,QTextEdit*>               m_StdOutputTabMap;
 
-    bool                                  m_ShowFilterWidgetDeleteDialog;
-    bool                                  m_ShouldRestart = false;
+    bool                                    m_ShowFilterWidgetDeleteDialog;
+    bool                                    m_ShouldRestart = false;
 
-    HideDockSetting                       m_HideErrorTable = HideDockSetting::Ignore;
-    HideDockSetting                       m_HideStdOutput = HideDockSetting::Ignore;
+    HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
+    HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
-    PipelineListWidget*                   m_ListWidget = nullptr;
-    PipelineTreeView*                     m_PipelineTreeView = nullptr;
+    QMenu*                                  m_MenuRecentFiles = new QMenu("Recent Files", this);
+    QMenu*                                  m_MenuFile = new QMenu("File", this);
+    QMenu*                                  m_MenuEdit = new QMenu("Edit", this);
+    QMenu*                                  m_MenuView = new QMenu("View", this);
+    QMenu*                                  m_MenuBookmarks = new QMenu("Bookmarks", this);
+    QMenu*                                  m_MenuPipeline = new QMenu("Pipeline", this);
+    QMenu*                                  m_MenuHelp = new QMenu("Help", this);
+    QMenu*                                  m_MenuAdvanced = new QMenu("Advanced", this);
 
-    QMenu*                                m_MenuRecentFiles = new QMenu("Recent Files", this);
-    QMenu*                                m_MenuFile = new QMenu("File", this);
-    QMenu*                                m_MenuEdit = new QMenu("Edit", this);
-    QMenu*                                m_MenuView = new QMenu("View", this);
-    QMenu*                                m_MenuBookmarks = new QMenu("Bookmarks", this);
-    QMenu*                                m_MenuPipeline = new QMenu("Pipeline", this);
-    QMenu*                                m_MenuHelp = new QMenu("Help", this);
-    QMenu*                                m_MenuAdvanced = new QMenu("Advanced", this);
-
-    QAction*                              m_ActionNew = new QAction("New...", this);
-    QAction*                              m_ActionOpen = new QAction("Open...", this);
-    QAction*                              m_ActionSave = new QAction("Save", this);
-    QAction*                              m_ActionSaveAs = new QAction("Save As...", this);
-    QAction*                              m_ActionLoadTheme = new QAction("Load Theme", this);
-    QAction*                              m_ActionSaveTheme = new QAction("Save Theme", this);
-    QAction*                              m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
-    QAction*                              m_ActionExit = new QAction("Exit " + QApplication::applicationName(), this);
-    QAction*                              m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
-    QAction*                              m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
-    QAction*                              m_ActionCheckForUpdates = new QAction("Check For Updates", this);
-    QAction*                              m_ActionPluginInformation = new QAction("Plugin Information", this);
-    QAction*                              m_ActionClearCache = new QAction("Clear Cache", this);
-
-    /**
-     * @brief setupPipelineViewWidget
-     */
-    void setupPipelineListWidget();
+    QAction*                                m_ActionNew = new QAction("New...", this);
+    QAction*                                m_ActionOpen = new QAction("Open...", this);
+    QAction*                                m_ActionSave = new QAction("Save", this);
+    QAction*                                m_ActionSaveAs = new QAction("Save As...", this);
+    QAction*                                m_ActionLoadTheme = new QAction("Load Theme", this);
+    QAction*                                m_ActionSaveTheme = new QAction("Save Theme", this);
+    QAction*                                m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
+    QAction*                                m_ActionExit = new QAction("Exit " + QApplication::applicationName(), this);
+    QAction*                                m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
+    QAction*                                m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
+    QAction*                                m_ActionCheckForUpdates = new QAction("Check For Updates", this);
+    QAction*                                m_ActionPluginInformation = new QAction("Plugin Information", this);
+    QAction*                                m_ActionClearCache = new QAction("Clear Cache", this);
 
     /**
      * @brief createSIMPLViewMenu

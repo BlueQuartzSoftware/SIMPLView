@@ -22,6 +22,12 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
     <size>
@@ -116,10 +122,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="pipelineInteralWidget">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+    <layout class="QGridLayout" name="gridLayout_3">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -132,6 +135,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <item row="0" column="0">
+      <widget class="PipelineListWidget" name="pipelineListWidget" native="true"/>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -438,6 +444,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>FilterListToolboxWidget</class>
    <extends>QWidget</extends>
    <header location="global">FilterListToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PipelineListWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">PipelineListWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

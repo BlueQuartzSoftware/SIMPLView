@@ -93,6 +93,16 @@ public:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
 
 public slots:
+  void listenNewInstanceTriggered();
+  void listenOpenPipelineTriggered();
+  void listenClearRecentFilesTriggered();
+  void listenClearSIMPLViewCacheTriggered();
+  void listenShowSIMPLViewHelpTriggered();
+  void listenCheckForUpdatesTriggered();
+  void listenDisplayPluginInfoDialogTriggered();
+  void listenDisplayAboutSIMPLViewDialogTriggered();
+  void listenExitApplicationTriggered();
+
   void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
 
   SIMPLView_UI* getNewSIMPLViewInstance();
@@ -112,18 +122,36 @@ protected:
   QSplashScreen* m_SplashScreen;
   QVector<QPluginLoader*> m_PluginLoaders;
 
+  /**
+   * @brief loadPlugins
+   * @return
+   */
   QVector<ISIMPLibPlugin*> loadPlugins();
 
-protected slots:
-  void listenExitApplicationTriggered();
+  /**
+   * @brief checkForUpdatesAtStartup
+   */
+  void checkForUpdatesAtStartup();
 
+  /**
+   * @brief dream3dWindowChanged
+   * @param instance
+   */
   virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+
+protected slots:
+  /**
+  * @brief versionCheckReply
+  */
+  void versionCheckReply(UpdateCheckData*);
 
 private:
   QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
 
   QMenuBar* m_DefaultMenuBar = nullptr;
   QMenu* m_DockMenu = nullptr;
+
+  QSharedPointer<UpdateCheck>           m_UpdateCheck;
 
   QMenu* m_MenuRecentFiles = nullptr;
   QMenu* m_MenuFile = new QMenu("File", m_DefaultMenuBar);
