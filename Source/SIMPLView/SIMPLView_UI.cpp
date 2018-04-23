@@ -175,7 +175,7 @@ SIMPLView_UI::~SIMPLView_UI()
   }
 
   writeSettings();
-  cleanupPipeline();
+
   dream3dApp->unregisterSIMPLViewWindow(this);
 
   if(dream3dApp->activeWindow() == this)
@@ -537,6 +537,12 @@ void SIMPLView_UI::setupGui()
   // Create the model
   PipelineModel* model = new PipelineModel(this);
   model->setMaxNumberOfPipelines(1);
+
+  for (int i = 0; i < 3; i++)
+  {
+    model->insertColumn(i);
+  }
+
   viewWidget->setModel(model);
 
   // Set the Data Browser widget into the Pipeline View widget
@@ -590,6 +596,29 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
 {
   m_SIMPLViewMenu = new QMenuBar(this);
 
+  m_MenuRecentFiles = new QMenu("Recent Files", this);
+  m_MenuFile = new QMenu("File", this);
+  m_MenuEdit = new QMenu("Edit", this);
+  m_MenuView = new QMenu("View", this);
+  m_MenuBookmarks = new QMenu("Bookmarks", this);
+  m_MenuPipeline = new QMenu("Pipeline", this);
+  m_MenuHelp = new QMenu("Help", this);
+  m_MenuAdvanced = new QMenu("Advanced", this);
+
+  m_ActionNew = new QAction("New...", this);
+  m_ActionOpen = new QAction("Open...", this);
+  m_ActionSave = new QAction("Save", this);
+  m_ActionSaveAs = new QAction("Save As...", this);
+  m_ActionLoadTheme = new QAction("Load Theme", this);
+  m_ActionSaveTheme = new QAction("Save Theme", this);
+  m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
+  m_ActionExit = new QAction("Exit " + QApplication::applicationName(), this);
+  m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
+  m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
+  m_ActionCheckForUpdates = new QAction("Check For Updates", this);
+  m_ActionPluginInformation = new QAction("Plugin Information", this);
+  m_ActionClearCache = new QAction("Clear Cache", this);
+
   // SIMPLView_UI Actions
   connect(m_ActionNew, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenNewInstanceTriggered);
   connect(m_ActionOpen, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenOpenPipelineTriggered);
@@ -618,6 +647,8 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   QAction* actionCopy = viewWidget->getActionCopy();
   QAction* actionPaste = viewWidget->getActionPaste();
   QAction* actionClearPipeline = viewWidget->getActionClearPipeline();
+  QAction* actionUndo = viewWidget->getActionUndo();
+  QAction* actionRedo = viewWidget->getActionRedo();
 
   // Bookmarks Actions
   BookmarksTreeView* bookmarksView = m_Ui->bookmarksWidget->getBookmarksTreeView();
@@ -641,6 +672,8 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
 
   // Create Edit Menu
   m_SIMPLViewMenu->addMenu(m_MenuEdit);
+  m_MenuEdit->addAction(actionUndo);
+  m_MenuEdit->addAction(actionRedo);
   m_MenuEdit->addSeparator();
   m_MenuEdit->addAction(actionCut);
   m_MenuEdit->addAction(actionCopy);
@@ -691,16 +724,6 @@ void SIMPLView_UI::connectSignalsSlots()
   /* Controller connections */
   connect(m_SIMPLController, &SIMPLController::statusMessageGenerated, [=] (const QString &msg) { statusBar()->showMessage(msg); });
   connect(m_SIMPLController, &SIMPLController::standardOutputMessageGenerated, [=] (const QString &msg) { addStdOutputMessage(msg); });
-
-  connect(m_SIMPLController, &SIMPLController::undoActionGenerated, [=] (QAction* actionUndo) {
-    PipelineModel* model = getPipelineModel();
-    model->setActionUndo(actionUndo);
-  });
-
-  connect(m_SIMPLController, &SIMPLController::redoActionGenerated, [=] (QAction* actionRedo) {
-    PipelineModel* model = getPipelineModel();
-    model->setActionRedo(actionRedo);
-  });
 
   // Connection that allows the Pipeline Tree controller to display cached issues in the table
   connect(m_SIMPLController, &SIMPLController::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
@@ -831,8 +854,7 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
   }
 
   // Populate the pipeline view
-  AddFilterCommand* cmd = new AddFilterCommand(filters, model, -1, "Add");
-  m_Ui->pipelineListWidget->getPipelineView()->addUndoCommand(cmd);
+  m_Ui->pipelineListWidget->getPipelineView()->addFilters(filters);
 
   m_OpenedFilePath = filePath;
   setWindowFilePath(filePath);
@@ -1132,19 +1154,6 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
     msgBox.exec();
   }
 #endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::cleanupPipeline()
-{
-  // Clear the filter input widget
-  clearFilterInputWidget();
-
-  SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-  viewWidget->clearPipeline(false);
-  setWindowModified(true);
 }
 
 // -----------------------------------------------------------------------------

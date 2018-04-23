@@ -399,28 +399,28 @@ class SIMPLView_UI : public QMainWindow
     HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
     HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
-    QMenu*                                  m_MenuRecentFiles = new QMenu("Recent Files", this);
-    QMenu*                                  m_MenuFile = new QMenu("File", this);
-    QMenu*                                  m_MenuEdit = new QMenu("Edit", this);
-    QMenu*                                  m_MenuView = new QMenu("View", this);
-    QMenu*                                  m_MenuBookmarks = new QMenu("Bookmarks", this);
-    QMenu*                                  m_MenuPipeline = new QMenu("Pipeline", this);
-    QMenu*                                  m_MenuHelp = new QMenu("Help", this);
-    QMenu*                                  m_MenuAdvanced = new QMenu("Advanced", this);
+    QMenu*                                  m_MenuRecentFiles = nullptr;
+    QMenu*                                  m_MenuFile = nullptr;
+    QMenu*                                  m_MenuEdit = nullptr;
+    QMenu*                                  m_MenuView = nullptr;
+    QMenu*                                  m_MenuBookmarks = nullptr;
+    QMenu*                                  m_MenuPipeline = nullptr;
+    QMenu*                                  m_MenuHelp = nullptr;
+    QMenu*                                  m_MenuAdvanced = nullptr;
 
-    QAction*                                m_ActionNew = new QAction("New...", this);
-    QAction*                                m_ActionOpen = new QAction("Open...", this);
-    QAction*                                m_ActionSave = new QAction("Save", this);
-    QAction*                                m_ActionSaveAs = new QAction("Save As...", this);
-    QAction*                                m_ActionLoadTheme = new QAction("Load Theme", this);
-    QAction*                                m_ActionSaveTheme = new QAction("Save Theme", this);
-    QAction*                                m_ActionClearRecentFiles = new QAction("Clear Recent Files", this);
-    QAction*                                m_ActionExit = new QAction("Exit " + QApplication::applicationName(), this);
-    QAction*                                m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", this);
-    QAction*                                m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
-    QAction*                                m_ActionCheckForUpdates = new QAction("Check For Updates", this);
-    QAction*                                m_ActionPluginInformation = new QAction("Plugin Information", this);
-    QAction*                                m_ActionClearCache = new QAction("Clear Cache", this);
+    QAction*                                m_ActionNew = nullptr;
+    QAction*                                m_ActionOpen = nullptr;
+    QAction*                                m_ActionSave = nullptr;
+    QAction*                                m_ActionSaveAs = nullptr;
+    QAction*                                m_ActionLoadTheme = nullptr;
+    QAction*                                m_ActionSaveTheme = nullptr;
+    QAction*                                m_ActionClearRecentFiles = nullptr;
+    QAction*                                m_ActionExit = nullptr;
+    QAction*                                m_ActionShowSIMPLViewHelp = nullptr;
+    QAction*                                m_ActionAboutSIMPLView = nullptr;
+    QAction*                                m_ActionCheckForUpdates = nullptr;
+    QAction*                                m_ActionPluginInformation = nullptr;
+    QAction*                                m_ActionClearCache = nullptr;
 
     /**
      * @brief createSIMPLViewMenu
@@ -447,8 +447,6 @@ class SIMPLView_UI : public QMainWindow
      * @return
      */
     bool savePipelineAs();
-
-    void cleanupPipeline();
 
     /**
      * @brief getPipelineFromFile

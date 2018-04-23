@@ -154,36 +154,38 @@ private:
   QSharedPointer<UpdateCheck>           m_UpdateCheck;
 
   QMenu* m_MenuRecentFiles = nullptr;
-  QMenu* m_MenuFile = new QMenu("File", m_DefaultMenuBar);
-  QMenu* m_MenuEdit = new QMenu("Edit", m_DefaultMenuBar);
-  QMenu* m_MenuView = new QMenu("View", m_DefaultMenuBar);
-  QMenu* m_MenuBookmarks = new QMenu("Bookmarks", m_DefaultMenuBar);
-  QMenu* m_MenuPipeline = new QMenu("Pipeline", m_DefaultMenuBar);
-  QMenu* m_MenuHelp = new QMenu("Help", m_DefaultMenuBar);
-  QMenu* m_MenuAdvanced = new QMenu("Advanced", m_DefaultMenuBar);
+  QMenu* m_MenuFile = nullptr;
+  QMenu* m_MenuEdit = nullptr;
+  QMenu* m_MenuView = nullptr;
+  QMenu* m_MenuBookmarks = nullptr;
+  QMenu* m_MenuPipeline = nullptr;
+  QMenu* m_MenuHelp = nullptr;
+  QMenu* m_MenuAdvanced = nullptr;
 
-  QAction* m_ActionNew = new QAction("New...", m_DefaultMenuBar);
-  QAction* m_ActionOpen = new QAction("Open...", m_DefaultMenuBar);
-  QAction* m_ActionSave = new QAction("Save", m_DefaultMenuBar);
-  QAction* m_ActionSaveAs = new QAction("Save As...", m_DefaultMenuBar);
-  QAction* m_ActionLoadTheme = new QAction("Load Theme", m_DefaultMenuBar);
-  QAction* m_ActionSaveTheme = new QAction("Save Theme", m_DefaultMenuBar);
-  QAction* m_ActionClearRecentFiles = new QAction("Clear Recent Files", m_DefaultMenuBar);
-  QAction* m_ActionExit = new QAction("Exit " + QApplication::applicationName(), m_DefaultMenuBar);
-  QAction* m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", m_DefaultMenuBar);
-  QAction* m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), m_DefaultMenuBar);
-  QAction* m_ActionCheckForUpdates = new QAction("Check For Updates", m_DefaultMenuBar);
-  QAction* m_ActionPluginInformation = new QAction("Plugin Information", m_DefaultMenuBar);
-  QAction* m_ActionClearCache = new QAction("Clear Cache", m_DefaultMenuBar);
+  QAction* m_ActionNew = nullptr;
+  QAction* m_ActionOpen = nullptr;
+  QAction* m_ActionSave = nullptr;
+  QAction* m_ActionSaveAs = nullptr;
+  QAction* m_ActionLoadTheme = nullptr;
+  QAction* m_ActionSaveTheme = nullptr;
+  QAction* m_ActionClearRecentFiles = nullptr;
+  QAction* m_ActionExit = nullptr;
+  QAction* m_ActionShowSIMPLViewHelp = nullptr;
+  QAction* m_ActionAboutSIMPLView = nullptr;
+  QAction* m_ActionCheckForUpdates = nullptr;
+  QAction* m_ActionPluginInformation = nullptr;
+  QAction* m_ActionClearCache = nullptr;
 
-  QAction* m_ActionCut = new QAction("Cut", m_DefaultMenuBar);
-  QAction* m_ActionCopy = new QAction("Copy", m_DefaultMenuBar);
-  QAction* m_ActionPaste = new QAction("Paste", m_DefaultMenuBar);
-  QAction* m_ActionClearPipeline = new QAction("Clear Pipeline", m_DefaultMenuBar);
+  QAction* m_ActionCut = nullptr;
+  QAction* m_ActionCopy = nullptr;
+  QAction* m_ActionPaste = nullptr;
+  QAction* m_ActionClearPipeline = nullptr;
+  QAction* m_ActionUndo = nullptr;
+  QAction* m_ActionRedo = nullptr;
 
-  QAction* m_ActionAddBookmark = new QAction("Add Bookmark", m_DefaultMenuBar);
-  QAction* m_ActionAddBookmarkFolder = new QAction("Add Bookmark Folder", m_DefaultMenuBar);
-  QAction* m_ActionClearBookmarks = new QAction("Clear Bookmarks", m_DefaultMenuBar);
+  QAction* m_ActionAddBookmark = nullptr;
+  QAction* m_ActionAddBookmarkFolder = nullptr;
+  QAction* m_ActionClearBookmarks = nullptr;
 
   int m_minSplashTime;
 

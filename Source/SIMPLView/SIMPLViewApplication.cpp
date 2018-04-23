@@ -916,16 +916,36 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_DefaultMenuBar = new QMenuBar();
 
   m_ActionCut = new QAction("Cut", m_DefaultMenuBar);
+  m_ActionCut->setShortcut(QKeySequence::Cut);
+
   m_ActionCopy = new QAction("Copy", m_DefaultMenuBar);
+  m_ActionCopy->setShortcut(QKeySequence::Copy);
+
   m_ActionPaste = new QAction("Paste", m_DefaultMenuBar);
+  m_ActionPaste->setShortcut(QKeySequence::Paste);
+
   m_ActionClearPipeline = new QAction("Clear Pipeline", m_DefaultMenuBar);
+  m_ActionClearPipeline->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
+
+  m_ActionUndo = new QAction("Undo", m_DefaultMenuBar);
+  m_ActionUndo->setShortcut(QKeySequence::Undo);
+
+  m_ActionRedo = new QAction("Redo", m_DefaultMenuBar);
+  m_ActionRedo->setShortcut(QKeySequence::Redo);
 
   m_ActionAddBookmark = new QAction("Add Bookmark", m_DefaultMenuBar);
+  m_ActionAddBookmark->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+
   m_ActionAddBookmarkFolder = new QAction("Add Bookmark Folder", m_DefaultMenuBar);
+  m_ActionAddBookmarkFolder->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+
   m_ActionClearBookmarks = new QAction("Clear Bookmarks", m_DefaultMenuBar);
 
   m_ActionSave = new QAction("Save", m_DefaultMenuBar);
+  m_ActionSave->setShortcut(QKeySequence::Save);
+
   m_ActionSaveAs = new QAction("Save As...", m_DefaultMenuBar);
+  m_ActionSaveAs->setShortcut(QKeySequence::SaveAs);
 
   m_MenuRecentFiles = new QMenu("Recent Files", m_DefaultMenuBar);
   m_MenuFile = new QMenu("File", m_DefaultMenuBar);
@@ -952,7 +972,7 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_ActionExit->setShortcut(QKeySequence::Quit);
 
   m_ActionShowSIMPLViewHelp = new QAction(QApplication::applicationName() + " Help", m_DefaultMenuBar);
-  m_ActionShowSIMPLViewHelp->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+  m_ActionShowSIMPLViewHelp->setShortcut(QKeySequence::HelpContents);
 
   m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), m_DefaultMenuBar);
 
@@ -983,6 +1003,8 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_ActionCut->setDisabled(true);
   m_ActionCopy->setDisabled(true);
   m_ActionPaste->setDisabled(true);
+  m_ActionUndo->setDisabled(true);
+  m_ActionRedo->setDisabled(true);
 
   // Create File Menu
   m_DefaultMenuBar->addMenu(m_MenuFile);
@@ -999,6 +1021,8 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuFile->addAction(m_ActionExit);
 
   // Create Edit Menu
+  m_MenuEdit->addAction(m_ActionUndo);
+  m_MenuEdit->addAction(m_ActionRedo);
   m_DefaultMenuBar->addMenu(m_MenuEdit);
   m_MenuEdit->addSeparator();
   m_MenuEdit->addAction(m_ActionCut);
