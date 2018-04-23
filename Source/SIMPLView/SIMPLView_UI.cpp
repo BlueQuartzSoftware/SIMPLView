@@ -538,11 +538,6 @@ void SIMPLView_UI::setupGui()
   PipelineModel* model = new PipelineModel(this);
   model->setMaxNumberOfPipelines(1);
 
-  for (int i = 0; i < 3; i++)
-  {
-    model->insertColumn(i);
-  }
-
   viewWidget->setModel(model);
 
   // Set the Data Browser widget into the Pipeline View widget
@@ -774,7 +769,7 @@ void SIMPLView_UI::connectSignalsSlots()
     if (execute)
     {
       PipelineModel* model = getPipelineModel();
-      QModelIndex pipelineIndex = model->index(0, PipelineItem::Name);
+      QModelIndex pipelineIndex = model->index(0, PipelineItem::Contents);
 
       newInstance->executePipeline(pipelineIndex);
     }
@@ -788,9 +783,22 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, m_SIMPLController, &SIMPLController::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView, SIGNAL(filterInputWidgetChanged(FilterInputWidget*)), this, SLOT(setFilterInputWidget(FilterInputWidget*)));
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] (const QItemSelection &selected, const QItemSelection &deselected) {
+    if (selected.size() == 1)
+    {
+      QModelIndex selectedIndex = selected.indexes()[0];
+      PipelineModel* model = getPipelineModel();
+      FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
 
-  connect(pipelineView, SIGNAL(filterInputWidgetNeedsCleared()), this, SLOT(clearFilterInputWidget()));
+      setFilterInputWidget(fiw);
+    }
+    else
+    {
+      clearFilterInputWidget();
+    }
+  });
+
+  connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
 
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
@@ -817,8 +825,6 @@ void SIMPLView_UI::connectSignalsSlots()
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  PipelineModel* model = getPipelineModel();
-
   QFileInfo fi(filePath);
   if(fi.exists() == false)
   {
