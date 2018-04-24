@@ -757,10 +757,10 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, &SVPipelineView::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
-  connect(pipelineView, &SVPipelineView::preflightFinished, [=] (int err) {
+  connect(pipelineView, &SVPipelineView::preflightFinished, [=] (FilterPipeline::Pointer pipeline, int err) {
     m_Ui->dataBrowserWidget->refreshData();
     m_Ui->issuesWidget->displayCachedMessages();
-    m_Ui->pipelineListWidget->preflightFinished(err);
+    m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
   });
 
   connect(pipelineView, &SVPipelineView::pipelineStarted, this, &SIMPLView_UI::pipelineDidFinish);
