@@ -101,8 +101,6 @@ public slots:
   void listenDisplayAboutSIMPLViewDialogTriggered();
   void listenExitApplicationTriggered();
 
-  void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
-
   SIMPLView_UI* getNewSIMPLViewInstance();
 
   SIMPLView_UI* newInstanceFromFile(const QString& filePath);
@@ -144,8 +142,6 @@ protected slots:
   void versionCheckReply(UpdateCheckData*);
 
 private:
-  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*>      m_Clipboard;
-
   QMenuBar* m_DefaultMenuBar = nullptr;
   QMenu* m_DockMenu = nullptr;
 

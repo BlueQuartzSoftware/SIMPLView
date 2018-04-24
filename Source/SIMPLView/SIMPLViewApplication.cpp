@@ -861,21 +861,6 @@ void SIMPLViewApplication::setActiveWindow(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard)
-{
-  // Properly delete what is currently stored on the clipboard
-  for(int i = 0; i < m_Clipboard.first.size(); i++)
-  {
-    delete m_Clipboard.first[i];
-  }
-
-  // Assign new clipboard values to the clipboard
-  m_Clipboard = clipboard;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::writeSettings()
 {
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
