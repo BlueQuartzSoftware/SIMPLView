@@ -13,8 +13,6 @@
 
 #include "@PluginName@/@PluginName@Constants.h"
 
-// Include the MOC generated file for this class
-#include "moc_@PluginName@Plugin.cpp"
 
 // -----------------------------------------------------------------------------
 //
@@ -43,9 +41,25 @@ m_DidLoad(false)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString @PluginName@Plugin::getPluginName()
+QString @PluginName@Plugin::getPluginFileName()
 {
-  return (@PluginName@Constants::@PluginName@PluginDisplayName);
+  return @PluginName@Constants::@PluginName@PluginFile;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString @PluginName@Plugin::getPluginDisplayName()
+{
+  return @PluginName@Constants::@PluginName@PluginDisplayName;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QString @PluginName@Plugin::getPluginBaseName()
+{
+  return @PluginName@Constants::@PluginName@BaseName;
 }
 
 // -----------------------------------------------------------------------------
@@ -210,7 +224,13 @@ void @PluginName@Plugin::readSettings(QSettings& prefs)
 {
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void @PluginName@Plugin::registerFilterWidgets(FilterWidgetManager* fwm)
+{
+}
+
 #include "@PluginName@Filters/RegisterKnownFilters.cpp"
 
-#include "FilterParameterWidgets/RegisterKnownFilterParameterWidgets.cpp"
 

@@ -12,13 +12,13 @@ set(DREAM3D_WIDGETS
 
 foreach(FPW ${DREAM3D_WIDGETS})
   set(${PLUGIN_NAME}_Widgets_HDRS ${${PLUGIN_NAME}_Widgets_HDRS}
-    ${${PLUGIN_NAME}_SOURCE_DIR}/Widgets/${FPW}.h
+    ${${PLUGIN_NAME}_SOURCE_DIR}/Gui/Widgets/${FPW}.h
     )
   set(${PLUGIN_NAME}_Widgets_SRCS ${${PLUGIN_NAME}_Widgets_SRCS}
-    ${${PLUGIN_NAME}_SOURCE_DIR}/Widgets/${FPW}.cpp
+    ${${PLUGIN_NAME}_SOURCE_DIR}/Gui/Widgets/${FPW}.cpp
     )
   set(${PLUGIN_NAME}_Widgets_UIS ${${PLUGIN_NAME}_Widgets_UIS}
-    ${${PLUGIN_NAME}_SOURCE_DIR}/Widgets/UI_Files/${FPW}.ui
+    ${${PLUGIN_NAME}_SOURCE_DIR}/Gui/Widgets/UI_Files/${FPW}.ui
     )
 endforeach()
 
@@ -48,6 +48,10 @@ set_source_files_properties( ${${PLUGIN_NAME}_Widgets_Generated_MOC_SRCS} PROPER
 # --------------------------------------------------------------------
 # -- Run UIC on the necessary files
 QT5_WRAP_UI( ${PLUGIN_NAME}_Widgets_Generated_UI_HDRS ${${PLUGIN_NAME}_Widgets_UIS} )
+foreach(h ${${PLUGIN_NAME}_Widgets_Generated_UI_HDRS})
+  set_property(SOURCE ${h} PROPERTY SKIP_AUTOMOC ON)
+endforeach()
+
 
 # --------------------------------------------------------------------
 #-- Put the Qt generated files into their own group for IDEs

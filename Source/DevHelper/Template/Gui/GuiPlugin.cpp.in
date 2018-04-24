@@ -1,0 +1,18 @@
+
+
+#include "@PluginName@GuiPlugin.h"
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PluginName@GuiPlugin::@PluginName@GuiPlugin()
+: @PluginName@Plugin()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PluginName@GuiPlugin::~@PluginName@GuiPlugin() = default;
+
+#include "@PluginName@/Gui/FilterParameterWidgets/RegisterKnownFilterParameterWidgets.cpp"
