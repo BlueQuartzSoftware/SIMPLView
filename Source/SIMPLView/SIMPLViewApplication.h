@@ -90,8 +90,6 @@ public:
   SIMPLView_UI* getActiveWindow();
   void setActiveWindow(SIMPLView_UI* instance);
 
-  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
-
 public slots:
   void listenNewInstanceTriggered();
   void listenOpenPipelineTriggered();
@@ -151,7 +149,9 @@ private:
   QMenuBar* m_DefaultMenuBar = nullptr;
   QMenu* m_DockMenu = nullptr;
 
-  QSharedPointer<UpdateCheck>           m_UpdateCheck;
+  QSharedPointer<UpdateCheck>                                       m_UpdateCheck;
+
+  QString                                                           m_LastFilePathOpened;
 
   QMenu* m_MenuRecentFiles = nullptr;
   QMenu* m_MenuFile = nullptr;

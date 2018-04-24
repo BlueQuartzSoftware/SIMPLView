@@ -861,14 +861,6 @@ void SIMPLViewApplication::setActiveWindow(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> SIMPLViewApplication::getClipboard()
-{
-  return m_Clipboard;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLViewApplication::setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard)
 {
   // Properly delete what is currently stored on the clipboard
