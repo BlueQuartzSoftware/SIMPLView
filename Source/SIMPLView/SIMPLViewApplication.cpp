@@ -502,7 +502,7 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
   QString infoText = QString("Clear the %1 cache?").arg(BrandedStrings::ApplicationName);
   msgBox.setInformativeText(infoText);
   msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::Yes);
+  msgBox.setDefaultButton(QMessageBox::No);
   int response = msgBox.exec();
 
   if(response == QMessageBox::Yes)
@@ -513,17 +513,16 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     prefs->setValue("Program Mode", QString("Clear Cache"));
 
     QMessageBox cacheClearedBox;
-    QString title = "Cache Cleared";
-    QString informativeText = QString("The cache has been cleared successfully. Please restart %1 for the changes to take effect.").arg(BrandedStrings::ApplicationName);
+    QString title = QString("The cache has been cleared successfully. Please restart %1 for the changes to take effect.").arg(BrandedStrings::ApplicationName);
 
     cacheClearedBox.setText(title);
-    cacheClearedBox.setDetailedText(informativeText);
-    QAbstractButton* restartBtn = cacheClearedBox.addButton("Restart Now", QMessageBox::YesRole);
-    cacheClearedBox.addButton("Restart Later", QMessageBox::NoRole);
+    QPushButton* restartNowBtn = cacheClearedBox.addButton("Restart Now", QMessageBox::YesRole);
+    QPushButton* restartLaterBtn = cacheClearedBox.addButton("Restart Later", QMessageBox::NoRole);
+    cacheClearedBox.setDefaultButton(restartLaterBtn);
     cacheClearedBox.setIcon(QMessageBox::Information);
     cacheClearedBox.exec();
 
-    if (cacheClearedBox.clickedButton() == restartBtn)
+    if (cacheClearedBox.clickedButton() == restartNowBtn)
     {
       listenExitApplicationTriggered();
       QProcess::startDetached(QApplication::applicationFilePath());
