@@ -551,6 +551,11 @@ void SIMPLView_UI::setupGui()
   // Read the toolbox settings and update the filter list
   m_Ui->filterListWidget->updateFilterList(true);
 
+  tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
+  tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
+
+  m_Ui->filterListDockWidget->raise();
+
   m_Ui->issuesDockWidget->toggleViewAction()->setText("Show " + m_Ui->issuesDockWidget->toggleViewAction()->text());
   m_Ui->stdOutDockWidget->toggleViewAction()->setText("Show " + m_Ui->stdOutDockWidget->toggleViewAction()->text());
   m_Ui->dataBrowserDockWidget->toggleViewAction()->setText("Show " + m_Ui->dataBrowserDockWidget->toggleViewAction()->text());
