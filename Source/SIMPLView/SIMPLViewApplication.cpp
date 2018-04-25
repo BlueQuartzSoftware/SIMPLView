@@ -526,7 +526,7 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     if (cacheClearedBox.clickedButton() == restartBtn)
     {
       listenExitApplicationTriggered();
-      QProcess::startDetached(arguments()[0], arguments());
+      QProcess::startDetached(QApplication::applicationFilePath());
     }
   }
 }
@@ -708,7 +708,7 @@ void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
     if(choice == QMessageBox::Yes)
     {
       listenExitApplicationTriggered();
-      QProcess::startDetached(arguments()[0], arguments());
+      QProcess::startDetached(QApplication::applicationFilePath());
     }
   }
 }
