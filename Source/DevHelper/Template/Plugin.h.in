@@ -10,6 +10,8 @@
 
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 
+#include "@PluginName@/@PluginName@DLLExport.h"
+
 /**
  * @brief The @PluginName@Plugin class
  */
