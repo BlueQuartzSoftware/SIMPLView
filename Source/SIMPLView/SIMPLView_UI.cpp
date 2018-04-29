@@ -1307,6 +1307,12 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   // Clear the filter input widget
   clearFilterInputWidget();
 
+  // Alert to DataArrayPath requirements
+  connect(widget, SIGNAL(viewPathsMatchingReqs(DataContainerSelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(DataContainerSelectionFilterParameter::RequirementType)));
+  connect(widget, SIGNAL(viewPathsMatchingReqs(AttributeMatrixSelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(AttributeMatrixSelectionFilterParameter::RequirementType)));
+  connect(widget, SIGNAL(viewPathsMatchingReqs(DataArraySelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(DataArraySelectionFilterParameter::RequirementType)));
+  connect(widget, SIGNAL(endViewPaths()), getDataStructureWidget(), SLOT(clearViewRequirements()));
+
   // Set the widget into the frame
   fiwFrameVLayout->addWidget(widget);
   widget->show();
