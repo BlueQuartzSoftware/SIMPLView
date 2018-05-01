@@ -772,6 +772,8 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineView, &SVPipelineView::pipelineStarted, this, &SIMPLView_UI::pipelineDidFinish);
 
+  connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
+
   connect(pipelineView, &SVPipelineView::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
 
   connect(pipelineView, &SVPipelineView::pipelineFinished, [=] {
@@ -779,6 +781,8 @@ void SIMPLView_UI::connectSignalsSlots()
   });
 
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
+
+  connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::markDocumentAsDirty);
 
   connect(pipelineView, &SVPipelineView::filePathOpened, [=] (const QString &filePath) { m_OpenDialogLastFilePath = filePath; });
 
@@ -804,7 +808,13 @@ void SIMPLView_UI::connectSignalsSlots()
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  return m_Ui->pipelineListWidget->getPipelineView()->openPipeline(filePath);
+  int err = m_Ui->pipelineListWidget->getPipelineView()->openPipeline(filePath);
+
+  QFileInfo fi(filePath);
+  setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());
+  setWindowModified(false);
+
+  return err;
 }
 
 // -----------------------------------------------------------------------------
