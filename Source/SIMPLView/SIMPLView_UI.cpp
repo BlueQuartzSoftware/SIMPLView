@@ -730,12 +730,14 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] (const QItemSelection &selected, const QItemSelection &deselected) {
-    if (selected.size() == 1)
-    {
-      QModelIndex selectedIndex = selected.indexes()[0];
-      PipelineModel* model = getPipelineModel();
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] {
 
+    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+    if (selectedIndexes.size() == 1)
+    {
+      QModelIndex selectedIndex = selectedIndexes[0];
+
+      PipelineModel* model = getPipelineModel();
       FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
       setFilterInputWidget(fiw);
 
