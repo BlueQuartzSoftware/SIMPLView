@@ -751,6 +751,8 @@ void SIMPLView_UI::connectSignalsSlots()
     }
   });
 
+  connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
+
   connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] {
     m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
   });
