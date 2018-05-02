@@ -733,6 +733,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] {
 
     QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+    qSort(selectedIndexes);
+
     if (selectedIndexes.size() == 1)
     {
       QModelIndex selectedIndex = selectedIndexes[0];
