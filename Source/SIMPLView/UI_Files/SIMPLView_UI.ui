@@ -90,8 +90,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="issuesDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -105,8 +105,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="stdOutDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -120,8 +120,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="dataBrowserDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -135,12 +135,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="pipelineDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
-    <string>Pipelines</string>
+    <string>Pipeline</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -168,8 +168,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="bookmarksDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -201,8 +201,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="filterLibraryDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -234,8 +234,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="filterListDockWidget">
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>62</width>
+     <height>38</height>
     </size>
    </property>
    <property name="windowTitle">

@@ -343,6 +343,9 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
     return;
   }
 
+  // Status Bar Widget needs to write out its settings BEFORE the main window is closed
+  m_StatusBar->writeSettings();
+
   event->accept();
 }
 
@@ -556,21 +559,21 @@ void SIMPLView_UI::setupGui()
 
   m_Ui->filterListDockWidget->raise();
 
-  m_Ui->issuesDockWidget->toggleViewAction()->setText("Show " + m_Ui->issuesDockWidget->toggleViewAction()->text());
-  m_Ui->stdOutDockWidget->toggleViewAction()->setText("Show " + m_Ui->stdOutDockWidget->toggleViewAction()->text());
-  m_Ui->dataBrowserDockWidget->toggleViewAction()->setText("Show " + m_Ui->dataBrowserDockWidget->toggleViewAction()->text());
-  m_Ui->pipelineDockWidget->toggleViewAction()->setText("Show " + m_Ui->pipelineDockWidget->toggleViewAction()->text());
-
   // Shortcut to close the window
   new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
 
   m_StatusBar = new StatusBarWidget();
   this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
 
+  m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
+  m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
+  m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
+  m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
   m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
-  m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
+
+  m_StatusBar->readSettings();
 
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
@@ -666,6 +669,16 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuEdit->addAction(actionCut);
   m_MenuEdit->addAction(actionCopy);
   m_MenuEdit->addAction(actionPaste);
+
+  // Create View Menu
+  m_SIMPLViewMenu->addMenu(m_MenuView);
+  m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->bookmarksDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->pipelineDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->issuesDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->stdOutDockWidget->toggleViewAction());
+  m_MenuView->addAction(m_Ui->dataBrowserDockWidget->toggleViewAction());
 
   // Create Bookmarks Menu
   m_SIMPLViewMenu->addMenu(m_MenuBookmarks);
