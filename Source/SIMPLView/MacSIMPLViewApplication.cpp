@@ -41,7 +41,6 @@
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "SIMPLView/SIMPLView_UI.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 // -----------------------------------------------------------------------------
@@ -75,17 +74,6 @@ bool MacSIMPLViewApplication::event(QEvent* event)
   }
 
   return QApplication::event(event);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MacSIMPLViewApplication::initializeDummyDockWidgetActions()
-{
-  if (m_SIMPLViewInstances.size() > 0)
-  {
-    m_DummyDockWidgetActions = m_SIMPLViewInstances[0]->getDummyDockWidgetActions();
-  }
 }
 
 // -----------------------------------------------------------------------------

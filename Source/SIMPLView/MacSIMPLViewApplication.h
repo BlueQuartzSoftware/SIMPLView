@@ -57,11 +57,6 @@ class MacSIMPLViewApplication : public SIMPLViewApplication
      */
     bool event(QEvent* event);
 
-    /**
-     * @brief initializeDummyDockWidgetActions
-     */
-    void initializeDummyDockWidgetActions();
-
   protected slots:
     /**
     * @brief activeWindowChanged

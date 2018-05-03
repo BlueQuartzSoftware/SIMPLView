@@ -41,7 +41,6 @@
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "SIMPLView/SIMPLView_UI.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 // -----------------------------------------------------------------------------
@@ -58,8 +57,7 @@ StandardSIMPLViewApplication::StandardSIMPLViewApplication(int& argc, char** arg
 // -----------------------------------------------------------------------------
 StandardSIMPLViewApplication::~StandardSIMPLViewApplication()
 {
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  toolbox->writeSettings();
+
 }
 
 // -----------------------------------------------------------------------------

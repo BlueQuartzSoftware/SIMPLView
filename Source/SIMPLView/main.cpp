@@ -134,10 +134,6 @@ int main(int argc, char* argv[])
     ui->show();
   }
 
-#if defined (Q_OS_MAC)
-  qtapp.initializeDummyDockWidgetActions();
-#endif
-
 #ifdef SIMPL_USE_MKDOCS
   QtSDocServer::Instance();
 #endif

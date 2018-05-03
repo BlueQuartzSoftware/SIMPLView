@@ -75,8 +75,6 @@
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
-#include "SVWidgetsLib/Widgets/SVPipelineFilterWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 #include "SIMPLView/AboutSIMPLView.h"

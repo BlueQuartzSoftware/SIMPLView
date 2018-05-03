@@ -55,7 +55,7 @@
 #include "SIMPLib/Filtering/FilterPipeline.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
-
+#include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 //-- UIC generated Header
@@ -73,7 +73,6 @@ class UpdateCheck;
 class QToolButton;
 class AboutSIMPLView;
 class StatusBarWidget;
-class FilterInputWidget;
 class PipelineTreeView;
 class PipelineModel;
 class PipelineListWidget;
@@ -112,24 +111,6 @@ class SIMPLView_UI : public QMainWindow
     void setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins);
 
     /**
-    * @brief getBookmarksToolboxWidget
-    * @param
-    */
-    BookmarksToolboxWidget* getBookmarksToolboxWidget();
-
-    /**
-    * @brief getFilterListToolboxWidget
-    * @param
-    */
-    FilterListToolboxWidget* getFilterListToolboxWidget();
-
-    /**
-    * @brief getFilterLibraryToolboxWidget
-    * @param
-    */
-    FilterLibraryToolboxWidget* getFilterLibraryToolboxWidget();
-
-    /**
      * @brief getDataStructureWidget
      * @return
      */
@@ -162,13 +143,6 @@ class SIMPLView_UI : public QMainWindow
      * @param menu
      */
     void removeDockWidgetActions(QMenu* menu);
-
-    /**
-     * @brief getDummyDockWidgetActions
-     * @param menu
-     * @return
-     */
-    QList<QAction*> getDummyDockWidgetActions();
 
     /**
      * @brief openPipeline

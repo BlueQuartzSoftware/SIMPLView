@@ -76,7 +76,6 @@
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
-#include "SVWidgetsLib/Widgets/SIMPLViewToolbox.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
@@ -549,7 +548,7 @@ void SIMPLView_UI::setupGui()
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
-  getFilterLibraryToolboxWidget()->refreshFilterGroups();
+  m_Ui->filterLibraryWidget->refreshFilterGroups();
 
   // Read the toolbox settings and update the filter list
   m_Ui->filterListWidget->updateFilterList(true);
@@ -1117,28 +1116,6 @@ void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QAction*> SIMPLView_UI::getDummyDockWidgetActions()
-{
-  QList<QAction*> actions;
-
-  QAction* issuesDummyAction = new QAction(m_Ui->issuesDockWidget->toggleViewAction()->text(), macApp);
-  issuesDummyAction->setDisabled(true);
-  actions.push_back(issuesDummyAction);
-
-  QAction* stdOutDummyAction = new QAction(m_Ui->stdOutDockWidget->toggleViewAction()->text(), macApp);
-  stdOutDummyAction->setDisabled(true);
-  actions.push_back(stdOutDummyAction);
-
-  QAction* dataBrowserDummyAction = new QAction(m_Ui->dataBrowserDockWidget->toggleViewAction()->text(), macApp);
-  dataBrowserDummyAction->setDisabled(true);
-  actions.push_back(dataBrowserDummyAction);
-
-  return actions;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
 {
 #if 0
@@ -1146,33 +1123,6 @@ void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
   menu->removeAction(stdOutDockWidget->toggleViewAction());
   menu->removeAction(dataBrowserDockWidget->toggleViewAction());
 #endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-BookmarksToolboxWidget* SIMPLView_UI::getBookmarksToolboxWidget()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  return toolbox->getBookmarksWidget();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-FilterListToolboxWidget* SIMPLView_UI::getFilterListToolboxWidget()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  return toolbox->getFilterListWidget();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-FilterLibraryToolboxWidget* SIMPLView_UI::getFilterLibraryToolboxWidget()
-{
-  SIMPLViewToolbox* toolbox = SIMPLViewToolbox::Instance();
-  return toolbox->getFilterLibraryWidget();
 }
 
 // -----------------------------------------------------------------------------
