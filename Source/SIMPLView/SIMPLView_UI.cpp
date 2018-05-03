@@ -68,7 +68,6 @@
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
-#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
@@ -96,7 +95,6 @@
 #define URL_GENERATOR QtSHelpUrlGenerator
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #endif
-
 
 #include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/AboutSIMPLView.h"

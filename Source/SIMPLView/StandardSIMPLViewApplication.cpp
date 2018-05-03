@@ -41,6 +41,7 @@
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
 #include "SIMPLView/SIMPLView_UI.h"
+
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 
 // -----------------------------------------------------------------------------
