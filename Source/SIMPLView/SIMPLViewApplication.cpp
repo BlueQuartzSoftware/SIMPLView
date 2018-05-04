@@ -817,7 +817,7 @@ void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-SIMPLView_UI* SIMPLViewApplication::getActiveWindow()
+SIMPLView_UI* SIMPLViewApplication::getActiveInstance()
 {
   return m_ActiveWindow;
 }

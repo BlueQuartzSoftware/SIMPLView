@@ -87,7 +87,7 @@ public:
 
   virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
-  SIMPLView_UI* getActiveWindow();
+  SIMPLView_UI* getActiveInstance();
   void setActiveWindow(SIMPLView_UI* instance);
 
 public slots:

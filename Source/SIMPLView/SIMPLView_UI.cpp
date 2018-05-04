@@ -726,11 +726,23 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::newSIMPLViewInstanceTriggered, [=] (const QString& filePath, bool execute) {
-    SIMPLView_UI* newInstance = dream3dApp->newInstanceFromFile(filePath);
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, [=] (const QString& filePath, bool execute) {
+    SIMPLView_UI* instance = dream3dApp->getActiveInstance();
+    if (instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
+    {
+      instance->openPipeline(filePath);
+
+      QtSRecentFileList* list = QtSRecentFileList::instance();
+      list->addFile(filePath);
+    }
+    else
+    {
+      instance = dream3dApp->newInstanceFromFile(filePath);
+    }
+
     if (execute)
     {
-      newInstance->executePipeline();
+      instance->executePipeline();
     }
   });
 
