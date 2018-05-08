@@ -356,7 +356,7 @@ class SIMPLView_UI : public QMainWindow
     FilterPipeline::Pointer                 m_PipelineInFlight;
     QVector<DataContainerArray::Pointer>    m_PreflightDataContainerArrays;
     QMenuBar*                               m_InstanceMenuBar = nullptr;
-    StatusBarWidget*                        m_StatusBar = nullptr;
+//    StatusBarWidget*                        m_StatusBar = nullptr;
 
     QString                                 m_OpenedFilePath;
     static QString                          m_OpenDialogLastFilePath;
