@@ -68,6 +68,7 @@
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
+#include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
@@ -752,10 +753,22 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] {
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] (const QItemSelection &selected, const QItemSelection &deselected) {
 
     QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
     qSort(selectedIndexes);
+
+    // Animate a selection border for selected indexes
+    for(const QModelIndex &index: selected.indexes())
+    {
+      new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
+    }
+
+    // Remove selection border from deselected indexes
+    for(const QModelIndex &index: deselected.indexes())
+    {
+      pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
+    }
 
     if (selectedIndexes.size() == 1)
     {
