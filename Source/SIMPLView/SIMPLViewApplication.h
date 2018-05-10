@@ -136,17 +136,17 @@ protected:
    */
   void checkForUpdatesAtStartup();
 
-  /**
-   * @brief dream3dWindowChanged
-   * @param instance
-   */
-  void dream3dWindowChanged(SIMPLView_UI* instance);
-
 protected slots:
   /**
   * @brief versionCheckReply
   */
   void versionCheckReply(UpdateCheckData*);
+
+  /**
+   * @brief dream3dWindowChanged
+   * @param instance
+   */
+  void dream3dWindowChanged(SIMPLView_UI* instance);
 
 private:
   QMenuBar* m_DefaultMenuBar = nullptr;
