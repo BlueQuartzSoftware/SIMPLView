@@ -55,6 +55,9 @@ class SIMPLViewToolbox;
 class SVPipelineFilterWidget;
 class SVPipelineViewWidget;
 
+/**
+ * @brief The SIMPLViewApplication class
+ */
 class SIMPLViewApplication : public QApplication
 {
   Q_OBJECT
@@ -82,34 +85,39 @@ public:
 
   void registerSIMPLViewWindow(SIMPLView_UI* window);
 
-  virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+  void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+
+  SIMPLView_UI* getActiveInstance();
+  void setActiveWindow(SIMPLView_UI* instance);
+
+  /**
+   * @brief event
+   * @param event
+   * @return
+   */
+  bool event(QEvent* event);
+
+public slots:
+  void listenNewInstanceTriggered();
+  void listenOpenPipelineTriggered();
+  void listenClearRecentFilesTriggered();
+  void listenClearSIMPLViewCacheTriggered();
+  void listenShowSIMPLViewHelpTriggered();
+  void listenCheckForUpdatesTriggered();
+  void listenDisplayPluginInfoDialogTriggered();
+  void listenDisplayAboutSIMPLViewDialogTriggered();
+  void listenExitApplicationTriggered();
 
   SIMPLView_UI* getNewSIMPLViewInstance();
 
-  SIMPLView_UI* getActiveWindow();
-  void setActiveWindow(SIMPLView_UI* instance);
-
-  bool isCurrentlyRunning(SIMPLView_UI* instance);
-
-  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> getClipboard();
-
-public slots:
-  void newInstanceFromFile(const QString& filePath, const bool& setOpenedFilePath, const bool& addToRecentFiles);
-
-  void setClipboard(QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> clipboard);
+  SIMPLView_UI* newInstanceFromFile(const QString& filePath);
 
 protected:
-  SIMPLViewToolbox* m_Toolbox;
-
   // This is a set of all SIMPLView instances currently available
   QList<SIMPLView_UI*> m_SIMPLViewInstances;
 
-  // This is the set of SIMPLView instances that are currently running a pipeline
-  QSet<SIMPLView_UI*> m_CurrentlyRunningInstances;
-
   // The currently active SIMPLView instance
   SIMPLView_UI* m_ActiveWindow;
-  SIMPLView_UI* m_PreviousActiveWindow;
 
   QString m_OpenDialogLastFilePath;
 
@@ -117,70 +125,84 @@ protected:
   QSplashScreen* m_SplashScreen;
   QVector<QPluginLoader*> m_PluginLoaders;
 
+  /**
+   * @brief loadPlugins
+   * @return
+   */
   QVector<ISIMPLibPlugin*> loadPlugins();
 
+  /**
+   * @brief checkForUpdatesAtStartup
+   */
+  void checkForUpdatesAtStartup();
+
 protected slots:
-  void on_actionCloseToolbox_triggered();
-  void on_actionNew_triggered();
-  void on_actionOpen_triggered();
-  void on_actionSave_triggered();
-  void on_actionSaveAs_triggered();
-  void on_actionShowToolbox_triggered(bool visible);
-  void on_actionOpenBookmark_triggered();
-  void on_actionOpenExecuteBookmark_triggered();
-
-  void on_actionAddBookmark_triggered();
-  void on_actionNewFolder_triggered();
-  void on_actionRenameBookmark_triggered();
-  void on_actionRemoveBookmark_triggered();
-  void on_actionShowBookmarkInFileSystem_triggered();
-  void on_actionClearCache_triggered();
-  void on_actionClearBookmarks_triggered();
-
-
-  void on_actionCloseWindow_triggered();
-  void on_actionExit_triggered();
-  void on_actionShowSIMPLViewHelp_triggered();
-  void on_actionCheckForUpdates_triggered();
-  void on_actionPluginInformation_triggered();
-  void on_actionAboutSIMPLView_triggered();
-
-  void on_pipelineViewWidget_deleteKeyPressed(SVPipelineViewWidget* widget);
-  void bookmarkSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
-
-  void toPipelineRunningState();
-  void toPipelineIdleState();
-
-  void on_actionCut_triggered();
-  void on_actionCopy_triggered();
-  void on_actionPaste_triggered();
-  void on_actionClearPipeline_triggered();
-
-  void updatePasteState(bool canPaste);
+  /**
+  * @brief versionCheckReply
+  */
+  void versionCheckReply(UpdateCheckData*);
 
   /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  virtual void updateRecentFileList(const QString& file);
-
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
-  virtual void toolboxWindowChanged();
-
-  virtual void on_actionClearRecentFiles_triggered();
-
-  // SIMPLView_UI slots
-  void openRecentFile();
-
-  void addFilter(const QString& className);
+   * @brief dream3dWindowChanged
+   * @param instance
+   */
+  void dream3dWindowChanged(SIMPLView_UI* instance);
 
 private:
-  QPair<QList<SVPipelineFilterWidget*>, SVPipelineViewWidget*> m_Clipboard;
+  QMenuBar* m_DefaultMenuBar = nullptr;
+  QMenu* m_DockMenu = nullptr;
 
-  QSharedPointer<QMenu> m_ContextMenu;
+  QSharedPointer<UpdateCheck>                                       m_UpdateCheck;
+
+  QString                                                           m_LastFilePathOpened;
+
+  QMenu* m_MenuRecentFiles = nullptr;
+  QMenu* m_MenuFile = nullptr;
+  QMenu* m_MenuEdit = nullptr;
+  QMenu* m_MenuView = nullptr;
+  QMenu* m_MenuBookmarks = nullptr;
+  QMenu* m_MenuPipeline = nullptr;
+  QMenu* m_MenuHelp = nullptr;
+  QMenu* m_MenuAdvanced = nullptr;
+
+  QAction* m_ActionNew = nullptr;
+  QAction* m_ActionOpen = nullptr;
+  QAction* m_ActionSave = nullptr;
+  QAction* m_ActionSaveAs = nullptr;
+  QAction* m_ActionLoadTheme = nullptr;
+  QAction* m_ActionSaveTheme = nullptr;
+  QAction* m_ActionClearRecentFiles = nullptr;
+  QAction* m_ActionExit = nullptr;
+  QAction* m_ActionShowSIMPLViewHelp = nullptr;
+  QAction* m_ActionAboutSIMPLView = nullptr;
+  QAction* m_ActionCheckForUpdates = nullptr;
+  QAction* m_ActionPluginInformation = nullptr;
+  QAction* m_ActionClearCache = nullptr;
+
+  QAction* m_ActionCut = nullptr;
+  QAction* m_ActionCopy = nullptr;
+  QAction* m_ActionPaste = nullptr;
+  QAction* m_ActionClearPipeline = nullptr;
+  QAction* m_ActionUndo = nullptr;
+  QAction* m_ActionRedo = nullptr;
+
+  QAction* m_ActionAddBookmark = nullptr;
+  QAction* m_ActionAddBookmarkFolder = nullptr;
+  QAction* m_ActionClearBookmarks = nullptr;
+
+  QAction* m_ActionShowFilterList = nullptr;
+  QAction* m_ActionShowFilterLibrary = nullptr;
+  QAction* m_ActionShowBookmarks = nullptr;
+  QAction* m_ActionShowPipeline = nullptr;
+  QAction* m_ActionShowIssues = nullptr;
+  QAction* m_ActionShowConsole = nullptr;
+  QAction* m_ActionShowDataBrowser = nullptr;
 
   int m_minSplashTime;
+
+  void createDefaultMenuBar();
+
+  void createMacDockMenu();
 
   void readSettings();
   void writeSettings();

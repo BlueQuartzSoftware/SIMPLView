@@ -40,10 +40,9 @@
 #include <QtGui/QFontDatabase>
 
 #include "BrandedStrings.h"
-#include "MacSIMPLViewApplication.h"
 #include "SIMPLView.h"
 #include "SIMPLView_UI.h"
-#include "StandardSIMPLViewApplication.h"
+#include "SIMPLViewApplication.h"
 
 #include "SVWidgetsLib/SVWidgetsLib.h"
 
@@ -94,11 +93,7 @@ int main(int argc, char* argv[])
 #endif
 //#endif
 
-#if defined (Q_OS_MAC)
-  MacSIMPLViewApplication qtapp(argc, argv);
-#else
-  StandardSIMPLViewApplication qtapp(argc, argv);
-#endif
+  SIMPLViewApplication qtapp(argc, argv);
 
   QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
   QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
@@ -125,7 +120,7 @@ int main(int argc, char* argv[])
     QString filePath = QString::fromLatin1(two);
     if (!filePath.isEmpty())
     {
-      qtapp.newInstanceFromFile(filePath, true, true);
+      qtapp.newInstanceFromFile(filePath);
     }
   }
   else
@@ -134,12 +129,8 @@ int main(int argc, char* argv[])
     ui->show();
   }
 
-#if defined (Q_OS_MAC)
-  qtapp.initializeDummyDockWidgetActions();
-#endif
-
 #ifdef SIMPL_USE_MKDOCS
-  QtSDocServer* docServer = QtSDocServer::Instance();
+  QtSDocServer::Instance();
 #endif
 
   int err = qtapp.exec();

@@ -22,14 +22,20 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="fiwFrame">
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
+  </property>
+  <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
     <size>
      <width>16777215</width>
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QGridLayout" name="fiwFrameVLayout">
+   <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -42,10 +48,52 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QFrame" name="fiwFrame">
+      <property name="styleSheet">
+       <string notr="true">PipelineViewWidget
+{
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <layout class="QVBoxLayout" name="fiwFrameVLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="issuesDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
    <property name="windowTitle">
     <string>[*]Pipeline Issues</string>
    </property>
@@ -55,6 +103,12 @@
    <widget class="IssuesWidget" name="issuesWidget"/>
   </widget>
   <widget class="QDockWidget" name="stdOutDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
    <property name="windowTitle">
     <string>[*]Pipeline Output</string>
    </property>
@@ -64,6 +118,12 @@
    <widget class="StandardOutputWidget" name="stdOutWidget"/>
   </widget>
   <widget class="QDockWidget" name="dataBrowserDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
    <property name="windowTitle">
     <string>Data Structure</string>
    </property>
@@ -72,21 +132,21 @@
    </attribute>
    <widget class="DataStructureWidget" name="dataBrowserWidget"/>
   </widget>
-  <widget class="QDockWidget" name="pipelineViewDockWidget">
-   <property name="acceptDrops">
-    <bool>false</bool>
+  <widget class="QDockWidget" name="pipelineDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Pipeline</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <property name="acceptDrops">
-     <bool>false</bool>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+   <widget class="QWidget" name="pipelineInteralWidget">
+    <layout class="QGridLayout" name="gridLayout_3">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -99,79 +159,107 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="QScrollArea" name="pipelineViewScrollArea">
-       <property name="acceptDrops">
-        <bool>false</bool>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="SVPipelineViewWidget" name="pipelineViewWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>99</width>
-          <height>500</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="acceptDrops">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </widget>
+     <item row="0" column="0">
+      <widget class="PipelineListWidget" name="pipelineListWidget" native="true"/>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="startPipelineBtn">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>35</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>Start Pipeline</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>:/media_play_white.png</normaloff>:/media_play_white.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>24</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="bookmarksDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Bookmarks</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="bookmarksInternalWidget">
+    <layout class="QGridLayout" name="gridLayout_5">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="BookmarksToolboxWidget" name="bookmarksWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="filterLibraryDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Filter Library</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="filterLibraryInternalWidget">
+    <layout class="QGridLayout" name="gridLayout_6">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="filterListDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>62</width>
+     <height>38</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Filter List</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="filterListInternalWidget">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="FilterListToolboxWidget" name="filterListWidget" native="true"/>
      </item>
     </layout>
    </widget>
@@ -365,12 +453,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SVPipelineViewWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">SVPipelineViewWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>IssuesWidget</class>
    <extends>QWidget</extends>
    <header location="global">IssuesWidget.h</header>
@@ -388,9 +470,34 @@
    <header location="global">DataStructureWidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>FilterLibraryToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">FilterLibraryToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BookmarksToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">BookmarksToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FilterListToolboxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">FilterListToolboxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PipelineListWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">PipelineListWidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
+  <include location="../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
  </resources>
  <connections/>
 </ui>
