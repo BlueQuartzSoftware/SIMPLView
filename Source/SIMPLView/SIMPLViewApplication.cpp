@@ -725,6 +725,7 @@ void SIMPLViewApplication::listenDisplayAboutSIMPLViewDialogTriggered()
 SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
 {
   SIMPLView_UI* ui = getNewSIMPLViewInstance();
+  ui->show();
   QString nativeFilePath = QDir::toNativeSeparators(filePath);
   QFileInfo fi(filePath);
   if(fi.exists())
@@ -734,7 +735,6 @@ SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
     QtSRecentFileList* list = QtSRecentFileList::instance();
     list->addFile(filePath);
   }
-  ui->show();
   return ui;
 }
 
