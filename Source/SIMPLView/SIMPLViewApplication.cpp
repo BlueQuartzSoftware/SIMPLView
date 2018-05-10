@@ -958,6 +958,14 @@ void SIMPLViewApplication::createDefaultMenuBar()
 
   m_ActionClearCache = new QAction("Clear Cache", m_DefaultMenuBar);
 
+  m_ActionShowFilterList = new QAction("Filter List", m_DefaultMenuBar);
+  m_ActionShowFilterLibrary = new QAction("Filter Library", m_DefaultMenuBar);
+  m_ActionShowBookmarks = new QAction("Bookmarks", m_DefaultMenuBar);
+  m_ActionShowPipeline = new QAction("Show Pipeline", m_DefaultMenuBar);
+  m_ActionShowIssues = new QAction("Pipeline Issues", m_DefaultMenuBar);
+  m_ActionShowConsole = new QAction("Pipeline Output", m_DefaultMenuBar);
+  m_ActionShowDataBrowser = new QAction("Data Structure", m_DefaultMenuBar);
+
   connect(m_ActionNew, &QAction::triggered, this, &SIMPLViewApplication::listenNewInstanceTriggered);
   connect(m_ActionOpen, &QAction::triggered, this, &SIMPLViewApplication::listenOpenPipelineTriggered);
   connect(m_ActionExit, &QAction::triggered, this, &SIMPLViewApplication::listenExitApplicationTriggered);
@@ -980,6 +988,14 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_ActionUndo->setDisabled(true);
   m_ActionRedo->setDisabled(true);
 
+  m_ActionShowFilterList->setDisabled(true);
+  m_ActionShowFilterLibrary->setDisabled(true);
+  m_ActionShowBookmarks->setDisabled(true);
+  m_ActionShowPipeline->setDisabled(true);
+  m_ActionShowIssues->setDisabled(true);
+  m_ActionShowConsole->setDisabled(true);
+  m_ActionShowDataBrowser->setDisabled(true);
+
   // Create File Menu
   m_DefaultMenuBar->addMenu(m_MenuFile);
   m_MenuFile->addAction(m_ActionNew);
@@ -995,13 +1011,23 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuFile->addAction(m_ActionExit);
 
   // Create Edit Menu
+  m_DefaultMenuBar->addMenu(m_MenuEdit);
   m_MenuEdit->addAction(m_ActionUndo);
   m_MenuEdit->addAction(m_ActionRedo);
-  m_DefaultMenuBar->addMenu(m_MenuEdit);
   m_MenuEdit->addSeparator();
   m_MenuEdit->addAction(m_ActionCut);
   m_MenuEdit->addAction(m_ActionCopy);
   m_MenuEdit->addAction(m_ActionPaste);
+
+  // Create View Menu
+  m_DefaultMenuBar->addMenu(m_MenuView);
+  m_MenuView->addAction(m_ActionShowFilterList);
+  m_MenuView->addAction(m_ActionShowFilterLibrary);
+  m_MenuView->addAction(m_ActionShowBookmarks);
+  m_MenuView->addAction(m_ActionShowPipeline);
+  m_MenuView->addAction(m_ActionShowIssues);
+  m_MenuView->addAction(m_ActionShowConsole);
+  m_MenuView->addAction(m_ActionShowDataBrowser);
 
   // Create Bookmarks Menu
   m_DefaultMenuBar->addMenu(m_MenuBookmarks);

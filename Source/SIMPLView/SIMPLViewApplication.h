@@ -183,6 +183,14 @@ private:
   QAction* m_ActionAddBookmarkFolder = nullptr;
   QAction* m_ActionClearBookmarks = nullptr;
 
+  QAction* m_ActionShowFilterList = nullptr;
+  QAction* m_ActionShowFilterLibrary = nullptr;
+  QAction* m_ActionShowBookmarks = nullptr;
+  QAction* m_ActionShowPipeline = nullptr;
+  QAction* m_ActionShowIssues = nullptr;
+  QAction* m_ActionShowConsole = nullptr;
+  QAction* m_ActionShowDataBrowser = nullptr;
+
   int m_minSplashTime;
 
   void createDefaultMenuBar();
