@@ -810,8 +810,16 @@ void SIMPLViewApplication::listenExitApplicationTriggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
-  // This should never be executed
-  return;
+  if (instance->isActiveWindow())
+  {
+    m_ActiveWindow = instance;
+  }
+  else if (m_SIMPLViewInstances.size() == 1)
+  {
+    /* If the inactive signal got fired and there are no more windows,
+     * this means that the last window has been closed. */
+    m_ActiveWindow = nullptr;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -843,8 +851,33 @@ void SIMPLViewApplication::registerSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
-  // This should never be executed
-  return;
+  m_SIMPLViewInstances.removeAll(window);
+
+#if defined(Q_OS_MAC)
+#else
+  if (m_SIMPLViewInstances.size() <= 0)
+  {
+    quit();
+  }
+#endif
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool SIMPLViewApplication::event(QEvent* event)
+{
+  #if defined(Q_OS_MAC)
+  if (event->type() == QEvent::FileOpen)
+  {
+    QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
+    QString filePath = openEvent->file();
+
+    newInstanceFromFile(filePath);
+  }
+  #endif
+
+  return QApplication::event(event);
 }
 
 // -----------------------------------------------------------------------------

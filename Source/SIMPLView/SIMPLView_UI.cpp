@@ -97,12 +97,11 @@
 #include "SVWidgetsLib/QtSupport/QtSHelpUrlGenerator.h"
 #endif
 
-#include "SIMPLView/MacSIMPLViewApplication.h"
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
-#include "SIMPLView/StandardSIMPLViewApplication.h"
+#include "SIMPLView/SIMPLViewApplication.h"
 
 #include "BrandedStrings.h"
 

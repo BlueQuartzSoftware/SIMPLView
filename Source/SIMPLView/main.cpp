@@ -40,10 +40,9 @@
 #include <QtGui/QFontDatabase>
 
 #include "BrandedStrings.h"
-#include "MacSIMPLViewApplication.h"
 #include "SIMPLView.h"
 #include "SIMPLView_UI.h"
-#include "StandardSIMPLViewApplication.h"
+#include "SIMPLViewApplication.h"
 
 #include "SVWidgetsLib/SVWidgetsLib.h"
 
@@ -94,11 +93,7 @@ int main(int argc, char* argv[])
 #endif
 //#endif
 
-#if defined (Q_OS_MAC)
-  MacSIMPLViewApplication qtapp(argc, argv);
-#else
-  StandardSIMPLViewApplication qtapp(argc, argv);
-#endif
+  SIMPLViewApplication qtapp(argc, argv);
 
   QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
   QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);

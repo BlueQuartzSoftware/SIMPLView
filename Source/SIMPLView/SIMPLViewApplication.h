@@ -85,10 +85,17 @@ public:
 
   void registerSIMPLViewWindow(SIMPLView_UI* window);
 
-  virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+  void unregisterSIMPLViewWindow(SIMPLView_UI* window);
 
   SIMPLView_UI* getActiveInstance();
   void setActiveWindow(SIMPLView_UI* instance);
+
+  /**
+   * @brief event
+   * @param event
+   * @return
+   */
+  bool event(QEvent* event);
 
 public slots:
   void listenNewInstanceTriggered();
@@ -133,7 +140,7 @@ protected:
    * @brief dream3dWindowChanged
    * @param instance
    */
-  virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+  void dream3dWindowChanged(SIMPLView_UI* instance);
 
 protected slots:
   /**
