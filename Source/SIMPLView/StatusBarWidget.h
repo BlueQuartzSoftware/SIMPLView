@@ -33,70 +33,95 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _standardsimplviewapplication_h_
-#define _standardsimplviewapplication_h_
+#ifndef _statusBarWidget_h_
+#define _statusBarWidget_h_
 
-#include "SIMPLView/SIMPLViewApplication.h"
+#include <QtWidgets/QFrame>
 
-#define standardApp (static_cast<StandardSIMPLViewApplication *>(qApp))
+#include "ui_StatusBarWidget.h"
 
-class SIMPLViewToolboxMenu;
+class QDockWidget;
 
-class StandardSIMPLViewApplication : public SIMPLViewApplication
+class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
 {
+
     Q_OBJECT
 
   public:
-    StandardSIMPLViewApplication(int& argc, char** argv);
-    virtual ~StandardSIMPLViewApplication();
+    StatusBarWidget(QWidget* parent = 0);
+    virtual ~StatusBarWidget();
 
-    virtual void unregisterSIMPLViewWindow(SIMPLView_UI* window);
+
+    using EnumType = unsigned int;
+
+    enum class Button : EnumType
+    {
+      Issues = 0,
+      Console = 1,
+      DataStructure = 2,
+      Toolbox = 3,
+      PipelineTreeView = 4
+    };
+
 
     /**
-     * @brief getSIMPLViewMenuBar Creates the QMenuBar that should be used for
-     * application windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
+     * @brief setButtonAction
+     * @param action
+     * @param btn
+     */
+    void setButtonAction(QDockWidget *dock, Button btn);
+
+    /**
+     * @brief updateStyle
+     */
+    void updateStyle();
+
+    /**
+     * @brief generateStyleSheet
+     * @param error
      * @return
      */
-    QMenuBar* getSIMPLViewMenuBar(SIMPLView_UI* instance);
+    QString generateStyleSheet(bool error);
 
-
+  public slots:
     /**
-     * @brief getToolboxMenuBar Creates the QMenuBar that should be used for
-     * Toolbox windows. The Caller is responsible for taking ownership of
-     * the pointer and cleaning it up when appropriate.
-     * @param instance
-     * @return
+     * @brief issuesVisibilityChanged
+     * @param b
      */
-    QMenuBar* getToolboxMenuBar();
-
-  protected slots:
+    void issuesVisibilityChanged(bool b);
+    /**
+     * @brief consolVisibilityChanged
+     * @param b
+     */
+    void consolVisibilityChanged(bool b);
+    /**
+     * @brief dataBrowserVisibilityChanged
+     * @param b
+     */
+    void dataBrowserVisibilityChanged(bool b);
 
     /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QtSRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    virtual void updateRecentFileList(const QString& file);
+     * @brief toolboxVisibilityChanged
+     * @param b
+     */
+    void toolboxVisibilityChanged(bool b);
 
     /**
-    * @brief activeWindowChanged
-    */
-    virtual void dream3dWindowChanged(SIMPLView_UI* instance);
+     * @brief issuesTableHasErrors
+     * @param b
+     */
+    void issuesTableHasErrors(bool b);
+
+  protected:
 
     /**
-    * @brief toolboxWindowChanged
-    */
-    virtual void toolboxWindowChanged();
-
-    // SIMPLView_UI slots
-    virtual void on_actionClearRecentFiles_triggered();
+     * @brief setupGui
+     */
+    void setupGui();
 
   private:
-    StandardSIMPLViewApplication(const StandardSIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-    void operator=(const StandardSIMPLViewApplication&) = delete;               // Move assignment Not Implemented
+    StatusBarWidget(const StatusBarWidget&) = delete; // Copy Constructor Not Implemented
+    void operator=(const StatusBarWidget&) = delete;  // Operator '=' Not Implemented
 };
 
-#endif /* _StandardSIMPLViewApplication_H */
-
+#endif /* _statusBarWidget_H_ */
