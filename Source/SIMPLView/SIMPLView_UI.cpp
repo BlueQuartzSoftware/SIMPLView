@@ -779,15 +779,9 @@ void SIMPLView_UI::connectSignalsSlots()
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
   });
 
-  connect(pipelineView, &SVPipelineView::pipelineStarted, this, &SIMPLView_UI::pipelineDidFinish);
-
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
 
   connect(pipelineView, &SVPipelineView::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
-
-  connect(pipelineView, &SVPipelineView::pipelineFinished, [=] {
-    m_Ui->pipelineListWidget->pipelineFinished();
-  });
 
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
@@ -1000,6 +994,24 @@ void SIMPLView_UI::pipelineDidFinish()
 
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
   m_Ui->filterLibraryWidget->blockSignals(false);
+
+  QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  if (selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+    PipelineModel* model = getPipelineModel();
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
+
+  m_Ui->pipelineListWidget->pipelineFinished();
 }
 
 // -----------------------------------------------------------------------------
