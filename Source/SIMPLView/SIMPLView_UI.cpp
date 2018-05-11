@@ -113,9 +113,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_Ui(new Ui::SIMPLView_UI)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
-#if !defined(Q_OS_MAC)
-, m_InstanceMenuBar(nullptr)
-#endif
 , m_OpenedFilePath("")
 {
   m_OpenedFilePath = QDir::homePath();
@@ -168,13 +165,6 @@ SIMPLView_UI::~SIMPLView_UI()
   {
     dream3dApp->setActiveWindow(nullptr);
   }
-
-#if !defined(Q_OS_MAC)
-  if(m_InstanceMenuBar)
-  {
-    delete m_InstanceMenuBar;
-  }
-#endif
 }
 
 // -----------------------------------------------------------------------------
