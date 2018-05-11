@@ -791,7 +791,25 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
-  connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::markDocumentAsDirty);
+  connect(pipelineView, &SVPipelineView::pipelineChanged, [=] {
+    markDocumentAsDirty();
+
+    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+    qSort(selectedIndexes);
+
+    if (selectedIndexes.size() == 1)
+    {
+      QModelIndex selectedIndex = selectedIndexes[0];
+      PipelineModel* model = getPipelineModel();
+
+      AbstractFilter::Pointer filter = model->filter(selectedIndex);
+      m_Ui->dataBrowserWidget->filterActivated(filter);
+    }
+    else
+    {
+      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+    }
+  });
 
   connect(pipelineView, &SVPipelineView::filePathOpened, [=] (const QString &filePath) { m_OpenedFilePath = filePath; });
 
