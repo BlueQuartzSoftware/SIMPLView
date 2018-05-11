@@ -118,16 +118,16 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
 
-  // Connection to update the recent files list on all windows when it changes
-  QtSRecentFileList* recentsList = QtSRecentFileList::instance();
-  connect(recentsList, SIGNAL(fileListChanged(const QString&)), this, SLOT(updateRecentFileList(const QString&)));
-
   createDefaultMenuBar();
 
   // If on Mac, add custom actions to a dock menu
 #if defined(Q_OS_MAC)
   createMacDockMenu();
 #endif
+
+  // Connection to update the recent files list on all windows when it changes
+  QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
+  connect(recentsList, &QtSRecentFileList::fileListChanged, this, &SIMPLViewApplication::updateRecentFileList);
 }
 
 // -----------------------------------------------------------------------------
@@ -441,6 +441,33 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::updateRecentFileList(const QString& file)
+{
+  Q_UNUSED(file)
+
+  // Clear the Recent Items Menu
+  m_MenuRecentFiles->clear();
+
+  // Get the list from the static object
+  QStringList filePaths = QtSRecentFileList::Instance()->fileList();
+  for (int i = 0; i < filePaths.size(); i++)
+  {
+    QString filePath = filePaths[i];
+    QAction* action = m_MenuRecentFiles->addAction(QtSRecentFileList::Instance()->parentAndFileName(filePath));
+//    action->setVisible(true);
+    connect(action, &QAction::triggered, [=] {
+      dream3dApp->newInstanceFromFile(filePath);
+    });
+  }
+
+  m_MenuRecentFiles->addSeparator();
+  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::listenNewInstanceTriggered()
 {
   SIMPLView_UI* newInstance = getNewSIMPLViewInstance();
@@ -470,13 +497,8 @@ void SIMPLViewApplication::listenOpenPipelineTriggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::listenClearRecentFilesTriggered()
 {
-  // Clear the Recent Items Menu
-  m_MenuRecentFiles->clear();
-  m_MenuRecentFiles->addSeparator();
-  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
-
   // Clear the actual list
-  QtSRecentFileList* recents = QtSRecentFileList::instance();
+  QtSRecentFileList* recents = QtSRecentFileList::Instance();
   recents->clear();
 
   // Write out the empty list
@@ -731,9 +753,6 @@ SIMPLView_UI* SIMPLViewApplication::newInstanceFromFile(const QString& filePath)
   if(fi.exists())
   {
     ui->openPipeline(nativeFilePath);
-
-    QtSRecentFileList* list = QtSRecentFileList::instance();
-    list->addFile(filePath);
   }
   return ui;
 }
@@ -901,6 +920,8 @@ void SIMPLViewApplication::writeSettings()
 
   BookmarksModel* model = BookmarksModel::Instance();
   model->writeBookmarksToPrefsFile();
+
+  QtSRecentFileList::Instance()->writeList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -913,6 +934,8 @@ void SIMPLViewApplication::readSettings()
   prefs->beginGroup("Application Settings");
 
   prefs->endGroup();
+
+  QtSRecentFileList::Instance()->readList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -999,6 +1022,8 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_ActionShowConsole = new QAction("Pipeline Output", m_DefaultMenuBar);
   m_ActionShowDataBrowser = new QAction("Data Structure", m_DefaultMenuBar);
 
+  m_MenuRecentFiles = new QMenu("Recent Files", m_DefaultMenuBar);
+
   connect(m_ActionNew, &QAction::triggered, this, &SIMPLViewApplication::listenNewInstanceTriggered);
   connect(m_ActionOpen, &QAction::triggered, this, &SIMPLViewApplication::listenOpenPipelineTriggered);
   connect(m_ActionExit, &QAction::triggered, this, &SIMPLViewApplication::listenExitApplicationTriggered);
@@ -1038,8 +1063,6 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuFile->addAction(m_ActionSaveAs);
   m_MenuFile->addSeparator();
   m_MenuFile->addAction(m_MenuRecentFiles->menuAction());
-  m_MenuRecentFiles->addSeparator();
-  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
   m_MenuFile->addSeparator();
   m_MenuFile->addAction(m_ActionExit);
 
@@ -1106,4 +1129,12 @@ void SIMPLViewApplication::createMacDockMenu()
 
   m_DockMenu->setAsDockMenu();
 #endif
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QMenu* SIMPLViewApplication::getRecentFilesMenu()
+{
+  return m_MenuRecentFiles;
 }
