@@ -52,11 +52,11 @@
 
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"
+#include "SIMPLib/Filtering/FilterPipeline.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
-
+#include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
-
 
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"
@@ -72,9 +72,12 @@ class UpdateCheckData;
 class UpdateCheck;
 class QToolButton;
 class AboutSIMPLView;
-class SVPipelineViewWidget;
 class StatusBarWidget;
-class FilterInputWidget;
+class PipelineTreeView;
+class PipelineModel;
+class PipelineListWidget;
+class SVPipelineViewWidget;
+class SIMPLViewMenuItems;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -85,7 +88,7 @@ class FilterInputWidget;
 * @date Oct 19, 2009
 * @version 1.0
 */
-class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
+class SIMPLView_UI : public QMainWindow
 {
     Q_OBJECT
 
@@ -106,30 +109,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      * @param plugins The plugins that adhere to the ISIMPLibPlugin
      */
     void setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins);
-
-    /**
-    * @brief getPipelineViewWidget
-    * @param
-    */
-    SVPipelineViewWidget* getPipelineViewWidget();
-
-    /**
-    * @brief getBookmarksToolboxWidget
-    * @param
-    */
-    BookmarksToolboxWidget* getBookmarksToolboxWidget();
-
-    /**
-    * @brief getFilterListToolboxWidget
-    * @param
-    */
-    FilterListToolboxWidget* getFilterListToolboxWidget();
-
-    /**
-    * @brief getFilterLibraryToolboxWidget
-    * @param
-    */
-    FilterLibraryToolboxWidget* getFilterLibraryToolboxWidget();
 
     /**
      * @brief getDataStructureWidget
@@ -154,16 +133,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void writeSettings();
 
     /**
-     * @brief savePipeline Helper function that saves the pipeline
-     */
-    bool savePipeline();
-
-    /**
-     * @brief savePipelineAs Helper function that saves the pipeline
-     */
-    bool savePipelineAs();
-
-    /**
      * @brief insertDockWidgetActions
      * @param menu
      */
@@ -176,19 +145,18 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void removeDockWidgetActions(QMenu* menu);
 
     /**
-     * @brief getDummyDockWidgetActions
-     * @param menu
+     * @brief openPipeline
+     * @param filePath
      * @return
      */
-    QList<QAction*> getDummyDockWidgetActions();
-
-  public slots:
+    int openPipeline(const QString& filePath);
 
     /**
-     * @brief on_startPipelineBtn_clicked
+     * @brief executePipeline
      */
-    void on_startPipelineBtn_clicked();
+    void executePipeline();
 
+  public slots:
     /**
     * @brief setOpenedFilePath
     * @param filePath
@@ -208,11 +176,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     void addStdOutputMessage(const QString& msg);
 
     /**
-    * @brief versionCheckReply
-    */
-    void versionCheckReply(UpdateCheckData*);
-
-    /**
      * @brief showFilterHelp
      * @param className
      */
@@ -229,80 +192,8 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     */
     void clearFilterInputWidget();
 
-  protected slots:
-
-    /**
-    * @brief pipelineDidFinish
-    */
-    void preflightDidFinish(int err);
-
-    /**
-     * @brief pipelineDidFinish
-     */
-    void pipelineDidFinish();
-
-    /**
-     * @brief processPipelineMessage
-     * @param msg
-     */
-    void processPipelineMessage(const PipelineMessage& msg);
-
-    void on_pipelineViewWidget_windowNeedsRecheck();
-    void on_pipelineViewWidget_pipelineIssuesCleared();
-    void on_pipelineViewWidget_pipelineHasNoErrors();
-    void on_pipelineViewWidget_pipelineOpened(QString& file, const bool& setOpenedFilePath, const bool& changeTitle);
-
-    /**
-    * @brief setFilterInputWidget
-    * @param widget
-    */
-    void setFilterInputWidget(FilterInputWidget* widget);
-
-    /**
-    * @brief markDocumentAsDirty
-    */
-    void markDocumentAsDirty();
-
-    /**
-    * @brief issuesTableHasErrors
-    * @param hasErrors
-    */
-    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
-
-    // Our Signals that we can emit custom for this class
-  signals:
-
-    /**
-    * @brief bookmarkNeedsToBeAdded
-    */
-    void bookmarkNeedsToBeAdded(const QString& filePath, const QModelIndex& parent);
-
-    void parentResized();
-
-    /**
-     * @brief A signal that is emitted when we want to cancel a process
-     */
-    void pipelineCanceled();
-
-    /**
-     * @brief pipelineStarted
-     */
-    void pipelineStarted();
-
-    /**
-    * @brief pipelineFinished
-    */
-    void pipelineFinished();
-
-    /**
-    * @brief dream3dWindowChangedState
-    */
-    void dream3dWindowChangedState(SIMPLView_UI* self);
-
-    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
-    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
-
-    void deleteKeyPressed(SVPipelineViewWidget* viewWidget);
+    void listenSavePipelineTriggered();
+    void listenSavePipelineAsTriggered();
 
   protected:
 
@@ -316,11 +207,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
     * @brief
     */
     void connectSignalsSlots();
-
-    /**
-    * @brief
-    */
-    void disconnectSignalsSlots();
 
     /**
      * @brief Implements the CloseEvent to Quit the application and write settings
@@ -349,8 +235,6 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
 
     void readWindowSettings(QtSSettings* prefs);
     void readVersionSettings(QtSSettings* prefs);
-
-    void checkForUpdatesAtStartup();
 
     /**
      * @brief Initializes some of the GUI elements with selections or other GUI related items
@@ -397,35 +281,148 @@ class SIMPLView_UI : public QMainWindow, private Ui::SIMPLView_UI
      */
     void resizeEvent ( QResizeEvent* event );
 
+  protected slots:
+    /**
+     * @brief pipelineDidFinish
+     */
+    void pipelineDidFinish();
+
+    /**
+     * @brief processPipelineMessage
+     * @param msg
+     */
+    void processPipelineMessage(const PipelineMessage& msg);
+
+    void refreshWindowTitle();
+
+    /**
+    * @brief setFilterInputWidget
+    * @param widget
+    */
+    void setFilterInputWidget(FilterInputWidget* widget);
+
+    /**
+    * @brief markDocumentAsDirty
+    */
+    void markDocumentAsDirty();
+
+    /**
+    * @brief issuesTableHasErrors
+    * @param hasErrors
+    */
+    void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
+
+    // Our Signals that we can emit custom for this class
+  signals:
+    void parentResized();
+
+    /**
+     * @brief A signal that is emitted when we want to cancel a process
+     */
+    void pipelineCanceled();
+
+    /**
+     * @brief pipelineStarted
+     */
+    void pipelineStarted();
+
+    /**
+    * @brief pipelineFinished
+    */
+    void pipelineFinished();
+
+    /**
+    * @brief dream3dWindowChangedState
+    */
+    void dream3dWindowChangedState(SIMPLView_UI* self);
+
+    void applicationExitTriggered();
+
+    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
+    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
+
+    void deleteKeyPressed();
+
   private:
-    QThread*                              m_WorkerThread = nullptr;
-    ISIMPLibPlugin*                       m_ActivePlugin = nullptr;
-    QVector<ISIMPLibPlugin*>              m_LoadedPlugins;
+    QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
+    QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
-    QSharedPointer<UpdateCheck>           m_UpdateCheck;
-    FilterManager*                        m_FilterManager = nullptr;
-    FilterWidgetManager*                  m_FilterWidgetManager = nullptr;
+    ISIMPLibPlugin*                         m_ActivePlugin = nullptr;
+    QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
 
-    FilterPipeline::Pointer               m_PipelineInFlight;
-    QVector<DataContainerArray::Pointer>  m_PreflightDataContainerArrays;
-    QMenuBar*                             m_InstanceMenuBar = nullptr;
-    StatusBarWidget*                      m_StatusBar = nullptr;
+    FilterManager*                          m_FilterManager = nullptr;
+    FilterWidgetManager*                    m_FilterWidgetManager = nullptr;
 
-    QString                               m_OpenedFilePath;
-    static QString                        m_OpenDialogLastFilePath;
+    FilterPipeline::Pointer                 m_PipelineInFlight;
+    QVector<DataContainerArray::Pointer>    m_PreflightDataContainerArrays;
+    QMenuBar*                               m_InstanceMenuBar = nullptr;
+//    StatusBarWidget*                        m_StatusBar = nullptr;
 
-    QMap<QWidget*,QTextEdit*>             m_StdOutputTabMap;
+    QString                                 m_OpenedFilePath;
+    static QString                          m_OpenDialogLastFilePath;
 
-    bool                                  m_ShowFilterWidgetDeleteDialog;
-    bool                                  m_ShouldRestart = false;
+    QMap<QWidget*,QTextEdit*>               m_StdOutputTabMap;
 
-    HideDockSetting                       m_HideErrorTable = HideDockSetting::Ignore;
-    HideDockSetting                       m_HideStdOutput = HideDockSetting::Ignore;
+    bool                                    m_ShowFilterWidgetDeleteDialog;
+    bool                                    m_ShouldRestart = false;
 
-    void cleanupPipeline();
+    HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
+    HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
-    QString getStartPipelineIdleStyle();
-    QString getStartPipelineInProgressStyle(float percent);
+    QMenu*                                  m_MenuRecentFiles = nullptr;
+    QMenu*                                  m_MenuFile = nullptr;
+    QMenu*                                  m_MenuEdit = nullptr;
+    QMenu*                                  m_MenuView = nullptr;
+    QMenu*                                  m_MenuBookmarks = nullptr;
+    QMenu*                                  m_MenuPipeline = nullptr;
+    QMenu*                                  m_MenuHelp = nullptr;
+    QMenu*                                  m_MenuAdvanced = nullptr;
+
+    QAction*                                m_ActionNew = nullptr;
+    QAction*                                m_ActionOpen = nullptr;
+    QAction*                                m_ActionSave = nullptr;
+    QAction*                                m_ActionSaveAs = nullptr;
+    QAction*                                m_ActionLoadTheme = nullptr;
+    QAction*                                m_ActionSaveTheme = nullptr;
+    QAction*                                m_ActionClearRecentFiles = nullptr;
+    QAction*                                m_ActionExit = nullptr;
+    QAction*                                m_ActionShowSIMPLViewHelp = nullptr;
+    QAction*                                m_ActionAboutSIMPLView = nullptr;
+    QAction*                                m_ActionCheckForUpdates = nullptr;
+    QAction*                                m_ActionPluginInformation = nullptr;
+    QAction*                                m_ActionClearCache = nullptr;
+
+    /**
+     * @brief createSIMPLViewMenu
+     */
+    void createSIMPLViewMenuSystem();
+
+    /**
+    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+    * should be connected to the Signal QtSRecentFileList->fileListChanged
+    * @param file The newly added file.
+    */
+    void updateRecentFileList(const QString& file);
+
+    void openRecentFile();
+
+    /**
+     * @brief savePipeline
+     * @return
+     */
+    bool savePipeline();
+
+    /**
+     * @brief saveAsPipeline
+     * @return
+     */
+    bool savePipelineAs();
+
+    /**
+     * @brief getPipelineModel
+     * @return
+     */
+    PipelineModel* getPipelineModel();
 
     SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
     void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
