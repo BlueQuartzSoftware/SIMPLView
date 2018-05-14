@@ -522,7 +522,7 @@ void SIMPLView_UI::setupGui()
   m_Ui->filterLibraryWidget->refreshFilterGroups();
 
   // Read the toolbox settings and update the filter list
-  m_Ui->filterListWidget->updateFilterList(true);
+  m_Ui->filterListWidget->loadFilterList();
 
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
   tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
