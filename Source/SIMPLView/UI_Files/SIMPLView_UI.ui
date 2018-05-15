@@ -176,7 +176,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <string>Bookmarks</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="bookmarksInternalWidget">
     <layout class="QGridLayout" name="gridLayout_5">
@@ -209,7 +209,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <string>Filter Library</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="filterLibraryInternalWidget">
     <layout class="QGridLayout" name="gridLayout_6">
@@ -242,7 +242,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     <string>Filter List</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="filterListInternalWidget">
     <layout class="QGridLayout" name="gridLayout_2">
