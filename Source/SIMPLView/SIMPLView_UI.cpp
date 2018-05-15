@@ -105,24 +105,17 @@
 
 #include "BrandedStrings.h"
 
-// Initialize private static member variable
-QString SIMPLView_UI::m_OpenDialogLastFilePath = "";
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
 , m_Ui(new Ui::SIMPLView_UI)
-, m_ActivePlugin(nullptr)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
-#if !defined(Q_OS_MAC)
-, m_InstanceMenuBar(nullptr)
-#endif
 , m_OpenedFilePath("")
 {
-  m_OpenDialogLastFilePath = QDir::homePath();
+  m_OpenedFilePath = QDir::homePath();
 
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
@@ -164,11 +157,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 // -----------------------------------------------------------------------------
 SIMPLView_UI::~SIMPLView_UI()
 {
-  for(QMap<QWidget*, QTextEdit*>::iterator iter = m_StdOutputTabMap.begin(); iter != m_StdOutputTabMap.end(); ++iter)
-  {
-    delete iter.key();
-  }
-
   writeSettings();
 
   dream3dApp->unregisterSIMPLViewWindow(this);
@@ -177,13 +165,6 @@ SIMPLView_UI::~SIMPLView_UI()
   {
     dream3dApp->setActiveWindow(nullptr);
   }
-
-#if !defined(Q_OS_MAC)
-  if(m_InstanceMenuBar)
-  {
-    delete m_InstanceMenuBar;
-  }
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -239,7 +220,7 @@ bool SIMPLView_UI::savePipeline()
     setWindowModified(false);
 
     // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::instance();
+    QtSRecentFileList* list = QtSRecentFileList::Instance();
     list->addFile(filePath);
   }
 
@@ -259,7 +240,7 @@ void SIMPLView_UI::listenSavePipelineAsTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipelineAs()
 {
-  QString proposedFile = m_OpenDialogLastFilePath + QDir::separator() + "Untitled.json";
+  QString proposedFile = m_OpenedFilePath + QDir::separator() + "Untitled.json";
   QString filePath = QFileDialog::getSaveFileName(this, tr("Save Pipeline To File"), proposedFile, tr("Json File (*.json);;SIMPLView File (*.dream3d);;All Files (*.*)"));
   if(true == filePath.isEmpty())
   {
@@ -287,7 +268,7 @@ bool SIMPLView_UI::savePipelineAs()
     setWindowModified(false);
 
     // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::instance();
+    QtSRecentFileList* list = QtSRecentFileList::Instance();
     list->addFile(filePath);
 
     m_OpenedFilePath = filePath;
@@ -298,7 +279,7 @@ bool SIMPLView_UI::savePipelineAs()
   }
 
   // Cache the last directory
-  m_OpenDialogLastFilePath = filePath;
+  m_OpenedFilePath = filePath;
 
   QMessageBox bookmarkMsgBox(this);
   bookmarkMsgBox.setWindowTitle("Pipeline Saved");
@@ -388,10 +369,6 @@ void SIMPLView_UI::readSettings()
   prefs->endGroup();
 
   prefs->endGroup();
-
-  m_ShowFilterWidgetDeleteDialog = prefs->value("Show 'Delete Filter Widgets' Dialog", QVariant(true)).toBool();
-
-  QtSRecentFileList::instance()->readList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -475,10 +452,6 @@ void SIMPLView_UI::writeSettings()
   prefs->endGroup();
 
   prefs->endGroup();
-
-  prefs->setValue("Show 'Delete Filter Widgets' Dialog", m_ShowFilterWidgetDeleteDialog);
-
-  QtSRecentFileList::instance()->writeList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -549,7 +522,7 @@ void SIMPLView_UI::setupGui()
   m_Ui->filterLibraryWidget->refreshFilterGroups();
 
   // Read the toolbox settings and update the filter list
-  m_Ui->filterListWidget->updateFilterList(true);
+  m_Ui->filterListWidget->loadFilterList();
 
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
   tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
@@ -584,7 +557,6 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
 {
   m_SIMPLViewMenu = new QMenuBar(this);
 
-  m_MenuRecentFiles = new QMenu("Recent Files", this);
   m_MenuFile = new QMenu("File", this);
   m_MenuEdit = new QMenu("Edit", this);
   m_MenuView = new QMenu("View", this);
@@ -592,6 +564,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuPipeline = new QMenu("Pipeline", this);
   m_MenuHelp = new QMenu("Help", this);
   m_MenuAdvanced = new QMenu("Advanced", this);
+  QMenu* menuRecentFiles = dream3dApp->getRecentFilesMenu();
 
   m_ActionNew = new QAction("New...", this);
   m_ActionOpen = new QAction("Open...", this);
@@ -652,9 +625,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuFile->addAction(m_ActionSave);
   m_MenuFile->addAction(m_ActionSaveAs);
   m_MenuFile->addSeparator();
-  m_MenuFile->addAction(m_MenuRecentFiles->menuAction());
-  m_MenuRecentFiles->addSeparator();
-  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
+  m_MenuFile->addAction(menuRecentFiles->menuAction());
   m_MenuFile->addSeparator();
   m_MenuFile->addAction(m_ActionExit);
 
@@ -731,14 +702,14 @@ void SIMPLView_UI::connectSignalsSlots()
     if (instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
     {
       instance->openPipeline(filePath);
-
-      QtSRecentFileList* list = QtSRecentFileList::instance();
-      list->addFile(filePath);
     }
     else
     {
       instance = dream3dApp->newInstanceFromFile(filePath);
     }
+
+    QtSRecentFileList* list = QtSRecentFileList::Instance();
+    list->addFile(filePath);
 
     if (execute)
     {
@@ -808,21 +779,33 @@ void SIMPLView_UI::connectSignalsSlots()
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
   });
 
-  connect(pipelineView, &SVPipelineView::pipelineStarted, this, &SIMPLView_UI::pipelineDidFinish);
-
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
 
   connect(pipelineView, &SVPipelineView::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
 
-  connect(pipelineView, &SVPipelineView::pipelineFinished, [=] {
-    m_Ui->pipelineListWidget->pipelineFinished();
-  });
-
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
-  connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::markDocumentAsDirty);
+  connect(pipelineView, &SVPipelineView::pipelineChanged, [=] {
+    markDocumentAsDirty();
 
-  connect(pipelineView, &SVPipelineView::filePathOpened, [=] (const QString &filePath) { m_OpenDialogLastFilePath = filePath; });
+    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+    qSort(selectedIndexes);
+
+    if (selectedIndexes.size() == 1)
+    {
+      QModelIndex selectedIndex = selectedIndexes[0];
+      PipelineModel* model = getPipelineModel();
+
+      AbstractFilter::Pointer filter = model->filter(selectedIndex);
+      m_Ui->dataBrowserWidget->filterActivated(filter);
+    }
+    else
+    {
+      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+    }
+  });
+
+  connect(pipelineView, &SVPipelineView::filePathOpened, [=] (const QString &filePath) { m_OpenedFilePath = filePath; });
 
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
@@ -831,8 +814,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
 
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
-
-//  connect(pipelineView, &SVPipelineView::pipelineDropped, pipelineModel, &PipelineModel::addPipeline);
 
   /* Pipeline Model Connections */
   connect(pipelineModel, &PipelineModel::statusMessageGenerated, [=] (const QString &msg) { statusBar()->showMessage(msg); });
@@ -874,75 +855,13 @@ void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::updateRecentFileList(const QString& file)
-{
-  // Clear the Recent Items Menu
-  m_MenuRecentFiles->clear();
-
-  // Get the list from the static object
-  QStringList files = QtSRecentFileList::instance()->fileList();
-  foreach(QString file, files)
-  {
-    QAction* action = m_MenuRecentFiles->addAction(QtSRecentFileList::instance()->parentAndFileName(file));
-    action->setData(file);
-    action->setVisible(true);
-    connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
-  }
-
-  m_MenuRecentFiles->addSeparator();
-  m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::openRecentFile()
-{
-  QAction* action = qobject_cast<QAction*>(sender());
-
-  if(action)
-  {
-    QString filePath = action->data().toString();
-
-    dream3dApp->newInstanceFromFile(filePath);
-
-    // Add file path to the recent files list for both instances
-    QtSRecentFileList* list = QtSRecentFileList::instance();
-    list->addFile(filePath);
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::refreshWindowTitle()
-{
-  QString fiBase = "Untitled";
-  if(false == m_OpenedFilePath.isEmpty())
-  {
-    fiBase = m_OpenedFilePath;
-  }
-
-  QFileInfo fi(fiBase);
-  if(!windowFilePath().isEmpty())
-  {
-    fi = QFileInfo(windowFilePath());
-  }
-
-  setWindowTitle(QString("[*]") + fi.baseName() + " - " + BrandedStrings::ApplicationName);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::dragEnterEvent(QDragEnterEvent* e)
 {
   const QMimeData* dat = e->mimeData();
   QList<QUrl> urls = dat->urls();
   QString file = urls.count() ? urls[0].toLocalFile() : QString();
   QDir parent(file);
-  this->m_OpenDialogLastFilePath = parent.dirName();
+  m_OpenedFilePath = parent.dirName();
   QFileInfo fi(file);
   QString ext = fi.suffix();
   if(fi.exists() && fi.isFile() && (ext.compare("mxa") || ext.compare("h5") || ext.compare("hdf5")))
@@ -964,7 +883,7 @@ void SIMPLView_UI::dropEvent(QDropEvent* e)
   QList<QUrl> urls = dat->urls();
   QString file = urls.count() ? urls[0].toLocalFile() : QString();
   QDir parent(file);
-  this->m_OpenDialogLastFilePath = parent.dirName();
+  m_OpenedFilePath = parent.dirName();
   QFileInfo fi(file);
   QString ext = fi.suffix();
   file = QDir::toNativeSeparators(file);
@@ -1075,6 +994,24 @@ void SIMPLView_UI::pipelineDidFinish()
 
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
   m_Ui->filterLibraryWidget->blockSignals(false);
+
+  QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  if (selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+    PipelineModel* model = getPipelineModel();
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
+
+  m_Ui->pipelineListWidget->pipelineFinished();
 }
 
 // -----------------------------------------------------------------------------
@@ -1126,49 +1063,9 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::insertDockWidgetActions(QMenu* menu)
-{
-#if 0
-  menu->addAction(issuesDockWidget->toggleViewAction());
-  menu->addAction(stdOutDockWidget->toggleViewAction());
-  menu->addAction(dataBrowserDockWidget->toggleViewAction());
-#endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::removeDockWidgetActions(QMenu* menu)
-{
-#if 0
-  menu->removeAction(issuesDockWidget->toggleViewAction());
-  menu->removeAction(stdOutDockWidget->toggleViewAction());
-  menu->removeAction(dataBrowserDockWidget->toggleViewAction());
-#endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 DataStructureWidget* SIMPLView_UI::getDataStructureWidget()
 {
   return m_Ui->dataBrowserWidget;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::setOpenedFilePath(const QString& filePath)
-{
-  m_OpenedFilePath = filePath;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::setOpenDialogLastFilePath(const QString& path)
-{
-  m_OpenDialogLastFilePath = path;
 }
 
 // -----------------------------------------------------------------------------

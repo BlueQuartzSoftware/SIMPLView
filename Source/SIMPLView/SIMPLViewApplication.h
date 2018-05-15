@@ -97,6 +97,12 @@ public:
    */
   bool event(QEvent* event);
 
+  /**
+   * @brief getRecentFilesMenu
+   * @return
+   */
+  QMenu* getRecentFilesMenu();
+
 public slots:
   void listenNewInstanceTriggered();
   void listenOpenPipelineTriggered();
@@ -148,6 +154,13 @@ protected slots:
    */
   void dream3dWindowChanged(SIMPLView_UI* instance);
 
+  /**
+  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+  * should be connected to the Signal QtSRecentFileList->fileListChanged
+  * @param file The newly added file.
+  */
+  void updateRecentFileList(const QString& file);
+
 private:
   QMenuBar* m_DefaultMenuBar = nullptr;
   QMenu* m_DockMenu = nullptr;
@@ -156,7 +169,6 @@ private:
 
   QString                                                           m_LastFilePathOpened;
 
-  QMenu* m_MenuRecentFiles = nullptr;
   QMenu* m_MenuFile = nullptr;
   QMenu* m_MenuEdit = nullptr;
   QMenu* m_MenuView = nullptr;
@@ -164,6 +176,7 @@ private:
   QMenu* m_MenuPipeline = nullptr;
   QMenu* m_MenuHelp = nullptr;
   QMenu* m_MenuAdvanced = nullptr;
+  QMenu* m_MenuRecentFiles = nullptr;
 
   QAction* m_ActionNew = nullptr;
   QAction* m_ActionOpen = nullptr;

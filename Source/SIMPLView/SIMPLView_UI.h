@@ -117,12 +117,6 @@ class SIMPLView_UI : public QMainWindow
     DataStructureWidget* getDataStructureWidget();
 
     /**
-    * @brief setOpenedFilePath
-    * @param path
-    */
-    void setOpenDialogLastFilePath(const QString& path);
-
-    /**
     * @brief Reads the preferences from the users pref file
     */
     void readSettings();
@@ -131,18 +125,6 @@ class SIMPLView_UI : public QMainWindow
      * @brief Writes the preferences to the users pref file
      */
     void writeSettings();
-
-    /**
-     * @brief insertDockWidgetActions
-     * @param menu
-     */
-    void insertDockWidgetActions(QMenu* menu);
-
-    /**
-     * @brief removeDockWidgetActions
-     * @param menu
-     */
-    void removeDockWidgetActions(QMenu* menu);
 
     /**
      * @brief openPipeline
@@ -157,12 +139,6 @@ class SIMPLView_UI : public QMainWindow
     void executePipeline();
 
   public slots:
-    /**
-    * @brief setOpenedFilePath
-    * @param filePath
-    */
-    void setOpenedFilePath(const QString& filePath);
-
     /**
     * @brief setFilterBeingDragged
     * @param msg
@@ -192,7 +168,14 @@ class SIMPLView_UI : public QMainWindow
     */
     void clearFilterInputWidget();
 
+    /**
+     * @brief listenSavePipelineTriggered
+     */
     void listenSavePipelineTriggered();
+
+    /**
+     * @brief listenSavePipelineAsTriggered
+     */
     void listenSavePipelineAsTriggered();
 
   protected:
@@ -293,8 +276,6 @@ class SIMPLView_UI : public QMainWindow
      */
     void processPipelineMessage(const PipelineMessage& msg);
 
-    void refreshWindowTitle();
-
     /**
     * @brief setFilterInputWidget
     * @param widget
@@ -317,59 +298,26 @@ class SIMPLView_UI : public QMainWindow
     void parentResized();
 
     /**
-     * @brief A signal that is emitted when we want to cancel a process
-     */
-    void pipelineCanceled();
-
-    /**
-     * @brief pipelineStarted
-     */
-    void pipelineStarted();
-
-    /**
-    * @brief pipelineFinished
-    */
-    void pipelineFinished();
-
-    /**
     * @brief dream3dWindowChangedState
     */
     void dream3dWindowChangedState(SIMPLView_UI* self);
-
-    void applicationExitTriggered();
-
-    void filterWidgetsAdded(const QString &jsonString, SIMPLView_UI* instance, int index);
-    void filterWidgetsPasted(const QString &jsonString, SIMPLView_UI* instance, int index);
-
-    void deleteKeyPressed();
 
   private:
     QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
     QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
-    ISIMPLibPlugin*                         m_ActivePlugin = nullptr;
     QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
 
     FilterManager*                          m_FilterManager = nullptr;
     FilterWidgetManager*                    m_FilterWidgetManager = nullptr;
 
-    FilterPipeline::Pointer                 m_PipelineInFlight;
-    QVector<DataContainerArray::Pointer>    m_PreflightDataContainerArrays;
-    QMenuBar*                               m_InstanceMenuBar = nullptr;
 //    StatusBarWidget*                        m_StatusBar = nullptr;
 
     QString                                 m_OpenedFilePath;
-    static QString                          m_OpenDialogLastFilePath;
-
-    QMap<QWidget*,QTextEdit*>               m_StdOutputTabMap;
-
-    bool                                    m_ShowFilterWidgetDeleteDialog;
-    bool                                    m_ShouldRestart = false;
 
     HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
     HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
-    QMenu*                                  m_MenuRecentFiles = nullptr;
     QMenu*                                  m_MenuFile = nullptr;
     QMenu*                                  m_MenuEdit = nullptr;
     QMenu*                                  m_MenuView = nullptr;
@@ -396,15 +344,6 @@ class SIMPLView_UI : public QMainWindow
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
-
-    /**
-    * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-    * should be connected to the Signal QtSRecentFileList->fileListChanged
-    * @param file The newly added file.
-    */
-    void updateRecentFileList(const QString& file);
-
-    void openRecentFile();
 
     /**
      * @brief savePipeline
