@@ -198,15 +198,9 @@ class SIMPLView_UI : public QMainWindow
     void closeEvent(QCloseEvent* event);
 
     /**
-     * @brief Drag and drop implementation
+     * @brief changeEvent
+     * @param event
      */
-    void dragEnterEvent(QDragEnterEvent*);
-
-    /**
-     * @brief Drag and drop implementation
-     */
-    void dropEvent(QDropEvent*);
-
     void changeEvent(QEvent* event);
 
     /**
