@@ -833,6 +833,8 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
   setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());
   setWindowModified(false);
 
+  m_OpenedFilePath = filePath;
+
   return err;
 }
 
@@ -850,47 +852,6 @@ void SIMPLView_UI::executePipeline()
 void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 {
   m_LoadedPlugins = plugins;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::dragEnterEvent(QDragEnterEvent* e)
-{
-  const QMimeData* dat = e->mimeData();
-  QList<QUrl> urls = dat->urls();
-  QString file = urls.count() ? urls[0].toLocalFile() : QString();
-  QDir parent(file);
-  m_OpenedFilePath = parent.dirName();
-  QFileInfo fi(file);
-  QString ext = fi.suffix();
-  if(fi.exists() && fi.isFile() && (ext.compare("mxa") || ext.compare("h5") || ext.compare("hdf5")))
-  {
-    e->accept();
-  }
-  else
-  {
-    e->ignore();
-  }
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::dropEvent(QDropEvent* e)
-{
-  const QMimeData* dat = e->mimeData();
-  QList<QUrl> urls = dat->urls();
-  QString file = urls.count() ? urls[0].toLocalFile() : QString();
-  QDir parent(file);
-  m_OpenedFilePath = parent.dirName();
-  QFileInfo fi(file);
-  QString ext = fi.suffix();
-  file = QDir::toNativeSeparators(file);
-  if(fi.exists() && fi.isFile())
-  {
-    // TODO: INSERT Drop Event CODE HERE
-  }
 }
 
 // -----------------------------------------------------------------------------
