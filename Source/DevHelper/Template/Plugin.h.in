@@ -15,7 +15,7 @@
 /**
  * @brief The @PluginName@Plugin class
  */
-class @PluginName@Plugin : public QObject, public ISIMPLibPlugin
+class @PluginName@_EXPORT @PluginName@Plugin : public QObject, public ISIMPLibPlugin
 {
     Q_OBJECT
     Q_INTERFACES(ISIMPLibPlugin)
