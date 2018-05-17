@@ -158,7 +158,15 @@ set(SIMPLView_PROJECT_SRCS
   ${SIMPLView_Generated_MOC_SRCS}
 )
 
+#------------------------------------------------------------------
+# Add VTK components necessary for SIMPLVtkLib
+include("${CMP_SOURCE_DIR}/ExtLib/VtkSupport.cmake")
+CMP_FindVtkComponents(QT5_REQUIRED TRUE
+                      COMPONENTS ${SIMPLVtk_VtkComponents}
+                      )
 
+#------------------------------------------------------------------
+# Set application icon
 if(APPLE)
     set(APPLICATION_ICON ${BrandedSIMPLView_DIR}/icons/icns/${SIMPLView_APPLICATION_NAME}.icns)
 endif(APPLE)
@@ -178,7 +186,7 @@ file(READ "${SIMPLPluginList}" SIMPLView_PLUGINS)
 get_property(QT_PLUGINS_FILE GLOBAL PROPERTY QtPluginsTxtFile)
 file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
-list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
+list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib SIMPLVtkLib ${SIMPLVtk_VtkComponents})
 
 #------------------------------------------------------------------
 # Add QtWebApp library if needed
@@ -216,6 +224,7 @@ target_include_directories(${SIMPLView_APPLICATION_NAME}
                     ${SIMPLViewProj_BINARY_DIR}
                     ${BrandedSIMPLView_DIR}
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
+                    ${SIMPLVtkLib_SOURCE_DIR}
 )
 #------------------------------------------------------------------
 # Add QtWebApp include path if needed

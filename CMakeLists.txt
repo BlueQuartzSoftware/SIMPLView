@@ -106,6 +106,18 @@ endif()
 get_filename_component(SIMPLView_PARENT ${SIMPLViewProj_SOURCE_DIR} DIRECTORY CACHE)
 
 #------------------------------------------------------------------------------
+# If the developer has set another SIMPLVtkLib directory then use that, otherwise look
+# for the SIMPLVtkLib directory at the same level as the SIMPLView directory
+if("${SIMPLVtkLibProj_SOURCE_DIR}" STREQUAL "")
+  set(SIMPLVtkLibProj_SOURCE_DIR ${SIMPLView_PARENT}/SIMPLVtkLib)
+  message(STATUS "SIMPLVtkLibProj_SOURCE_DIR: ${SIMPLVtkLibProj_SOURCE_DIR}")
+endif()
+
+if(NOT EXISTS "${SIMPLVtkLibProj_SOURCE_DIR}")
+  message(FATAL_ERROR "SIMPLVtkLibProj_SOURCE_DIR does not exist at ${SIMPLVtkLibProj_SOURCE_DIR}.")
+endif()
+
+#------------------------------------------------------------------------------
 # If the developer has set another SIMPL directory then use that, otherwise look
 # for the SIMPLView directory at the same level as the SIMPL directory
 if("${SIMPLProj_SOURCE_DIR}" STREQUAL "")
@@ -208,6 +220,10 @@ set(SIMPL_Group_WIDGETS ON CACHE BOOL "Build the QtWidgets based library")
 # -----------------------------------------------------------------------
 add_subdirectory( ${SIMPLProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPL)
 
+# -----------------------------------------------------------------------
+# Bring in the SIMPLVtkLib Project
+# -----------------------------------------------------------------------
+add_subdirectory( ${SIMPLVtkLibProj_SOURCE_DIR} ${PROJECT_BINARY_DIR}/SIMPLVtkLib)
 
 # -----------------------------------------------------------------------
 #Enable use of Solution Folders

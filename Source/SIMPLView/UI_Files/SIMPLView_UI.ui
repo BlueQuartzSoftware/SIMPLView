@@ -52,36 +52,159 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QFrame" name="fiwFrame">
-      <property name="styleSheet">
-       <string notr="true">PipelineViewWidget
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="filterInputWidgetTab">
+       <attribute name="title">
+        <string>Filter Parameters</string>
+       </attribute>
+       <layout class="QGridLayout" name="tabLayoutFilterInput">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QFrame" name="fiwFrame">
+          <property name="styleSheet">
+           <string notr="true">PipelineViewWidget
 {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
 }</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <layout class="QVBoxLayout" name="fiwFrameVLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-      </layout>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QVBoxLayout" name="fiwFrameVLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="visualizationTab">
+       <attribute name="title">
+        <string>Visualization</string>
+       </attribute>
+       <layout class="QGridLayout" name="tabLayoutVisual">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QFrame" name="filterFrame">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QSplitter" name="splitter_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <widget class="VSFilterView" name="visualizationTreeView">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>250</height>
+                </size>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+              </widget>
+              <widget class="VSInfoWidget" name="visualizationInfoWidget" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>1</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="VSMainWidget" name="visualizationWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -90,7 +213,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="issuesDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -105,7 +228,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="stdOutDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -120,7 +243,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="dataBrowserDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -135,7 +258,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="pipelineDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -168,7 +291,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="bookmarksDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -201,7 +324,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="filterLibraryDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -234,7 +357,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
   <widget class="QDockWidget" name="filterListDockWidget">
    <property name="minimumSize">
     <size>
-     <width>62</width>
+     <width>80</width>
      <height>38</height>
     </size>
    </property>
@@ -492,6 +615,23 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>PipelineListWidget</class>
    <extends>QWidget</extends>
    <header location="global">PipelineListWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VSMainWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">VSMainWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VSFilterView</class>
+   <extends>QTreeView</extends>
+   <header>VSFilterView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>VSInfoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">VSInfoWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
