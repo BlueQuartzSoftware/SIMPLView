@@ -764,7 +764,7 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](FilterPipeline::Pointer pipeline, DataContainerArray::Pointer dca) {
     showVisualizationTab();
-    m_Ui->visualizationWidget->getController()->importPipelineOutput(pipeline, dca);
+    m_Ui->visualizationWidget->getController()->reloadPipelineOutput(pipeline, dca);
   });
 }
 
