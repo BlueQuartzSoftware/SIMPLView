@@ -762,9 +762,9 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineModel, &PipelineModel::statusMessageGenerated, [=](const QString& msg) { statusBar()->showMessage(msg); });
   connect(pipelineModel, &PipelineModel::standardOutputMessageGenerated, [=](const QString& msg) { addStdOutputMessage(msg); });
 
-  connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](DataContainerArray::Pointer dca) {
+  connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](FilterPipeline::Pointer pipeline, DataContainerArray::Pointer dca) {
     showVisualizationTab();
-    m_Ui->visualizationWidget->importDataContainerArray(dca, true);
+    m_Ui->visualizationWidget->getController()->importPipelineOutput(pipeline, dca);
   });
 }
 
