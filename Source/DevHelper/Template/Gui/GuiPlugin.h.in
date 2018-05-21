@@ -11,6 +11,11 @@ class @PluginName@GuiPlugin : public @PluginName@Plugin
 public:
   @PluginName@GuiPlugin();
   ~@PluginName@GuiPlugin() override;
+  
+  /**
+   * @brief Register all the filters with the FilterWidgetFactory
+   */
+  void registerFilterWidgets(FilterWidgetManager* fwm) override;
 
 public:
   @PluginName@GuiPlugin(const @PluginName@GuiPlugin&) = delete;            // Copy Constructor Not Implemented
