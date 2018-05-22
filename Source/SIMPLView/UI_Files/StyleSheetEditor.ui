@@ -32,23 +32,8 @@
    <item row="0" column="5">
     <widget class="QComboBox" name="styleSheetCombo">
      <property name="currentIndex">
-      <number>1</number>
+      <number>-1</number>
      </property>
-     <item>
-      <property name="text">
-       <string>Default</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Light</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Dark</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="0" column="3">

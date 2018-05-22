@@ -73,8 +73,12 @@ StyleSheetEditor::StyleSheetEditor(QWidget *parent)
 
     m_Ui->styleCombo->addItems(QStyleFactory::keys());
     m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
-    m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Default"));
     
+    m_Ui->styleSheetCombo->addItem("Default");
+    m_Ui->styleSheetCombo->addItem("Light");
+    m_Ui->styleSheetCombo->addItem("Orange");
+    m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Default"));
+
     connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), 
             this, SLOT(qssFileChanged(const QString&)));
 }
