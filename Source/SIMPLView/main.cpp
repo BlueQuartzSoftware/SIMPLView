@@ -43,8 +43,10 @@
 #include "SIMPLView.h"
 #include "SIMPLView_UI.h"
 #include "SIMPLViewApplication.h"
+#include "StyleSheetEditor.h"
 
 #include "SVWidgetsLib/SVWidgetsLib.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #ifdef Q_WS_X11
 #include <QPlastiqueStyle>
@@ -56,6 +58,63 @@
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #endif
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void InitFonts(const QStringList &fontList)
+{
+  int fontID(-1);
+  
+  for (QStringList::const_iterator constIterator = fontList.constBegin(); constIterator != fontList.constEnd(); ++constIterator)
+  {
+    QFile res(":/Fonts/" + *constIterator);
+    //qDebug() << "font path: " << res.fileName();
+    if (res.open(QIODevice::ReadOnly) == false)
+    {
+      qDebug() << "ERROR opening font resource: " << res.fileName();
+    }
+    
+    else
+    {
+      fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
+      //qDebug() << "loading font Id " << fontID;
+      if (fontID == -1 ) {
+        qDebug() << "ERROR loading font id: " << fontID;
+      }
+      res.close();
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void InitStyleSheet(const QString &sheetName)
+{
+
+  SVStyle* style = SVStyle::Instance();
+  style->loadStyleSheet(sheetName);
+
+  #if 0
+  QFile file(":/StyleSheets/" + sheetName.toLower() + ".css");
+  file.open(QFile::ReadOnly);
+  QString styleSheet = QString::fromLatin1(file.readAll());
+  //qDebug() << "style sheet name: "  << sheetName;
+  qApp->setStyleSheet(styleSheet);
+  #endif
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void InitStyleSheetEditor()
+{
+  StyleSheetEditor* stylesheeteditor = new StyleSheetEditor(nullptr);
+  stylesheeteditor->show();
+}
+
+
+
 int main(int argc, char* argv[])
 {
 #ifdef Q_OS_X11
@@ -64,20 +123,20 @@ int main(int argc, char* argv[])
   // let's just use plastique for now
   //QApplication::setStyle(new QPlastiqueStyle);
 #endif
-
+  
   QFileInfo fi(argv[0]);
   QString absPathExe = fi.absolutePath();
   QString cwd = QDir::currentPath();
   qDebug() << "argv[0]: " << absPathExe;
   qDebug() << "    cwd: " << cwd;
-
+  
 #ifdef Q_OS_WIN
-  // Some where Visual Studio wants to set the Current Working Directory (cwd)
+  // Somewhere Visual Studio wants to set the Current Working Directory (cwd)
   // to the subfolder BUILD/Applications/SIMPLView instead of our true binary
   // directory where everything is built. This wreaks havoc on the prebuilt
   // pipelines not being able to find the data folder. This _should_ fix things
   // for debugging and hopefully NOT effect any type of release
-
+  
   if (absPathExe != cwd)
   {
     QDir::setCurrent(absPathExe);
@@ -86,33 +145,70 @@ int main(int argc, char* argv[])
   cwd = QDir::currentPath();
   qDebug() << "        cwd: " << cwd;
 #endif
-
-//#if !defined (Q_OS_MAC)
+  
+  
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-//#endif
-
+  
   SIMPLViewApplication qtapp(argc, argv);
-
-  QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
-  QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
-  QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
-
-#if defined (Q_OS_MAC)
-  dream3dApp->setQuitOnLastWindowClosed(false);
-#endif
-
-  QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-
-  setlocale(LC_NUMERIC, "C");
-  QFontDatabase::addApplicationFont(":/fonts/FiraSans-Regular.ttf");
-
+    
   if (!qtapp.initialize(argc, argv))
   {
     return 1;
   }
+  
+  QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
+  QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
+  QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
+  
+#if defined (Q_OS_MAC)
+  dream3dApp->setQuitOnLastWindowClosed(false);
+#endif
+  
+  QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+  
+  setlocale(LC_NUMERIC, "C");
+  
+  int id = QFontDatabase::addApplicationFont(":/Fonts/Lato-Regular.ttf");
+  
+  /* On Linux builds this will always return -1 */
+  if ( id >= 0 )
+  {
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    
+    QFont defaultFont(family);
+    defaultFont.setPixelSize(12);
+    qApp->setFont(defaultFont);
+    
+    qDebug() << "Default Font Loaded";
+  }
+  else
+  {
+    qDebug() << "ERROR LOADING DEFAULT FONT";
+  }
+  
+  // This is the single standard font that ships with the open-source version
+  {
+    QStringList fontList;
+    fontList << "FiraSans-Regular.ttf";
+    InitFonts(fontList);
+  }
+  
+  // Init any extra fonts that are needed by specialized versions of SIMPLView
+  {
+    QStringList fontList;
+    fontList << "Lato-Regular.ttf" << "Lato-Black.ttf" << "Lato-Bold.ttf" << "Lato-Italic.ttf" << "Lato-Light.ttf"
+             << "Lato-HairlineItalic.ttf" << "Lato-Hairline.ttf" << "Lato-BoldItalic.ttf" << "Lato-BlackItalic.ttf";
+    InitFonts(fontList);
+  }
 
+  // Initialize the Default Stylesheet
+  //InitStyleSheet(QString("Default"));
+  InitStyleSheet(QString(":/StyleSheets/Light.json"));
+  
+  InitStyleSheetEditor();
+  
   // Open pipeline if SIMPLView was opened from a compatible file
   if (argc == 2)
   {
@@ -128,11 +224,11 @@ int main(int argc, char* argv[])
     SIMPLView_UI* ui = qtapp.getNewSIMPLViewInstance();
     ui->show();
   }
-
+  
 #ifdef SIMPL_USE_MKDOCS
   QtSDocServer::Instance();
 #endif
-
+  
   int err = qtapp.exec();
   return err;
 }
