@@ -572,10 +572,6 @@ void SIMPLView_UI::setupGui()
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
-
-  // Setup SIMPLVtkLib Widgets
-  m_Ui->visualizationWidget->setFilterView(m_Ui->visualizationTreeView);
-  m_Ui->visualizationWidget->setInfoWidget(m_Ui->visualizationInfoWidget);
 }
 
 // -----------------------------------------------------------------------------
