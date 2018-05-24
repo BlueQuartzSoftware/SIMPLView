@@ -77,7 +77,8 @@ StyleSheetEditor::StyleSheetEditor(QWidget *parent)
     m_Ui->styleSheetCombo->addItem("Default");
     m_Ui->styleSheetCombo->addItem("Light");
     m_Ui->styleSheetCombo->addItem("Orange");
-    m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Default"));
+    m_Ui->styleSheetCombo->addItem("Watermelon");
+    m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
 
     connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), 
             this, SLOT(qssFileChanged(const QString&)));
