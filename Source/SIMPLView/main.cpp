@@ -96,9 +96,6 @@ void InitStyleSheet(const QString &sheetName)
   SVStyle* style = SVStyle::Instance();
   style->loadStyleSheet(sheetName);
 
-  QtSStyles* styles = QtSStyles::Instance();
-  styles->setStyleFilePath(sheetName);
-
   #if 0
   QFile file(":/StyleSheets/" + sheetName.toLower() + ".css");
   file.open(QFile::ReadOnly);
