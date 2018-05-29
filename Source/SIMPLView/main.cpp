@@ -46,6 +46,7 @@
 #include "StyleSheetEditor.h"
 
 #include "SVWidgetsLib/SVWidgetsLib.h"
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #ifdef Q_WS_X11
@@ -94,6 +95,9 @@ void InitStyleSheet(const QString &sheetName)
 
   SVStyle* style = SVStyle::Instance();
   style->loadStyleSheet(sheetName);
+
+  QtSStyles* styles = QtSStyles::Instance();
+  styles->setStyleFilePath(sheetName);
 
   #if 0
   QFile file(":/StyleSheets/" + sheetName.toLower() + ".css");

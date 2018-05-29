@@ -53,6 +53,8 @@
 #include "StyleSheetEditor.h"
 #include "SVStyle.h"
 
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
+
 #include "ui_StyleSheetEditor.h"
 
 
@@ -112,6 +114,11 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
 
 void StyleSheetEditor::qssFileChanged(const QString& filePath)
 {
-    SVStyle* style = SVStyle::Instance();
-    style->loadStyleSheet(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json");
+  QString jsonFilePath = m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json";
+
+  SVStyle* style = SVStyle::Instance();
+  style->loadStyleSheet(jsonFilePath);
+
+  QtSStyles* styles = QtSStyles::Instance();
+  styles->setStyleFilePath(jsonFilePath);
 }
