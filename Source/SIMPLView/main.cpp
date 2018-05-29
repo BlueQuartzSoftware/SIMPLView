@@ -46,6 +46,7 @@
 #include "StyleSheetEditor.h"
 
 #include "SVWidgetsLib/SVWidgetsLib.h"
+#include "SVWidgetsLib/QtSupport/QtSStyles.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #ifdef Q_WS_X11
