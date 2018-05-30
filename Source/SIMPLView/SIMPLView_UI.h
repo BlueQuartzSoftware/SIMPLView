@@ -65,7 +65,6 @@
 class ISIMPLibPlugin;
 class FilterLibraryToolboxWidget;
 class BookmarksToolboxWidget;
-class PrebuiltsToolboxWidget;
 class FilterListWidget;
 class UpdateCheckDialog;
 class UpdateCheckData;
