@@ -1039,6 +1039,12 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
     return;
   }
 
+  if(m_FilterInputWidget)
+  {
+    emit m_FilterInputWidget->endPathFiltering();
+    emit m_FilterInputWidget->endViewPaths();
+  }
+
   // Clear the filter input widget
   clearFilterInputWidget();
 
@@ -1055,6 +1061,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 
   // Set the widget into the frame
   m_Ui->fiwFrameVLayout->addWidget(widget);
+  m_FilterInputWidget = widget;
   widget->show();
 }
 
@@ -1073,6 +1080,8 @@ void SIMPLView_UI::clearFilterInputWidget()
       w->setParent(nullptr);
     }
   }
+
+  m_FilterInputWidget = nullptr;
 }
 
 // -----------------------------------------------------------------------------
