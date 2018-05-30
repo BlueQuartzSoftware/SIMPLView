@@ -117,6 +117,6 @@ void StyleSheetEditor::qssFileChanged(const QString& filePath)
 {
   QString jsonFilePath = m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json";
 
-  SVStyle* style = SVStyle::NewInstance();
+  SVStyle* style = SVStyle::Instance();
   style->loadStyleSheet(jsonFilePath);
 }
