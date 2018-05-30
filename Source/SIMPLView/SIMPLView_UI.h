@@ -312,6 +312,8 @@ class SIMPLView_UI : public QMainWindow
     HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
     HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
+    FilterInputWidget*                      m_FilterInputWidget = nullptr;
+
     QMenu*                                  m_MenuFile = nullptr;
     QMenu*                                  m_MenuEdit = nullptr;
     QMenu*                                  m_MenuView = nullptr;
