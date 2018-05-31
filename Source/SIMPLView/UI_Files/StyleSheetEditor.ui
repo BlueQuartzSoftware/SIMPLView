@@ -123,7 +123,7 @@
    <item row="1" column="0" colspan="7">
     <widget class="QLineEdit" name="qssFilePath">
      <property name="text">
-      <string>/Users/mjackson/DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/StyleSheets/</string>
+      <string/>
      </property>
     </widget>
    </item>

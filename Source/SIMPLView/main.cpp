@@ -45,6 +45,8 @@
 #include "SIMPLViewApplication.h"
 #include "StyleSheetEditor.h"
 
+#include "BrandedStrings.h"
+
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
@@ -68,7 +70,7 @@ void InitFonts(const QStringList &fontList)
   
   for (QStringList::const_iterator constIterator = fontList.constBegin(); constIterator != fontList.constEnd(); ++constIterator)
   {
-    QFile res(":/Fonts/" + *constIterator);
+    QFile res(*constIterator);
     //qDebug() << "font path: " << res.fileName();
     if (res.open(QIODevice::ReadOnly) == false)
     {
@@ -92,17 +94,8 @@ void InitFonts(const QStringList &fontList)
 // -----------------------------------------------------------------------------
 void InitStyleSheet(const QString &sheetName)
 {
-
   SVStyle* style = SVStyle::Instance();
   style->loadStyleSheet(sheetName);
-
-  #if 0
-  QFile file(":/StyleSheets/" + sheetName.toLower() + ".css");
-  file.open(QFile::ReadOnly);
-  QString styleSheet = QString::fromLatin1(file.readAll());
-  //qDebug() << "style sheet name: "  << sheetName;
-  qApp->setStyleSheet(styleSheet);
-  #endif
 }
 
 // -----------------------------------------------------------------------------
@@ -114,8 +107,9 @@ void InitStyleSheetEditor()
   stylesheeteditor->show();
 }
 
-
-
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
 #ifdef Q_OS_X11
@@ -171,7 +165,9 @@ int main(int argc, char* argv[])
   
   setlocale(LC_NUMERIC, "C");
   
-  int id = QFontDatabase::addApplicationFont(":/Fonts/Lato-Regular.ttf");
+  // Load the default font from SIMPL
+  QString firaSansFontPath(":/SIMPL/fonts/FiraSans-Regular.ttf");
+  int id = QFontDatabase::addApplicationFont(firaSansFontPath);
   
   /* On Linux builds this will always return -1 */
   if ( id >= 0 )
@@ -181,33 +177,28 @@ int main(int argc, char* argv[])
     QFont defaultFont(family);
     defaultFont.setPixelSize(12);
     qApp->setFont(defaultFont);
-    
-    qDebug() << "Default Font Loaded";
+    qDebug() << "Default Font Loaded: " << firaSansFontPath;
   }
   else
   {
-    qDebug() << "ERROR LOADING DEFAULT FONT";
+    qDebug() << "ERROR LOADING DEFAULT FONT: " << firaSansFontPath;
   }
-  
+
   // This is the single standard font that ships with the open-source version
   {
     QStringList fontList;
-    fontList << "FiraSans-Regular.ttf";
+    fontList << firaSansFontPath;
     InitFonts(fontList);
   }
   
   // Init any extra fonts that are needed by specialized versions of SIMPLView
-  {
-    QStringList fontList;
-    fontList << "Lato-Regular.ttf" << "Lato-Black.ttf" << "Lato-Bold.ttf" << "Lato-Italic.ttf" << "Lato-Light.ttf"
-             << "Lato-HairlineItalic.ttf" << "Lato-Hairline.ttf" << "Lato-BoldItalic.ttf" << "Lato-BlackItalic.ttf";
-    InitFonts(fontList);
-  }
+  InitFonts(BrandedStrings::ExtraFonts);
+  
 
   // Initialize the Default Stylesheet
-  //InitStyleSheet(QString("Default"));
-  InitStyleSheet(QString(":/StyleSheets/Light.json"));
+  InitStyleSheet(QString(BrandedStrings::DefaultColorFontFile));
   
+
   InitStyleSheetEditor();
   
   // Open pipeline if SIMPLView was opened from a compatible file

@@ -84,6 +84,13 @@ StyleSheetEditor::StyleSheetEditor(QWidget *parent)
 
     connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), 
             this, SLOT(qssFileChanged(const QString&)));
+            
+    
+    
+    QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/");
+    m_Ui->qssFilePath->setText(styleSheetPath);
+    
+    
 }
 
 void StyleSheetEditor::on_styleCombo_activated(const QString &styleName)
