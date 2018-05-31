@@ -80,6 +80,7 @@ StyleSheetEditor::StyleSheetEditor(QWidget *parent)
     m_Ui->styleSheetCombo->addItem("Light");
     m_Ui->styleSheetCombo->addItem("Orange");
     m_Ui->styleSheetCombo->addItem("Watermelon");
+    m_Ui->styleSheetCombo->addItem("Green");
     m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
 
     connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), 
