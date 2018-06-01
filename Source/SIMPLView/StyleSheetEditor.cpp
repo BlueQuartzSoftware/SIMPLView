@@ -50,61 +50,54 @@
 
 #include <QtWidgets>
 
-#include "StyleSheetEditor.h"
 #include "SVStyle.h"
+#include "StyleSheetEditor.h"
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
 #include "ui_StyleSheetEditor.h"
 
-
-StyleSheetEditor::StyleSheetEditor(QWidget *parent)
-    : QDialog(parent)
-    , m_Ui(new Ui::StyleSheetEditor)
+StyleSheetEditor::StyleSheetEditor(QWidget* parent)
+: QDialog(parent)
+, m_Ui(new Ui::StyleSheetEditor)
 
 {
-    m_Ui->setupUi(this);
-    this->setSizeGripEnabled(true);
-    
-    QRegularExpression regExp("^.(.*)\\+?Style$");
-    QString defaultStyle = QApplication::style()->metaObject()->className();
-    QRegularExpressionMatch match = regExp.match(defaultStyle);
+  m_Ui->setupUi(this);
+  this->setSizeGripEnabled(true);
 
-    if (match.hasMatch())
-        defaultStyle = match.captured(1);
+  QRegularExpression regExp("^.(.*)\\+?Style$");
+  QString defaultStyle = QApplication::style()->metaObject()->className();
+  QRegularExpressionMatch match = regExp.match(defaultStyle);
 
-    m_Ui->styleCombo->addItems(QStyleFactory::keys());
-    m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
-    
-    m_Ui->styleSheetCombo->addItem("Default");
-    m_Ui->styleSheetCombo->addItem("Light");
-    m_Ui->styleSheetCombo->addItem("Orange");
-    m_Ui->styleSheetCombo->addItem("Watermelon");
-    m_Ui->styleSheetCombo->addItem("Green");
-    m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
+  if(match.hasMatch())
+    defaultStyle = match.captured(1);
 
-    connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), 
-            this, SLOT(qssFileChanged(const QString&)));
-            
-    
-    
-    QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/");
-    m_Ui->qssFilePath->setText(styleSheetPath);
-    
-    
+  m_Ui->styleCombo->addItems(QStyleFactory::keys());
+  m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
+
+  m_Ui->styleSheetCombo->addItem("Default");
+  m_Ui->styleSheetCombo->addItem("Light");
+  m_Ui->styleSheetCombo->addItem("Orange");
+  m_Ui->styleSheetCombo->addItem("Watermelon");
+  m_Ui->styleSheetCombo->addItem("Green");
+  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
+
+  connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
+
+  QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/");
+  m_Ui->qssFilePath->setText(styleSheetPath);
 }
 
-void StyleSheetEditor::on_styleCombo_activated(const QString &styleName)
+void StyleSheetEditor::on_styleCombo_activated(const QString& styleName)
 {
   //  qApp->setStyle(styleName);
 }
 
-void StyleSheetEditor::on_styleSheetCombo_activated(const QString &sheetName)
+void StyleSheetEditor::on_styleSheetCombo_activated(const QString& sheetName)
 {
-    on_reloadButton_stateChanged(m_Ui->reloadButton->checkState());
-    qssFileChanged(QString(""));
+  on_reloadButton_stateChanged(m_Ui->reloadButton->checkState());
+  qssFileChanged(QString(""));
 }
-
 
 void StyleSheetEditor::on_reloadButton_stateChanged(int state)
 {
@@ -112,7 +105,6 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
   {
     m_FileWatcher.addPath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".css");
     m_FileWatcher.addPath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json");
-    
   }
   else
   {

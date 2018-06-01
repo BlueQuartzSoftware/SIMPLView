@@ -1,37 +1,37 @@
 /* ============================================================================
-* Copyright (c) 2009-2016 BlueQuartz Software, LLC
-*
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted provided that the following conditions are met:
-*
-* Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-*
-* Redistributions in binary form must reproduce the above copyright notice, this
-* list of conditions and the following disclaimer in the documentation and/or
-* other materials provided with the distribution.
-*
-* Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
-* contributors may be used to endorse or promote products derived from this software
-* without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-* USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-* The code contained herein was partially funded by the followig contracts:
-*    United States Air Force Prime Contract FA8650-07-D-5800
-*    United States Air Force Prime Contract FA8650-10-D-5210
-*    United States Prime Contract Navy N00173-07-C-2068
-*
-* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ * Copyright (c) 2009-2016 BlueQuartz Software, LLC
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
+ * contributors may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The code contained herein was partially funded by the followig contracts:
+ *    United States Air Force Prime Contract FA8650-07-D-5800
+ *    United States Air Force Prime Contract FA8650-10-D-5210
+ *    United States Prime Contract Navy N00173-07-C-2068
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "SIMPLView_UI.h"
 
@@ -60,26 +60,26 @@
 //-- SIMPLView Includes
 #include "SIMPLib/Common/Constants.h"
 #include "SIMPLib/Common/DocRequestManager.h"
-#include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+#include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 
-#include "SVWidgetsLib/QtSupport/QtSMacros.h"
-#include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
-#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-#include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
-#include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
+#include "SVWidgetsLib/QtSupport/QtSMacros.h"
+#include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
-#include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
+#include "SVWidgetsLib/Widgets/PipelineModel.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
+#include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
 #ifdef SIMPL_USE_QtWebEngine
 #include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
 #else
@@ -99,9 +99,9 @@
 
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLView.h"
+#include "SIMPLView/SIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
-#include "SIMPLView/SIMPLViewApplication.h"
 
 #include "BrandedStrings.h"
 
@@ -322,7 +322,7 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
   }
 
   // Status Bar Widget needs to write out its settings BEFORE the main window is closed
-//  m_StatusBar->writeSettings();
+  //  m_StatusBar->writeSettings();
 
   event->accept();
 }
@@ -532,20 +532,20 @@ void SIMPLView_UI::setupGui()
   // Shortcut to close the window
   new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
 
-//  m_StatusBar = new StatusBarWidget();
-//  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
+  //  m_StatusBar = new StatusBarWidget();
+  //  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
 
-//  m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
-//  m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
-//  m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
-//  m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
-//  m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
-//  m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
-//  m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+  //  m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
+  //  m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
+  //  m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
+  //  m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
+  //  m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
+  //  m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
+  //  m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
 
-//  m_StatusBar->readSettings();
+  //  m_StatusBar->readSettings();
 
-//  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
+  //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 }
@@ -697,9 +697,9 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, [=] (const QString& filePath, bool execute) {
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, [=](const QString& filePath, bool execute) {
     SIMPLView_UI* instance = dream3dApp->getActiveInstance();
-    if (instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
+    if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
     {
       instance->openPipeline(filePath);
     }
@@ -711,7 +711,7 @@ void SIMPLView_UI::connectSignalsSlots()
     QtSRecentFileList* list = QtSRecentFileList::Instance();
     list->addFile(filePath);
 
-    if (execute)
+    if(execute)
     {
       instance->executePipeline();
     }
@@ -723,24 +723,23 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=] (const QItemSelection &selected, const QItemSelection &deselected) {
-
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection& selected, const QItemSelection& deselected) {
     QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
     qSort(selectedIndexes);
 
     // Animate a selection border for selected indexes
-    for(const QModelIndex &index: selected.indexes())
+    for(const QModelIndex& index : selected.indexes())
     {
       new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
     }
 
     // Remove selection border from deselected indexes
-    for(const QModelIndex &index: deselected.indexes())
+    for(const QModelIndex& index : deselected.indexes())
     {
       pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
     }
 
-    if (selectedIndexes.size() == 1)
+    if(selectedIndexes.size() == 1)
     {
       QModelIndex selectedIndex = selectedIndexes[0];
 
@@ -760,9 +759,7 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
 
-  connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] {
-    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
-  });
+  connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
 
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
 
@@ -773,7 +770,7 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, &SVPipelineView::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
-  connect(pipelineView, &SVPipelineView::preflightFinished, [=] (FilterPipeline::Pointer pipeline, int err) {
+  connect(pipelineView, &SVPipelineView::preflightFinished, [=](FilterPipeline::Pointer pipeline, int err) {
     m_Ui->dataBrowserWidget->refreshData();
     m_Ui->issuesWidget->displayCachedMessages();
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
@@ -791,7 +788,7 @@ void SIMPLView_UI::connectSignalsSlots()
     QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
     qSort(selectedIndexes);
 
-    if (selectedIndexes.size() == 1)
+    if(selectedIndexes.size() == 1)
     {
       QModelIndex selectedIndex = selectedIndexes[0];
       PipelineModel* model = getPipelineModel();
@@ -805,7 +802,7 @@ void SIMPLView_UI::connectSignalsSlots()
     }
   });
 
-  connect(pipelineView, &SVPipelineView::filePathOpened, [=] (const QString &filePath) { m_OpenedFilePath = filePath; });
+  connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_OpenedFilePath = filePath; });
 
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
@@ -816,10 +813,10 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
 
   /* Pipeline Model Connections */
-  connect(pipelineModel, &PipelineModel::statusMessageGenerated, [=] (const QString &msg) { statusBar()->showMessage(msg); });
-  connect(pipelineModel, &PipelineModel::standardOutputMessageGenerated, [=] (const QString &msg) { addStdOutputMessage(msg); });
+  connect(pipelineModel, &PipelineModel::statusMessageGenerated, [=](const QString& msg) { statusBar()->showMessage(msg); });
+  connect(pipelineModel, &PipelineModel::standardOutputMessageGenerated, [=](const QString& msg) { addStdOutputMessage(msg); });
 
-  connect(pipelineModel, &PipelineModel::pipelineDataChanged, [=] {  });
+  connect(pipelineModel, &PipelineModel::pipelineDataChanged, [=] {});
 }
 
 // -----------------------------------------------------------------------------
@@ -893,7 +890,6 @@ QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::populateMenus(QObject* plugin)
 {
-
 }
 
 // -----------------------------------------------------------------------------
@@ -959,7 +955,7 @@ void SIMPLView_UI::pipelineDidFinish()
   QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
   qSort(selectedIndexes);
 
-  if (selectedIndexes.size() == 1)
+  if(selectedIndexes.size() == 1)
   {
     QModelIndex selectedIndex = selectedIndexes[0];
     PipelineModel* model = getPipelineModel();
@@ -1049,9 +1045,12 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   clearFilterInputWidget();
 
   // Alert to DataArrayPath requirements
-  connect(widget, SIGNAL(viewPathsMatchingReqs(DataContainerSelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(DataContainerSelectionFilterParameter::RequirementType)), Qt::ConnectionType::UniqueConnection);
-  connect(widget, SIGNAL(viewPathsMatchingReqs(AttributeMatrixSelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(AttributeMatrixSelectionFilterParameter::RequirementType)), Qt::ConnectionType::UniqueConnection);
-  connect(widget, SIGNAL(viewPathsMatchingReqs(DataArraySelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(DataArraySelectionFilterParameter::RequirementType)), Qt::ConnectionType::UniqueConnection);
+  connect(widget, SIGNAL(viewPathsMatchingReqs(DataContainerSelectionFilterParameter::RequirementType)), getDataStructureWidget(),
+          SLOT(setViewReqs(DataContainerSelectionFilterParameter::RequirementType)), Qt::ConnectionType::UniqueConnection);
+  connect(widget, SIGNAL(viewPathsMatchingReqs(AttributeMatrixSelectionFilterParameter::RequirementType)), getDataStructureWidget(),
+          SLOT(setViewReqs(AttributeMatrixSelectionFilterParameter::RequirementType)), Qt::ConnectionType::UniqueConnection);
+  connect(widget, SIGNAL(viewPathsMatchingReqs(DataArraySelectionFilterParameter::RequirementType)), getDataStructureWidget(), SLOT(setViewReqs(DataArraySelectionFilterParameter::RequirementType)),
+          Qt::ConnectionType::UniqueConnection);
   connect(widget, SIGNAL(endViewPaths()), getDataStructureWidget(), SLOT(clearViewRequirements()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(filterPath(DataArrayPath)), widget, SIGNAL(filterPath(DataArrayPath)), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(endPathFiltering()), widget, SIGNAL(endPathFiltering()), Qt::ConnectionType::UniqueConnection);

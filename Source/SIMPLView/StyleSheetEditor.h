@@ -55,32 +55,31 @@
 #include <QtCore/QSharedPointer>
 #include <QtWidgets/QDialog>
 
-
 namespace Ui
 {
 class StyleSheetEditor;
 }
 
-
 // Provides a way of changing and dynamically editing styles while the app is running
 class StyleSheetEditor : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    StyleSheetEditor(QWidget *parent = nullptr);
+  StyleSheetEditor(QWidget* parent = nullptr);
 
 private slots:
-    void on_styleCombo_activated(const QString &styleName);
-    void on_styleSheetCombo_activated(const QString &styleSheetName);
-    void on_reloadButton_stateChanged(int state);
-    void qssFileChanged(const QString& filePath);
-private:
-    void loadStyleSheet(const QString &sheetName);
+  void on_styleCombo_activated(const QString& styleName);
+  void on_styleSheetCombo_activated(const QString& styleSheetName);
+  void on_reloadButton_stateChanged(int state);
+  void qssFileChanged(const QString& filePath);
 
-    QSharedPointer<Ui::StyleSheetEditor> m_Ui;
-    
-    QFileSystemWatcher m_FileWatcher;
+private:
+  void loadStyleSheet(const QString& sheetName);
+
+  QSharedPointer<Ui::StyleSheetEditor> m_Ui;
+
+  QFileSystemWatcher m_FileWatcher;
 };
 
 #endif
