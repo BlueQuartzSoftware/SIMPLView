@@ -140,6 +140,9 @@ include(CMakeParseArguments)
 option(SIMPLView_BUILD_DOCUMENTATION "Build the SIMPLView documentation" ON)
 set_property(GLOBAL PROPERTY SIMPLView_BUILD_DOCUMENTATION "${SIMPLView_BUILD_DOCUMENTATION}")
 
+option(SIMPLView_USE_STYLESHEETEDITOR "Use the style sheet editor to apply custom styles" OFF)
+set_property(GLOBAL PROPERTY SIMPLView_USE_STYLESHEETEDITOR "${SIMPLView_USE_STYLESHEETEDITOR}")
+
 # -----------------------------------------------------------------------
 # Setup a Global property that is used to gather Documentation Information
 # into a single known location

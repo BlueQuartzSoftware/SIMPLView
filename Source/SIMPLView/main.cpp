@@ -198,8 +198,9 @@ int main(int argc, char* argv[])
   // Initialize the Default Stylesheet
   InitStyleSheet(QString(BrandedStrings::DefaultColorFontFile));
   
-
+#ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();
+#endif
   
   // Open pipeline if SIMPLView was opened from a compatible file
   if (argc == 2)

@@ -12,5 +12,8 @@
 
 #cmakedefine SIMPL_USE_QtWebEngine
 
+/* Defined if SIMPL uses the style sheet editor for applying custom style sheets */
+#cmakedefine SIMPLView_USE_STYLESHEETEDITOR
+
 #endif /* _simplview_H_ */
 
