@@ -53,7 +53,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 
-#include "SVWidgetsLib/QtSupport/QtSStyles.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Filtering/FilterManager.h"
@@ -103,7 +103,7 @@ void AboutSIMPLView::setupGui()
   out << "\n" << BrandedStrings::DistributionName;
 
   versionLabel->setText(str);
-  versionLabel->setFont(QtSStyles::GetTitleFont());
+  versionLabel->setFont(SVStyle::Instance()->GetTitleFont());
 
   str.clear();
   out << "Built on " << SIMPLView::Version::BuildDate();

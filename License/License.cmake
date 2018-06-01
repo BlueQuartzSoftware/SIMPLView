@@ -40,18 +40,19 @@ endforeach(lf ${LICENSE_FILES})
 string(CONCAT THIRDPARTY_QRC_CONTENTS ${THIRDPARTY_QRC_CONTENTS} "</qresource>\n</RCC>")
 set(cmp_contents "${THIRDPARTY_QRC_CONTENTS}")
 configure_file(${CMP_CONFIGURED_FILES_SOURCE_DIR}/QtResourceFile-All.qrc.in
-                   ${PROJECT_RESOURCES_DIR}/ThirdParty.qrc)
+                   ${PROJECT_BINARY_DIR}/ThirdParty.qrc)
 
-set(QRC_LICENSE_FILES ${QRC_LICENSE_FILES} ${PROJECT_RESOURCES_DIR}/ThirdParty.qrc)
+set(QRC_LICENSE_FILES ${QRC_LICENSE_FILES} ${PROJECT_BINARY_DIR}/ThirdParty.qrc)
 
 set(cmp_text_file_name "SIMPLView/SIMPLViewLicense.txt")
 
 configure_file("${SIMPLView_LICENSE_FILE}" ${PROJECT_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt   COPYONLY )
 
-# create the Qt Resource File
-configure_file(${CMP_CONFIGURED_FILES_SOURCE_DIR}/QtResourceFile.qrc.in ${PROJECT_RESOURCES_DIR}/SIMPLView.qrc)
 
-set(QRC_LICENSE_FILES ${QRC_LICENSE_FILES} ${PROJECT_RESOURCES_DIR}/SIMPLView.qrc)
+# create the Qt Resource File
+# configure_file(${CMP_CONFIGURED_FILES_SOURCE_DIR}/QtResourceFile.qrc.in ${PROJECT_BINARY_DIR}/SIMPLView.qrc)
+# set(QRC_LICENSE_FILES ${QRC_LICENSE_FILES} ${PROJECT_BINARY_DIR}/SIMPLView.qrc)
+
 file(APPEND ${LICENSE_HEADER_FILE} " << \":/SIMPLView/SIMPLViewLicense.txt\"")
 
 cmp_IDE_GENERATED_PROPERTIES("Generated/qrc" "${QRC_LICENSE_FILES}" "")

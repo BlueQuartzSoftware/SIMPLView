@@ -65,7 +65,6 @@
 class ISIMPLibPlugin;
 class FilterLibraryToolboxWidget;
 class BookmarksToolboxWidget;
-class PrebuiltsToolboxWidget;
 class FilterListWidget;
 class UpdateCheckDialog;
 class UpdateCheckData;
@@ -311,6 +310,8 @@ class SIMPLView_UI : public QMainWindow
 
     HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
     HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
+
+    FilterInputWidget*                      m_FilterInputWidget = nullptr;
 
     QMenu*                                  m_MenuFile = nullptr;
     QMenu*                                  m_MenuEdit = nullptr;

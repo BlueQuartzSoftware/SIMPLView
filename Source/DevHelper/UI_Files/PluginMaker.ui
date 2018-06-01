@@ -72,7 +72,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../Resources/icons/images/Icons.qrc">
-         <normaloff>:/add.png</normaloff>:/add.png</iconset>
+         <normaloff>:/SIMPL/icons/images/add.png</normaloff>:/add.png</iconset>
        </property>
       </widget>
      </item>
@@ -89,7 +89,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../../Resources/icons/images/Icons.qrc">
-         <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
+         <normaloff>:/SIMPL/icons/images/delete.png</normaloff>:/delete.png</iconset>
        </property>
       </widget>
      </item>
