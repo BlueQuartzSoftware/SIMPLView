@@ -76,6 +76,7 @@
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLView_UI.h"
@@ -118,16 +119,10 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
 
-  createDefaultMenuBar();
-
   // If on Mac, add custom actions to a dock menu
 #if defined(Q_OS_MAC)
   createMacDockMenu();
 #endif
-
-  // Connection to update the recent files list on all windows when it changes
-  QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
-  connect(recentsList, &QtSRecentFileList::fileListChanged, this, &SIMPLViewApplication::updateRecentFileList);
 }
 
 // -----------------------------------------------------------------------------
@@ -985,6 +980,7 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuPipeline = new QMenu("Pipeline", m_DefaultMenuBar);
   m_MenuHelp = new QMenu("Help", m_DefaultMenuBar);
   m_MenuAdvanced = new QMenu("Advanced", m_DefaultMenuBar);
+  m_MenuThemes = new QMenu("Themes", m_DefaultMenuBar);
 
   m_ActionNew = new QAction("New...", m_DefaultMenuBar);
   m_ActionNew->setShortcut(QKeySequence::New);
@@ -1099,15 +1095,58 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_DefaultMenuBar->addMenu(m_MenuHelp);
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
+
+  addThemeMenu();
+
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
+
   m_MenuHelp->addMenu(m_MenuAdvanced);
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(m_ActionClearBookmarks);
+
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);
   m_MenuHelp->addAction(m_ActionPluginInformation);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::addThemeMenu()
+{
+  QStringList themeNames = BrandedStrings::ThemeNames;
+  if (themeNames.size() > 0)
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_ThemeActionGroup->setExclusive(true);
+
+    m_MenuHelp->addMenu(m_MenuThemes);
+    QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
+      qApp->setStyleSheet("");
+    });
+    defaultThemeAction->setCheckable(true);
+    m_ThemeActionGroup->addAction(defaultThemeAction);
+
+    SVStyle* style = SVStyle::Instance();
+    for (int i = 0; i < themeNames.size(); i++)
+    {
+      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
+        QString jsonFilePath = tr(":/DREAM3D/StyleSheets/%1.json").arg(themeNames[i]);
+
+        style->loadStyleSheet(jsonFilePath);
+      });
+      action->setCheckable(true);
+      if(themeNames[i] == style->getCurrentThemeName())
+      {
+        action->setChecked(true);
+      }
+      m_ThemeActionGroup->addAction(action);
+    }
+
+    m_MenuHelp->addSeparator();
+  }
 }
 
 // -----------------------------------------------------------------------------

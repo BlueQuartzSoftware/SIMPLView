@@ -1,7 +1,7 @@
-#ifndef _brandedstrings_h_
-#define _brandedstrings_h_
+#pragma once
 
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 
 namespace BrandedStrings
 {
@@ -16,7 +16,5 @@ namespace BrandedStrings
   static const QString DefaultColorFontFile(":/SIMPL/StyleSheets/Default.json");
 
   static const QStringList ExtraFonts;
+  static const QStringList ThemeNames;
 }
-
-
-#endif /* _BrandedStrings_H_ */

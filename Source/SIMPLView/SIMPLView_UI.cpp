@@ -564,6 +564,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuPipeline = new QMenu("Pipeline", this);
   m_MenuHelp = new QMenu("Help", this);
   m_MenuAdvanced = new QMenu("Advanced", this);
+  m_MenuThemes = new QMenu("Themes", this);
   QMenu* menuRecentFiles = dream3dApp->getRecentFilesMenu();
 
   m_ActionNew = new QAction("New...", this);
@@ -662,17 +663,60 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_SIMPLViewMenu->addMenu(m_MenuHelp);
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
+
+  addThemeMenu();
+
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
+
   m_MenuHelp->addMenu(m_MenuAdvanced);
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
+
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);
   m_MenuHelp->addAction(m_ActionPluginInformation);
 
   setMenuBar(m_SIMPLViewMenu);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addThemeMenu()
+{
+  QStringList themeNames = BrandedStrings::ThemeNames;
+  if (themeNames.size() > 0)
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_ThemeActionGroup->setExclusive(true);
+
+    m_MenuHelp->addMenu(m_MenuThemes);
+    QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
+      qApp->setStyleSheet("");
+    });
+    defaultThemeAction->setCheckable(true);
+    m_ThemeActionGroup->addAction(defaultThemeAction);
+
+    SVStyle* style = SVStyle::Instance();
+    for (int i = 0; i < themeNames.size(); i++)
+    {
+      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
+        QString jsonFilePath = tr(":/DREAM3D/StyleSheets/%1.json").arg(themeNames[i]);
+
+        style->loadStyleSheet(jsonFilePath);
+      });
+      action->setCheckable(true);
+      if(themeNames[i] == style->getCurrentThemeName())
+      {
+        action->setChecked(true);
+      }
+      m_ThemeActionGroup->addAction(action);
+    }
+
+    m_MenuHelp->addSeparator();
+  }
 }
 
 // -----------------------------------------------------------------------------
