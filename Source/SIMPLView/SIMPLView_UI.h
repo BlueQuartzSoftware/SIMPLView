@@ -320,6 +320,7 @@ class SIMPLView_UI : public QMainWindow
     QMenu*                                  m_MenuPipeline = nullptr;
     QMenu*                                  m_MenuHelp = nullptr;
     QMenu*                                  m_MenuAdvanced = nullptr;
+    QMenu*                                  m_MenuThemes = nullptr;
 
     QAction*                                m_ActionNew = nullptr;
     QAction*                                m_ActionOpen = nullptr;
@@ -335,10 +336,17 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionPluginInformation = nullptr;
     QAction*                                m_ActionClearCache = nullptr;
 
+    QActionGroup*                           m_ThemeActionGroup = nullptr;
+
     /**
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
+
+    /**
+     * @brief addThemeMenu
+     */
+    void addThemeMenu();
 
     /**
      * @brief savePipeline

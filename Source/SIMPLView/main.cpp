@@ -46,6 +46,7 @@
 #include "StyleSheetEditor.h"
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
@@ -198,6 +199,13 @@ int main(int argc, char* argv[])
 #ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();
 #endif
+
+  // Create the default menu bar
+  qtapp.createDefaultMenuBar();
+
+  // Connection to update the recent files list on all windows when it changes
+  QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
+  QObject::connect(recentsList, &QtSRecentFileList::fileListChanged, &qtapp, &SIMPLViewApplication::updateRecentFileList);
 
   // Open pipeline if SIMPLView was opened from a compatible file
   if(argc == 2)
