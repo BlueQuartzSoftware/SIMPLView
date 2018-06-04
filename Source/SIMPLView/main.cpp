@@ -200,6 +200,8 @@ int main(int argc, char* argv[])
   InitStyleSheetEditor();
 #endif
 
+  qtapp.readSettings();
+
   // Create the default menu bar
   qtapp.createDefaultMenuBar();
 

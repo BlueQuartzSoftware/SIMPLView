@@ -81,6 +81,16 @@ public:
 
   bool initialize(int argc, char* argv[]);
 
+  /**
+   * @brief readSettings
+   */
+  void readSettings();
+
+  /**
+   * @brief writeSettings
+   */
+  void writeSettings();
+
   void createDefaultMenuBar();
 
   QList<SIMPLView_UI*> getSIMPLViewInstances();
@@ -224,9 +234,6 @@ private:
   void addThemeMenu();
 
   void createMacDockMenu();
-
-  void readSettings();
-  void writeSettings();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented

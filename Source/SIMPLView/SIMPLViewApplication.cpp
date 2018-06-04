@@ -170,8 +170,6 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
   Q_UNUSED(argv)
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
 
-  readSettings();
-
   // Assume we are launching on the main screen.
   float pixelRatio = qApp->screens().at(0)->devicePixelRatio();
 
@@ -911,6 +909,10 @@ void SIMPLViewApplication::writeSettings()
 
   prefs->beginGroup("Application Settings");
 
+  SVStyle* styles = SVStyle::Instance();
+  QString themeName = styles->getCurrentThemeName();
+  prefs->setValue("Theme", themeName);
+
   prefs->endGroup();
 
   BookmarksModel* model = BookmarksModel::Instance();
@@ -927,6 +929,16 @@ void SIMPLViewApplication::readSettings()
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   prefs->beginGroup("Application Settings");
+
+  SVStyle* styles = SVStyle::Instance();
+  QString themeName = prefs->value("Theme", QString()).toString();
+  if (themeName.isEmpty() == false)
+  {
+    QString defaultThemeFilePath = BrandedStrings::DefaultColorFontFile;
+    QFileInfo fi(defaultThemeFilePath);
+    QString themeFilePath = tr("%1%2%3.json").arg(fi.path()).arg(QDir::separator()).arg(themeName);
+    styles->loadStyleSheet(themeFilePath);
+  }
 
   prefs->endGroup();
 
@@ -1133,9 +1145,11 @@ void SIMPLViewApplication::addThemeMenu()
     for (int i = 0; i < themeNames.size(); i++)
     {
       QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
-        QString jsonFilePath = tr(":/DREAM3D/StyleSheets/%1.json").arg(themeNames[i]);
+        QString defaultThemeFilePath = BrandedStrings::DefaultColorFontFile;
+        QFileInfo fi(defaultThemeFilePath);
+        QString themeFilePath = tr("%1%2%3.json").arg(fi.path()).arg(QDir::separator()).arg(themeNames[i]);
 
-        style->loadStyleSheet(jsonFilePath);
+        style->loadStyleSheet(themeFilePath);
       });
       action->setCheckable(true);
       if(themeNames[i] == style->getCurrentThemeName())
