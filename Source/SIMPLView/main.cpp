@@ -45,8 +45,6 @@
 #include "SIMPLView_UI.h"
 #include "StyleSheetEditor.h"
 
-#include "BrandedStrings.h"
-
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
