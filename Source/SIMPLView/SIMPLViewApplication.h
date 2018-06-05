@@ -93,6 +93,8 @@ public:
 
   void createDefaultMenuBar();
 
+  void createMacDockMenu();
+
   QList<SIMPLView_UI*> getSIMPLViewInstances();
 
   void registerSIMPLViewWindow(SIMPLView_UI* window);
@@ -232,8 +234,6 @@ private:
    * @brief addThemeMenu
    */
   void addThemeMenu();
-
-  void createMacDockMenu();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
