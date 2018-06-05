@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
     QFont defaultFont(family);
     defaultFont.setPixelSize(12);
     qApp->setFont(defaultFont);
-    qDebug() << "Default Font Loaded: " << firaSansFontPath;
+//    qDebug() << "Default Font Loaded: " << firaSansFontPath;
   }
   else
   {
