@@ -1083,6 +1083,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   {
     emit m_FilterInputWidget->endPathFiltering();
     emit m_FilterInputWidget->endViewPaths();
+    emit m_FilterInputWidget->endDataStructureFiltering();
   }
 
   // Clear the filter input widget
@@ -1097,7 +1098,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
           Qt::ConnectionType::UniqueConnection);
   connect(widget, SIGNAL(endViewPaths()), getDataStructureWidget(), SLOT(clearViewRequirements()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(filterPath(DataArrayPath)), widget, SIGNAL(filterPath(DataArrayPath)), Qt::ConnectionType::UniqueConnection);
-  connect(getDataStructureWidget(), SIGNAL(endPathFiltering()), widget, SIGNAL(endPathFiltering()), Qt::ConnectionType::UniqueConnection);
+  connect(getDataStructureWidget(), SIGNAL(endDataStructureFiltering()), widget, SIGNAL(endDataStructureFiltering()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(applyPathToFilteringParameter(DataArrayPath)), widget, SIGNAL(applyPathToFilteringParameter(DataArrayPath)));
 
   emit widget->endPathFiltering();
