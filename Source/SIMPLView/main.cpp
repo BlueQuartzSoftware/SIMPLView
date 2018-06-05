@@ -205,6 +205,11 @@ int main(int argc, char* argv[])
   // Create the default menu bar
   qtapp.createDefaultMenuBar();
 
+  // If on Mac, add custom actions to a dock menu
+#if defined(Q_OS_MAC)
+  qtapp.createMacDockMenu();
+#endif
+
   // Connection to update the recent files list on all windows when it changes
   QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
   QObject::connect(recentsList, &QtSRecentFileList::fileListChanged, &qtapp, &SIMPLViewApplication::updateRecentFileList);

@@ -118,11 +118,6 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 {
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
-
-  // If on Mac, add custom actions to a dock menu
-#if defined(Q_OS_MAC)
-  createMacDockMenu();
-#endif
 }
 
 // -----------------------------------------------------------------------------
