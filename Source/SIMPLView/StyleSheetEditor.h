@@ -73,6 +73,7 @@ private slots:
   void on_styleSheetCombo_activated(const QString& styleSheetName);
   void on_reloadButton_stateChanged(int state);
   void qssFileChanged(const QString& filePath);
+  void on_qssFilePath_returnPressed();
 
 private:
   void loadStyleSheet(const QString& sheetName);
