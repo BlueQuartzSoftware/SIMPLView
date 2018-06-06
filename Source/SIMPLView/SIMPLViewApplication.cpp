@@ -929,10 +929,7 @@ void SIMPLViewApplication::readSettings()
   QString themeName = prefs->value("Theme", QString()).toString();
   if (themeName.isEmpty() == false)
   {
-    QString defaultThemeFilePath = BrandedStrings::DefaultColorFontFile;
-    QFileInfo fi(defaultThemeFilePath);
-    QString themeFilePath = tr("%1%2%3.json").arg(fi.path()).arg(QDir::separator()).arg(themeName);
-    styles->loadStyleSheet(themeFilePath);
+    styles->loadStyleSheetByName(themeName);
   }
 
   prefs->endGroup();
@@ -1123,28 +1120,30 @@ void SIMPLViewApplication::createDefaultMenuBar()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::addThemeMenu()
 {
-  QStringList themeNames = BrandedStrings::ThemeNames;
-  if (themeNames.size() > 0)
+  SVStyle* style = SVStyle::Instance();
+
+  QStringList themeNames = style->getThemeNames();
+  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
   {
     m_ThemeActionGroup = new QActionGroup(this);
     m_ThemeActionGroup->setExclusive(true);
 
     m_MenuHelp->addMenu(m_MenuThemes);
     QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
-      qApp->setStyleSheet("");
+      style->loadStyleSheetByName("Default");
     });
     defaultThemeAction->setCheckable(true);
     m_ThemeActionGroup->addAction(defaultThemeAction);
 
-    SVStyle* style = SVStyle::Instance();
     for (int i = 0; i < themeNames.size(); i++)
     {
-      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
-        QString defaultThemeFilePath = BrandedStrings::DefaultColorFontFile;
-        QFileInfo fi(defaultThemeFilePath);
-        QString themeFilePath = tr("%1%2%3.json").arg(fi.path()).arg(QDir::separator()).arg(themeNames[i]);
+      if (themeNames[i] == "Default")
+      {
+        continue;
+      }
 
-        style->loadStyleSheet(themeFilePath);
+      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
+        style->loadStyleSheetByName(themeNames[i]);
       });
       action->setCheckable(true);
       if(themeNames[i] == style->getCurrentThemeName())

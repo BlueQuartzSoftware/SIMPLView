@@ -75,11 +75,13 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
   m_Ui->styleCombo->addItems(QStyleFactory::keys());
   m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
 
+  SVStyle* style = SVStyle::Instance();
+  QStringList themeNames = style->getThemeNames();
   m_Ui->styleSheetCombo->addItem("Default");
-  m_Ui->styleSheetCombo->addItem("Light");
-  m_Ui->styleSheetCombo->addItem("Orange");
-  m_Ui->styleSheetCombo->addItem("Watermelon");
-  m_Ui->styleSheetCombo->addItem("Green");
+  for (int i = 0; i < themeNames.size(); i++)
+  {
+    m_Ui->styleSheetCombo->addItem(themeNames[i]);
+  }
   m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
@@ -115,8 +117,6 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
 
 void StyleSheetEditor::qssFileChanged(const QString& filePath)
 {
-  QString jsonFilePath = m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json";
-
   SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheet(jsonFilePath);
+  style->loadStyleSheetByName(m_Ui->styleSheetCombo->currentText());
 }

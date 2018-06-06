@@ -37,6 +37,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
 #include <QtCore/QString>
+#include <QtCore/QDirIterator>
+
 #include <QtGui/QFontDatabase>
 
 #include "BrandedStrings.h"
@@ -92,10 +94,28 @@ void InitFonts(const QStringList& fontList)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void InitStyleSheet(const QString& sheetName)
+void InitStyleSheet(const QString& themeName)
 {
   SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheet(sheetName);
+
+  // Load the default style sheet
+  style->insertTheme("Default", ":/SIMPL/StyleSheets/Default.json");
+
+  // Load all the other custom style sheets
+  QDirIterator it(BrandedStrings::DefaultStyleDirectory, QDirIterator::Subdirectories);
+  while (it.hasNext())
+  {
+    QString filePath = it.next();
+    QFileInfo fi(filePath);
+    QString ext = fi.completeSuffix();
+    if (ext == "json")
+    {
+      QString themeName = fi.baseName();
+      style->insertTheme(themeName, filePath);
+    }
+  }
+
+  style->loadStyleSheetByName(themeName);
 }
 
 // -----------------------------------------------------------------------------
@@ -194,7 +214,7 @@ int main(int argc, char* argv[])
   InitFonts(BrandedStrings::ExtraFonts);
 
   // Initialize the Default Stylesheet
-  InitStyleSheet(QString(BrandedStrings::DefaultColorFontFile));
+  InitStyleSheet(BrandedStrings::DefaultThemeName);
 
 #ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();
