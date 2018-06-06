@@ -38,6 +38,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QString>
 #include <QtCore/QDirIterator>
+#include <QtCore/QJsonDocument>
 
 #include <QtGui/QFontDatabase>
 
@@ -110,12 +111,37 @@ void InitStyleSheet(const QString& themeName)
     QString ext = fi.completeSuffix();
     if (ext == "json")
     {
-      QString themeName = fi.baseName();
-      style->insertTheme(themeName, filePath);
+      QFile jsonFile(filePath);
+      if(!jsonFile.open(QFile::ReadOnly))
+      {
+        continue;
+      }
+
+      QByteArray jsonContent = jsonFile.readAll();
+      QJsonParseError parseError;
+      QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonContent, &parseError);
+      if(parseError.error != QJsonParseError::NoError)
+      {
+        continue;
+      }
+      QJsonObject rootObj = jsonDoc.object();
+
+      QString themeName = rootObj["Theme_Name"].toString("");
+      if (themeName.isEmpty())
+      {
+        themeName = fi.baseName();
+      }
+      if (BrandedStrings::LoadedThemeNames.contains(themeName))
+      {
+        style->insertTheme(themeName, filePath);
+      }
     }
   }
 
-  style->loadStyleSheetByName(themeName);
+  if (themeName.isEmpty() == false)
+  {
+    style->loadStyleSheetByName(themeName);
+  }
 }
 
 // -----------------------------------------------------------------------------

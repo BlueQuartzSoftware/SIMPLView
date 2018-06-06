@@ -695,19 +695,8 @@ void SIMPLView_UI::addThemeMenu()
     m_ThemeActionGroup->setExclusive(true);
 
     m_MenuHelp->addMenu(m_MenuThemes);
-    QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
-      style->loadStyleSheetByName("Default");
-    });
-    defaultThemeAction->setCheckable(true);
-    m_ThemeActionGroup->addAction(defaultThemeAction);
-
     for (int i = 0; i < themeNames.size(); i++)
     {
-      if (themeNames[i] == "Default")
-      {
-        continue;
-      }
-
       QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
         style->loadStyleSheetByName(themeNames[i]);
       });
