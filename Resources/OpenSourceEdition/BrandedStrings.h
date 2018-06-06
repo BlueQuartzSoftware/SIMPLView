@@ -12,9 +12,8 @@ namespace BrandedStrings
 
   static const QString ApplicationName("SIMPLView");
 
-  static const QString DefaultStyleSheet(":/SIMPL/StyleSheets/Default.css");
-  static const QString DefaultColorFontFile(":/SIMPL/StyleSheets/Default.json");
+  static const QString DefaultStyleDirectory(":/SIMPL/StyleSheets");
+  static const QString DefaultThemeName("Default");
 
   static const QStringList ExtraFonts;
-  static const QStringList ThemeNames;
 }
