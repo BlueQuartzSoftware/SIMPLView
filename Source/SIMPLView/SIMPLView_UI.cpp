@@ -861,7 +861,17 @@ void SIMPLView_UI::connectSignalsSlots()
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  int err = m_Ui->pipelineListWidget->getPipelineView()->openPipeline(filePath);
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  int err = pipelineView->openPipeline(filePath);
+  if (err >= 0)
+  {
+    PipelineModel* model = pipelineView->getPipelineModel();
+    if (model->rowCount() > 0)
+    {
+      QModelIndex index = model->index(0, PipelineItem::PipelineItemData::Contents);
+      pipelineView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    }
+  }
 
   QFileInfo fi(filePath);
   setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());
