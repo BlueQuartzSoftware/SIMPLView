@@ -2,8 +2,7 @@
  * Your License or Copyright can go here
  */
 
-#ifndef _@PluginNameLowerCase@plugin_h_
-#define _@PluginNameLowerCase@plugin_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QSettings>
@@ -162,5 +161,3 @@ class @PluginName@_EXPORT @PluginName@Plugin : public QObject, public ISIMPLibPl
     @PluginName@Plugin(const @PluginName@Plugin&); // Copy Constructor Not Implemented
     void operator=(const @PluginName@Plugin&); // Operator '=' Not Implemented
 };
-
-#endif /* _@PluginName@_H_ */
