@@ -68,6 +68,9 @@ class StyleSheetEditor : public QDialog
 public:
   StyleSheetEditor(QWidget* parent = nullptr);
 
+public slots:
+  void updateCurrentStyleSheet(const QString &jsonFilePath);
+
 private slots:
   void on_styleCombo_activated(const QString& styleName);
   void on_styleSheetCombo_activated(const QString& styleSheetName);

@@ -106,8 +106,12 @@ void InitStyleSheet(const QString& themeFilePath)
 // -----------------------------------------------------------------------------
 void InitStyleSheetEditor()
 {
-  StyleSheetEditor* stylesheeteditor = new StyleSheetEditor(nullptr);
-  stylesheeteditor->show();
+  SVStyle* style = SVStyle::Instance();
+
+  StyleSheetEditor* styleSheetEditor = new StyleSheetEditor(nullptr);
+  styleSheetEditor->show();
+
+  QObject::connect(style, &SVStyle::styleSheetLoaded, styleSheetEditor, &StyleSheetEditor::updateCurrentStyleSheet);
 }
 
 // -----------------------------------------------------------------------------
@@ -198,16 +202,16 @@ int main(int argc, char* argv[])
   // Init any extra fonts that are needed by specialized versions of SIMPLView
   InitFonts(BrandedStrings::ExtraFonts);
 
+#ifdef SIMPLView_USE_STYLESHEETEDITOR
+  InitStyleSheetEditor();
+#endif
+
   // Initialize the Default Stylesheet
   QFileInfo fi2(BrandedStrings::DefaultThemeFilePath);
   if (BrandedStrings::LoadedThemeNames.contains(fi2.baseName()))
   {
     InitStyleSheet(BrandedStrings::DefaultThemeFilePath);
   }
-
-#ifdef SIMPLView_USE_STYLESHEETEDITOR
-  InitStyleSheetEditor();
-#endif
 
   qtapp.readSettings();
 

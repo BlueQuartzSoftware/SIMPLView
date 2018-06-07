@@ -118,6 +118,18 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
 }
 
 // -----------------------------------------------------------------------------
+// This is called when a new style gets loaded
+// -----------------------------------------------------------------------------
+void StyleSheetEditor::updateCurrentStyleSheet(const QString &jsonFilePath)
+{
+  QFileInfo fi(jsonFilePath);
+
+  m_Ui->styleSheetCombo->blockSignals(true);
+  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText(fi.baseName(), Qt::MatchContains));
+  m_Ui->styleSheetCombo->blockSignals(false);
+}
+
+// -----------------------------------------------------------------------------
 // This is called when the file on the file system changes
 // -----------------------------------------------------------------------------
 void StyleSheetEditor::qssFileChanged(const QString& filePath)
