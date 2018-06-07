@@ -52,6 +52,7 @@
 
 #include "SVStyle.h"
 #include "StyleSheetEditor.h"
+#include "BrandedStrings.h"
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
@@ -75,14 +76,15 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
   m_Ui->styleCombo->addItems(QStyleFactory::keys());
   m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
 
-  SVStyle* style = SVStyle::Instance();
-  QStringList themeNames = style->getThemeNames();
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
   //m_Ui->styleSheetCombo->addItem("Default");
   for (int i = 0; i < themeNames.size(); i++)
   {
     m_Ui->styleSheetCombo->addItem(themeNames[i]);
   }
-  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
+
+  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText(fi.baseName()));
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
 

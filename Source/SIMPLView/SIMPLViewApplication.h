@@ -95,6 +95,11 @@ public:
 
   void createMacDockMenu();
 
+  /**
+   * @brief createThemeMenu
+   */
+  QMenu* createThemeMenu(QActionGroup *actionGroup, QWidget* parent = nullptr);
+
   QList<SIMPLView_UI*> getSIMPLViewInstances();
 
   void registerSIMPLViewWindow(SIMPLView_UI* window);
@@ -229,11 +234,6 @@ private:
   QActionGroup* m_ThemeActionGroup = nullptr;
 
   int m_minSplashTime;
-
-  /**
-   * @brief addThemeMenu
-   */
-  void addThemeMenu();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
