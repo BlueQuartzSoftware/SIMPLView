@@ -113,10 +113,8 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_Ui(new Ui::SIMPLView_UI)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
-, m_OpenedFilePath("")
+, m_LastOpenedFilePath(QDir::homePath())
 {
-  m_OpenedFilePath = QDir::homePath();
-
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
   m_FilterManager = FilterManager::Instance();
@@ -197,14 +195,14 @@ bool SIMPLView_UI::savePipeline()
   if(isWindowModified() == true)
   {
     QString filePath;
-    if(m_OpenedFilePath.isEmpty())
+    if(windowFilePath().isEmpty())
     {
       // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
       return savePipelineAs();
     }
     else
     {
-      filePath = m_OpenedFilePath;
+      filePath = windowFilePath();
     }
 
     // Fix the separators
@@ -240,7 +238,7 @@ void SIMPLView_UI::listenSavePipelineAsTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipelineAs()
 {
-  QString proposedFile = m_OpenedFilePath + QDir::separator() + "Untitled.json";
+  QString proposedFile = m_LastOpenedFilePath + QDir::separator() + "Untitled.json";
   QString filePath = QFileDialog::getSaveFileName(this, tr("Save Pipeline To File"), proposedFile, tr("Json File (*.json);;SIMPLView File (*.dream3d);;All Files (*.*)"));
   if(true == filePath.isEmpty())
   {
@@ -271,7 +269,7 @@ bool SIMPLView_UI::savePipelineAs()
     QtSRecentFileList* list = QtSRecentFileList::Instance();
     list->addFile(filePath);
 
-    m_OpenedFilePath = filePath;
+    setWindowFilePath(filePath);
   }
   else
   {
@@ -279,7 +277,7 @@ bool SIMPLView_UI::savePipelineAs()
   }
 
   // Cache the last directory
-  m_OpenedFilePath = filePath;
+  m_LastOpenedFilePath = filePath;
 
   QMessageBox bookmarkMsgBox(this);
   bookmarkMsgBox.setWindowTitle("Pipeline Saved");
@@ -839,7 +837,7 @@ void SIMPLView_UI::connectSignalsSlots()
     }
   });
 
-  connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_OpenedFilePath = filePath; });
+  connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
 
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
 
@@ -875,9 +873,8 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
 
   QFileInfo fi(filePath);
   setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());
+  setWindowFilePath(filePath);
   setWindowModified(false);
-
-  m_OpenedFilePath = filePath;
 
   return err;
 }
