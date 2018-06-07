@@ -720,19 +720,8 @@ void SIMPLView_UI::addThemeMenu()
     m_ThemeActionGroup->setExclusive(true);
 
     m_MenuHelp->addMenu(m_MenuThemes);
-    QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
-      style->loadStyleSheetByName("Default");
-    });
-    defaultThemeAction->setCheckable(true);
-    m_ThemeActionGroup->addAction(defaultThemeAction);
-
     for (int i = 0; i < themeNames.size(); i++)
     {
-      if (themeNames[i] == "Default")
-      {
-        continue;
-      }
-
       QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
         style->loadStyleSheetByName(themeNames[i]);
       });
@@ -817,7 +806,17 @@ void SIMPLView_UI::connectSignalsSlots()
 // -----------------------------------------------------------------------------
 int SIMPLView_UI::openPipeline(const QString& filePath)
 {
-  int err = m_Ui->pipelineListWidget->getPipelineView()->openPipeline(filePath);
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  int err = pipelineView->openPipeline(filePath);
+  if (err >= 0)
+  {
+    PipelineModel* model = pipelineView->getPipelineModel();
+    if (model->rowCount() > 0)
+    {
+      QModelIndex index = model->index(0, PipelineItem::PipelineItemData::Contents);
+      pipelineView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    }
+  }
 
   QFileInfo fi(filePath);
   setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());

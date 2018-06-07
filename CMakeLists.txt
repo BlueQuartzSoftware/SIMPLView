@@ -24,7 +24,7 @@ set(SIMPLViewProjGenerateVersion 0)
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
-project(SIMPLViewProj VERSION 1.0.0.0)
+project(SIMPLViewProj VERSION 1.1.0.0)
 get_property(SIMPLViewProj_VERSION_MAJOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MAJOR)
 if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
   set(SIMPLViewProj_VERSION_MAJOR "1")
@@ -143,7 +143,7 @@ endif(BUILD_SHARED_LIBS)
 # Development: This is currently in development and probably has bugs.
 get_property(SIMPLViewProj_RELEASE_TYPE GLOBAL PROPERTY PACKAGE_RELEASE_TYPE)
 if("${SIMPLViewProj_RELEASE_TYPE}" STREQUAL "")
-  set(SIMPLViewProj_RELEASE_TYPE "Development")
+  set(SIMPLViewProj_RELEASE_TYPE "Beta")
   set_property(GLOBAL PROPERTY PACKAGE_RELEASE_TYPE "${SIMPLViewProj_RELEASE_TYPE}")
 endif()
 
