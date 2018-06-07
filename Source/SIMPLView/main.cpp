@@ -95,53 +95,10 @@ void InitFonts(const QStringList& fontList)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void InitStyleSheet(const QString& themeName)
+void InitStyleSheet(const QString& themeFilePath)
 {
   SVStyle* style = SVStyle::Instance();
-
-  // Load the default style sheet
-  style->insertTheme("Default", ":/SIMPL/StyleSheets/Default.json");
-
-  // Load all the other custom style sheets
-  QDirIterator it(BrandedStrings::DefaultStyleDirectory, QDirIterator::Subdirectories);
-  while (it.hasNext())
-  {
-    QString filePath = it.next();
-    QFileInfo fi(filePath);
-    QString ext = fi.completeSuffix();
-    if (ext == "json")
-    {
-      QFile jsonFile(filePath);
-      if(!jsonFile.open(QFile::ReadOnly))
-      {
-        continue;
-      }
-
-      QByteArray jsonContent = jsonFile.readAll();
-      QJsonParseError parseError;
-      QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonContent, &parseError);
-      if(parseError.error != QJsonParseError::NoError)
-      {
-        continue;
-      }
-      QJsonObject rootObj = jsonDoc.object();
-
-      QString themeName = rootObj["Theme_Name"].toString("");
-      if (themeName.isEmpty())
-      {
-        themeName = fi.baseName();
-      }
-      if (BrandedStrings::LoadedThemeNames.contains(themeName))
-      {
-        style->insertTheme(themeName, filePath);
-      }
-    }
-  }
-
-  if (themeName.isEmpty() == false)
-  {
-    style->loadStyleSheetByName(themeName);
-  }
+  style->loadStyleSheet(themeFilePath);
 }
 
 // -----------------------------------------------------------------------------
@@ -240,7 +197,11 @@ int main(int argc, char* argv[])
   InitFonts(BrandedStrings::ExtraFonts);
 
   // Initialize the Default Stylesheet
-  InitStyleSheet(BrandedStrings::DefaultThemeName);
+  QFileInfo fi2(BrandedStrings::DefaultThemeFilePath);
+  if (BrandedStrings::LoadedThemeNames.contains(fi2.baseName()))
+  {
+    InitStyleSheet(BrandedStrings::DefaultThemeFilePath);
+  }
 
 #ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();

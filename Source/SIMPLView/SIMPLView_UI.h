@@ -344,11 +344,6 @@ class SIMPLView_UI : public QMainWindow
     void createSIMPLViewMenuSystem();
 
     /**
-     * @brief addThemeMenu
-     */
-    void addThemeMenu();
-
-    /**
      * @brief savePipeline
      * @return
      */

@@ -639,6 +639,18 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
 
   // Create View Menu
   m_SIMPLViewMenu->addMenu(m_MenuView);
+
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  if (themeNames.size() > 0)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_MenuThemes = dream3dApp->createThemeMenu(m_ThemeActionGroup, m_SIMPLViewMenu);
+
+    m_MenuView->addMenu(m_MenuThemes);
+
+    m_MenuView->addSeparator();
+  }
+
   m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->bookmarksDockWidget->toggleViewAction());
@@ -662,8 +674,6 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
 
-  addThemeMenu();
-
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
 
@@ -677,38 +687,6 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuHelp->addAction(m_ActionPluginInformation);
 
   setMenuBar(m_SIMPLViewMenu);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addThemeMenu()
-{
-  SVStyle* style = SVStyle::Instance();
-
-  QStringList themeNames = style->getThemeNames();
-  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
-  {
-    m_ThemeActionGroup = new QActionGroup(this);
-    m_ThemeActionGroup->setExclusive(true);
-    
-    m_MenuFile->addSeparator();
-    m_MenuFile->addMenu(m_MenuThemes);
-    for (int i = 0; i < themeNames.size(); i++)
-    {
-      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
-        style->loadStyleSheetByName(themeNames[i]);
-      });
-      action->setCheckable(true);
-      if(themeNames[i] == style->getCurrentThemeName())
-      {
-        action->setChecked(true);
-      }
-      m_ThemeActionGroup->addAction(action);
-    }
-
-    m_MenuFile->addSeparator();
-  }
 }
 
 // -----------------------------------------------------------------------------
