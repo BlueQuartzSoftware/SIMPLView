@@ -691,8 +691,9 @@ void SIMPLView_UI::addThemeMenu()
   {
     m_ThemeActionGroup = new QActionGroup(this);
     m_ThemeActionGroup->setExclusive(true);
-
-    m_MenuHelp->addMenu(m_MenuThemes);
+    
+    m_MenuFile->addSeparator();
+    m_MenuFile->addMenu(m_MenuThemes);
     for (int i = 0; i < themeNames.size(); i++)
     {
       QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
@@ -706,7 +707,7 @@ void SIMPLView_UI::addThemeMenu()
       m_ThemeActionGroup->addAction(action);
     }
 
-    m_MenuHelp->addSeparator();
+    m_MenuFile->addSeparator();
   }
 }
 
