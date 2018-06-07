@@ -1,7 +1,7 @@
-#ifndef _brandedstrings_h_
-#define _brandedstrings_h_
+#pragma once
 
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 
 namespace BrandedStrings
 {
@@ -12,8 +12,8 @@ namespace BrandedStrings
 
   static const QString ApplicationName("SIMPLView");
 
+  static const QString DefaultStyleDirectory(":/SIMPL/StyleSheets");
+  static const QString DefaultThemeName("Default");
+
+  static const QStringList ExtraFonts;
 }
-
-
-#endif /* _BrandedStrings_H_ */
-

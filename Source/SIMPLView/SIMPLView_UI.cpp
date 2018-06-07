@@ -70,7 +70,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-#include "SVWidgetsLib/QtSupport/QtSStyles.h"
+
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
@@ -78,6 +78,7 @@
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 #include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
 #ifdef SIMPL_USE_QtWebEngine
@@ -588,6 +589,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuPipeline = new QMenu("Pipeline", this);
   m_MenuHelp = new QMenu("Help", this);
   m_MenuAdvanced = new QMenu("Advanced", this);
+  m_MenuThemes = new QMenu("Themes", this);
   QMenu* menuRecentFiles = dream3dApp->getRecentFilesMenu();
 
   m_ActionNew = new QAction("New...", this);
@@ -686,17 +688,64 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_SIMPLViewMenu->addMenu(m_MenuHelp);
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
+
+  addThemeMenu();
+
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
+
   m_MenuHelp->addMenu(m_MenuAdvanced);
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
+
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);
   m_MenuHelp->addAction(m_ActionPluginInformation);
 
   setMenuBar(m_SIMPLViewMenu);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::addThemeMenu()
+{
+  SVStyle* style = SVStyle::Instance();
+
+  QStringList themeNames = style->getThemeNames();
+  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_ThemeActionGroup->setExclusive(true);
+
+    m_MenuHelp->addMenu(m_MenuThemes);
+    QAction* defaultThemeAction = m_MenuThemes->addAction("Default", [=] {
+      style->loadStyleSheetByName("Default");
+    });
+    defaultThemeAction->setCheckable(true);
+    m_ThemeActionGroup->addAction(defaultThemeAction);
+
+    for (int i = 0; i < themeNames.size(); i++)
+    {
+      if (themeNames[i] == "Default")
+      {
+        continue;
+      }
+
+      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
+        style->loadStyleSheetByName(themeNames[i]);
+      });
+      action->setCheckable(true);
+      if(themeNames[i] == style->getCurrentThemeName())
+      {
+        action->setChecked(true);
+      }
+      m_ThemeActionGroup->addAction(action);
+    }
+
+    m_MenuHelp->addSeparator();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -747,7 +796,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
   connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
-
   connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_OpenedFilePath = filePath; });
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
@@ -1062,6 +1110,13 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
     return;
   }
 
+  if(m_FilterInputWidget)
+  {
+    emit m_FilterInputWidget->endPathFiltering();
+    emit m_FilterInputWidget->endViewPaths();
+    emit m_FilterInputWidget->endDataStructureFiltering();
+  }
+
   // Clear the filter input widget
   clearFilterInputWidget();
 
@@ -1074,13 +1129,14 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
           Qt::ConnectionType::UniqueConnection);
   connect(widget, SIGNAL(endViewPaths()), getDataStructureWidget(), SLOT(clearViewRequirements()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(filterPath(DataArrayPath)), widget, SIGNAL(filterPath(DataArrayPath)), Qt::ConnectionType::UniqueConnection);
-  connect(getDataStructureWidget(), SIGNAL(endPathFiltering()), widget, SIGNAL(endPathFiltering()), Qt::ConnectionType::UniqueConnection);
+  connect(getDataStructureWidget(), SIGNAL(endDataStructureFiltering()), widget, SIGNAL(endDataStructureFiltering()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(applyPathToFilteringParameter(DataArrayPath)), widget, SIGNAL(applyPathToFilteringParameter(DataArrayPath)));
 
   emit widget->endPathFiltering();
 
   // Set the widget into the frame
   m_Ui->fiwFrameVLayout->addWidget(widget);
+  m_FilterInputWidget = widget;
   widget->show();
 
   // Force the FilterParameterTab front and center
@@ -1102,6 +1158,8 @@ void SIMPLView_UI::clearFilterInputWidget()
       w->setParent(nullptr);
     }
   }
+
+  m_FilterInputWidget = nullptr;
 }
 
 // -----------------------------------------------------------------------------

@@ -81,6 +81,20 @@ public:
 
   bool initialize(int argc, char* argv[]);
 
+  /**
+   * @brief readSettings
+   */
+  void readSettings();
+
+  /**
+   * @brief writeSettings
+   */
+  void writeSettings();
+
+  void createDefaultMenuBar();
+
+  void createMacDockMenu();
+
   QList<SIMPLView_UI*> getSIMPLViewInstances();
 
   void registerSIMPLViewWindow(SIMPLView_UI* window);
@@ -118,6 +132,13 @@ public slots:
 
   SIMPLView_UI* newInstanceFromFile(const QString& filePath);
 
+  /**
+  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
+  * should be connected to the Signal QtSRecentFileList->fileListChanged
+  * @param file The newly added file.
+  */
+  void updateRecentFileList(const QString& file);
+
 protected:
   // This is a set of all SIMPLView instances currently available
   QList<SIMPLView_UI*> m_SIMPLViewInstances;
@@ -154,13 +175,6 @@ protected slots:
    */
   void dream3dWindowChanged(SIMPLView_UI* instance);
 
-  /**
-  * @brief Updates the QMenu 'Recent Files' with the latest list of files. This
-  * should be connected to the Signal QtSRecentFileList->fileListChanged
-  * @param file The newly added file.
-  */
-  void updateRecentFileList(const QString& file);
-
 private:
   QMenuBar* m_DefaultMenuBar = nullptr;
   QMenu* m_DockMenu = nullptr;
@@ -177,6 +191,7 @@ private:
   QMenu* m_MenuHelp = nullptr;
   QMenu* m_MenuAdvanced = nullptr;
   QMenu* m_MenuRecentFiles = nullptr;
+  QMenu* m_MenuThemes = nullptr;
 
   QAction* m_ActionNew = nullptr;
   QAction* m_ActionOpen = nullptr;
@@ -211,14 +226,14 @@ private:
   QAction* m_ActionShowConsole = nullptr;
   QAction* m_ActionShowDataBrowser = nullptr;
 
+  QActionGroup* m_ThemeActionGroup = nullptr;
+
   int m_minSplashTime;
 
-  void createDefaultMenuBar();
-
-  void createMacDockMenu();
-
-  void readSettings();
-  void writeSettings();
+  /**
+   * @brief addThemeMenu
+   */
+  void addThemeMenu();
 
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
   void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
