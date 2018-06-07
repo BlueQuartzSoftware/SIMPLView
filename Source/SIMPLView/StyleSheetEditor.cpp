@@ -52,6 +52,7 @@
 
 #include "SVStyle.h"
 #include "StyleSheetEditor.h"
+#include "BrandedStrings.h"
 
 #include "SVWidgetsLib/QtSupport/QtSStyles.h"
 
@@ -75,18 +76,19 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
   m_Ui->styleCombo->addItems(QStyleFactory::keys());
   m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
 
-  SVStyle* style = SVStyle::Instance();
-  QStringList themeNames = style->getThemeNames();
-  m_Ui->styleSheetCombo->addItem("Default");
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  //m_Ui->styleSheetCombo->addItem("Default");
   for (int i = 0; i < themeNames.size(); i++)
   {
     m_Ui->styleSheetCombo->addItem(themeNames[i]);
   }
-  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText("Light"));
+
+  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText(fi.baseName()));
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
 
-  QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/");
+  QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/BlueQuartz.json");
   m_Ui->qssFilePath->setText(styleSheetPath);
 }
 
@@ -105,18 +107,31 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
 {
   if(state == Qt::Checked)
   {
-    m_FileWatcher.addPath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".css");
-    m_FileWatcher.addPath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json");
+    m_FileWatcher.addPath(m_Ui->qssFilePath->text());
+    m_FileWatcher.addPath(m_Ui->qssFilePath->text());
   }
   else
   {
-    m_FileWatcher.removePath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".css");
-    m_FileWatcher.removePath(m_Ui->qssFilePath->text() + "/" + m_Ui->styleSheetCombo->currentText() + ".json");
+    m_FileWatcher.removePath(m_Ui->qssFilePath->text());
+    m_FileWatcher.removePath(m_Ui->qssFilePath->text());
   }
 }
 
+// -----------------------------------------------------------------------------
+// This is called when the file on the file system changes
+// -----------------------------------------------------------------------------
 void StyleSheetEditor::qssFileChanged(const QString& filePath)
 {
   SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheetByName(m_Ui->styleSheetCombo->currentText());
+  style->loadStyleSheet(filePath);
+}
+
+// -----------------------------------------------------------------------------
+// This is called when the user hits the "return" key on the keyboard while editing
+// QLineEdit
+// -----------------------------------------------------------------------------
+void StyleSheetEditor::on_qssFilePath_returnPressed()
+{
+  SVStyle* style = SVStyle::Instance();
+  style->loadStyleSheet(m_Ui->qssFilePath->text());
 }

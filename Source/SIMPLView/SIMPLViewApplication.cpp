@@ -905,8 +905,8 @@ void SIMPLViewApplication::writeSettings()
   prefs->beginGroup("Application Settings");
 
   SVStyle* styles = SVStyle::Instance();
-  QString themeName = styles->getCurrentThemeName();
-  prefs->setValue("Theme", themeName);
+  QString themeFilePath = styles->getCurrentThemeFilePath();
+  prefs->setValue("Theme File Path", themeFilePath);
 
   prefs->endGroup();
 
@@ -926,10 +926,11 @@ void SIMPLViewApplication::readSettings()
   prefs->beginGroup("Application Settings");
 
   SVStyle* styles = SVStyle::Instance();
-  QString themeName = prefs->value("Theme", QString()).toString();
-  if (themeName.isEmpty() == false)
+  QString themeFilePath = prefs->value("Theme File Path", QString()).toString();
+  QFileInfo fi(themeFilePath);
+  if (themeFilePath.isEmpty() == false && BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
   {
-    styles->loadStyleSheetByName(themeName);
+    styles->loadStyleSheet(themeFilePath);
   }
 
   prefs->endGroup();
@@ -984,7 +985,6 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuPipeline = new QMenu("Pipeline", m_DefaultMenuBar);
   m_MenuHelp = new QMenu("Help", m_DefaultMenuBar);
   m_MenuAdvanced = new QMenu("Advanced", m_DefaultMenuBar);
-  m_MenuThemes = new QMenu("Themes", m_DefaultMenuBar);
 
   m_ActionNew = new QAction("New...", m_DefaultMenuBar);
   m_ActionNew->setShortcut(QKeySequence::New);
@@ -1077,6 +1077,18 @@ void SIMPLViewApplication::createDefaultMenuBar()
 
   // Create View Menu
   m_DefaultMenuBar->addMenu(m_MenuView);
+
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_MenuThemes = createThemeMenu(m_ThemeActionGroup, m_DefaultMenuBar);
+
+    m_MenuView->addMenu(m_MenuThemes);
+
+    m_MenuView->addSeparator();
+  }
+
   m_MenuView->addAction(m_ActionShowFilterList);
   m_MenuView->addAction(m_ActionShowFilterLibrary);
   m_MenuView->addAction(m_ActionShowBookmarks);
@@ -1100,8 +1112,6 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
 
-  addThemeMenu();
-
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
 
@@ -1118,32 +1128,39 @@ void SIMPLViewApplication::createDefaultMenuBar()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewApplication::addThemeMenu()
+QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget* parent)
 {
   SVStyle* style = SVStyle::Instance();
 
-  QStringList themeNames = style->getThemeNames();
-  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  QMenu* menuThemes = new QMenu("Themes", parent);
+
+  QString themePath = ":/SIMPL/StyleSheets/Default.json";
+  QAction* action = menuThemes->addAction("Default", [=] {
+    style->loadStyleSheet(themePath);
+  });
+  action->setCheckable(true);
+  if(themePath == style->getCurrentThemeFilePath())
   {
-    m_ThemeActionGroup = new QActionGroup(this);
-    m_ThemeActionGroup->setExclusive(true);
-
-    m_MenuHelp->addMenu(m_MenuThemes);
-    for (int i = 0; i < themeNames.size(); i++)
-    {
-      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
-        style->loadStyleSheetByName(themeNames[i]);
-      });
-      action->setCheckable(true);
-      if(themeNames[i] == style->getCurrentThemeName())
-      {
-        action->setChecked(true);
-      }
-      m_ThemeActionGroup->addAction(action);
-    }
-
-    m_MenuHelp->addSeparator();
+    action->setChecked(true);
   }
+  actionGroup->addAction(action);
+
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  for (int i = 0; i < themeNames.size(); i++)
+  {
+    QString themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeNames[i] + ".json";
+    QAction* action = menuThemes->addAction(themeNames[i], [=] {
+      style->loadStyleSheet(themePath);
+    });
+    action->setCheckable(true);
+    if(themePath == style->getCurrentThemeFilePath())
+    {
+      action->setChecked(true);
+    }
+    actionGroup->addAction(action);
+  }
+
+  return menuThemes;
 }
 
 // -----------------------------------------------------------------------------

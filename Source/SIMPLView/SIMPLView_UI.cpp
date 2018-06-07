@@ -114,10 +114,8 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_Ui(new Ui::SIMPLView_UI)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
-, m_OpenedFilePath("")
+, m_LastOpenedFilePath(QDir::homePath())
 {
-  m_OpenedFilePath = QDir::homePath();
-
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
   m_FilterManager = FilterManager::Instance();
@@ -198,14 +196,14 @@ bool SIMPLView_UI::savePipeline()
   if(isWindowModified() == true)
   {
     QString filePath;
-    if(m_OpenedFilePath.isEmpty())
+    if(windowFilePath().isEmpty())
     {
       // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
       return savePipelineAs();
     }
     else
     {
-      filePath = m_OpenedFilePath;
+      filePath = windowFilePath();
     }
 
     // Fix the separators
@@ -241,7 +239,7 @@ void SIMPLView_UI::listenSavePipelineAsTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipelineAs()
 {
-  QString proposedFile = m_OpenedFilePath + QDir::separator() + "Untitled.json";
+  QString proposedFile = m_LastOpenedFilePath + QDir::separator() + "Untitled.json";
   QString filePath = QFileDialog::getSaveFileName(this, tr("Save Pipeline To File"), proposedFile, tr("Json File (*.json);;SIMPLView File (*.dream3d);;All Files (*.*)"));
   if(true == filePath.isEmpty())
   {
@@ -272,7 +270,7 @@ bool SIMPLView_UI::savePipelineAs()
     QtSRecentFileList* list = QtSRecentFileList::Instance();
     list->addFile(filePath);
 
-    m_OpenedFilePath = filePath;
+    setWindowFilePath(filePath);
   }
   else
   {
@@ -280,7 +278,7 @@ bool SIMPLView_UI::savePipelineAs()
   }
 
   // Cache the last directory
-  m_OpenedFilePath = filePath;
+  m_LastOpenedFilePath = filePath;
 
   QMessageBox bookmarkMsgBox(this);
   bookmarkMsgBox.setWindowTitle("Pipeline Saved");
@@ -666,6 +664,18 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
 
   // Create View Menu
   m_SIMPLViewMenu->addMenu(m_MenuView);
+
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  if (themeNames.size() > 0)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  {
+    m_ThemeActionGroup = new QActionGroup(this);
+    m_MenuThemes = dream3dApp->createThemeMenu(m_ThemeActionGroup, m_SIMPLViewMenu);
+
+    m_MenuView->addMenu(m_MenuThemes);
+
+    m_MenuView->addSeparator();
+  }
+
   m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->bookmarksDockWidget->toggleViewAction());
@@ -689,8 +699,6 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuHelp->addAction(m_ActionShowSIMPLViewHelp);
   m_MenuHelp->addSeparator();
 
-  addThemeMenu();
-
   m_MenuHelp->addAction(m_ActionCheckForUpdates);
   m_MenuHelp->addSeparator();
 
@@ -704,37 +712,6 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuHelp->addAction(m_ActionPluginInformation);
 
   setMenuBar(m_SIMPLViewMenu);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::addThemeMenu()
-{
-  SVStyle* style = SVStyle::Instance();
-
-  QStringList themeNames = style->getThemeNames();
-  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
-  {
-    m_ThemeActionGroup = new QActionGroup(this);
-    m_ThemeActionGroup->setExclusive(true);
-
-    m_MenuHelp->addMenu(m_MenuThemes);
-    for (int i = 0; i < themeNames.size(); i++)
-    {
-      QAction* action = m_MenuThemes->addAction(themeNames[i], [=] {
-        style->loadStyleSheetByName(themeNames[i]);
-      });
-      action->setCheckable(true);
-      if(themeNames[i] == style->getCurrentThemeName())
-      {
-        action->setChecked(true);
-      }
-      m_ThemeActionGroup->addAction(action);
-    }
-
-    m_MenuHelp->addSeparator();
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -785,7 +762,7 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
   connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
-  connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_OpenedFilePath = filePath; });
+  connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
@@ -820,9 +797,8 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
 
   QFileInfo fi(filePath);
   setWindowTitle(QString("[*]") + fi.baseName() + " - " + QApplication::applicationName());
+  setWindowFilePath(filePath);
   setWindowModified(false);
-
-  m_OpenedFilePath = filePath;
 
   return err;
 }

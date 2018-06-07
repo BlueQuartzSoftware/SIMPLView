@@ -335,7 +335,7 @@ class SIMPLView_UI : public QMainWindow
 
 //    StatusBarWidget*                        m_StatusBar = nullptr;
 
-    QString                                 m_OpenedFilePath;
+    QString                                 m_LastOpenedFilePath;
 
     HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
     HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
@@ -371,11 +371,6 @@ class SIMPLView_UI : public QMainWindow
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
-
-    /**
-     * @brief addThemeMenu
-     */
-    void addThemeMenu();
 
     /**
      * @brief savePipeline
