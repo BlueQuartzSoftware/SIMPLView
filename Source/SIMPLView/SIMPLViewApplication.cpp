@@ -118,6 +118,31 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 {
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
+
+  // Initialize the Default Stylesheet
+  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  if (BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
+  {
+    SVStyle* style = SVStyle::Instance();
+    style->loadStyleSheet(BrandedStrings::DefaultThemeFilePath);
+  }
+
+  readSettings();
+
+  // Create the default menu bar
+  createDefaultMenuBar();
+
+  // If on Mac, add custom actions to a dock menu
+#if defined(Q_OS_MAC)
+  createMacDockMenu();
+#endif
+
+  // Connection to update the recent files list on all windows when it changes
+  QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
+  QObject::connect(recentsList, &QtSRecentFileList::fileListChanged, this, &SIMPLViewApplication::updateRecentFileList);
+
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+  QtSRecentFileList::Instance()->readList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -934,8 +959,6 @@ void SIMPLViewApplication::readSettings()
   }
 
   prefs->endGroup();
-
-  QtSRecentFileList::Instance()->readList(prefs.data());
 }
 
 // -----------------------------------------------------------------------------

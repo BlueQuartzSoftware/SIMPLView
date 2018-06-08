@@ -95,15 +95,6 @@ void InitFonts(const QStringList& fontList)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void InitStyleSheet(const QString& themeFilePath)
-{
-  SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheet(themeFilePath);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void InitStyleSheetEditor()
 {
   SVStyle* style = SVStyle::Instance();
@@ -154,16 +145,16 @@ int main(int argc, char* argv[])
   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+  QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
+  QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
+  QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
+
   SIMPLViewApplication qtapp(argc, argv);
 
   if(!qtapp.initialize(argc, argv))
   {
     return 1;
   }
-
-  QCoreApplication::setOrganizationDomain(BrandedStrings::OrganizationDomain);
-  QCoreApplication::setOrganizationName(BrandedStrings::OrganizationName);
-  QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
 
 #if defined(Q_OS_MAC)
   dream3dApp->setQuitOnLastWindowClosed(false);
@@ -205,27 +196,6 @@ int main(int argc, char* argv[])
 #ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();
 #endif
-
-  // Initialize the Default Stylesheet
-  QFileInfo fi2(BrandedStrings::DefaultThemeFilePath);
-  if (BrandedStrings::LoadedThemeNames.contains(fi2.baseName()))
-  {
-    InitStyleSheet(BrandedStrings::DefaultThemeFilePath);
-  }
-
-  qtapp.readSettings();
-
-  // Create the default menu bar
-  qtapp.createDefaultMenuBar();
-
-  // If on Mac, add custom actions to a dock menu
-#if defined(Q_OS_MAC)
-  qtapp.createMacDockMenu();
-#endif
-
-  // Connection to update the recent files list on all windows when it changes
-  QtSRecentFileList* recentsList = QtSRecentFileList::Instance();
-  QObject::connect(recentsList, &QtSRecentFileList::fileListChanged, &qtapp, &SIMPLViewApplication::updateRecentFileList);
 
   // Open pipeline if SIMPLView was opened from a compatible file
   if(argc == 2)
