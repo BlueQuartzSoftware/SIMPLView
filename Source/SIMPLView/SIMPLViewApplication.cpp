@@ -119,6 +119,14 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
 
+  // Initialize the Default Stylesheet
+  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  if (BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
+  {
+    SVStyle* style = SVStyle::Instance();
+    style->loadStyleSheet(BrandedStrings::DefaultThemeFilePath);
+  }
+
   readSettings();
 
   // Create the default menu bar

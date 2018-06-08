@@ -95,15 +95,6 @@ void InitFonts(const QStringList& fontList)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void InitStyleSheet(const QString& themeFilePath)
-{
-  SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheet(themeFilePath);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void InitStyleSheetEditor()
 {
   SVStyle* style = SVStyle::Instance();
@@ -203,13 +194,6 @@ int main(int argc, char* argv[])
 #ifdef SIMPLView_USE_STYLESHEETEDITOR
   InitStyleSheetEditor();
 #endif
-
-  // Initialize the Default Stylesheet
-  QFileInfo fi2(BrandedStrings::DefaultThemeFilePath);
-  if (BrandedStrings::LoadedThemeNames.contains(fi2.baseName()))
-  {
-    InitStyleSheet(BrandedStrings::DefaultThemeFilePath);
-  }
 
   // Open pipeline if SIMPLView was opened from a compatible file
   if(argc == 2)
