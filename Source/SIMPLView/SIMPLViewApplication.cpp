@@ -120,12 +120,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
   checkForUpdatesAtStartup();
 
   // Initialize the Default Stylesheet
-  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
-  if (BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
-  {
-    SVStyle* style = SVStyle::Instance();
-    style->loadStyleSheet(BrandedStrings::DefaultThemeFilePath);
-  }
+  SVStyle* style = SVStyle::Instance();
+  style->loadStyleSheet(BrandedStrings::DefaultThemeFilePath);
 
   readSettings();
 
