@@ -12,8 +12,8 @@
 namespace @PluginName@Constants
 {
   const QString @PluginName@PluginFile("@PluginName@Plugin");
-  const QString @PluginName@PluginDisplayName("@PluginName@Plugin");
-  const QString @PluginName@BaseName("@PluginName@Plugin");
+  const QString @PluginName@PluginDisplayName("@PluginName@");
+  const QString @PluginName@BaseName("@PluginName@");
 
   namespace FilterGroups
   {
