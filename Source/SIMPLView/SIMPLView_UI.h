@@ -99,7 +99,7 @@ class SIMPLView_UI : public QMainWindow
       OnStatusAndError = 2
     };
 
-    SIMPLView_UI(QWidget* parent = 0);
+    SIMPLView_UI(QWidget* parent = nullptr);
     virtual ~SIMPLView_UI();
 
     /**

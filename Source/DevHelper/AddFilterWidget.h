@@ -44,7 +44,7 @@ class AddFilterWidget : public QDialog, public Ui::Dialog
     Q_OBJECT
 
   public:
-    AddFilterWidget(QWidget* parent = 0);
+    AddFilterWidget(QWidget* parent = nullptr);
     QString getFilterName();
     bool isPublic();
     bool getBtnClicked();

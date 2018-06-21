@@ -69,7 +69,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
       TEST_INDEX
     };
 
-    FilterMaker(QWidget* parent = 0);
+    FilterMaker(QWidget* parent = nullptr);
     ~FilterMaker();
 
     bool validityCheck();
