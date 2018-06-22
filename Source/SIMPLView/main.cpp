@@ -110,8 +110,6 @@ void InitStyleSheetEditor()
 // -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-  QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
-
 #ifdef Q_OS_X11
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)
