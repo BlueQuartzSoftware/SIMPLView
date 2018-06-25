@@ -192,35 +192,32 @@ void SIMPLView_UI::listenSavePipelineTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipeline()
 {
-  if(isWindowModified() == true)
+  QString filePath;
+  if(windowFilePath().isEmpty())
   {
-    QString filePath;
-    if(windowFilePath().isEmpty())
-    {
-      // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
-      return savePipelineAs();
-    }
-    else
-    {
-      filePath = windowFilePath();
-    }
-
-    // Fix the separators
-    filePath = QDir::toNativeSeparators(filePath);
-
-    // Write the pipeline
-    SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-    viewWidget->writePipeline(filePath);
-
-    // Set window title and save flag
-    QFileInfo prefFileInfo = QFileInfo(filePath);
-    setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
-    setWindowModified(false);
-
-    // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
+    // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
+    return savePipelineAs();
   }
+  else
+  {
+    filePath = windowFilePath();
+  }
+
+  // Fix the separators
+  filePath = QDir::toNativeSeparators(filePath);
+
+  // Write the pipeline
+  SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
+  viewWidget->writePipeline(filePath);
+
+  // Set window title and save flag
+  QFileInfo prefFileInfo = QFileInfo(filePath);
+  setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
+  setWindowModified(false);
+
+  // Add file to the recent files list
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
 
   return true;
 }
