@@ -293,6 +293,30 @@ bool SIMPLView_UI::savePipelineAs()
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
+{
+  SIMPLView_UI* instance = dream3dApp->getActiveInstance();
+  if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
+  {
+    instance->openPipeline(filePath);
+  }
+  else
+  {
+    instance = dream3dApp->newInstanceFromFile(filePath);
+  }
+
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
+
+  if(execute)
+  {
+    instance->executePipeline();
+  }
+}
+
+// -----------------------------------------------------------------------------
 //  Called when the main window is closed.
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::closeEvent(QCloseEvent* event)
@@ -698,7 +722,6 @@ void SIMPLView_UI::connectSignalsSlots()
   DocRequestManager* docRequester = DocRequestManager::Instance();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
-
   connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
 
   /* Filter Library Widget Connections */
@@ -708,76 +731,19 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, [=](const QString& filePath, bool execute) {
-    SIMPLView_UI* instance = dream3dApp->getActiveInstance();
-    if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
-    {
-      instance->openPipeline(filePath);
-    }
-    else
-    {
-      instance = dream3dApp->newInstanceFromFile(filePath);
-    }
-
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
-
-    if(execute)
-    {
-      instance->executePipeline();
-    }
-  });
-
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
   connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
   /* Pipeline List Widget Connections */
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection& selected, const QItemSelection& deselected) {
-    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-    qSort(selectedIndexes);
-
-    // Animate a selection border for selected indexes
-    for(const QModelIndex& index : selected.indexes())
-    {
-      new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
-    }
-
-    // Remove selection border from deselected indexes
-    for(const QModelIndex& index : deselected.indexes())
-    {
-      pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
-    }
-
-    if(selectedIndexes.size() == 1)
-    {
-      QModelIndex selectedIndex = selectedIndexes[0];
-
-      PipelineModel* model = getPipelineModel();
-      FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
-      setFilterInputWidget(fiw);
-
-      AbstractFilter::Pointer filter = model->filter(selectedIndex);
-      m_Ui->dataBrowserWidget->filterActivated(filter);
-    }
-    else
-    {
-      clearFilterInputWidget();
-      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
-    }
-  });
-
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
   connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
-
   connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
-
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
-
   connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
-
   connect(pipelineView, &SVPipelineView::clearIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::clearIssues);
-
   connect(pipelineView, &SVPipelineView::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
@@ -788,39 +754,15 @@ void SIMPLView_UI::connectSignalsSlots()
   });
 
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
-
   connect(pipelineView, &SVPipelineView::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
-
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
-  connect(pipelineView, &SVPipelineView::pipelineChanged, [=] {
-    markDocumentAsDirty();
-
-    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-    qSort(selectedIndexes);
-
-    if(selectedIndexes.size() == 1)
-    {
-      QModelIndex selectedIndex = selectedIndexes[0];
-      PipelineModel* model = getPipelineModel();
-
-      AbstractFilter::Pointer filter = model->filter(selectedIndex);
-      m_Ui->dataBrowserWidget->filterActivated(filter);
-    }
-    else
-    {
-      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
-    }
-  });
-
+  connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
   connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
 
   connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
-
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
-
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
-
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
 
   /* Pipeline Model Connections */
@@ -853,6 +795,31 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
   setWindowModified(false);
 
   return err;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::handlePipelineChanges()
+{
+  markDocumentAsDirty();
+
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  if(selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+    PipelineModel* model = getPipelineModel();
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1043,6 +1010,47 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 DataStructureWidget* SIMPLView_UI::getDataStructureWidget()
 {
   return m_Ui->dataBrowserWidget;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  PipelineModel* pipelineModel = pipelineView->getPipelineModel();
+
+  QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  // Animate a selection border for selected indexes
+  for(const QModelIndex& index : selected.indexes())
+  {
+    new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
+  }
+
+  // Remove selection border from deselected indexes
+  for(const QModelIndex& index : deselected.indexes())
+  {
+    pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
+  }
+
+  if(selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+
+    PipelineModel* model = getPipelineModel();
+    FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
+    setFilterInputWidget(fiw);
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    clearFilterInputWidget();
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
 }
 
 // -----------------------------------------------------------------------------

@@ -257,6 +257,18 @@ class SIMPLView_UI : public QMainWindow
      */
     void resizeEvent ( QResizeEvent* event );
 
+    /**
+    * @brief activateBookmark
+    * @param filePath
+    * @param execute
+    */
+    void activateBookmark(const QString& filePath, bool execute);
+
+    /**
+    * @brief handlePipelineChanges
+    */
+    void handlePipelineChanges();
+
   protected slots:
     /**
      * @brief pipelineDidFinish
@@ -285,6 +297,13 @@ class SIMPLView_UI : public QMainWindow
     * @param hasErrors
     */
     void issuesTableHasErrors(bool hasErrors, int errCount, int warnCount);
+
+    /**
+    * @brief Update the FilterInputWidget based on the updated selection
+    * @param selected
+    * @param deselected
+    */
+    void filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
     // Our Signals that we can emit custom for this class
   signals:
