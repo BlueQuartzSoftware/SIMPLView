@@ -739,7 +739,10 @@ void SIMPLView_UI::connectSignalsSlots()
 
   /* Pipeline View Connections */
   connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
-  connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
+  connect(pipelineView, &SVPipelineView::filterParametersChanged, [=] (AbstractFilter::Pointer filter) {
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+    markDocumentAsDirty();
+  });
   connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
   connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
@@ -760,7 +763,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
   connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
 
-  connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
