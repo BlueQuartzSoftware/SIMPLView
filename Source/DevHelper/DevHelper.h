@@ -50,7 +50,7 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
     Q_OBJECT
 
   public:
-    DevHelper(QWidget* parent = 0);
+    DevHelper(QWidget* parent = nullptr);
     ~DevHelper();
 
     bool validityCheck();

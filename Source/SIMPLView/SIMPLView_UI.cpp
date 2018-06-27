@@ -193,35 +193,32 @@ void SIMPLView_UI::listenSavePipelineTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipeline()
 {
-  if(isWindowModified() == true)
+  QString filePath;
+  if(windowFilePath().isEmpty())
   {
-    QString filePath;
-    if(windowFilePath().isEmpty())
-    {
-      // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
-      return savePipelineAs();
-    }
-    else
-    {
-      filePath = windowFilePath();
-    }
-
-    // Fix the separators
-    filePath = QDir::toNativeSeparators(filePath);
-
-    // Write the pipeline
-    SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-    viewWidget->writePipeline(filePath);
-
-    // Set window title and save flag
-    QFileInfo prefFileInfo = QFileInfo(filePath);
-    setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
-    setWindowModified(false);
-
-    // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
+    // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
+    return savePipelineAs();
   }
+  else
+  {
+    filePath = windowFilePath();
+  }
+
+  // Fix the separators
+  filePath = QDir::toNativeSeparators(filePath);
+
+  // Write the pipeline
+  SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
+  viewWidget->writePipeline(filePath);
+
+  // Set window title and save flag
+  QFileInfo prefFileInfo = QFileInfo(filePath);
+  setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
+  setWindowModified(false);
+
+  // Add file to the recent files list
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
 
   return true;
 }
@@ -743,7 +740,10 @@ void SIMPLView_UI::connectSignalsSlots()
 
   /* Pipeline View Connections */
   connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
-  connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
+  connect(pipelineView, &SVPipelineView::filterParametersChanged, [=] (AbstractFilter::Pointer filter) {
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+    markDocumentAsDirty();
+  });
   connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
   connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
@@ -763,7 +763,7 @@ void SIMPLView_UI::connectSignalsSlots()
 
   connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
   connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
-  connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
+
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));

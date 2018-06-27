@@ -48,7 +48,7 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     Q_OBJECT
 
   public:
-    StatusBarWidget(QWidget* parent = 0);
+    StatusBarWidget(QWidget* parent = nullptr);
     virtual ~StatusBarWidget();
 
 

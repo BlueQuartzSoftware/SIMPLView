@@ -54,7 +54,7 @@ class PluginMaker : public QWidget, public Ui::PluginMaker
     Q_OBJECT
 
   public:
-    PluginMaker(QWidget* parent = 0);
+    PluginMaker(QWidget* parent = nullptr);
 
     bool validityCheck();
 

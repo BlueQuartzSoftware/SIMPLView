@@ -46,7 +46,7 @@ class AddFilterParameter : public QWidget, public Ui::AddFilterParameter
     Q_OBJECT
 
   public:
-    AddFilterParameter(QWidget* parent = 0);
+    AddFilterParameter(QWidget* parent = nullptr);
     ~AddFilterParameter();
 
     QString getVariableName();

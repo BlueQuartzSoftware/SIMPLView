@@ -83,7 +83,8 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
     m_Ui->styleSheetCombo->addItem(themeNames[i]);
   }
 
-  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  QString defaultLoadedThemePath = BrandedStrings::DefaultStyleDirectory + "/" + BrandedStrings::DefaultLoadedTheme + ".json";
+  QFileInfo fi(defaultLoadedThemePath);
   m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText(fi.baseName()));
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
