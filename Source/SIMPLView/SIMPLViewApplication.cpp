@@ -121,7 +121,8 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 
   // Initialize the Default Stylesheet
   SVStyle* style = SVStyle::Instance();
-  style->loadStyleSheet(BrandedStrings::DefaultThemeFilePath);
+  QString defaultLoadedThemePath = BrandedStrings::DefaultStyleDirectory + "/" + BrandedStrings::DefaultLoadedTheme + ".json";
+  style->loadStyleSheet(defaultLoadedThemePath);
 
   readSettings();
 
