@@ -92,13 +92,6 @@ class SIMPLView_UI : public QMainWindow
     Q_OBJECT
 
   public:
-    enum class HideDockSetting : int
-    {
-      Ignore = 0,
-      OnError = 1,
-      OnStatusAndError = 2
-    };
-
     SIMPLView_UI(QWidget* parent = nullptr);
     virtual ~SIMPLView_UI();
 
@@ -225,25 +218,11 @@ class SIMPLView_UI : public QMainWindow
     void readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
 
     /**
-    * @brief SIMPLView_UI::setupDockWidget
-    * @param prefs
-    * @param value
-    */
-    void readHideDockSettings(QtSSettings* prefs, HideDockSetting& value);
-
-    /**
      * @brief writeDockWidgetSettings
      * @param prefs
      * @param dw
      */
     void writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
-
-    /**
-    * @brief writeHideDockSettings
-    * @param prefs
-    * @param value
-    */
-    void writeHideDockSettings(QtSSettings* prefs, HideDockSetting value);
 
     /**
      * @brief Checks the currently open file for changes that need to be saved
@@ -326,9 +305,6 @@ class SIMPLView_UI : public QMainWindow
 //    StatusBarWidget*                        m_StatusBar = nullptr;
 
     QString                                 m_LastOpenedFilePath;
-
-    HideDockSetting                         m_HideErrorTable = HideDockSetting::Ignore;
-    HideDockSetting                         m_HideStdOutput = HideDockSetting::Ignore;
 
     FilterInputWidget*                      m_FilterInputWidget = nullptr;
 

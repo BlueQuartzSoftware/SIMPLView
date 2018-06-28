@@ -137,11 +137,11 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 
   // Read various settings
   readSettings();
-  if(HideDockSetting::OnError == m_HideErrorTable)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == IssuesWidget::GetHideDockSetting())
   {
     m_Ui->issuesDockWidget->setHidden(true);
   }
-  if(HideDockSetting::OnError == m_HideStdOutput)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == StandardOutputWidget::GetHideDockSetting())
   {
     m_Ui->stdOutDockWidget->setHidden(true);
   }
@@ -358,16 +358,14 @@ void SIMPLView_UI::readSettings()
   readVersionSettings(prefs.data());
 
   // Read dock widget settings
-  prefs->beginGroup("DockWidgetSettings");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::GroupName);
 
-  prefs->beginGroup("Issues Dock Widget");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::IssuesDockGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
-  readHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
-  prefs->beginGroup("Standard Output Dock Widget");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::StandardOutputGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
-  readHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -432,16 +430,6 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readHideDockSettings(QtSSettings* prefs, HideDockSetting& value)
-{
-  int showError = static_cast<int>(HideDockSetting::Ignore);
-  int hideDockSetting = prefs->value("Show / Hide On Error", QVariant(showError)).toInt();
-  value = static_cast<HideDockSetting>(hideDockSetting);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
 {
 }
@@ -462,12 +450,12 @@ void SIMPLView_UI::writeSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   writeDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
-  writeHideDockSettings(prefs.data(), m_HideErrorTable);
+  //writeHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
   writeDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
-  writeHideDockSettings(prefs.data(), m_HideStdOutput);
+  //writeHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -500,15 +488,6 @@ void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
 void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 {
   prefs->setValue(dw->objectName(), dw->isHidden());
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::writeHideDockSettings(QtSSettings* prefs, HideDockSetting value)
-{
-  int valuei = static_cast<int>(value);
-  prefs->setValue("Show / Hide On Error", valuei);
 }
 
 // -----------------------------------------------------------------------------
@@ -912,13 +891,13 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     }
 
     // Allow status messages to open the standard output widget
-    if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
+    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
       m_Ui->stdOutDockWidget->setVisible(true);
     }
 
     // Allow status messages to open the issuesDockWidget as well
-    if(HideDockSetting::OnStatusAndError == m_HideErrorTable)
+    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
     {
       m_Ui->issuesDockWidget->setVisible(true);
     }
@@ -1129,12 +1108,17 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable || HideDockSetting::OnStatusAndError == m_HideErrorTable)
+
+  SIMPLView::DockWidgetSettings::HideDockSetting errorTableSetting = IssuesWidget::GetHideDockSetting();
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting 
+     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
     m_Ui->issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput || HideDockSetting::OnStatusAndError == m_HideStdOutput)
+  SIMPLView::DockWidgetSettings::HideDockSetting stdOutSetting = StandardOutputWidget::GetHideDockSetting();
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == stdOutSetting 
+     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
     m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }
