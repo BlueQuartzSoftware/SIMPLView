@@ -24,7 +24,7 @@ set(SIMPLViewProjGenerateVersion 0)
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
-project(SIMPLViewProj VERSION 1.1.0.0)
+project(SIMPLViewProj VERSION 1.2.0.0)
 get_property(SIMPLViewProj_VERSION_MAJOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MAJOR)
 if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
   set(SIMPLViewProj_VERSION_MAJOR "1")
@@ -32,7 +32,7 @@ if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
 endif()
 get_property(SIMPLViewProj_VERSION_MINOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MINOR)
 if("${SIMPLViewProj_VERSION_MINOR}" STREQUAL "")
-  set(SIMPLViewProj_VERSION_MINOR "0")
+  set(SIMPLViewProj_VERSION_MINOR "2")
 endif()
 get_property(SIMPLViewProj_VERSION_PATCH GLOBAL PROPERTY SIMPLViewProj_VERSION_PATCH)
 if("${SIMPLViewProj_VERSION_PATCH}" STREQUAL "")
