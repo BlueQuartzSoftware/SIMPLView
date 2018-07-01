@@ -95,7 +95,7 @@ include(${CMP_SOURCE_DIR}/cmpProject.cmake)
 include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 
 # If SIMPLView is being built from another higher level project then this is should be set to 0
-if(NOT SIMPLViewProjGenerateVersion)
+if(${SIMPLViewProjGenerateVersion} EQUAL 1)
   cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
                       GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
                       NAMESPACE "SIMPLViewProj"
