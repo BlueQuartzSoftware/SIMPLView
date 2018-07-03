@@ -59,6 +59,7 @@
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 #include "SIMPLib/Plugin/PluginProxy.h"
+#include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
@@ -930,6 +931,12 @@ void SIMPLViewApplication::writeSettings()
   QString themeFilePath = styles->getCurrentThemeFilePath();
   prefs->setValue("Theme File Path", themeFilePath);
 
+  #if defined Q_OS_MAC && defined SIMPL_CHOOSABLE_DATA_DIRECTORY
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = validator->getSIMPLDataDirectory();
+  prefs->setValue("Data Directory", dataDir);
+  #endif
+
   prefs->endGroup();
 
   BookmarksModel* model = BookmarksModel::Instance();
@@ -954,6 +961,12 @@ void SIMPLViewApplication::readSettings()
   {
     styles->loadStyleSheet(themeFilePath);
   }
+
+  #if defined Q_OS_MAC && defined SIMPL_CHOOSABLE_DATA_DIRECTORY
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = prefs->value("Data Directory", QString()).toString();
+  validator->setSIMPLDataDirectory(dataDir);
+  #endif
 
   prefs->endGroup();
 }
