@@ -63,6 +63,7 @@
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/PluginManager.h"
+#include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
@@ -70,6 +71,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
@@ -290,6 +292,33 @@ bool SIMPLView_UI::savePipelineAs()
   }
 
   return true;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::listenSetDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = QFileDialog::getExistingDirectory(nullptr, tr("Set %1 Data Directory").arg(QApplication::applicationName()), validator->getSIMPLDataDirectory());
+  if (dataDir.isEmpty())
+  {
+    return;
+  }
+
+  validator->setSIMPLDataDirectory(dataDir);
+
+  setStatusBarMessage(tr("%1 Data Directory set successfully to '%2'.").arg(QApplication::applicationName()).arg(dataDir));
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::listenShowDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDirectory = validator->getSIMPLDataDirectory();
+  QtSFileUtils::ShowPathInGui(nullptr, dataDirectory);
 }
 
 // -----------------------------------------------------------------------------
@@ -681,6 +710,18 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
+
+  #if defined SIMPL_RELATIVE_PATH_CHECK
+  m_ActionSetDataFolder = new QAction(tr("Set %1 Data Directory Location").arg(QApplication::applicationName()), this);
+  m_ActionShowDataFolder = new QAction(tr("Show %1 Data Directory Location").arg(QApplication::applicationName()), this);
+
+  connect(m_ActionSetDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenSetDataFolderTriggered);
+  connect(m_ActionShowDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenShowDataFolderTriggered);
+
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addAction(m_ActionSetDataFolder);
+  m_MenuHelp->addAction(m_ActionShowDataFolder);
+  #endif
 
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);

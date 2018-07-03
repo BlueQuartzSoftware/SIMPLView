@@ -250,6 +250,16 @@ class SIMPLView_UI : public QMainWindow
 
   protected slots:
     /**
+     * @brief listenSetDataFolderTriggered
+     */
+    void listenSetDataFolderTriggered();
+
+    /**
+     * @brief listenShowDataFolderTriggered
+     */
+    void listenShowDataFolderTriggered();
+
+    /**
      * @brief pipelineDidFinish
      */
     void pipelineDidFinish();
@@ -330,6 +340,8 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionCheckForUpdates = nullptr;
     QAction*                                m_ActionPluginInformation = nullptr;
     QAction*                                m_ActionClearCache = nullptr;
+    QAction*                                m_ActionSetDataFolder = nullptr;
+    QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
 
