@@ -931,7 +931,7 @@ void SIMPLViewApplication::writeSettings()
   QString themeFilePath = styles->getCurrentThemeFilePath();
   prefs->setValue("Theme File Path", themeFilePath);
 
-  #if defined Q_OS_MAC && defined SIMPL_CHOOSABLE_DATA_DIRECTORY
+  #if defined SIMPL_RELATIVE_PATH_CHECK
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = validator->getSIMPLDataDirectory();
   prefs->setValue("Data Directory", dataDir);
@@ -962,10 +962,21 @@ void SIMPLViewApplication::readSettings()
     styles->loadStyleSheet(themeFilePath);
   }
 
-  #if defined Q_OS_MAC && defined SIMPL_CHOOSABLE_DATA_DIRECTORY
+  #if defined SIMPL_RELATIVE_PATH_CHECK
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = prefs->value("Data Directory", QString()).toString();
-  validator->setSIMPLDataDirectory(dataDir);
+
+  if (dataDir.isEmpty())
+  {
+    QString dataDirectory = validator->getSIMPLDataDirectory();
+    QString msg = tr("The %1 data directory location has been set to '%2'.\n\nIf you would like to change the data directory location, "
+                     "please choose 'Set %3 Data Location' from the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
+    QMessageBox::information(nullptr, tr("%1 Data Directory").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
+  }
+  else
+  {
+    validator->setSIMPLDataDirectory(dataDir);
+  }
   #endif
 
   prefs->endGroup();

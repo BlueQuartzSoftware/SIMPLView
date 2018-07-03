@@ -711,7 +711,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
 
-  #if defined Q_OS_MAC && defined SIMPL_CHOOSABLE_DATA_DIRECTORY
+  #if defined SIMPL_RELATIVE_PATH_CHECK
   m_ActionSetDataFolder = new QAction(tr("Set %1 Data Folder").arg(QApplication::applicationName()), this);
   m_ActionShowDataFolder = new QAction(tr("Show %1 Data Folder").arg(QApplication::applicationName()), this);
 
