@@ -970,8 +970,8 @@ void SIMPLViewApplication::readSettings()
   {
     QString dataDirectory = validator->getSIMPLDataDirectory();
     QString msg = tr("The %1 data directory location has been set to '%2'.\n\nIf you would like to change the data directory location, "
-                     "please choose 'Set %3 Data Location' from the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
-    QMessageBox::information(nullptr, tr("%1 Data Directory").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
+                     "please choose 'Set %3 Data Directory Location' from the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
+    QMessageBox::information(nullptr, tr("%1 Data Directory Location").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
   }
   else
   {

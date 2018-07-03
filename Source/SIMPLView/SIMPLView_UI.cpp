@@ -712,8 +712,8 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addAction(actionClearBookmarks);
 
   #if defined SIMPL_RELATIVE_PATH_CHECK
-  m_ActionSetDataFolder = new QAction(tr("Set %1 Data Folder").arg(QApplication::applicationName()), this);
-  m_ActionShowDataFolder = new QAction(tr("Show %1 Data Folder").arg(QApplication::applicationName()), this);
+  m_ActionSetDataFolder = new QAction(tr("Set %1 Data Directory Location").arg(QApplication::applicationName()), this);
+  m_ActionShowDataFolder = new QAction(tr("Show %1 Data Directory Location").arg(QApplication::applicationName()), this);
 
   connect(m_ActionSetDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenSetDataFolderTriggered);
   connect(m_ActionShowDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenShowDataFolderTriggered);
