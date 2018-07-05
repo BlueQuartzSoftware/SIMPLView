@@ -130,6 +130,11 @@ class SIMPLView_UI : public QMainWindow
      */
     void executePipeline();
 
+    /**
+     * @brief showDockWidget
+     */
+    void showDockWidget(QDockWidget* dockWidget);
+
   public slots:
     /**
     * @brief setFilterBeingDragged
