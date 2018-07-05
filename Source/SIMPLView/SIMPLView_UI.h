@@ -326,6 +326,7 @@ class SIMPLView_UI : public QMainWindow
     QMenu*                                  m_MenuHelp = nullptr;
     QMenu*                                  m_MenuAdvanced = nullptr;
     QMenu*                                  m_MenuThemes = nullptr;
+    QMenu*                                  m_MenuDataDirectory = nullptr;
 
     QAction*                                m_ActionNew = nullptr;
     QAction*                                m_ActionOpen = nullptr;
@@ -340,6 +341,8 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionCheckForUpdates = nullptr;
     QAction*                                m_ActionPluginInformation = nullptr;
     QAction*                                m_ActionClearCache = nullptr;
+    QAction*                                m_ActionSetDataFolder = nullptr;
+    QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
 

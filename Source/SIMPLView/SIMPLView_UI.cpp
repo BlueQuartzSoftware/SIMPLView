@@ -63,6 +63,7 @@
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/PluginManager.h"
+#include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
@@ -70,7 +71,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
@@ -682,6 +683,21 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
+
+  #if defined SIMPL_RELATIVE_PATH_CHECK
+
+  m_MenuDataDirectory = new QMenu("Data Directory", this);
+  m_ActionSetDataFolder = new QAction("Set Location...", this);
+  m_ActionShowDataFolder = new QAction("Show Location", this);
+
+  connect(m_ActionSetDataFolder, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenSetDataFolderTriggered);
+  connect(m_ActionShowDataFolder, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenShowDataFolderTriggered);
+
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addMenu(m_MenuDataDirectory);
+  m_MenuDataDirectory->addAction(m_ActionSetDataFolder);
+  m_MenuDataDirectory->addAction(m_ActionShowDataFolder);
+  #endif
 
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);

@@ -77,7 +77,6 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
   m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
 
   QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  //m_Ui->styleSheetCombo->addItem("Default");
   for (int i = 0; i < themeNames.size(); i++)
   {
     m_Ui->styleSheetCombo->addItem(themeNames[i]);
@@ -109,11 +108,9 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
   if(state == Qt::Checked)
   {
     m_FileWatcher.addPath(m_Ui->qssFilePath->text());
-    m_FileWatcher.addPath(m_Ui->qssFilePath->text());
   }
   else
   {
-    m_FileWatcher.removePath(m_Ui->qssFilePath->text());
     m_FileWatcher.removePath(m_Ui->qssFilePath->text());
   }
 }
