@@ -132,6 +132,8 @@ public slots:
   void listenDisplayPluginInfoDialogTriggered();
   void listenDisplayAboutSIMPLViewDialogTriggered();
   void listenExitApplicationTriggered();
+  void listenSetDataFolderTriggered();
+  void listenShowDataFolderTriggered();
 
   SIMPLView_UI* getNewSIMPLViewInstance();
 
@@ -197,6 +199,7 @@ private:
   QMenu* m_MenuAdvanced = nullptr;
   QMenu* m_MenuRecentFiles = nullptr;
   QMenu* m_MenuThemes = nullptr;
+  QMenu* m_MenuDataDirectory = nullptr;
 
   QAction* m_ActionNew = nullptr;
   QAction* m_ActionOpen = nullptr;
@@ -230,6 +233,8 @@ private:
   QAction* m_ActionShowIssues = nullptr;
   QAction* m_ActionShowConsole = nullptr;
   QAction* m_ActionShowDataBrowser = nullptr;
+  QAction* m_ActionSetDataFolder = nullptr;
+  QAction* m_ActionShowDataFolder = nullptr;
 
   QActionGroup* m_ThemeActionGroup = nullptr;
 

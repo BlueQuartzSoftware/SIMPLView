@@ -655,6 +655,36 @@ void SIMPLViewApplication::listenCheckForUpdatesTriggered()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenSetDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = QFileDialog::getExistingDirectory(nullptr, tr("Set %1 Data Directory").arg(QApplication::applicationName()), validator->getSIMPLDataDirectory());
+  if (dataDir.isEmpty())
+  {
+    return;
+  }
+
+  validator->setSIMPLDataDirectory(dataDir);
+
+  if (m_ActiveWindow)
+  {
+    m_ActiveWindow->setStatusBarMessage(tr("%1 Data Directory set successfully to '%2'.").arg(QApplication::applicationName()).arg(dataDir));
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::listenShowDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDirectory = validator->getSIMPLDataDirectory();
+  QtSFileUtils::ShowPathInGui(nullptr, dataDirectory);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLViewApplication::checkForUpdatesAtStartup()
 {
   UpdateCheck::SIMPLVersionData_t data = dream3dApp->FillVersionData();
@@ -844,12 +874,6 @@ void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
   {
     m_ActiveWindow = instance;
   }
-  else if (m_SIMPLViewInstances.size() == 1)
-  {
-    /* If the inactive signal got fired and there are no more windows,
-     * this means that the last window has been closed. */
-    m_ActiveWindow = nullptr;
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -882,6 +906,11 @@ void SIMPLViewApplication::registerSIMPLViewWindow(SIMPLView_UI* window)
 void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
+
+  if (m_SIMPLViewInstances.isEmpty())
+  {
+    m_ActiveWindow = nullptr;
+  }
 
 #if defined(Q_OS_MAC)
 #else
@@ -1163,6 +1192,20 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_MenuAdvanced->addAction(m_ActionClearCache);
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(m_ActionClearBookmarks);
+
+#if defined SIMPL_RELATIVE_PATH_CHECK
+  m_MenuDataDirectory = new QMenu("Data Directory");
+  m_ActionSetDataFolder = new QAction("Set Location...");
+  m_ActionShowDataFolder = new QAction("Show Location");
+
+  connect(m_ActionSetDataFolder, &QAction::triggered, this, &SIMPLViewApplication::listenSetDataFolderTriggered);
+  connect(m_ActionShowDataFolder, &QAction::triggered, this, &SIMPLViewApplication::listenShowDataFolderTriggered);
+
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addMenu(m_MenuDataDirectory);
+  m_MenuDataDirectory->addAction(m_ActionSetDataFolder);
+  m_MenuDataDirectory->addAction(m_ActionShowDataFolder);
+#endif
 
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);

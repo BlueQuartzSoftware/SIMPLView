@@ -297,33 +297,6 @@ bool SIMPLView_UI::savePipelineAs()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::listenSetDataFolderTriggered()
-{
-  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
-  QString dataDir = QFileDialog::getExistingDirectory(nullptr, tr("Set %1 Data Directory").arg(QApplication::applicationName()), validator->getSIMPLDataDirectory());
-  if (dataDir.isEmpty())
-  {
-    return;
-  }
-
-  validator->setSIMPLDataDirectory(dataDir);
-
-  setStatusBarMessage(tr("%1 Data Directory set successfully to '%2'.").arg(QApplication::applicationName()).arg(dataDir));
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::listenShowDataFolderTriggered()
-{
-  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
-  QString dataDirectory = validator->getSIMPLDataDirectory();
-  QtSFileUtils::ShowPathInGui(nullptr, dataDirectory);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
 {
   SIMPLView_UI* instance = dream3dApp->getActiveInstance();
@@ -712,15 +685,18 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addAction(actionClearBookmarks);
 
   #if defined SIMPL_RELATIVE_PATH_CHECK
-  m_ActionSetDataFolder = new QAction(tr("Set %1 Data Directory Location").arg(QApplication::applicationName()), this);
-  m_ActionShowDataFolder = new QAction(tr("Show %1 Data Directory Location").arg(QApplication::applicationName()), this);
 
-  connect(m_ActionSetDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenSetDataFolderTriggered);
-  connect(m_ActionShowDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenShowDataFolderTriggered);
+  m_MenuDataDirectory = new QMenu("Data Directory", this);
+  m_ActionSetDataFolder = new QAction("Set Location...", this);
+  m_ActionShowDataFolder = new QAction("Show Location", this);
+
+  connect(m_ActionSetDataFolder, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenSetDataFolderTriggered);
+  connect(m_ActionShowDataFolder, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenShowDataFolderTriggered);
 
   m_MenuHelp->addSeparator();
-  m_MenuHelp->addAction(m_ActionSetDataFolder);
-  m_MenuHelp->addAction(m_ActionShowDataFolder);
+  m_MenuHelp->addMenu(m_MenuDataDirectory);
+  m_MenuDataDirectory->addAction(m_ActionSetDataFolder);
+  m_MenuDataDirectory->addAction(m_ActionShowDataFolder);
   #endif
 
   m_MenuHelp->addSeparator();
