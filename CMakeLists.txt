@@ -24,7 +24,7 @@ set(SIMPLViewProjGenerateVersion 0)
 
 #------------------------------------------------------------------------------
 # Create the Top level Project
-project(SIMPLViewProj VERSION 1.1.0.0)
+project(SIMPLViewProj VERSION 1.2.0.0)
 get_property(SIMPLViewProj_VERSION_MAJOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MAJOR)
 if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
   set(SIMPLViewProj_VERSION_MAJOR "1")
@@ -32,7 +32,7 @@ if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
 endif()
 get_property(SIMPLViewProj_VERSION_MINOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MINOR)
 if("${SIMPLViewProj_VERSION_MINOR}" STREQUAL "")
-  set(SIMPLViewProj_VERSION_MINOR "0")
+  set(SIMPLViewProj_VERSION_MINOR "2")
 endif()
 get_property(SIMPLViewProj_VERSION_PATCH GLOBAL PROPERTY SIMPLViewProj_VERSION_PATCH)
 if("${SIMPLViewProj_VERSION_PATCH}" STREQUAL "")
@@ -95,7 +95,7 @@ include(${CMP_SOURCE_DIR}/cmpProject.cmake)
 include(${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
 
 # If SIMPLView is being built from another higher level project then this is should be set to 0
-if(NOT SIMPLViewProjGenerateVersion)
+if(${SIMPLViewProjGenerateVersion} EQUAL 1)
   cmpRevisionString( GENERATED_HEADER_FILE_PATH "SIMPLViewFileNotUsed.h"
                       GENERATED_SOURCE_FILE_PATH "SIMPLViewFileNotUsed.cpp"
                       NAMESPACE "SIMPLViewProj"
@@ -131,7 +131,7 @@ endif(BUILD_SHARED_LIBS)
 # Development: This is currently in development and probably has bugs.
 get_property(SIMPLViewProj_RELEASE_TYPE GLOBAL PROPERTY PACKAGE_RELEASE_TYPE)
 if("${SIMPLViewProj_RELEASE_TYPE}" STREQUAL "")
-  set(SIMPLViewProj_RELEASE_TYPE "Beta")
+  set(SIMPLViewProj_RELEASE_TYPE "Development")
   set_property(GLOBAL PROPERTY PACKAGE_RELEASE_TYPE "${SIMPLViewProj_RELEASE_TYPE}")
 endif()
 

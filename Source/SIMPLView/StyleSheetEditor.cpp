@@ -77,13 +77,13 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
   m_Ui->styleCombo->setCurrentIndex(m_Ui->styleCombo->findText(defaultStyle, Qt::MatchContains));
 
   QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  //m_Ui->styleSheetCombo->addItem("Default");
   for (int i = 0; i < themeNames.size(); i++)
   {
     m_Ui->styleSheetCombo->addItem(themeNames[i]);
   }
 
-  QFileInfo fi(BrandedStrings::DefaultThemeFilePath);
+  QString defaultLoadedThemePath = BrandedStrings::DefaultStyleDirectory + "/" + BrandedStrings::DefaultLoadedTheme + ".json";
+  QFileInfo fi(defaultLoadedThemePath);
   m_Ui->styleSheetCombo->setCurrentIndex(m_Ui->styleSheetCombo->findText(fi.baseName()));
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
@@ -108,11 +108,9 @@ void StyleSheetEditor::on_reloadButton_stateChanged(int state)
   if(state == Qt::Checked)
   {
     m_FileWatcher.addPath(m_Ui->qssFilePath->text());
-    m_FileWatcher.addPath(m_Ui->qssFilePath->text());
   }
   else
   {
-    m_FileWatcher.removePath(m_Ui->qssFilePath->text());
     m_FileWatcher.removePath(m_Ui->qssFilePath->text());
   }
 }

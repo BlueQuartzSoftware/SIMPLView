@@ -63,6 +63,7 @@
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/PluginManager.h"
+#include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
@@ -70,6 +71,7 @@
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
@@ -137,11 +139,11 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 
   // Read various settings
   readSettings();
-  if(HideDockSetting::OnError == m_HideErrorTable)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == IssuesWidget::GetHideDockSetting())
   {
     m_Ui->issuesDockWidget->setHidden(true);
   }
-  if(HideDockSetting::OnError == m_HideStdOutput)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == StandardOutputWidget::GetHideDockSetting())
   {
     m_Ui->stdOutDockWidget->setHidden(true);
   }
@@ -192,35 +194,32 @@ void SIMPLView_UI::listenSavePipelineTriggered()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::savePipeline()
 {
-  if(isWindowModified() == true)
+  QString filePath;
+  if(windowFilePath().isEmpty())
   {
-    QString filePath;
-    if(windowFilePath().isEmpty())
-    {
-      // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
-      return savePipelineAs();
-    }
-    else
-    {
-      filePath = windowFilePath();
-    }
-
-    // Fix the separators
-    filePath = QDir::toNativeSeparators(filePath);
-
-    // Write the pipeline
-    SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-    viewWidget->writePipeline(filePath);
-
-    // Set window title and save flag
-    QFileInfo prefFileInfo = QFileInfo(filePath);
-    setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
-    setWindowModified(false);
-
-    // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
+    // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
+    return savePipelineAs();
   }
+  else
+  {
+    filePath = windowFilePath();
+  }
+
+  // Fix the separators
+  filePath = QDir::toNativeSeparators(filePath);
+
+  // Write the pipeline
+  SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
+  viewWidget->writePipeline(filePath);
+
+  // Set window title and save flag
+  QFileInfo prefFileInfo = QFileInfo(filePath);
+  setWindowTitle("[*]" + prefFileInfo.baseName() + " - " + BrandedStrings::ApplicationName);
+  setWindowModified(false);
+
+  // Add file to the recent files list
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
 
   return true;
 }
@@ -296,6 +295,57 @@ bool SIMPLView_UI::savePipelineAs()
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::listenSetDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = QFileDialog::getExistingDirectory(nullptr, tr("Set %1 Data Directory").arg(QApplication::applicationName()), validator->getSIMPLDataDirectory());
+  if (dataDir.isEmpty())
+  {
+    return;
+  }
+
+  validator->setSIMPLDataDirectory(dataDir);
+
+  setStatusBarMessage(tr("%1 Data Directory set successfully to '%2'.").arg(QApplication::applicationName()).arg(dataDir));
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::listenShowDataFolderTriggered()
+{
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDirectory = validator->getSIMPLDataDirectory();
+  QtSFileUtils::ShowPathInGui(nullptr, dataDirectory);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
+{
+  SIMPLView_UI* instance = dream3dApp->getActiveInstance();
+  if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
+  {
+    instance->openPipeline(filePath);
+  }
+  else
+  {
+    instance = dream3dApp->newInstanceFromFile(filePath);
+  }
+
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
+
+  if(execute)
+  {
+    instance->executePipeline();
+  }
+}
+
+// -----------------------------------------------------------------------------
 //  Called when the main window is closed.
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::closeEvent(QCloseEvent* event)
@@ -337,16 +387,14 @@ void SIMPLView_UI::readSettings()
   readVersionSettings(prefs.data());
 
   // Read dock widget settings
-  prefs->beginGroup("DockWidgetSettings");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::GroupName);
 
-  prefs->beginGroup("Issues Dock Widget");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::IssuesDockGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
-  readHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
-  prefs->beginGroup("Standard Output Dock Widget");
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::StandardOutputGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
-  readHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -411,16 +459,6 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readHideDockSettings(QtSSettings* prefs, HideDockSetting& value)
-{
-  int showError = static_cast<int>(HideDockSetting::Ignore);
-  int hideDockSetting = prefs->value("Show / Hide On Error", QVariant(showError)).toInt();
-  value = static_cast<HideDockSetting>(hideDockSetting);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
 {
 }
@@ -441,12 +479,12 @@ void SIMPLView_UI::writeSettings()
 
   prefs->beginGroup("Issues Dock Widget");
   writeDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
-  writeHideDockSettings(prefs.data(), m_HideErrorTable);
+  //writeHideDockSettings(prefs.data(), m_HideErrorTable);
   prefs->endGroup();
 
   prefs->beginGroup("Standard Output Dock Widget");
   writeDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
-  writeHideDockSettings(prefs.data(), m_HideStdOutput);
+  //writeHideDockSettings(prefs.data(), m_HideStdOutput);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -479,15 +517,6 @@ void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
 void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 {
   prefs->setValue(dw->objectName(), dw->isHidden());
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::writeHideDockSettings(QtSSettings* prefs, HideDockSetting value)
-{
-  int valuei = static_cast<int>(value);
-  prefs->setValue("Show / Hide On Error", valuei);
 }
 
 // -----------------------------------------------------------------------------
@@ -682,6 +711,18 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
 
+  #if defined SIMPL_RELATIVE_PATH_CHECK
+  m_ActionSetDataFolder = new QAction(tr("Set %1 Data Directory Location").arg(QApplication::applicationName()), this);
+  m_ActionShowDataFolder = new QAction(tr("Show %1 Data Directory Location").arg(QApplication::applicationName()), this);
+
+  connect(m_ActionSetDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenSetDataFolderTriggered);
+  connect(m_ActionShowDataFolder, &QAction::triggered, this, &SIMPLView_UI::listenShowDataFolderTriggered);
+
+  m_MenuHelp->addSeparator();
+  m_MenuHelp->addAction(m_ActionSetDataFolder);
+  m_MenuHelp->addAction(m_ActionShowDataFolder);
+  #endif
+
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);
   m_MenuHelp->addAction(m_ActionPluginInformation);
@@ -701,7 +742,6 @@ void SIMPLView_UI::connectSignalsSlots()
   DocRequestManager* docRequester = DocRequestManager::Instance();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
-
   connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
 
   /* Filter Library Widget Connections */
@@ -711,76 +751,22 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, [=](const QString& filePath, bool execute) {
-    SIMPLView_UI* instance = dream3dApp->getActiveInstance();
-    if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
-    {
-      instance->openPipeline(filePath);
-    }
-    else
-    {
-      instance = dream3dApp->newInstanceFromFile(filePath);
-    }
-
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
-
-    if(execute)
-    {
-      instance->executePipeline();
-    }
-  });
-
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
   connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
   /* Pipeline List Widget Connections */
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
   /* Pipeline View Connections */
-  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, [=](const QItemSelection& selected, const QItemSelection& deselected) {
-    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-    qSort(selectedIndexes);
-
-    // Animate a selection border for selected indexes
-    for(const QModelIndex& index : selected.indexes())
-    {
-      new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
-    }
-
-    // Remove selection border from deselected indexes
-    for(const QModelIndex& index : deselected.indexes())
-    {
-      pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
-    }
-
-    if(selectedIndexes.size() == 1)
-    {
-      QModelIndex selectedIndex = selectedIndexes[0];
-
-      PipelineModel* model = getPipelineModel();
-      FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
-      setFilterInputWidget(fiw);
-
-      AbstractFilter::Pointer filter = model->filter(selectedIndex);
-      m_Ui->dataBrowserWidget->filterActivated(filter);
-    }
-    else
-    {
-      clearFilterInputWidget();
-      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
-    }
+  connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
+  connect(pipelineView, &SVPipelineView::filterParametersChanged, [=] (AbstractFilter::Pointer filter) {
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+    markDocumentAsDirty();
   });
-
-  connect(pipelineView, &SVPipelineView::filterParametersChanged, m_Ui->dataBrowserWidget, &DataStructureWidget::filterActivated);
-
   connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
-
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
-
   connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
-
   connect(pipelineView, &SVPipelineView::clearIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::clearIssues);
-
   connect(pipelineView, &SVPipelineView::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
@@ -791,39 +777,14 @@ void SIMPLView_UI::connectSignalsSlots()
   });
 
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
-
   connect(pipelineView, &SVPipelineView::pipelineFinished, this, &SIMPLView_UI::pipelineDidFinish);
-
   connect(pipelineView, &SVPipelineView::pipelineFilePathUpdated, this, &SIMPLView_UI::setWindowFilePath);
 
-  connect(pipelineView, &SVPipelineView::pipelineChanged, [=] {
-    markDocumentAsDirty();
-
-    QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-    qSort(selectedIndexes);
-
-    if(selectedIndexes.size() == 1)
-    {
-      QModelIndex selectedIndex = selectedIndexes[0];
-      PipelineModel* model = getPipelineModel();
-
-      AbstractFilter::Pointer filter = model->filter(selectedIndex);
-      m_Ui->dataBrowserWidget->filterActivated(filter);
-    }
-    else
-    {
-      m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
-    }
-  });
-
+  connect(pipelineView, &SVPipelineView::pipelineChanged, this, &SIMPLView_UI::handlePipelineChanges);
   connect(pipelineView, &SVPipelineView::filePathOpened, [=](const QString& filePath) { m_LastOpenedFilePath = filePath; });
 
-  connect(pipelineView, SIGNAL(filterInputWidgetEdited()), this, SLOT(markDocumentAsDirty()));
-
   connect(pipelineView, SIGNAL(filterEnabledStateChanged()), this, SLOT(markDocumentAsDirty()));
-
   connect(pipelineView, SIGNAL(statusMessage(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
-
   connect(pipelineView, SIGNAL(stdOutMessage(const QString&)), this, SLOT(addStdOutputMessage(const QString&)));
 
   /* Pipeline Model Connections */
@@ -856,6 +817,31 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
   setWindowModified(false);
 
   return err;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::handlePipelineChanges()
+{
+  markDocumentAsDirty();
+
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  if(selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+    PipelineModel* model = getPipelineModel();
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -946,13 +932,13 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     }
 
     // Allow status messages to open the standard output widget
-    if(HideDockSetting::OnStatusAndError == m_HideStdOutput)
+    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
       m_Ui->stdOutDockWidget->setVisible(true);
     }
 
     // Allow status messages to open the issuesDockWidget as well
-    if(HideDockSetting::OnStatusAndError == m_HideErrorTable)
+    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
     {
       m_Ui->issuesDockWidget->setVisible(true);
     }
@@ -1051,6 +1037,47 @@ DataStructureWidget* SIMPLView_UI::getDataStructureWidget()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLView_UI::filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  PipelineModel* pipelineModel = pipelineView->getPipelineModel();
+
+  QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
+  qSort(selectedIndexes);
+
+  // Animate a selection border for selected indexes
+  for(const QModelIndex& index : selected.indexes())
+  {
+    new PipelineItemBorderSizeAnimation(pipelineModel, QPersistentModelIndex(index));
+  }
+
+  // Remove selection border from deselected indexes
+  for(const QModelIndex& index : deselected.indexes())
+  {
+    pipelineModel->setData(index, -1, PipelineModel::Roles::BorderSizeRole);
+  }
+
+  if(selectedIndexes.size() == 1)
+  {
+    QModelIndex selectedIndex = selectedIndexes[0];
+
+    PipelineModel* model = getPipelineModel();
+    FilterInputWidget* fiw = model->filterInputWidget(selectedIndex);
+    setFilterInputWidget(fiw);
+
+    AbstractFilter::Pointer filter = model->filter(selectedIndex);
+    m_Ui->dataBrowserWidget->filterActivated(filter);
+  }
+  else
+  {
+    clearFilterInputWidget();
+    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
@@ -1122,12 +1149,17 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
 {
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
-  if(HideDockSetting::OnError == m_HideErrorTable || HideDockSetting::OnStatusAndError == m_HideErrorTable)
+
+  SIMPLView::DockWidgetSettings::HideDockSetting errorTableSetting = IssuesWidget::GetHideDockSetting();
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting 
+     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
     m_Ui->issuesDockWidget->setVisible(hasErrors);
   }
 
-  if(HideDockSetting::OnError == m_HideStdOutput || HideDockSetting::OnStatusAndError == m_HideStdOutput)
+  SIMPLView::DockWidgetSettings::HideDockSetting stdOutSetting = StandardOutputWidget::GetHideDockSetting();
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == stdOutSetting 
+     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
     m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }

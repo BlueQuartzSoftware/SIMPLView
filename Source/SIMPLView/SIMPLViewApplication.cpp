@@ -59,6 +59,7 @@
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 #include "SIMPLib/Plugin/PluginProxy.h"
+#include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 #include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
@@ -118,6 +119,11 @@ SIMPLViewApplication::SIMPLViewApplication(int& argc, char** argv)
 {
   // Automatically check for updates at startup if the user has indicated that preference before
   checkForUpdatesAtStartup();
+
+  // Initialize the Default Stylesheet
+  SVStyle* style = SVStyle::Instance();
+  QString defaultLoadedThemePath = BrandedStrings::DefaultStyleDirectory + "/" + BrandedStrings::DefaultLoadedTheme + ".json";
+  style->loadStyleSheet(defaultLoadedThemePath);
 
   readSettings();
 
@@ -925,6 +931,12 @@ void SIMPLViewApplication::writeSettings()
   QString themeFilePath = styles->getCurrentThemeFilePath();
   prefs->setValue("Theme File Path", themeFilePath);
 
+  #if defined SIMPL_RELATIVE_PATH_CHECK
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = validator->getSIMPLDataDirectory();
+  prefs->setValue("Data Directory", dataDir);
+  #endif
+
   prefs->endGroup();
 
   BookmarksModel* model = BookmarksModel::Instance();
@@ -949,6 +961,23 @@ void SIMPLViewApplication::readSettings()
   {
     styles->loadStyleSheet(themeFilePath);
   }
+
+  #if defined SIMPL_RELATIVE_PATH_CHECK
+  SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
+  QString dataDir = prefs->value("Data Directory", QString()).toString();
+
+  if (dataDir.isEmpty())
+  {
+    QString dataDirectory = validator->getSIMPLDataDirectory();
+    QString msg = tr("The %1 data directory location has been set to '%2'.\n\nIf you would like to change the data directory location, "
+                     "please choose 'Set %3 Data Directory Location' from the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
+    QMessageBox::information(nullptr, tr("%1 Data Directory Location").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
+  }
+  else
+  {
+    validator->setSIMPLDataDirectory(dataDir);
+  }
+  #endif
 
   prefs->endGroup();
 }

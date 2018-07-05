@@ -48,7 +48,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
     Q_OBJECT
 
   public:
-    AboutSIMPLView(QWidget* parent = 0);
+    AboutSIMPLView(QWidget* parent = nullptr);
     virtual ~AboutSIMPLView();
 
 

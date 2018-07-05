@@ -127,11 +127,10 @@ class @ClassName@ : public AbstractFilter
     /* Rule of 5: All special member functions should be defined if any are defined.
     * https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c21-if-you-define-or-delete-any-default-operation-define-or-delete-them-all
     */
-    @ClassName@(const @ClassName@&) = delete;             // Copy Constructor
-    @ClassName@& operator=(const @ClassName@&) = delete;  // Copy Assignment
-    @ClassName@(@ClassName@&&) = delete;                  // Move Constructor
-    @ClassName@& operator=(@ClassName@&&) = delete;       // Move Assignment
-
+    @ClassName@(const @ClassName@&) = delete;             // Copy Constructor Not Implemented
+    @ClassName@& operator=(const @ClassName@&) = delete;  // Copy Assignment Not Implemented
+    @ClassName@(@ClassName@&&) = delete;                  // Move Constructor Not Implemented
+    @ClassName@& operator=(@ClassName@&&) = delete;       // Move Assignment Not Implemented
 
 };
 
