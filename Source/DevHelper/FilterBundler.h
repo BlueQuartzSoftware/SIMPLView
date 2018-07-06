@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _filterbundler_h_
-#define _filterbundler_h_
+#pragma once
 
 #include <QtWidgets/QTreeWidgetItem>
 #include "PMFileGenerator.h"
@@ -89,4 +88,3 @@ class FilterBundler
 
 };
 
-#endif

@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _multiattributematrixselectionwidgetcodegenerator_h_
-#define _multiattributematrixselectionwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class MultiAttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const MultiAttributeMatrixSelectionWidgetCodeGenerator&) = delete;                                   // Move assignment Not Implemented
 };
 
-#endif /* MultiAttributeMatrixSelectionWidgetCodeGenerator_H_ */

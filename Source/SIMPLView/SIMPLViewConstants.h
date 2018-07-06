@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _simplviewconstants_h_
-#define _simplviewconstants_h_
+#pragma once
 
 #include <QtCore/QString>
 
@@ -52,4 +51,3 @@ namespace SIMPLView
   }
 }
 
-#endif /* _SIMPLView_CONSTANTS_H_ */

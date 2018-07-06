@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _simplviewapplication_h_
-#define _simplviewapplication_h_
+#pragma once
 
 #include <QtCore/QSet>
 #include <QtCore/QSharedPointer>
@@ -244,4 +243,3 @@ private:
   void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
 };
 
-#endif /* _SIMPLViewApplication_H */

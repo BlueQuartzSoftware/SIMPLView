@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _axisanglewidgetcodegenerator_h_
-#define _axisanglewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const AxisAngleWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
-#endif /* AxisAngleWidgetCodeGenerator_H_ */

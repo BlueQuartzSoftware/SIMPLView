@@ -35,8 +35,7 @@
 
 
 
-#ifndef _simplview_ui_h_
-#define _simplview_ui_h_
+#pragma once
 
 
 //-- Qt Includes
@@ -368,5 +367,4 @@ class SIMPLView_UI : public QMainWindow
     void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
 };
 
-#endif /* _SIMPLView_UI_H_ */
 

@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _filtermaker_h_
-#define _filtermaker_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QSettings>
@@ -128,4 +127,3 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     void operator=(const FilterMaker&); // Move assignment Not Implemented
 };
 
-#endif

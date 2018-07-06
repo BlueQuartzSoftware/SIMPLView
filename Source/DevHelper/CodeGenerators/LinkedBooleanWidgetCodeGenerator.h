@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _linkedbooleanwidgetcodegenerator_h_
-#define _linkedbooleanwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class LinkedBooleanWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const LinkedBooleanWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
 };
 
-#endif /* LinkedBooleanWidgetCodeGenerator_H_ */

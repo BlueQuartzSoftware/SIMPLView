@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _pluginmaker_h_
-#define _pluginmaker_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -98,4 +97,3 @@ class PluginMaker : public QWidget, public Ui::PluginMaker
     QTreeWidgetItem* F_namefilters;
 };
 
-#endif

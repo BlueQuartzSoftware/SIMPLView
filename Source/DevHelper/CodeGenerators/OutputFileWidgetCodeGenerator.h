@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _outputfilewidgetcodegenerator_h_
-#define _outputfilewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class OutputFileWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const OutputFileWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
 };
 
-#endif /* OutputFileWidgetCodeGenerator_H_ */

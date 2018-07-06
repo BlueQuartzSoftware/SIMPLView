@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _dynamicchoicewidgetcodegenerator_h_
-#define _dynamicchoicewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class DynamicChoiceWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const DynamicChoiceWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
 };
 
-#endif /* DynamicChoiceWidgetCodeGenerator_H_ */

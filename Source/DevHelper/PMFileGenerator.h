@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _pmfilegenerator_h_
-#define _pmfilegenerator_h_
+#pragma once
 
 #include "PMDirGenerator.h"
 
@@ -97,5 +96,4 @@ class PMFileGenerator : public PMDirGenerator
     QString getFileContents(QString replaceStr);
 };
 
-#endif /* PMFILEGENERATOR_H_ */
 

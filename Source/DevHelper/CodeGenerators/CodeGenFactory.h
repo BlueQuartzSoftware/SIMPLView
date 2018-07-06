@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _codegenfactory_h_
-#define _codegenfactory_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -61,4 +60,3 @@ class CodeGenFactory
     void operator=(const CodeGenFactory&) = delete; // Move assignment Not Implemented
 };
 
-#endif /* _CodeGenFactory_H_ */

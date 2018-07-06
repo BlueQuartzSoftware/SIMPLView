@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _comparisonselectionwidgetcodegenerator_h_
-#define _comparisonselectionwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class ComparisonSelectionWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const ComparisonSelectionWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
 };
 
-#endif /* ComparisonSelectionWidgetCodeGenerator_H_ */

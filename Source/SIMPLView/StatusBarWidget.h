@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _statusBarWidget_h_
-#define _statusBarWidget_h_
+#pragma once
 
 #include <QtWidgets/QFrame>
 
@@ -124,4 +123,3 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
     void operator=(const StatusBarWidget&) = delete;  // Operator '=' Not Implemented
 };
 
-#endif /* _statusBarWidget_H_ */

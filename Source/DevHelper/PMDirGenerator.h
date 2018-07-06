@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _pmdirgenerator_h_
-#define _pmdirgenerator_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -111,5 +110,4 @@ class PMDirGenerator : public QObject
 
 };
 
-#endif /* PMDIRTWI_H_ */
 

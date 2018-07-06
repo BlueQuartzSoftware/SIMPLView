@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _pmgeneratortreeitem_h_
-#define _pmgeneratortreeitem_h_
+#pragma once
 
 #include <QtWidgets/QTreeWidgetItem>
 #include "PMDirGenerator.h"
@@ -71,4 +70,3 @@ class PMGeneratorTreeItem : public QTreeWidgetItem
     void operator=(const PMGeneratorTreeItem& rhs);       // Move assignment Not Implemented
 };
 
-#endif

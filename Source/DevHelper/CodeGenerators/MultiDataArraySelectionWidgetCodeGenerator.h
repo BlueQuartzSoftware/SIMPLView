@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _multidataarrayselectionwidgetcodegenerator_h_
-#define _multidataarrayselectionwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class MultiDataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const MultiDataArraySelectionWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
 };
 
-#endif /* MultiDataArraySelectionWidgetCodeGenerator_H_ */
