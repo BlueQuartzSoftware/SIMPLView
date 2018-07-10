@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _CodeGenFactory_H_
-#define _CodeGenFactory_H_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -64,4 +63,3 @@ class CodeGenFactory
     CodeGenFactory(const CodeGenFactory&); // Copy Constructor Not Implemented
     void operator=(const CodeGenFactory&); // Move assignment Not Implemented
 };
-#endif /* FilterFACTORY_H_ */

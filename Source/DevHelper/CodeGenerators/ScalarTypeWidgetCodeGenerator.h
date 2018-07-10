@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _scalartypewidgetcodegenerator_h_
-#define _scalartypewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class ScalarTypeWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const ScalarTypeWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
 };
 
-#endif /* ScalarTypeWidgetCodeGenerator_H_ */

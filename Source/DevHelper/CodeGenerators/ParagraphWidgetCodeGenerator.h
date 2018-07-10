@@ -31,8 +31,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _paragraphwidgetcodegenerator_h_
-#define _paragraphwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 #include "SIMPLib/SIMPLib.h"
@@ -68,4 +67,3 @@ private:
   void operator=(const ParagraphWidgetCodeGenerator&);                        // Move assignment Not Implemented
 };
 
-#endif /* _paragraphwidgetcodegenerator_h_ */

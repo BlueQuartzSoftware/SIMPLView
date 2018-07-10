@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _dataarraycreationwidgetcodegenerator_h_
-#define _dataarraycreationwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class DataArrayCreationWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const DataArrayCreationWidgetCodeGenerator&) = delete;                       // Move assignment Not Implemented
 };
 
-#endif /* DataArrayCreationWidgetCodeGenerator_H_ */

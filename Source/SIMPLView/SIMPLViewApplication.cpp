@@ -995,11 +995,12 @@ void SIMPLViewApplication::readSettings()
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = prefs->value("Data Directory", QString()).toString();
 
+
   if (dataDir.isEmpty())
   {
     QString dataDirectory = validator->getSIMPLDataDirectory();
     QString msg = tr("The %1 data directory location has been set to '%2'.\n\nIf you would like to change the data directory location, "
-                     "please choose 'Set %3 Data Directory Location' from the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
+                     "please choose 'Set Location...' from the Data Directory menu in the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
     QMessageBox::information(nullptr, tr("%1 Data Directory Location").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
   }
   else

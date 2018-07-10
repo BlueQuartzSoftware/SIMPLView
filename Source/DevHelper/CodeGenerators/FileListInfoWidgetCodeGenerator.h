@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _filelistinfowidgetcodegenerator_h_
-#define _filelistinfowidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const FileListInfoWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
 };
 
-#endif /* FileListInfoWidgetCodeGenerator_H_ */

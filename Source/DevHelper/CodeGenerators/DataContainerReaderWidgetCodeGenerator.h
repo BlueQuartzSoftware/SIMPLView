@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _datacontainerreaderwidgetcodegenerator_h_
-#define _datacontainerreaderwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class DataContainerReaderWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const DataContainerReaderWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
 };
 
-#endif /* DataContainerReaderWidgetCodeGenerator_H_ */

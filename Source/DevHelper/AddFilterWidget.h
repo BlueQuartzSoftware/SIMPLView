@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _addfilterwidget_h_
-#define _addfilterwidget_h_
+#pragma once
 
 #include "ui_AddFilterWidget.h"
 
@@ -59,4 +58,3 @@ class AddFilterWidget : public QDialog, public Ui::Dialog
     QString cleanName(QString name);
 };
 
-#endif

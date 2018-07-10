@@ -48,8 +48,7 @@
 **
 ****************************************************************************/
 
-#ifndef STYLESHEETEDITOR_H
-#define STYLESHEETEDITOR_H
+#pragma once
 
 #include <QtCore/QFileSystemWatcher>
 #include <QtCore/QSharedPointer>
@@ -86,4 +85,3 @@ private:
   QFileSystemWatcher m_FileWatcher;
 };
 
-#endif

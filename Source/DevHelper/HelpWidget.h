@@ -34,8 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
-#ifndef _helpwidget_h_
-#define _helpwidget_h_
+#pragma once
 
 #include <QtCore/QObject>
 
@@ -50,4 +49,3 @@ class HelpWidget : public QWidget, public Ui::helpWidget
     HelpWidget(QWidget* parent = nullptr);
 };
 
-#endif

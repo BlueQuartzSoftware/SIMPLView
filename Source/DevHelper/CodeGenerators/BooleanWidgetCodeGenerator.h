@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _booleanwidgetcodegenerator_h_
-#define _booleanwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class BooleanWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const BooleanWidgetCodeGenerator&) = delete;             // Move assignment Not Implemented
 };
 
-#endif /* BooleanWidgetCodeGenerator_H_ */

@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _addfilterparameter_h_
-#define _addfilterparameter_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtWidgets/QWidget>
@@ -85,4 +84,3 @@ class AddFilterParameter : public QWidget, public Ui::AddFilterParameter
     void operator=(const AddFilterParameter&);        // Move assignment Not Implemented
 };
 
-#endif

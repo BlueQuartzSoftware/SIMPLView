@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _dynamictablewidgetcodegenerator_h_
-#define _dynamictablewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class DynamicTableWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const DynamicTableWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
 };
 
-#endif /* DynamicTableWidgetCodeGenerator_H_ */

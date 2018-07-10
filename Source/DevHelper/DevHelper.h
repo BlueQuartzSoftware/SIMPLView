@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _devhelper_h_
-#define _devhelper_h_
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtWidgets/QWidget>
@@ -77,4 +76,3 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
     void operator=(const DevHelper&); // Move assignment Not Implemented
 };
 
-#endif

@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _floatwidgetcodegenerator_h_
-#define _floatwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class FloatWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const FloatWidgetCodeGenerator&) = delete;           // Move assignment Not Implemented
 };
 
-#endif /* FloatWidgetCodeGenerator_H_ */

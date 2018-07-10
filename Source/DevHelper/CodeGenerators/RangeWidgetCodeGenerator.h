@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _rangewidgetcodegenerator_h_
-#define _rangewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const RangeWidgetCodeGenerator&) = delete;           // Move assignment Not Implemented
 };
 
-#endif /* RangeWidgetCodeGenerator_H_ */

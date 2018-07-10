@@ -316,6 +316,9 @@ void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
   {
     instance->executePipeline();
   }
+
+  instance->raise();
+  QApplication::setActiveWindow(instance);
 }
 
 // -----------------------------------------------------------------------------
@@ -730,6 +733,8 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
   connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
+
   /* Pipeline List Widget Connections */
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
 
@@ -771,6 +776,19 @@ void SIMPLView_UI::connectSignalsSlots()
     showVisualizationTab();
     m_Ui->visualizationWidget->getController()->reloadPipelineOutput(pipeline, dca);
   });
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showDockWidget(QDockWidget* dockWidget)
+{
+  if (tabifiedDockWidgets(dockWidget).isEmpty() && dockWidget->toggleViewAction()->isChecked() == false)
+  {
+    dockWidget->toggleViewAction()->trigger();
+  }
+
+  dockWidget->raise();
 }
 
 // -----------------------------------------------------------------------------

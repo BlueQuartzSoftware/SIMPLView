@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _intwidgetcodegenerator_h_
-#define _intwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class IntWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const IntWidgetCodeGenerator&) = delete;         // Move assignment Not Implemented
 };
 
-#endif /* IntWidgetCodeGenerator_H_ */
