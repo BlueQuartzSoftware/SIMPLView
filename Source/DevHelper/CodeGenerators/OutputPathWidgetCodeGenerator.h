@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _outputpathwidgetcodegenerator_h_
-#define _outputpathwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class OutputPathWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const OutputPathWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
 };
 
-#endif /* OutputPathWidgetCodeGenerator_H_ */

@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _separatorwidgetcodegenerator_h_
-#define _separatorwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const SeparatorWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
-#endif /* SeparatorWidgetCodeGenerator_H_ */

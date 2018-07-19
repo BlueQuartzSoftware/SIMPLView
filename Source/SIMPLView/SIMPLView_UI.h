@@ -35,8 +35,7 @@
 
 
 
-#ifndef _simplview_ui_h_
-#define _simplview_ui_h_
+#pragma once
 
 
 //-- Qt Includes
@@ -129,6 +128,11 @@ class SIMPLView_UI : public QMainWindow
      * @brief executePipeline
      */
     void executePipeline();
+
+    /**
+     * @brief showDockWidget
+     */
+    void showDockWidget(QDockWidget* dockWidget);
 
   public slots:
     /**
@@ -250,16 +254,6 @@ class SIMPLView_UI : public QMainWindow
 
   protected slots:
     /**
-     * @brief listenSetDataFolderTriggered
-     */
-    void listenSetDataFolderTriggered();
-
-    /**
-     * @brief listenShowDataFolderTriggered
-     */
-    void listenShowDataFolderTriggered();
-
-    /**
      * @brief pipelineDidFinish
      */
     void pipelineDidFinish();
@@ -326,6 +320,7 @@ class SIMPLView_UI : public QMainWindow
     QMenu*                                  m_MenuHelp = nullptr;
     QMenu*                                  m_MenuAdvanced = nullptr;
     QMenu*                                  m_MenuThemes = nullptr;
+    QMenu*                                  m_MenuDataDirectory = nullptr;
 
     QAction*                                m_ActionNew = nullptr;
     QAction*                                m_ActionOpen = nullptr;
@@ -372,5 +367,4 @@ class SIMPLView_UI : public QMainWindow
     void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
 };
 
-#endif /* _SIMPLView_UI_H_ */
 

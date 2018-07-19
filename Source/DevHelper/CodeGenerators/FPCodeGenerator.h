@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _fpcodegenerator_h_
-#define _fpcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -97,4 +96,3 @@ class FPCodeGenerator
     void operator=(const FPCodeGenerator&) = delete;  // Move assignment Not Implemented
 };
 
-#endif /* FPCodeGenerator_H_ */

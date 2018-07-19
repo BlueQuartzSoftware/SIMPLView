@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _generatecolortablewidgetcodegenerator_h_
-#define _generatecolortablewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -72,4 +71,3 @@ class GenerateColorTableWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const GenerateColorTableWidgetCodeGenerator&) = delete;                        // Move assignment Not Implemented
 };
 
-#endif /* _generatecolortablewidgetcodegenerator_h_ */

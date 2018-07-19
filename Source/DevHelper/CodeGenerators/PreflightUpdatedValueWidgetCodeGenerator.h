@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _preflightupdatedvaluewidgetcodegenerator_h_
-#define _preflightupdatedvaluewidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const PreflightUpdatedValueWidgetCodeGenerator&) = delete;                           // Move assignment Not Implemented
 };
 
-#endif /* PreflightUpdatedValueWidgetCodeGenerator_H_ */

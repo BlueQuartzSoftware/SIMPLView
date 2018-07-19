@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _inputpathwidgetcodegenerator_h_
-#define _inputpathwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const InputPathWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
 };
 
-#endif /* InputPathWidgetCodeGenerator_H_ */

@@ -35,8 +35,7 @@
 
 
 
-#ifndef _aboutsimplview_h_
-#define _aboutsimplview_h_
+#pragma once
 
 #include <QtCore/QObject>
 
@@ -90,5 +89,4 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
     AboutSIMPLView(const AboutSIMPLView&) = delete; // Copy Constructor Not Implemented
     void operator=(const AboutSIMPLView&) = delete; // Move assignment Not Implemented
 };
-#endif /* _AboutSIMPLView_H_ */
 

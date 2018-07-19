@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _thirdorderpolynomialwidgetcodegenerator_h_
-#define _thirdorderpolynomialwidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -70,4 +69,3 @@ class ThirdOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const ThirdOrderPolynomialWidgetCodeGenerator&) = delete;                          // Move assignment Not Implemented
 };
 
-#endif /* ThirdOrderPolynomialWidgetCodeGenerator_H_ */

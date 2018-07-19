@@ -33,8 +33,7 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#ifndef _datacontainerarrayproxywidgetcodegenerator_h_
-#define _datacontainerarrayproxywidgetcodegenerator_h_
+#pragma once
 
 #include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Common/SIMPLibSetGetMacros.h"
@@ -71,4 +70,3 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
     void operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
 };
 
-#endif /* DataContainerArrayProxyWidgetCodeGenerator_H_ */
