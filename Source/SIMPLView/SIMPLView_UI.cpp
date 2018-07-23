@@ -600,7 +600,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_ActionNew->setShortcut(QKeySequence::New);
   m_ActionOpen->setShortcut(QKeySequence::Open);
   m_ActionSave->setShortcut(QKeySequence::Save);
-  m_ActionSaveAs->setShortcut(QKeySequence::SaveAs);
+  m_ActionSaveAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
   m_ActionExit->setShortcut(QKeySequence::Quit);
   m_ActionCheckForUpdates->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
   m_ActionShowSIMPLViewHelp->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
