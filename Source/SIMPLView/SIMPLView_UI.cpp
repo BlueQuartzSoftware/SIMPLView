@@ -582,7 +582,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_ActionAboutSIMPLView = new QAction("About " + QApplication::applicationName(), this);
   m_ActionCheckForUpdates = new QAction("Check For Updates", this);
   m_ActionPluginInformation = new QAction("Plugin Information", this);
-  m_ActionClearCache = new QAction("Clear Cache", this);
+  m_ActionClearCache = new QAction("Reset Preferences", this);
 
   // SIMPLView_UI Actions
   connect(m_ActionNew, &QAction::triggered, dream3dApp, &SIMPLViewApplication::listenNewInstanceTriggered);
