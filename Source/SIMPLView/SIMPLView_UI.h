@@ -200,16 +200,6 @@ class SIMPLView_UI : public QMainWindow
     void changeEvent(QEvent* event);
 
     /**
-     *
-     * @param prefs
-     */
-    void writeWindowSettings(QtSSettings* prefs);
-    void writeVersionCheckSettings(QtSSettings* prefs);
-
-    void readWindowSettings(QtSSettings* prefs);
-    void readVersionSettings(QtSSettings* prefs);
-
-    /**
      * @brief Initializes some of the GUI elements with selections or other GUI related items
      */
     void setupGui();
@@ -253,6 +243,28 @@ class SIMPLView_UI : public QMainWindow
     void handlePipelineChanges();
 
   protected slots:
+    /**
+     * @brief Writes the window settings for the SIMPLView_UI instance.  This includes the window position and size,
+     * dock widget locations, tab orders, splitter position, etc.
+     */
+    void writeWindowSettings();
+
+    /**
+     * @brief Writes the version check settings for the SIMPLView_UI instance.
+     */
+    void writeVersionCheckSettings();
+
+    /**
+     * @brief Reads the window settings for the SIMPLView_UI instance.  This includes the window position and size,
+     * dock widget locations, tab orders, splitter position, etc.
+     */
+    void readWindowSettings();
+
+    /**
+     * @brief Reads the version check settings for the SIMPLView_UI instance.
+     */
+    void readVersionCheckSettings();
+
     /**
      * @brief pipelineDidFinish
      */
@@ -344,6 +356,12 @@ class SIMPLView_UI : public QMainWindow
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
+
+    /**
+     * @brief Connects all the dock widget specific signals and slots
+     * @param dockWidget
+     */
+    void connectDockWidgetSignalsSlots(QDockWidget* dockWidget);
 
     /**
      * @brief savePipeline

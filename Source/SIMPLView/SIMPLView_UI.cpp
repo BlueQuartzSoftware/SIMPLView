@@ -177,8 +177,7 @@ void SIMPLView_UI::resizeEvent(QResizeEvent* event)
   emit parentResized();
 
   // We need to write the window settings so that any new windows will open with these window settings
-  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
-  writeWindowSettings(prefs.data());
+  writeWindowSettings();
 }
 
 // -----------------------------------------------------------------------------
@@ -359,8 +358,8 @@ void SIMPLView_UI::readSettings()
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
   // Have the pipeline builder read its settings from the prefs file
-  readWindowSettings(prefs.data());
-  readVersionSettings(prefs.data());
+  readWindowSettings();
+  readVersionCheckSettings();
 
   // Read dock widget settings
   prefs->beginGroup(SIMPLView::DockWidgetSettings::GroupName);
@@ -396,8 +395,10 @@ void SIMPLView_UI::readSettings()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readWindowSettings(QtSSettings* prefs)
+void SIMPLView_UI::readWindowSettings()
 {
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+
   bool ok = false;
   prefs->beginGroup("WindowSettings");
   if(prefs->contains(QString("MainWindowGeometry")))
@@ -435,8 +436,9 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
+void SIMPLView_UI::readVersionCheckSettings()
 {
+
 }
 
 // -----------------------------------------------------------------------------
@@ -444,40 +446,28 @@ void SIMPLView_UI::readVersionSettings(QtSSettings* prefs)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::writeSettings()
 {
+  // Have the pipeline builder write its settings to the prefs file
+  writeWindowSettings();
+
+  // Have the version check widet write its preferences.
+  writeVersionCheckSettings();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::writeVersionCheckSettings()
+{
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::writeWindowSettings()
+{
   QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
 
-  // Have the pipeline builder write its settings to the prefs file
-  writeWindowSettings(prefs.data());
-  // Have the version check widet write its preferences.
-  writeVersionCheckSettings(prefs.data());
-
-  prefs->beginGroup("DockWidgetSettings");
-
-  prefs->beginGroup("Issues Dock Widget");
-  writeDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
-  //writeHideDockSettings(prefs.data(), m_HideErrorTable);
-  prefs->endGroup();
-
-  prefs->beginGroup("Standard Output Dock Widget");
-  writeDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
-  //writeHideDockSettings(prefs.data(), m_HideStdOutput);
-  prefs->endGroup();
-
-  prefs->endGroup();
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::writeVersionCheckSettings(QtSSettings* prefs)
-{
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::writeWindowSettings(QtSSettings* prefs)
-{
   prefs->beginGroup("WindowSettings");
   QByteArray geo_data = saveGeometry();
   QByteArray layout_data = saveState();
@@ -551,6 +541,14 @@ void SIMPLView_UI::setupGui()
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
+
+  connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->dataBrowserDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->filterLibraryDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->filterListDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->issuesDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->pipelineDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->stdOutDockWidget);
 }
 
 // -----------------------------------------------------------------------------
@@ -721,7 +719,7 @@ void SIMPLView_UI::connectSignalsSlots()
   DocRequestManager* docRequester = DocRequestManager::Instance();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
-  connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
+  connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));  
 
   /* Filter Library Widget Connections */
   connect(m_Ui->filterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
@@ -773,6 +771,16 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineModel, &PipelineModel::standardOutputMessageGenerated, [=](const QString& msg) { addStdOutputMessage(msg); });
 
   connect(pipelineModel, &PipelineModel::pipelineDataChanged, [=] {});
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::connectDockWidgetSignalsSlots(QDockWidget* dockWidget)
+{
+  connect(dockWidget, &QDockWidget::dockLocationChanged, [=] { writeWindowSettings(); });
+  connect(dockWidget, &QDockWidget::topLevelChanged, [=] { writeWindowSettings(); });
+  connect(dockWidget, &QDockWidget::visibilityChanged, [=] { writeWindowSettings(); });
 }
 
 // -----------------------------------------------------------------------------
