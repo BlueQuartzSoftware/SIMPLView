@@ -438,7 +438,6 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::readVersionCheckSettings()
 {
-
 }
 
 // -----------------------------------------------------------------------------
@@ -458,7 +457,6 @@ void SIMPLView_UI::writeSettings()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::writeVersionCheckSettings()
 {
-
 }
 
 // -----------------------------------------------------------------------------
@@ -564,11 +562,11 @@ void SIMPLView_UI::setupGui()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::eventFilter(QObject* watched, QEvent* event)
 {
-  if (static_cast<QDockWidget*>(watched) != nullptr)
+  if(static_cast<QDockWidget*>(watched) != nullptr)
   {
     // Writes the window settings when dock widgets are resized or when the tabs are rearranged.  ChildRemoved and ChildAdded
     // are the only signals emitted when changing the order of the tabs, and there doesn't seem to be a better way to detect that.
-    if (event->type() == QEvent::Resize || event->type() == QEvent::ChildRemoved || event->type() == QEvent::ChildAdded)
+    if(event->type() == QEvent::Resize || event->type() == QEvent::ChildRemoved || event->type() == QEvent::ChildAdded)
     {
       writeWindowSettings();
     }
@@ -745,7 +743,7 @@ void SIMPLView_UI::connectSignalsSlots()
   DocRequestManager* docRequester = DocRequestManager::Instance();
 
   connect(docRequester, SIGNAL(showFilterDocs(const QString&)), this, SLOT(showFilterHelp(const QString&)));
-  connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));  
+  connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
 
   /* Filter Library Widget Connections */
   connect(m_Ui->filterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
