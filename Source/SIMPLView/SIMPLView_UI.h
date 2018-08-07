@@ -95,6 +95,14 @@ class SIMPLView_UI : public QMainWindow
     virtual ~SIMPLView_UI();
 
     /**
+     * @brief eventFilter
+     * @param watched
+     * @param event
+     * @return
+     */
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    /**
      * @brief setLoadedPlugins This will set the plugins that have already been loaded by another mechanism. The plugins are NOT
      * deleted by this class and the unloading and clean up of the plugin pointers is the responsibility of the caller.
      * @param plugins The plugins that adhere to the ISIMPLibPlugin

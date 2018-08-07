@@ -549,6 +549,27 @@ void SIMPLView_UI::setupGui()
   connectDockWidgetSignalsSlots(m_Ui->issuesDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->pipelineDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->stdOutDockWidget);
+
+  m_Ui->bookmarksDockWidget->installEventFilter(this);
+  m_Ui->dataBrowserDockWidget->installEventFilter(this);
+  m_Ui->filterLibraryDockWidget->installEventFilter(this);
+  m_Ui->filterListDockWidget->installEventFilter(this);
+  m_Ui->issuesDockWidget->installEventFilter(this);
+  m_Ui->pipelineDockWidget->installEventFilter(this);
+  m_Ui->stdOutDockWidget->installEventFilter(this);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool SIMPLView_UI::eventFilter(QObject* watched, QEvent* event)
+{
+  if (event->type() == QEvent::Resize && static_cast<QDockWidget*>(watched) != nullptr)
+  {
+    writeWindowSettings();
+  }
+
+  return QMainWindow::eventFilter(watched, event);
 }
 
 // -----------------------------------------------------------------------------
