@@ -564,9 +564,14 @@ void SIMPLView_UI::setupGui()
 // -----------------------------------------------------------------------------
 bool SIMPLView_UI::eventFilter(QObject* watched, QEvent* event)
 {
-  if (event->type() == QEvent::Resize && static_cast<QDockWidget*>(watched) != nullptr)
+  if (static_cast<QDockWidget*>(watched) != nullptr)
   {
-    writeWindowSettings();
+    // Writes the window settings when dock widgets are resized or when the tabs are rearranged.  ChildRemoved and ChildAdded
+    // are the only signals emitted when changing the order of the tabs, and there doesn't seem to be a better way to detect that.
+    if (event->type() == QEvent::Resize || event->type() == QEvent::ChildRemoved || event->type() == QEvent::ChildAdded)
+    {
+      writeWindowSettings();
+    }
   }
 
   return QMainWindow::eventFilter(watched, event);
