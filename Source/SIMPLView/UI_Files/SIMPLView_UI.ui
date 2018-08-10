@@ -136,7 +136,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="VSMainWidget2" name="visualizationWidget" native="true">
+          <widget class="VSMainWidget" name="visualizationWidget" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
@@ -561,9 +561,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>VSMainWidget2</class>
+   <class>VSMainWidget</class>
    <extends>QWidget</extends>
-   <header location="global">VSMainWidget2.h</header>
+   <header location="global">VSMainWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
