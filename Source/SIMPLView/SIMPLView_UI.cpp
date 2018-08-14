@@ -139,6 +139,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 
   // Read various settings
   readSettings();
+#if 0
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == IssuesWidget::GetHideDockSetting())
   {
     m_Ui->issuesDockWidget->setHidden(true);
@@ -147,6 +148,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
   {
     m_Ui->stdOutDockWidget->setHidden(true);
   }
+#endif
 
   // Set window modified to false
   setWindowModified(false);
@@ -365,11 +367,11 @@ void SIMPLView_UI::readSettings()
   prefs->beginGroup(SIMPLView::DockWidgetSettings::GroupName);
 
   prefs->beginGroup(SIMPLView::DockWidgetSettings::IssuesDockGroupName);
-  readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
+  //readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup(SIMPLView::DockWidgetSettings::StandardOutputGroupName);
-  readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
+  //readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -515,10 +517,12 @@ void SIMPLView_UI::setupGui()
   // Read the toolbox settings and update the filter list
   m_Ui->filterListWidget->loadFilterList();
 
+#if 0
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
   tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
 
   m_Ui->filterListDockWidget->raise();
+#endif
 
   // Shortcut to close the window
   new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
@@ -538,6 +542,7 @@ void SIMPLView_UI::setupGui()
 
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
+#if 0
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 
   connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
@@ -555,6 +560,12 @@ void SIMPLView_UI::setupGui()
   m_Ui->issuesDockWidget->installEventFilter(this);
   m_Ui->pipelineDockWidget->installEventFilter(this);
   m_Ui->stdOutDockWidget->installEventFilter(this);
+#endif
+
+  m_Ui->filtersTabWidget->setTabText(0, QApplication::applicationName());
+
+  m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
+  m_Ui->visualizationWidget->setInfoWidget(m_Ui->visualInfoWidget);
 }
 
 // -----------------------------------------------------------------------------
@@ -678,6 +689,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
     m_MenuView->addSeparator();
   }
 
+#if 0
   m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->bookmarksDockWidget->toggleViewAction());
@@ -685,6 +697,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuView->addAction(m_Ui->issuesDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->stdOutDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->dataBrowserDockWidget->toggleViewAction());
+#endif
 
   // Create Bookmarks Menu
   m_SIMPLViewMenu->addMenu(m_MenuBookmarks);
@@ -755,7 +768,7 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
   connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
+  //connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
 
   /* Pipeline List Widget Connections */
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
@@ -763,10 +776,13 @@ void SIMPLView_UI::connectSignalsSlots()
   /* Pipeline View Connections */
   connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
   connect(pipelineView, &SVPipelineView::filterParametersChanged, [=] (AbstractFilter::Pointer filter) {
-    m_Ui->dataBrowserWidget->filterActivated(filter);
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(filter);
+    }
     markDocumentAsDirty();
   });
-  connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
+  //connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
   connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
   connect(pipelineView, &SVPipelineView::clearIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::clearIssues);
@@ -774,7 +790,10 @@ void SIMPLView_UI::connectSignalsSlots()
 
   // Connection that displays issues in the Issue Table when the preflight is finished
   connect(pipelineView, &SVPipelineView::preflightFinished, [=](FilterPipeline::Pointer pipeline, int err) {
-    m_Ui->dataBrowserWidget->refreshData();
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->refreshData();
+    }
     m_Ui->issuesWidget->displayCachedMessages();
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
   });
@@ -865,11 +884,17 @@ void SIMPLView_UI::handlePipelineChanges()
     PipelineModel* model = getPipelineModel();
 
     AbstractFilter::Pointer filter = model->filter(selectedIndex);
-    m_Ui->dataBrowserWidget->filterActivated(filter);
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(filter);
+    }
   }
   else
   {
-    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(AbstractFilter::NullPointer());
+    }
   }
 }
 
@@ -886,7 +911,7 @@ void SIMPLView_UI::executePipeline()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterParameterTab()
 {
-  m_Ui->tabWidget->setCurrentIndex(0);
+  //m_Ui->tabWidget->setCurrentIndex(0);
 }
 
 // -----------------------------------------------------------------------------
@@ -894,7 +919,7 @@ void SIMPLView_UI::showFilterParameterTab()
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showVisualizationTab()
 {
-  m_Ui->tabWidget->setCurrentIndex(1);
+  //m_Ui->tabWidget->setCurrentIndex(1);
 }
 
 // -----------------------------------------------------------------------------
@@ -976,6 +1001,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
+#if 0
     // Allow status messages to open the standard output widget
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
@@ -987,6 +1013,7 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     {
       m_Ui->issuesDockWidget->setVisible(true);
     }
+#endif
 
     QString text = "<span style=\" color:#000000;\" >";
     text.append(msg.getText());
@@ -1015,11 +1042,17 @@ void SIMPLView_UI::pipelineDidFinish()
     PipelineModel* model = getPipelineModel();
 
     AbstractFilter::Pointer filter = model->filter(selectedIndex);
-    m_Ui->dataBrowserWidget->filterActivated(filter);
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(filter);
+    }
   }
   else
   {
-    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(AbstractFilter::NullPointer());
+    }
   }
 
   m_Ui->pipelineListWidget->pipelineFinished();
@@ -1076,7 +1109,12 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 // -----------------------------------------------------------------------------
 DataStructureWidget* SIMPLView_UI::getDataStructureWidget()
 {
-  return m_Ui->dataBrowserWidget;
+  if(nullptr != m_FilterInputWidget)
+  {
+    return m_FilterInputWidget->getDataStructureWidget();
+  }
+
+  return nullptr;
 }
 
 // -----------------------------------------------------------------------------
@@ -1111,12 +1149,18 @@ void SIMPLView_UI::filterSelectionChanged(const QItemSelection& selected, const 
     setFilterInputWidget(fiw);
 
     AbstractFilter::Pointer filter = model->filter(selectedIndex);
-    m_Ui->dataBrowserWidget->filterActivated(filter);
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(filter);
+    }
   }
   else
   {
     clearFilterInputWidget();
-    m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer());
+    if(getDataStructureWidget())
+    {
+      getDataStructureWidget()->filterActivated(AbstractFilter::NullPointer());
+    }
   }
 }
 
@@ -1127,6 +1171,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
+    m_Ui->stackedWidget->setCurrentIndex(0);
     return;
   }
 
@@ -1139,6 +1184,9 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 
   // Clear the filter input widget
   clearFilterInputWidget();
+
+  // Set FilterInputWidget
+  m_FilterInputWidget = widget;
 
   // Alert to DataArrayPath requirements
   connect(widget, SIGNAL(viewPathsMatchingReqs(DataContainerSelectionFilterParameter::RequirementType)), getDataStructureWidget(),
@@ -1155,9 +1203,9 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   emit widget->endPathFiltering();
 
   // Set the widget into the frame
-  m_Ui->fiwFrameVLayout->addWidget(widget);
-  m_FilterInputWidget = widget;
+  m_Ui->stackedWidget->insertWidget(1, widget);
   widget->show();
+  m_Ui->stackedWidget->setCurrentIndex(1);
 
   // Force the FilterParameterTab front and center
   showFilterParameterTab();
@@ -1168,6 +1216,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::clearFilterInputWidget()
 {
+#if 0
   QLayoutItem* item = m_Ui->fiwFrameVLayout->takeAt(0);
   if(item)
   {
@@ -1178,6 +1227,15 @@ void SIMPLView_UI::clearFilterInputWidget()
       w->setParent(nullptr);
     }
   }
+#else
+  if(nullptr != m_FilterInputWidget)
+  {
+    m_Ui->stackedWidget->setCurrentIndex(0);
+    m_FilterInputWidget->hide();
+    m_Ui->stackedWidget->removeWidget(m_FilterInputWidget);
+    m_FilterInputWidget->setParent(nullptr);
+  }
+#endif
 
   m_FilterInputWidget = nullptr;
 }
@@ -1198,6 +1256,7 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
 
+#if 0
   SIMPLView::DockWidgetSettings::HideDockSetting errorTableSetting = IssuesWidget::GetHideDockSetting();
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting 
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
@@ -1211,6 +1270,7 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
   {
     m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }
+#endif
 }
 
 // -----------------------------------------------------------------------------

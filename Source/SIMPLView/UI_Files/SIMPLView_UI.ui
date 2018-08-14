@@ -6,516 +6,384 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1084</width>
-    <height>623</height>
+    <width>1103</width>
+    <height>724</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="windowTitle">
-   <string>ActiveDocument.txt</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
-  <property name="dockNestingEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="dockOptions">
-   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
+   <string>ActiveDocument - SIMPLView_UI</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>16777215</height>
-    </size>
-   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="topMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="rightMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="spacing">
-     <number>0</number>
+     <number>4</number>
     </property>
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>0</number>
+     <widget class="QSplitter" name="splitter_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="filterInputWidgetTab">
-       <attribute name="title">
-        <string>Filter Parameters</string>
-       </attribute>
-       <layout class="QGridLayout" name="tabLayoutFilterInput">
-        <property name="leftMargin">
+      <widget class="QSplitter" name="splitter_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="childrenCollapsible">
+        <bool>false</bool>
+       </property>
+       <widget class="QTabWidget" name="filtersTabWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="tabPosition">
+         <enum>QTabWidget::West</enum>
+        </property>
+        <property name="tabShape">
+         <enum>QTabWidget::Rounded</enum>
+        </property>
+        <property name="currentIndex">
          <number>0</number>
         </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QFrame" name="fiwFrame">
-          <property name="styleSheet">
-           <string notr="true">PipelineViewWidget
-{
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 236, 241, 255), stop:1.0 rgba(211, 216, 224, 255));
-}</string>
+        <widget class="QWidget" name="pipelineTab">
+         <attribute name="title">
+          <string>SIMPLView</string>
+         </attribute>
+         <layout class="QGridLayout" name="pipelineTabLayout">
+          <property name="leftMargin">
+           <number>0</number>
           </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+          <property name="topMargin">
+           <number>0</number>
           </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
+          <property name="rightMargin">
+           <number>0</number>
           </property>
-          <layout class="QVBoxLayout" name="fiwFrameVLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QScrollArea" name="pipelineScrollArea">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>222</width>
+               <height>546</height>
+              </rect>
+             </property>
+             <layout class="QGridLayout" name="pipelineScrollLayout">
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
+              <property name="spacing">
+               <number>4</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QSplitter" name="splitter">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <widget class="PipelineListWidget" name="pipelineListWidget" native="true">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+                <widget class="QTabWidget" name="filterTabWidget">
+                 <property name="currentIndex">
+                  <number>0</number>
+                 </property>
+                 <widget class="FilterListToolboxWidget" name="filterListWidget">
+                  <attribute name="title">
+                   <string>Filter List</string>
+                  </attribute>
+                 </widget>
+                 <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget">
+                  <attribute name="title">
+                   <string>Filter Library</string>
+                  </attribute>
+                 </widget>
+                 <widget class="BookmarksToolboxWidget" name="bookmarksWidget">
+                  <attribute name="title">
+                   <string>Bookmarks</string>
+                  </attribute>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="visualizationTab">
+         <attribute name="title">
+          <string>Visualization</string>
+         </attribute>
+         <layout class="QGridLayout" name="visualTabLayout">
+          <property name="leftMargin">
+           <number>1</number>
+          </property>
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="rightMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
+           <number>1</number>
+          </property>
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QSplitter" name="splitter_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="VSFilterView" name="visualFilterView">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+            <widget class="VSInfoWidget" name="visualInfoWidget" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>3</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="VSMainWidget" name="visualizationWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>3</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>800</width>
+          <height>600</height>
+         </size>
+        </property>
+       </widget>
       </widget>
-      <widget class="QWidget" name="visualizationTab">
-       <attribute name="title">
-        <string>Visualization</string>
-       </attribute>
-       <layout class="QGridLayout" name="tabLayoutVisual">
-        <property name="leftMargin">
-         <number>0</number>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="pipelinePage">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QSplitter" name="splitter">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <widget class="VSMainWidget" name="visualizationWidget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QSplitter" name="pipelineSplitter">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>125</height>
+            </size>
            </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QWidget" name="pipelineIssuesGroup" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>3</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>1</number>
+             </property>
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="rightMargin">
+              <number>1</number>
+             </property>
+             <property name="bottomMargin">
+              <number>1</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Pipeline Issues</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="IssuesWidget" name="issuesWidget" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="pipelineStdOutGroup" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>2</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>1</number>
+             </property>
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="rightMargin">
+              <number>1</number>
+             </property>
+             <property name="bottomMargin">
+              <number>1</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Pipeline Output</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="StandardOutputWidget" name="stdOutWidget" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
-         </widget>
-        </item>
-       </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="visualizationPage"/>
       </widget>
      </widget>
     </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="issuesDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>[*]Pipeline Issues</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="IssuesWidget" name="issuesWidget"/>
-  </widget>
-  <widget class="QDockWidget" name="stdOutDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>[*]Pipeline Output</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="StandardOutputWidget" name="stdOutWidget"/>
-  </widget>
-  <widget class="QDockWidget" name="dataBrowserDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>Data Structure</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="DataStructureWidget" name="dataBrowserWidget"/>
-  </widget>
-  <widget class="QDockWidget" name="pipelineDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>Pipeline</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="pipelineInteralWidget">
-    <layout class="QGridLayout" name="gridLayout_3">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="PipelineListWidget" name="pipelineListWidget" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="bookmarksDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>Bookmarks</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="bookmarksInternalWidget">
-    <layout class="QGridLayout" name="gridLayout_5">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="BookmarksToolboxWidget" name="bookmarksWidget" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="filterLibraryDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>Filter Library</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="filterLibraryInternalWidget">
-    <layout class="QGridLayout" name="gridLayout_6">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="filterListDockWidget">
-   <property name="minimumSize">
-    <size>
-     <width>80</width>
-     <height>38</height>
-    </size>
-   </property>
-   <property name="windowTitle">
-    <string>Filter List</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="filterListInternalWidget">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="FilterListToolboxWidget" name="filterListWidget" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <action name="actionShow_Filter_Library">
-   <property name="text">
-    <string>Filter Library</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionShow_Prebuilt_Pipelines">
-   <property name="text">
-    <string>Prebuilt Pipelines</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionOpen">
-   <property name="text">
-    <string>Open...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="actionNew">
-   <property name="text">
-    <string>New...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionSavePipelineAs">
-   <property name="text">
-    <string>Save Pipeline As...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
-  <action name="actionShow_Favorites">
-   <property name="text">
-    <string>Favorites</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionClearPipeline">
-   <property name="text">
-    <string>Clear</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+Backspace</string>
-   </property>
-  </action>
-  <action name="actionClearRecentFiles">
-   <property name="text">
-    <string>Clear Recent Files</string>
-   </property>
-  </action>
-  <action name="actionShow_Issues">
-   <property name="text">
-    <string>Issues</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionShow_Filter_List">
-   <property name="text">
-    <string>Filter List</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionShowIndex">
-   <property name="text">
-    <string>SIMPLView Help</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+H</string>
-   </property>
-  </action>
-  <action name="actionLicense_Information">
-   <property name="text">
-    <string>Show License</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+L</string>
-   </property>
-  </action>
-  <action name="actionAbout_SIMPLView">
-   <property name="text">
-    <string>About SIMPLView</string>
-   </property>
-  </action>
-  <action name="actionCheck_For_Updates">
-   <property name="text">
-    <string>Check For Updates</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+U</string>
-   </property>
-  </action>
-  <action name="actionExit">
-   <property name="text">
-    <string>Exit SIMPLView</string>
-   </property>
-  </action>
-  <action name="actionSaveAsNewFavorite">
-   <property name="text">
-    <string>Save As New Favorite</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
-  <action name="actionCopyCurrentFilter">
-   <property name="text">
-    <string>Copy Current Filter</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
-   </property>
-  </action>
-  <action name="actionAppendToExistingFavorite">
-   <property name="text">
-    <string>Append To Existing Favorite</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+A</string>
-   </property>
-  </action>
-  <action name="actionUpdateFavorite">
-   <property name="text">
-    <string>Update Favorite</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
-  </action>
-  <action name="actionPasteCopiedFilter">
-   <property name="text">
-    <string>Paste Copied Filter</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V</string>
-   </property>
-  </action>
-  <action name="actionRemoveCurrentFilter">
-   <property name="text">
-    <string>Remove Current Filter</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Backspace</string>
-   </property>
-  </action>
-  <action name="actionPlugin_Information">
-   <property name="text">
-    <string>Plugin Information</string>
-   </property>
-   <property name="iconText">
-    <string>Plugin Information</string>
-   </property>
-   <property name="toolTip">
-    <string>Plugin Information</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
-  </action>
-  <action name="actionSaveAs">
-   <property name="text">
-    <string>Save As...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -528,12 +396,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <class>StandardOutputWidget</class>
    <extends>QWidget</extends>
    <header location="global">StandardOutputWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>DataStructureWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">DataStructureWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -561,15 +423,23 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>VSFilterView</class>
+   <extends>QTreeView</extends>
+   <header location="global">VSFilterView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>VSInfoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">VSInfoWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>VSMainWidget</class>
    <extends>QWidget</extends>
    <header location="global">VSMainWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
-  <include location="../../../../SIMPL/Source/SVWidgetsLib/icons/images/Icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
