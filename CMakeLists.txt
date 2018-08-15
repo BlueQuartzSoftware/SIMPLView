@@ -250,19 +250,10 @@ include(${CMP_SOURCE_DIR}/ExtLib/HDF5Support.cmake)
 # Should we use Intel Threading Building Blocks
 # --------------------------------------------------------------------
 set(SIMPL_USE_PARALLEL_ALGORITHMS "")
-option(SIMPL_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" ON)
+option(SIMPL_USE_MULTITHREADED_ALGOS "Use MultiThreaded Algorithms" OFF)
 if(SIMPL_USE_MULTITHREADED_ALGOS)
-    find_package(TBB)
-    if(TBB_FOUND)
-        CMP_COPY_DEPENDENT_LIBRARIES("tbb;tbb_malloc")
-        # Append the locations of the TBB libraries to our Library Search Paths
-        list(APPEND CMP_LIB_SEARCH_DIRS ${TBB_BINARY_DIR} ${TBB_LIBRARY_DIR} )
-        # Create an install rule to copy the dependent shared library over to the installed location
-        CMP_LIBRARIES_INSTALL_RULES("tbb;tbb_malloc" ".")
-    else()
-        message(FATAL_ERROR "The Intel Threading Building Blocks library is needed to enable the multithreaded algorithms. Please make sure it is installed properly")
-    endif()
-    set(SIMPL_USE_PARALLEL_ALGORITHMS "1")
+  include(${CMP_SOURCE_DIR}/ExtLib/TBBSupport.cmake)
+  set(SIMPL_USE_PARALLEL_ALGORITHMS "1")
 endif()
 
 # --------------------------------------------------------------------
