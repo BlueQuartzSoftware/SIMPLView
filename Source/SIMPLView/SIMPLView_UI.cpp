@@ -565,7 +565,13 @@ void SIMPLView_UI::setupGui()
   m_Ui->filtersTabWidget->setTabText(0, QApplication::applicationName());
 
   m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
-  m_Ui->visualizationWidget->setInfoWidget(m_Ui->visualInfoWidget);
+  m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->vsFilterWidget);
+  m_Ui->visualizationWidget->setVisibilitySettingsWidget(m_Ui->vsVisibilityWidget);
+  m_Ui->visualizationWidget->setColorMappingWidget(m_Ui->vsColorMappingWidget);
+  m_Ui->visualizationWidget->setAdvancedVisibilityWidget(m_Ui->vsAdvVisibilityWidget);
+  m_Ui->visualizationWidget->setTransformWidget(m_Ui->vsTransformWidget);
+
+  connect(m_Ui->filtersTabWidget, &QTabWidget::currentChanged, this, &SIMPLView_UI::mainTabChanged);
 }
 
 // -----------------------------------------------------------------------------
@@ -920,6 +926,16 @@ void SIMPLView_UI::showFilterParameterTab()
 void SIMPLView_UI::showVisualizationTab()
 {
   //m_Ui->tabWidget->setCurrentIndex(1);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::mainTabChanged(int index)
+{
+  int offset = index == 0 ? -1 : 1;
+  int stackedIndex = m_Ui->stackedWidget->currentIndex();
+  m_Ui->stackedWidget->setCurrentIndex(stackedIndex + offset);
 }
 
 // -----------------------------------------------------------------------------

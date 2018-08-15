@@ -192,6 +192,12 @@ class SIMPLView_UI : public QMainWindow
      */
     void listenSavePipelineAsTriggered();
 
+    /**
+     * @brief Alert to a change in the main tab widget
+     * @param index
+     */
+    void mainTabChanged(int index);
+
   protected:
 
     /**
