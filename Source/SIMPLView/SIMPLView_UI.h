@@ -140,16 +140,6 @@ class SIMPLView_UI : public QMainWindow
     void executePipeline();
 
     /**
-     * @brief Selects the FilterInputWidget tab
-     */
-    void showFilterParameterTab();
-
-    /**
-     * @brief Selects the vizualization tab
-     */
-    void showVisualizationTab();
-
-    /**
      * @brief showDockWidget
      */
     void showDockWidget(QDockWidget* dockWidget);
@@ -194,11 +184,40 @@ class SIMPLView_UI : public QMainWindow
      */
     void listenSavePipelineAsTriggered();
 
+    /**
+     * @brief showVisualizationFilters
+     */
     void showVisualizationFilters();
+
+    /**
+     * @brief showVisibilitySettings
+     */
     void showVisibilitySettings();
+
+    /**
+     * @brief showColorMapping
+     */
     void showColorMapping();
+
+    /**
+     * @brief showAdvVisibilitySettings
+     */
     void showAdvVisibilitySettings();
+
+    /**
+     * @brief showVisualTransform
+     */
     void showVisualTransform();
+
+    /**
+     * @brief showPipelineOutputPage
+     */
+    void showPipelineOutputPage();
+
+    /**
+     * @brief showFilterInputWidgetPage
+     */
+    void showFilterInputWidgetPage();
 
   protected:
 

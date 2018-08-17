@@ -602,6 +602,10 @@ void SIMPLView_UI::setupGui()
   connect(m_Ui->colorMappingBtn, &QPushButton::clicked, this, &SIMPLView_UI::showColorMapping);
   connect(m_Ui->advVisualizationSettingsBtn, &QPushButton::clicked, this, &SIMPLView_UI::showAdvVisibilitySettings);
   connect(m_Ui->transformBtn, &QPushButton::clicked, this, &SIMPLView_UI::showVisualTransform);
+
+  // Forward / Back buttons for QStackedWidget
+  connect(m_Ui->pipelineIssuesBtn, &QToolButton::clicked, this, &SIMPLView_UI::showPipelineOutputPage);
+  connect(m_Ui->filterInputWidgetBtn, &QToolButton::clicked, this, &SIMPLView_UI::showFilterInputWidgetPage);
 }
 
 // -----------------------------------------------------------------------------
@@ -850,7 +854,6 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(pipelineModel, &PipelineModel::standardOutputMessageGenerated, [=](const QString& msg) { addStdOutputMessage(msg); });
 
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](FilterPipeline::Pointer pipeline, DataContainerArray::Pointer dca) {
-    showVisualizationTab();
     m_Ui->visualizationWidget->getController()->reloadPipelineOutput(pipeline, dca);
   });
 }
@@ -945,17 +948,25 @@ void SIMPLView_UI::executePipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::showFilterParameterTab()
+void SIMPLView_UI::showPipelineOutputPage()
 {
-  //m_Ui->tabWidget->setCurrentIndex(0);
+  m_Ui->stackedWidget->setCurrentIndex(0);
+  m_Ui->pipelineIssuesBtn->setEnabled(false);
+  m_Ui->filterInputWidgetBtn->setEnabled(nullptr != m_FilterInputWidget);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::showVisualizationTab()
+void SIMPLView_UI::showFilterInputWidgetPage()
 {
-  //m_Ui->tabWidget->setCurrentIndex(1);
+  if(m_Ui->stackedWidget->count() > 1)
+  {
+    m_Ui->stackedWidget->setCurrentIndex(1);
+  }
+
+  m_Ui->pipelineIssuesBtn->setEnabled(true);
+  m_Ui->filterInputWidgetBtn->setEnabled(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -964,10 +975,15 @@ void SIMPLView_UI::showVisualizationTab()
 void SIMPLView_UI::showPopup(PopUpWidget* popup, QPushButton* button)
 {
   QPoint position = button->mapToGlobal(QPoint(button->width() * 0.5, 0));
+  int minimumWidth = 150;
 
   int padding = 25;
   QSize minimumSizeHint = popup->getWidget()->sizeHint();
-  if(minimumSizeHint.width() > padding)
+  if(minimumSizeHint.width() < minimumWidth)
+  {
+    minimumSizeHint.setWidth(minimumWidth);
+  }
+  else if(minimumSizeHint.width() > popup->minimumSizeHint().width())
   {
     minimumSizeHint.setWidth(minimumSizeHint.width() + padding);
   }
@@ -1276,7 +1292,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
-    m_Ui->stackedWidget->setCurrentIndex(0);
+    showPipelineOutputPage();
+    m_Ui->filterInputWidgetBtn->setEnabled(false);
     return;
   }
 
@@ -1308,12 +1325,12 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   emit widget->endPathFiltering();
 
   // Set the widget into the frame
-  m_Ui->stackedWidget->insertWidget(1, widget);
-  widget->show();
-  m_Ui->stackedWidget->setCurrentIndex(1);
-
-  // Force the FilterParameterTab front and center
-  showFilterParameterTab();
+  if(nullptr != widget)
+  {
+    m_Ui->stackedWidget->insertWidget(1, widget);
+    widget->show();
+    showFilterInputWidgetPage();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1335,7 +1352,7 @@ void SIMPLView_UI::clearFilterInputWidget()
 #else
   if(nullptr != m_FilterInputWidget)
   {
-    m_Ui->stackedWidget->setCurrentIndex(0);
+    showPipelineOutputPage();
     m_FilterInputWidget->hide();
     m_Ui->stackedWidget->removeWidget(m_FilterInputWidget);
     m_FilterInputWidget->setParent(nullptr);
