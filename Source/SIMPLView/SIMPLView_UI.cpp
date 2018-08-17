@@ -116,6 +116,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
 , m_LastOpenedFilePath(QDir::homePath())
+, m_VisualizationFiltersUi(new Ui::VisualizationFilterWidgets)
 {
   // Register all of the Filters we know about - the rest will be loaded through plugins
   //  which all should have been loaded by now.
@@ -567,16 +568,40 @@ void SIMPLView_UI::setupGui()
   m_Ui->stdOutDockWidget->installEventFilter(this);
 #endif
 
-  m_Ui->filtersTabWidget->setTabText(0, QApplication::applicationName());
+  // Create pop-up widgets
+  m_VisualizationFiltersPopup = new PopUpWidget();
+  m_VisualizationSettingsPopup = new PopUpWidget();
+  m_ColorMappingPopup = new PopUpWidget();
+  m_AdvVisualizationSettingsPopup = new PopUpWidget();
+  m_VisualizationTransformPopup = new PopUpWidget();
 
-  m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
-  m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->vsFilterWidget);
-  m_Ui->visualizationWidget->setVisibilitySettingsWidget(m_Ui->vsVisibilityWidget);
-  m_Ui->visualizationWidget->setColorMappingWidget(m_Ui->vsColorMappingWidget);
-  m_Ui->visualizationWidget->setAdvancedVisibilityWidget(m_Ui->vsAdvVisibilityWidget);
-  m_Ui->visualizationWidget->setTransformWidget(m_Ui->vsTransformWidget);
+  // Create Visualization Widgets
+  QWidget* visualizationFilters = new QWidget();
+  m_VisualizationFiltersUi->setupUi(visualizationFilters);
+  VSVisibilitySettingsWidget* visibilitySettingsWidget = new VSVisibilitySettingsWidget();
+  VSColorMappingWidget* colorMappingWidget = new VSColorMappingWidget();
+  VSAdvancedVisibilitySettingsWidget* advVisibilityWidget = new VSAdvancedVisibilitySettingsWidget();
+  VSTransformWidget* transformWidget = new VSTransformWidget();
 
-  connect(m_Ui->filtersTabWidget, &QTabWidget::currentChanged, this, &SIMPLView_UI::mainTabChanged);
+  // Set pop-up widgets
+  m_VisualizationFiltersPopup->setWidget(visualizationFilters);
+  m_VisualizationSettingsPopup->setWidget(visibilitySettingsWidget);
+  m_ColorMappingPopup->setWidget(colorMappingWidget);
+  m_AdvVisualizationSettingsPopup->setWidget(advVisibilityWidget);
+  m_VisualizationTransformPopup->setWidget(transformWidget);
+
+  m_Ui->visualizationWidget->setFilterView(m_VisualizationFiltersUi->visualFilterView);
+  m_Ui->visualizationWidget->setFilterSettingsWidget(m_VisualizationFiltersUi->vsFilterWidget);
+  m_Ui->visualizationWidget->setVisibilitySettingsWidget(visibilitySettingsWidget);
+  m_Ui->visualizationWidget->setColorMappingWidget(colorMappingWidget);
+  m_Ui->visualizationWidget->setAdvancedVisibilityWidget(advVisibilityWidget);
+  m_Ui->visualizationWidget->setTransformWidget(transformWidget);
+
+  connect(m_Ui->visualizationFiltersBtn, &QPushButton::clicked, this, &SIMPLView_UI::showVisualizationFilters);
+  connect(m_Ui->visualizationSettingsBtn, &QPushButton::clicked, this, &SIMPLView_UI::showVisibilitySettings);
+  connect(m_Ui->colorMappingBtn, &QPushButton::clicked, this, &SIMPLView_UI::showColorMapping);
+  connect(m_Ui->advVisualizationSettingsBtn, &QPushButton::clicked, this, &SIMPLView_UI::showAdvVisibilitySettings);
+  connect(m_Ui->transformBtn, &QPushButton::clicked, this, &SIMPLView_UI::showVisualTransform);
 }
 
 // -----------------------------------------------------------------------------
@@ -936,11 +961,70 @@ void SIMPLView_UI::showVisualizationTab()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::mainTabChanged(int index)
+void SIMPLView_UI::showPopup(PopUpWidget* popup, QPushButton* button)
 {
-  int offset = index == 0 ? -1 : 1;
-  int stackedIndex = m_Ui->stackedWidget->currentIndex();
-  m_Ui->stackedWidget->setCurrentIndex(stackedIndex + offset);
+  QPoint position = button->mapToGlobal(QPoint(button->width() * 0.5, 0));
+
+  int padding = 25;
+  QSize minimumSizeHint = popup->getWidget()->sizeHint();
+  if(minimumSizeHint.width() > padding)
+  {
+    minimumSizeHint.setWidth(minimumSizeHint.width() + padding);
+  }
+  if(minimumSizeHint.height() > popup->minimumSizeHint().height())
+  {
+    minimumSizeHint.setHeight(minimumSizeHint.height() + padding);
+  }
+  else
+  {
+    minimumSizeHint.setHeight(popup->minimumSizeHint().height());
+    //position.setY(position.y() - button->height());
+  }
+  popup->resize(minimumSizeHint);
+
+  QPoint targetPosition(position.x() - 0.5 * minimumSizeHint.width(), position.y() - minimumSizeHint.height());
+  popup->move(targetPosition);
+  popup->show();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showVisualizationFilters()
+{
+  showPopup(m_VisualizationFiltersPopup, m_Ui->visualizationFiltersBtn);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showVisibilitySettings()
+{
+  showPopup(m_VisualizationSettingsPopup, m_Ui->visualizationSettingsBtn);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showColorMapping()
+{
+  showPopup(m_ColorMappingPopup, m_Ui->colorMappingBtn);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showAdvVisibilitySettings()
+{
+  showPopup(m_AdvVisualizationSettingsPopup, m_Ui->advVisualizationSettingsBtn);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::showVisualTransform()
+{
+  showPopup(m_VisualizationTransformPopup, m_Ui->transformBtn);
 }
 
 // -----------------------------------------------------------------------------

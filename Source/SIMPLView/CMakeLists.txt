@@ -110,6 +110,7 @@ SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/StyleSheetEditor.ui
+  ${SIMPLView_SOURCE_DIR}/UI_Files/VisualizationFilterWidgets.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 

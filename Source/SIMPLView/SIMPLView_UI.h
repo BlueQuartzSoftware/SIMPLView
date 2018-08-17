@@ -55,10 +55,12 @@
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Widgets/FilterInputWidget.h"
+#include "SVWidgetsLib/Widgets/PopUpWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"
+#include "ui_VisualizationFilterWidgets.h"
 
 
 class ISIMPLibPlugin;
@@ -192,11 +194,11 @@ class SIMPLView_UI : public QMainWindow
      */
     void listenSavePipelineAsTriggered();
 
-    /**
-     * @brief Alert to a change in the main tab widget
-     * @param index
-     */
-    void mainTabChanged(int index);
+    void showVisualizationFilters();
+    void showVisibilitySettings();
+    void showColorMapping();
+    void showAdvVisibilitySettings();
+    void showVisualTransform();
 
   protected:
 
@@ -265,6 +267,8 @@ class SIMPLView_UI : public QMainWindow
      * @brief handlePipelineChanges
      */
     void handlePipelineChanges();
+
+    void showPopup(PopUpWidget* popup, QPushButton* button);
 
   protected slots:
     /**
@@ -375,6 +379,13 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
+
+    PopUpWidget*                            m_VisualizationFiltersPopup = nullptr;
+    PopUpWidget*                            m_VisualizationSettingsPopup = nullptr;
+    PopUpWidget*                            m_ColorMappingPopup = nullptr;
+    PopUpWidget*                            m_AdvVisualizationSettingsPopup = nullptr;
+    PopUpWidget*                            m_VisualizationTransformPopup = nullptr;
+    QSharedPointer<Ui::VisualizationFilterWidgets> m_VisualizationFiltersUi = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

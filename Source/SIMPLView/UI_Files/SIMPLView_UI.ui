@@ -20,260 +20,219 @@
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_4">
     <property name="leftMargin">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="spacing">
      <number>4</number>
     </property>
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_4">
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QSplitter" name="splitter_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="childrenCollapsible">
-        <bool>false</bool>
-       </property>
-       <widget class="QTabWidget" name="filtersTabWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>250</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="tabPosition">
-         <enum>QTabWidget::West</enum>
-        </property>
-        <property name="tabShape">
-         <enum>QTabWidget::Rounded</enum>
-        </property>
-        <property name="currentIndex">
+      <widget class="QWidget" name="filterVisualizationContainer" native="true">
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="pipelineTab">
-         <attribute name="title">
-          <string>SIMPLView</string>
-         </attribute>
-         <layout class="QGridLayout" name="pipelineTabLayout">
-          <property name="leftMargin">
-           <number>0</number>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QScrollArea" name="pipelineScrollArea">
-            <property name="widgetResizable">
-             <bool>true</bool>
+          <widget class="QSplitter" name="filterSplitter">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <widget class="PipelineListWidget" name="pipelineListWidget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
             </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>222</width>
-               <height>590</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="pipelineScrollLayout">
-              <property name="leftMargin">
-               <number>1</number>
-              </property>
-              <property name="topMargin">
-               <number>1</number>
-              </property>
-              <property name="rightMargin">
-               <number>1</number>
-              </property>
-              <property name="bottomMargin">
-               <number>1</number>
-              </property>
-              <property name="spacing">
-               <number>4</number>
-              </property>
-              <item row="0" column="0">
-               <widget class="QSplitter" name="splitter">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <widget class="PipelineListWidget" name="pipelineListWidget" native="true">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-                <widget class="QTabWidget" name="filterTabWidget">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="FilterListToolboxWidget" name="filterListWidget">
-                  <attribute name="title">
-                   <string>Filter List</string>
-                  </attribute>
-                 </widget>
-                 <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget">
-                  <attribute name="title">
-                   <string>Filter Library</string>
-                  </attribute>
-                 </widget>
-                 <widget class="BookmarksToolboxWidget" name="bookmarksWidget">
-                  <attribute name="title">
-                   <string>Bookmarks</string>
-                  </attribute>
-                 </widget>
-                </widget>
-               </widget>
-              </item>
-             </layout>
+           </widget>
+           <widget class="QTabWidget" name="filterTabWidget">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="FilterListToolboxWidget" name="filterListWidget">
+             <attribute name="title">
+              <string>Filter List</string>
+             </attribute>
+            </widget>
+            <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget">
+             <attribute name="title">
+              <string>Filter Library</string>
+             </attribute>
+            </widget>
+            <widget class="BookmarksToolboxWidget" name="bookmarksWidget">
+             <attribute name="title">
+              <string>Bookmarks</string>
+             </attribute>
             </widget>
            </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="visualizationTab">
-         <attribute name="title">
-          <string>Visualization</string>
-         </attribute>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <property name="leftMargin">
-           <number>1</number>
+          </widget>
+          <widget class="VSMainWidget" name="visualizationWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>3</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>800</width>
+             <height>600</height>
+            </size>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QWidget" name="popupButtonBar" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="topMargin">
-           <number>1</number>
-          </property>
-          <property name="rightMargin">
-           <number>1</number>
-          </property>
-          <property name="bottomMargin">
-           <number>1</number>
-          </property>
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QSplitter" name="splitter_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <widget class="VSFilterView" name="visualFilterView">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-               <horstretch>0</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="visualizationFiltersBtn">
+             <property name="text">
+              <string>Visualization Filters</string>
              </property>
             </widget>
-            <widget class="QScrollArea" name="scrollArea">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-               <horstretch>0</horstretch>
-               <verstretch>3</verstretch>
-              </sizepolicy>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
              </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>220</width>
-                <height>174</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <property name="spacing">
-                <number>1</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="VSFilterSettingsWidget" name="vsFilterWidget" native="true">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer_5">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>160</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="visualizationSettingsBtn">
+             <property name="text">
+              <string>Visualization Settings</string>
+             </property>
             </widget>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-       <widget class="VSMainWidget" name="visualizationWidget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>3</horstretch>
-          <verstretch>1</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>800</width>
-          <height>600</height>
-         </size>
-        </property>
-       </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="colorMappingBtn">
+             <property name="text">
+              <string>Color Mapping</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="advVisualizationSettingsBtn">
+             <property name="text">
+              <string>Advanced Visualization Settings</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="transformBtn">
+             <property name="text">
+              <string>Transform</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="sizePolicy">
@@ -706,11 +665,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>VSFilterView</class>
-   <extends>QTreeView</extends>
-   <header location="global">VSFilterView.h</header>
-  </customwidget>
-  <customwidget>
    <class>VSMainWidget</class>
    <extends>QWidget</extends>
    <header location="global">VSMainWidget.h</header>
@@ -720,12 +674,6 @@
    <class>VSTransformWidget</class>
    <extends>QWidget</extends>
    <header location="global">VSTransformWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>VSFilterSettingsWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">VSFilterSettingsWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
