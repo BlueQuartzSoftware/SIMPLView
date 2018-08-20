@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1103</width>
-    <height>793</height>
+    <height>794</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -200,6 +200,10 @@
              <property name="text">
               <string>Visualization Filters</string>
              </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
+               <normaloff>:/SIMPL/icons/images/BlankGroup_Icon.png</normaloff>:/SIMPL/icons/images/BlankGroup_Icon.png</iconset>
+             </property>
             </widget>
            </item>
            <item>
@@ -219,6 +223,10 @@
             <widget class="QPushButton" name="visualizationSettingsBtn">
              <property name="text">
               <string>Visualization Settings</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
+               <normaloff>:/icons/pqCellData.png</normaloff>:/icons/pqCellData.png</iconset>
              </property>
             </widget>
            </item>
@@ -240,6 +248,10 @@
              <property name="text">
               <string>Color Mapping</string>
              </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
+               <normaloff>:/icons/pqColorBar.png</normaloff>:/icons/pqColorBar.png</iconset>
+             </property>
             </widget>
            </item>
            <item>
@@ -257,8 +269,15 @@
            </item>
            <item>
             <widget class="QPushButton" name="advVisualizationSettingsBtn">
-             <property name="text">
+             <property name="toolTip">
               <string>Advanced Visualization Settings</string>
+             </property>
+             <property name="text">
+              <string>Advanced Settings</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
+               <normaloff>:/icons/pqGear.png</normaloff>:/icons/pqGear.png</iconset>
              </property>
             </widget>
            </item>
@@ -277,8 +296,15 @@
            </item>
            <item>
             <widget class="QPushButton" name="transformBtn">
+             <property name="toolTip">
+              <string>Visualization Transform</string>
+             </property>
              <property name="text">
               <string>Transform</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
+               <normaloff>:/SIMPL/icons/images/zoom_in.png</normaloff>:/SIMPL/icons/images/zoom_in.png</iconset>
              </property>
             </widget>
            </item>
@@ -514,6 +540,7 @@
  </customwidgets>
  <resources>
   <include location="../../../../SIMPL/Resources/SIMPL.qrc"/>
+  <include location="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc"/>
  </resources>
  <connections/>
 </ui>

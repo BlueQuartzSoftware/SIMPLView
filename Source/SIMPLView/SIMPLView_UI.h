@@ -293,11 +293,27 @@ class SIMPLView_UI : public QMainWindow
      * @param button
      */
     void showPopup(PopUpWidget* popup, QPushButton* button);
+    
+    /**
+     * @brief Sets the current VSFilterViewSettings
+     * @param viewSettings
+     */
+    void setVisualizationSettings(VSFilterViewSettings* viewSettings);
 
     /**
-     * @brief Update visualization buttons
+     * @brief Handles changes in VSFilterViewSettings visibility
      */
-    void updateVisualizationSettingsButtons();
+    void vsVisibilityChanged();
+
+    /**
+     * @brief Handles changes in VSFilterViewSettings active array and component
+     */
+    void vsArrayChanged();
+
+    /**
+     * @brief Handles changes in VSFilterViewSettings color mapping value
+     */
+    void vsColorMappingChanged();
 
   protected slots:
     /**
@@ -429,7 +445,7 @@ class SIMPLView_UI : public QMainWindow
     PopUpWidget*                            m_VisualizationTransformPopup = nullptr;
     QSharedPointer<Ui::VisualizationFilterWidgets> m_VisualizationFiltersUi = nullptr;
     VSAbstractViewWidget*                   m_VisualizationViewWidget = nullptr;
-    VSAbstractFilter*                       m_VisualizationFilter = nullptr;
+    VSFilterViewSettings*                   m_VisualizationViewSettings = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

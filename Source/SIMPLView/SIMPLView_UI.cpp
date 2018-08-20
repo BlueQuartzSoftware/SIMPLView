@@ -603,6 +603,9 @@ void SIMPLView_UI::setupGui()
   connect(m_Ui->advVisualizationSettingsBtn, &QPushButton::clicked, this, &SIMPLView_UI::showAdvVisibilitySettings);
   connect(m_Ui->transformBtn, &QPushButton::clicked, this, &SIMPLView_UI::showVisualTransform);
 
+  // Set Visualization View
+  activeViewChanged(m_Ui->visualizationWidget->getActiveViewWidget());
+
   // Forward / Back buttons for QStackedWidget
   connect(m_Ui->pipelineIssuesBtn, &QToolButton::clicked, this, &SIMPLView_UI::showPipelineOutputPage);
   connect(m_Ui->filterInputWidgetBtn, &QToolButton::clicked, this, &SIMPLView_UI::showFilterInputWidgetPage);
@@ -1061,7 +1064,15 @@ void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 void SIMPLView_UI::activeViewChanged(VSAbstractViewWidget* viewWidget)
 {
   m_VisualizationViewWidget = viewWidget;
-  updateVisualizationSettingsButtons();
+
+  if(m_VisualizationViewSettings)
+  {
+    setVisualizationSettings(viewWidget->getFilterViewSettings(m_VisualizationViewSettings->getFilter()));
+  }
+  else
+  {
+    setVisualizationSettings(nullptr);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1069,46 +1080,127 @@ void SIMPLView_UI::activeViewChanged(VSAbstractViewWidget* viewWidget)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::activeVisualizationFilterChanged(VSAbstractFilter* filter, VSAbstractFilterWidget* filterWidget)
 {
-  m_VisualizationFilter = filter;
-
-  bool filterExists = (nullptr != filter);
-  m_Ui->visualizationSettingsBtn->setEnabled(filterExists);
-  m_Ui->colorMappingBtn->setEnabled(filterExists);
-  m_Ui->advVisualizationSettingsBtn->setEnabled(filterExists);
-  m_Ui->transformBtn->setEnabled(filterExists);
-
-  if(filterExists)
+  if(m_VisualizationViewWidget)
   {
-    m_Ui->visualizationFiltersBtn->setText(filter->getFilterName() + " Filter");
+    VSFilterViewSettings* viewSettings = m_VisualizationViewWidget->getFilterViewSettings(filter);
+    setVisualizationSettings(viewSettings);
   }
   else
   {
-    m_Ui->visualizationFiltersBtn->setText("No Filter");
+    setVisualizationSettings(nullptr);
   }
-
-  updateVisualizationSettingsButtons();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::updateVisualizationSettingsButtons()
+void SIMPLView_UI::setVisualizationSettings(VSFilterViewSettings* viewSettings)
 {
-  if(nullptr == m_VisualizationViewWidget)
+  if(m_VisualizationViewSettings)
   {
-    return;
+    disconnect(m_VisualizationViewSettings, &VSFilterViewSettings::visibilityChanged, this, &SIMPLView_UI::vsVisibilityChanged);
+    disconnect(m_VisualizationViewSettings, &VSFilterViewSettings::activeArrayNameChanged, this, &SIMPLView_UI::vsArrayChanged);
+    disconnect(m_VisualizationViewSettings, &VSFilterViewSettings::activeComponentIndexChanged, this, &SIMPLView_UI::vsArrayChanged);
+    disconnect(m_VisualizationViewSettings, &VSFilterViewSettings::mapColorsChanged, this, &SIMPLView_UI::vsColorMappingChanged);
   }
 
-  VSFilterViewSettings* viewSettings = m_VisualizationViewWidget->getFilterViewSettings(m_VisualizationFilter);
-  if(nullptr == viewSettings)
+  m_VisualizationViewSettings = viewSettings;
+
+  if(m_VisualizationViewSettings)
   {
-    return;
+    connect(m_VisualizationViewSettings, &VSFilterViewSettings::visibilityChanged, this, &SIMPLView_UI::vsVisibilityChanged);
+    connect(m_VisualizationViewSettings, &VSFilterViewSettings::activeArrayNameChanged, this, &SIMPLView_UI::vsArrayChanged);
+    connect(m_VisualizationViewSettings, &VSFilterViewSettings::activeComponentIndexChanged, this, &SIMPLView_UI::vsArrayChanged);
+    connect(m_VisualizationViewSettings, &VSFilterViewSettings::mapColorsChanged, this, &SIMPLView_UI::vsColorMappingChanged);
+
+    m_Ui->visualizationFiltersBtn->setToolTip(viewSettings->getFilterName() + " Filter");
+
+    bool validSettings = viewSettings->isValid();
+    m_Ui->visualizationSettingsBtn->setEnabled(validSettings);
+    m_Ui->colorMappingBtn->setEnabled(validSettings);
+    m_Ui->advVisualizationSettingsBtn->setEnabled(validSettings);
+    m_Ui->transformBtn->setEnabled(true);
+  }
+  else
+  {
+    m_Ui->visualizationFiltersBtn->setToolTip("No Filter Selected");
+
+    m_Ui->visualizationSettingsBtn->setEnabled(false);
+    m_Ui->colorMappingBtn->setEnabled(false);
+    m_Ui->advVisualizationSettingsBtn->setEnabled(false);
+    m_Ui->transformBtn->setEnabled(false);
   }
 
-  bool settingsValid = viewSettings->isValid();
-  m_Ui->visualizationSettingsBtn->setEnabled(settingsValid);
-  m_Ui->colorMappingBtn->setEnabled(settingsValid);
-  m_Ui->advVisualizationSettingsBtn->setEnabled(settingsValid);
+  vsVisibilityChanged();
+  vsArrayChanged();
+  vsColorMappingChanged();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::vsVisibilityChanged()
+{
+  if(m_VisualizationViewSettings)
+  {
+    bool settingsValid = m_VisualizationViewSettings->isValid();
+    m_Ui->visualizationSettingsBtn->setEnabled(settingsValid);
+    m_Ui->colorMappingBtn->setEnabled(settingsValid);
+    m_Ui->advVisualizationSettingsBtn->setEnabled(settingsValid);
+  }
+  else
+  {
+    m_Ui->visualizationSettingsBtn->setEnabled(false);
+    m_Ui->colorMappingBtn->setEnabled(false);
+    m_Ui->advVisualizationSettingsBtn->setEnabled(false);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::vsArrayChanged()
+{
+  QString buttonText = "Visualization Settings";
+  if(m_VisualizationViewSettings)
+  {
+    if(m_VisualizationViewSettings->isValid())
+    {
+      buttonText = m_VisualizationViewSettings->getActiveComponentName();
+    }  
+  }
+
+  m_Ui->visualizationSettingsBtn->setToolTip(buttonText);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::vsColorMappingChanged()
+{
+  QString colorMappingStr = "Color Mapping";
+  if(m_VisualizationViewSettings)
+  {
+    if(m_VisualizationViewSettings->isValid())
+    {
+      switch(m_VisualizationViewSettings->getMapColors())
+      {
+      case VSFilterViewSettings::ColorMapping::Always:
+        colorMappingStr = "Map All Colors";
+        break;
+      case VSFilterViewSettings::ColorMapping::NonColors:
+        colorMappingStr = "Map Non-Colors";
+        break;
+      case VSFilterViewSettings::ColorMapping::None:
+        colorMappingStr = "No Mapping Colors";
+        break;
+      default:
+        break;
+      }
+    }
+  }
+
+  m_Ui->colorMappingBtn->setToolTip(colorMappingStr);
 }
 
 // -----------------------------------------------------------------------------
