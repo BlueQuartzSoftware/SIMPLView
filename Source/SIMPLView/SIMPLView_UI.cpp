@@ -856,6 +856,10 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](FilterPipeline::Pointer pipeline, DataContainerArray::Pointer dca) {
     m_Ui->visualizationWidget->getController()->reloadPipelineOutput(pipeline, dca);
   });
+
+  /* Visualization Connections */
+  connect(m_Ui->visualizationWidget, &VSMainWidget::changedActiveView, this, &SIMPLView_UI::activeViewChanged);
+  connect(m_Ui->visualizationWidget, &VSMainWidget::changedActiveFilter, this, &SIMPLView_UI::activeVisualizationFilterChanged);
 }
 
 // -----------------------------------------------------------------------------
@@ -1049,6 +1053,62 @@ void SIMPLView_UI::showVisualTransform()
 void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 {
   m_LoadedPlugins = plugins;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::activeViewChanged(VSAbstractViewWidget* viewWidget)
+{
+  m_VisualizationViewWidget = viewWidget;
+  updateVisualizationSettingsButtons();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::activeVisualizationFilterChanged(VSAbstractFilter* filter, VSAbstractFilterWidget* filterWidget)
+{
+  m_VisualizationFilter = filter;
+
+  bool filterExists = (nullptr != filter);
+  m_Ui->visualizationSettingsBtn->setEnabled(filterExists);
+  m_Ui->colorMappingBtn->setEnabled(filterExists);
+  m_Ui->advVisualizationSettingsBtn->setEnabled(filterExists);
+  m_Ui->transformBtn->setEnabled(filterExists);
+
+  if(filterExists)
+  {
+    m_Ui->visualizationFiltersBtn->setText(filter->getFilterName() + " Filter");
+  }
+  else
+  {
+    m_Ui->visualizationFiltersBtn->setText("No Filter");
+  }
+
+  updateVisualizationSettingsButtons();
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::updateVisualizationSettingsButtons()
+{
+  if(nullptr == m_VisualizationViewWidget)
+  {
+    return;
+  }
+
+  VSFilterViewSettings* viewSettings = m_VisualizationViewWidget->getFilterViewSettings(m_VisualizationFilter);
+  if(nullptr == viewSettings)
+  {
+    return;
+  }
+
+  bool settingsValid = viewSettings->isValid();
+  m_Ui->visualizationSettingsBtn->setEnabled(settingsValid);
+  m_Ui->colorMappingBtn->setEnabled(settingsValid);
+  m_Ui->advVisualizationSettingsBtn->setEnabled(settingsValid);
 }
 
 // -----------------------------------------------------------------------------

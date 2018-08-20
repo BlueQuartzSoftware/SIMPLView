@@ -287,7 +287,17 @@ class SIMPLView_UI : public QMainWindow
      */
     void handlePipelineChanges();
 
+    /**
+     * @brief Opens the given PopUpWidget based on the provided button position
+     * @param popup
+     * @param button
+     */
     void showPopup(PopUpWidget* popup, QPushButton* button);
+
+    /**
+     * @brief Update visualization buttons
+     */
+    void updateVisualizationSettingsButtons();
 
   protected slots:
     /**
@@ -347,6 +357,19 @@ class SIMPLView_UI : public QMainWindow
      */
     void filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
+    /**
+     * @brief Update visualization buttons based on the active visualization view widget
+     * @param viewWidget
+     */
+    void activeViewChanged(VSAbstractViewWidget* viewWidget);
+
+    /**
+     * @brief Update visualization buttons based on the active filter
+     * @param filter
+     * @param filterWidget
+     */
+    void activeVisualizationFilterChanged(VSAbstractFilter* filter, VSAbstractFilterWidget* filterWidget);
+
     // Our Signals that we can emit custom for this class
   signals:
     void parentResized();
@@ -405,6 +428,8 @@ class SIMPLView_UI : public QMainWindow
     PopUpWidget*                            m_AdvVisualizationSettingsPopup = nullptr;
     PopUpWidget*                            m_VisualizationTransformPopup = nullptr;
     QSharedPointer<Ui::VisualizationFilterWidgets> m_VisualizationFiltersUi = nullptr;
+    VSAbstractViewWidget*                   m_VisualizationViewWidget = nullptr;
+    VSAbstractFilter*                       m_VisualizationFilter = nullptr;
 
     /**
      * @brief createSIMPLViewMenu
