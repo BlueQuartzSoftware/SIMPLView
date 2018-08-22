@@ -187,9 +187,12 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
+               <width>250</width>
                <height>20</height>
               </size>
              </property>
@@ -197,8 +200,11 @@
            </item>
            <item>
             <widget class="QPushButton" name="visualizationFiltersBtn">
-             <property name="text">
+             <property name="toolTip">
               <string>Visualization Filters</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
@@ -207,22 +213,12 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QPushButton" name="visualizationSettingsBtn">
+             <property name="toolTip">
+              <string>Color Filter By</string>
+             </property>
              <property name="text">
-              <string>Visualization Settings</string>
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
@@ -231,22 +227,12 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QPushButton" name="colorMappingBtn">
-             <property name="text">
+             <property name="toolTip">
               <string>Color Mapping</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
@@ -255,25 +241,12 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QPushButton" name="advVisualizationSettingsBtn">
              <property name="toolTip">
               <string>Advanced Visualization Settings</string>
              </property>
              <property name="text">
-              <string>Advanced Settings</string>
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
@@ -282,9 +255,26 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_4">
+            <widget class="QPushButton" name="transformBtn">
+             <property name="toolTip">
+              <string>Visualization Transform</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
+               <normaloff>:/SIMPL/icons/images/zoom_in.png</normaloff>:/SIMPL/icons/images/zoom_in.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -295,16 +285,16 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="transformBtn">
-             <property name="toolTip">
-              <string>Visualization Transform</string>
-             </property>
+            <widget class="QLabel" name="vsFilterLabel">
              <property name="text">
-              <string>Transform</string>
+              <string>Filter Name</string>
              </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
-               <normaloff>:/SIMPL/icons/images/zoom_in.png</normaloff>:/SIMPL/icons/images/zoom_in.png</iconset>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="vsDataArrayLabel">
+             <property name="text">
+              <string>Data Array</string>
              </property>
             </widget>
            </item>
