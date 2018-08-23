@@ -41,6 +41,7 @@
 #include <QtCore/QJsonDocument>
 
 #include <QtGui/QFontDatabase>
+#include <QtGui/QSurfaceFormat>
 
 #include "BrandedStrings.h"
 #include "SIMPLView.h"
