@@ -1065,7 +1065,7 @@ void SIMPLView_UI::activeViewChanged(VSAbstractViewWidget* viewWidget)
 {
   m_VisualizationViewWidget = viewWidget;
 
-  if(m_VisualizationViewSettings)
+  if(m_VisualizationViewSettings && viewWidget)
   {
     setVisualizationSettings(viewWidget->getFilterViewSettings(m_VisualizationViewSettings->getFilter()));
   }
