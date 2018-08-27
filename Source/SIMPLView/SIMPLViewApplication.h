@@ -63,7 +63,7 @@ class SIMPLViewApplication : public QApplication
 
 public:
   SIMPLViewApplication(int& argc, char** argv);
-  ~SIMPLViewApplication();
+  ~SIMPLViewApplication() override;
 
   enum PasteType
   {
@@ -113,7 +113,7 @@ public:
    * @param event
    * @return
    */
-  bool event(QEvent* event);
+  bool event(QEvent* event) override;
 
   /**
    * @brief getRecentFilesMenu
