@@ -92,7 +92,15 @@ class SIMPLView_UI : public QMainWindow
 
   public:
     SIMPLView_UI(QWidget* parent = nullptr);
-    virtual ~SIMPLView_UI();
+    ~SIMPLView_UI() override;
+
+    /**
+     * @brief eventFilter
+     * @param watched
+     * @param event
+     * @return
+     */
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     /**
      * @brief setLoadedPlugins This will set the plugins that have already been loaded by another mechanism. The plugins are NOT
@@ -191,23 +199,13 @@ class SIMPLView_UI : public QMainWindow
      * @brief Implements the CloseEvent to Quit the application and write settings
      * to the preference file
      */
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
 
     /**
      * @brief changeEvent
      * @param event
      */
-    void changeEvent(QEvent* event);
-
-    /**
-     *
-     * @param prefs
-     */
-    void writeWindowSettings(QtSSettings* prefs);
-    void writeVersionCheckSettings(QtSSettings* prefs);
-
-    void readWindowSettings(QtSSettings* prefs);
-    void readVersionSettings(QtSSettings* prefs);
+    void changeEvent(QEvent* event) override;
 
     /**
      * @brief Initializes some of the GUI elements with selections or other GUI related items
@@ -238,7 +236,7 @@ class SIMPLView_UI : public QMainWindow
      * @brief Over ride the resize event
      * @param event The event to process
      */
-    void resizeEvent ( QResizeEvent* event );
+    void resizeEvent(QResizeEvent* event) override;
 
     /**
     * @brief activateBookmark
@@ -253,6 +251,28 @@ class SIMPLView_UI : public QMainWindow
     void handlePipelineChanges();
 
   protected slots:
+    /**
+     * @brief Writes the window settings for the SIMPLView_UI instance.  This includes the window position and size,
+     * dock widget locations, tab orders, splitter position, etc.
+     */
+    void writeWindowSettings();
+
+    /**
+     * @brief Writes the version check settings for the SIMPLView_UI instance.
+     */
+    void writeVersionCheckSettings();
+
+    /**
+     * @brief Reads the window settings for the SIMPLView_UI instance.  This includes the window position and size,
+     * dock widget locations, tab orders, splitter position, etc.
+     */
+    void readWindowSettings();
+
+    /**
+     * @brief Reads the version check settings for the SIMPLView_UI instance.
+     */
+    void readVersionCheckSettings();
+
     /**
      * @brief pipelineDidFinish
      */
@@ -344,6 +364,12 @@ class SIMPLView_UI : public QMainWindow
      * @brief createSIMPLViewMenu
      */
     void createSIMPLViewMenuSystem();
+
+    /**
+     * @brief Connects all the dock widget specific signals and slots
+     * @param dockWidget
+     */
+    void connectDockWidgetSignalsSlots(QDockWidget* dockWidget);
 
     /**
      * @brief savePipeline
