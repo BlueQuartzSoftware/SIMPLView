@@ -93,7 +93,7 @@ class SIMPLView_UI : public QMainWindow
 
   public:
     SIMPLView_UI(QWidget* parent = nullptr);
-    virtual ~SIMPLView_UI();
+    ~SIMPLView_UI() override;
 
     /**
      * @brief eventFilter
@@ -210,13 +210,13 @@ class SIMPLView_UI : public QMainWindow
      * @brief Implements the CloseEvent to Quit the application and write settings
      * to the preference file
      */
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
 
     /**
      * @brief changeEvent
      * @param event
      */
-    void changeEvent(QEvent* event);
+    void changeEvent(QEvent* event) override;
 
     /**
      * @brief Initializes some of the GUI elements with selections or other GUI related items
@@ -247,7 +247,7 @@ class SIMPLView_UI : public QMainWindow
      * @brief Over ride the resize event
      * @param event The event to process
      */
-    void resizeEvent ( QResizeEvent* event );
+    void resizeEvent(QResizeEvent* event) override;
 
     /**
      * @brief activateBookmark

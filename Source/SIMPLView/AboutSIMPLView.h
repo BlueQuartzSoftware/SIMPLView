@@ -48,8 +48,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
 
   public:
     AboutSIMPLView(QWidget* parent = nullptr);
-    virtual ~AboutSIMPLView();
-
+    ~AboutSIMPLView() override;
 
     /**
      * @brief This will set the list of licenses that can be viewed by the
