@@ -927,7 +927,12 @@ void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 bool SIMPLViewApplication::event(QEvent* event)
 {
   #if defined(Q_OS_MAC)
-  if (event->type() == QEvent::FileOpen)
+  if (event->type() == QEvent::Close)
+  {
+    // This needs to be here to prevent the close event from firing twice when quitting DREAM3D from the macOS dock.
+    return false;
+  }
+  else if (event->type() == QEvent::FileOpen)
   {
     QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
     QString filePath = openEvent->file();
