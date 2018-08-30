@@ -60,7 +60,6 @@
 
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"
-#include "ui_VisualizationFilterWidgets.h"
 
 
 class ISIMPLibPlugin;
@@ -185,31 +184,6 @@ class SIMPLView_UI : public QMainWindow
     void listenSavePipelineAsTriggered();
 
     /**
-     * @brief showVisualizationFilters
-     */
-    void showVisualizationFilters();
-
-    /**
-     * @brief showVisibilitySettings
-     */
-    void showVisibilitySettings();
-
-    /**
-     * @brief showColorMapping
-     */
-    void showColorMapping();
-
-    /**
-     * @brief showAdvVisibilitySettings
-     */
-    void showAdvVisibilitySettings();
-
-    /**
-     * @brief showVisualTransform
-     */
-    void showVisualTransform();
-
-    /**
      * @brief showPipelineOutputPage
      */
     void showPipelineOutputPage();
@@ -287,34 +261,6 @@ class SIMPLView_UI : public QMainWindow
      */
     void handlePipelineChanges();
 
-    /**
-     * @brief Opens the given PopUpWidget based on the provided button position
-     * @param popup
-     * @param button
-     */
-    void showPopup(PopUpWidget* popup, QPushButton* button);
-    
-    /**
-     * @brief Sets the current VSFilterViewSettings
-     * @param viewSettings
-     */
-    void setVisualizationSettings(VSFilterViewSettings* viewSettings);
-
-    /**
-     * @brief Handles changes in VSFilterViewSettings visibility
-     */
-    void vsVisibilityChanged();
-
-    /**
-     * @brief Handles changes in VSFilterViewSettings active array and component
-     */
-    void vsArrayChanged();
-
-    /**
-     * @brief Handles changes in VSFilterViewSettings color mapping value
-     */
-    void vsColorMappingChanged();
-
   protected slots:
     /**
      * @brief Writes the window settings for the SIMPLView_UI instance.  This includes the window position and size,
@@ -373,19 +319,6 @@ class SIMPLView_UI : public QMainWindow
      */
     void filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
-    /**
-     * @brief Update visualization buttons based on the active visualization view widget
-     * @param viewWidget
-     */
-    void activeViewChanged(VSAbstractViewWidget* viewWidget);
-
-    /**
-     * @brief Update visualization buttons based on the active filter
-     * @param filter
-     * @param filterWidget
-     */
-    void activeVisualizationFilterChanged(VSAbstractFilter* filter, VSAbstractFilterWidget* filterWidget);
-
     // Our Signals that we can emit custom for this class
   signals:
     void parentResized();
@@ -437,15 +370,6 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
-
-    PopUpWidget*                            m_VisualizationFiltersPopup = nullptr;
-    PopUpWidget*                            m_VisualizationSettingsPopup = nullptr;
-    PopUpWidget*                            m_ColorMappingPopup = nullptr;
-    PopUpWidget*                            m_AdvVisualizationSettingsPopup = nullptr;
-    PopUpWidget*                            m_VisualizationTransformPopup = nullptr;
-    QSharedPointer<Ui::VisualizationFilterWidgets> m_VisualizationFiltersUi = nullptr;
-    VSAbstractViewWidget*                   m_VisualizationViewWidget = nullptr;
-    VSFilterViewSettings*                   m_VisualizationViewSettings = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

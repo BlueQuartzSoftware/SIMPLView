@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1103</width>
-    <height>794</height>
+    <height>796</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,7 +102,7 @@
             </widget>
            </widget>
           </widget>
-          <widget class="VSMainWidget" name="visualizationWidget" native="true">
+          <widget class="VSMainWidget2" name="visualizationWidget" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>3</horstretch>
@@ -179,122 +179,6 @@
              <property name="icon">
               <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
                <normaloff>:/SIMPL/icons/images/navigate_right.png</normaloff>:/SIMPL/icons/images/navigate_right.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>250</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="visualizationFiltersBtn">
-             <property name="toolTip">
-              <string>Visualization Filters</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
-               <normaloff>:/SIMPL/icons/images/BlankGroup_Icon.png</normaloff>:/SIMPL/icons/images/BlankGroup_Icon.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="visualizationSettingsBtn">
-             <property name="toolTip">
-              <string>Color Filter By</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
-               <normaloff>:/icons/pqCellData.png</normaloff>:/icons/pqCellData.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="colorMappingBtn">
-             <property name="toolTip">
-              <string>Color Mapping</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
-               <normaloff>:/icons/pqColorBar.png</normaloff>:/icons/pqColorBar.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="advVisualizationSettingsBtn">
-             <property name="toolTip">
-              <string>Advanced Visualization Settings</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPLVtkLib/Resources/VtkSIMPL.qrc">
-               <normaloff>:/icons/pqGear.png</normaloff>:/icons/pqGear.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="transformBtn">
-             <property name="toolTip">
-              <string>Visualization Transform</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../../SIMPL/Resources/SIMPL.qrc">
-               <normaloff>:/SIMPL/icons/images/zoom_in.png</normaloff>:/SIMPL/icons/images/zoom_in.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="vsFilterLabel">
-             <property name="text">
-              <string>Filter Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="vsDataArrayLabel">
-             <property name="text">
-              <string>Data Array</string>
              </property>
             </widget>
            </item>
@@ -522,9 +406,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>VSMainWidget</class>
+   <class>VSMainWidget2</class>
    <extends>QWidget</extends>
-   <header location="global">VSMainWidget.h</header>
+   <header location="global">VSMainWidget2.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
