@@ -842,7 +842,6 @@ void SIMPLView_UI::connectSignalsSlots()
     }
     m_IssuesUi->issuesWidget->displayCachedMessages();
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
-    m_Ui->issuesOverlayBtn->setChecked(true);
   });
 
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
@@ -965,7 +964,6 @@ void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 // -----------------------------------------------------------------------------
 QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 {
-
   if(this->isWindowModified() == true)
   {
     int r = QMessageBox::warning(this, BrandedStrings::ApplicationName, tr("The Pipeline has been modified.\nDo you want to save your changes?"), QMessageBox::Save | QMessageBox::Default,
@@ -1314,6 +1312,8 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
   }
 
   m_Ui->issuesOverlayBtn->setProperty("error", hasErrors);
+  qApp->style()->unpolish(m_Ui->issuesOverlayBtn);
+  qApp->style()->polish(m_Ui->issuesOverlayBtn);
 }
 
 // -----------------------------------------------------------------------------
