@@ -113,6 +113,7 @@
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
 , m_Ui(new Ui::SIMPLView_UI)
+, m_IssuesUi(new Ui::PipelineIssuesWidget)
 , m_FilterManager(nullptr)
 , m_FilterWidgetManager(nullptr)
 , m_LastOpenedFilePath(QDir::homePath())
@@ -490,6 +491,10 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setupGui()
 {
+  // Setup pipeline issues widget
+  QWidget* issuesWidget = new QWidget(this);
+  m_IssuesUi->setupUi(issuesWidget);
+
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
   setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North); 
   setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North); 
@@ -507,7 +512,7 @@ void SIMPLView_UI::setupGui()
   viewWidget->setModel(model);
 
   // Set the IssuesWidget as a PipelineMessageObserver Object.
-  viewWidget->addPipelineMessageObserver(m_Ui->issuesWidget);
+  viewWidget->addPipelineMessageObserver(m_IssuesUi->issuesWidget);
 
   createSIMPLViewMenuSystem();
 
@@ -546,7 +551,7 @@ void SIMPLView_UI::setupGui()
   //  m_StatusBar->readSettings();
 
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
-  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
+  connect(m_IssuesUi->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
 #if 0
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 
@@ -567,9 +572,19 @@ void SIMPLView_UI::setupGui()
   m_Ui->stdOutDockWidget->installEventFilter(this);
 #endif
 
-  // Forward / Back buttons for QStackedWidget
-  connect(m_Ui->pipelineIssuesBtn, &QToolButton::clicked, this, &SIMPLView_UI::showPipelineOutputPage);
-  connect(m_Ui->filterInputWidgetBtn, &QToolButton::clicked, this, &SIMPLView_UI::showFilterInputWidgetPage);
+  // Setup overlay buttons
+  m_Ui->filterOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_Ui->issuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_Ui->issuesOverlayBtn->setSource(issuesWidget);
+
+  QVector<SVOverlayWidgetButton*> issuesOverlayVector;
+  issuesOverlayVector.push_back(m_Ui->filterOverlayBtn);
+  m_Ui->issuesOverlayBtn->setOverlappingButtons(issuesOverlayVector);
+
+  QVector<SVOverlayWidgetButton*> filterOverlayVector;
+  filterOverlayVector.push_back(m_Ui->issuesOverlayBtn);
+  m_Ui->filterOverlayBtn->setOverlappingButtons(filterOverlayVector);
+  update();
 }
 
 // -----------------------------------------------------------------------------
@@ -788,8 +803,8 @@ void SIMPLView_UI::connectSignalsSlots()
   });
   //connect(pipelineView, &SVPipelineView::clearDataStructureWidgetTriggered, [=] { m_Ui->dataBrowserWidget->filterActivated(AbstractFilter::NullPointer()); });
   connect(pipelineView, &SVPipelineView::filterInputWidgetNeedsCleared, this, &SIMPLView_UI::clearFilterInputWidget);
-  connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::displayCachedMessages);
-  connect(pipelineView, &SVPipelineView::clearIssuesTriggered, m_Ui->issuesWidget, &IssuesWidget::clearIssues);
+  connect(pipelineView, &SVPipelineView::displayIssuesTriggered, m_IssuesUi->issuesWidget, &IssuesWidget::displayCachedMessages);
+  connect(pipelineView, &SVPipelineView::clearIssuesTriggered, m_IssuesUi->issuesWidget, &IssuesWidget::clearIssues);
   connect(pipelineView, &SVPipelineView::writeSIMPLViewSettingsTriggered, [=] { writeSettings(); });
 
   // Connection that displays issues in the Issue Table when the preflight is finished
@@ -798,8 +813,9 @@ void SIMPLView_UI::connectSignalsSlots()
     {
       getDataStructureWidget()->refreshData();
     }
-    m_Ui->issuesWidget->displayCachedMessages();
+    m_IssuesUi->issuesWidget->displayCachedMessages();
     m_Ui->pipelineListWidget->preflightFinished(pipeline, err);
+    m_Ui->issuesOverlayBtn->setChecked(true);
   });
 
   connect(pipelineView, &SVPipelineView::pipelineHasMessage, this, &SIMPLView_UI::processPipelineMessage);
@@ -912,30 +928,6 @@ void SIMPLView_UI::executePipeline()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::showPipelineOutputPage()
-{
-  m_Ui->stackedWidget->setCurrentIndex(0);
-  m_Ui->pipelineIssuesBtn->setEnabled(false);
-  m_Ui->filterInputWidgetBtn->setEnabled(nullptr != m_FilterInputWidget);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void SIMPLView_UI::showFilterInputWidgetPage()
-{
-  if(m_Ui->stackedWidget->count() > 1)
-  {
-    m_Ui->stackedWidget->setCurrentIndex(1);
-  }
-
-  m_Ui->pipelineIssuesBtn->setEnabled(true);
-  m_Ui->filterInputWidgetBtn->setEnabled(false);
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 {
   m_LoadedPlugins = plugins;
@@ -1012,24 +1004,24 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
-#if 0
     // Allow status messages to open the standard output widget
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
-      m_Ui->stdOutDockWidget->setVisible(true);
+      // m_Ui->stdOutDockWidget->setVisible(true);
+      m_Ui->issuesOverlayBtn->setChecked(true);
     }
 
     // Allow status messages to open the issuesDockWidget as well
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
     {
-      m_Ui->issuesDockWidget->setVisible(true);
+      // m_Ui->issuesDockWidget->setVisible(true);
+      m_Ui->issuesOverlayBtn->setChecked(true);
     }
-#endif
 
     QString text = "<span style=\" color:#000000;\" >";
     text.append(msg.getText());
     text.append("</span>");
-    m_Ui->stdOutWidget->appendText(text);
+    m_IssuesUi->stdOutWidget->appendText(text);
   }
 }
 
@@ -1182,8 +1174,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
-    showPipelineOutputPage();
-    m_Ui->filterInputWidgetBtn->setEnabled(false);
+    m_Ui->filterOverlayBtn->setSource(nullptr);
+    m_Ui->filterOverlayBtn->setChecked(false);
     return;
   }
 
@@ -1217,9 +1209,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   // Set the widget into the frame
   if(nullptr != widget)
   {
-    m_Ui->stackedWidget->insertWidget(1, widget);
-    widget->show();
-    showFilterInputWidgetPage();
+    m_Ui->filterOverlayBtn->setSource(widget);
+    m_Ui->filterOverlayBtn->setChecked(true);
   }
 }
 
@@ -1242,9 +1233,8 @@ void SIMPLView_UI::clearFilterInputWidget()
 #else
   if(nullptr != m_FilterInputWidget)
   {
-    showPipelineOutputPage();
     m_FilterInputWidget->hide();
-    m_Ui->stackedWidget->removeWidget(m_FilterInputWidget);
+    m_Ui->filterOverlayBtn->setSource(nullptr);
     m_FilterInputWidget->setParent(nullptr);
   }
 #endif
@@ -1268,21 +1258,21 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
   Q_UNUSED(errCount)
   Q_UNUSED(warnCount)
 
-#if 0
   SIMPLView::DockWidgetSettings::HideDockSetting errorTableSetting = IssuesWidget::GetHideDockSetting();
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting 
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
-    m_Ui->issuesDockWidget->setVisible(hasErrors);
+    // m_Ui->issuesDockWidget->setVisible(hasErrors);
+    m_Ui->issuesOverlayBtn->setChecked(hasErrors);
   }
 
   SIMPLView::DockWidgetSettings::HideDockSetting stdOutSetting = StandardOutputWidget::GetHideDockSetting();
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == stdOutSetting 
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
-    m_Ui->stdOutDockWidget->setVisible(hasErrors);
+    // m_Ui->stdOutDockWidget->setVisible(hasErrors);
+    m_Ui->issuesOverlayBtn->setChecked(hasErrors);
   }
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1301,7 +1291,7 @@ void SIMPLView_UI::addStdOutputMessage(const QString& msg)
   QString text = "<span style=\" color:#000000;\" >";
   text.append(msg);
   text.append("</span>");
-  m_Ui->stdOutWidget->appendText(text);
+  m_IssuesUi->stdOutWidget->appendText(text);
 }
 
 // -----------------------------------------------------------------------------

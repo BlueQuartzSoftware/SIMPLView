@@ -60,6 +60,7 @@
 
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"
+#include "ui_PipelineIssuesWidget.h"
 
 
 class ISIMPLibPlugin;
@@ -182,16 +183,6 @@ class SIMPLView_UI : public QMainWindow
      * @brief listenSavePipelineAsTriggered
      */
     void listenSavePipelineAsTriggered();
-
-    /**
-     * @brief showPipelineOutputPage
-     */
-    void showPipelineOutputPage();
-
-    /**
-     * @brief showFilterInputWidgetPage
-     */
-    void showFilterInputWidgetPage();
 
   protected:
 
@@ -330,6 +321,7 @@ class SIMPLView_UI : public QMainWindow
 
   private:
     QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
+    QSharedPointer<Ui::PipelineIssuesWidget>        m_IssuesUi;
     QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
     QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
