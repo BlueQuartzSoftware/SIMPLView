@@ -252,6 +252,12 @@ class SIMPLView_UI : public QMainWindow
      */
     void handlePipelineChanges();
 
+    /**
+     * @brief createFilterListWidget
+     * @return
+     */
+    QWidget* createFilterListWidget();
+
   protected slots:
     /**
      * @brief Writes the window settings for the SIMPLView_UI instance.  This includes the window position and size,
@@ -362,6 +368,10 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
+
+    FilterListToolboxWidget*                m_FilterListWidget = nullptr;
+    FilterLibraryToolboxWidget*             m_FilterLibraryWidget = nullptr;
+    BookmarksToolboxWidget*                 m_BookmarksWidget = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

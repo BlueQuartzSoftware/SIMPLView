@@ -76,6 +76,7 @@
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
 #include "SVWidgetsLib/Widgets/FilterLibraryToolboxWidget.h"
+#include "SVWidgetsLib/Widgets/FilterListToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
@@ -290,7 +291,7 @@ bool SIMPLView_UI::savePipelineAs()
 
   if(ret == QMessageBox::Yes)
   {
-    m_Ui->bookmarksWidget->getBookmarksTreeView()->addBookmark(filePath, QModelIndex());
+    m_BookmarksWidget->getBookmarksTreeView()->addBookmark(filePath, QModelIndex());
   }
 
   return true;
@@ -381,15 +382,15 @@ void SIMPLView_UI::readSettings()
 
   // Read dock widget settings
   prefs->beginGroup("Bookmarks Widget");
-  m_Ui->bookmarksWidget->readSettings(prefs.data());
+  m_BookmarksWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->beginGroup("Filter List Widget");
-  m_Ui->filterListWidget->readSettings(prefs.data());
+  m_FilterListWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->beginGroup("Filter Library Widget");
-  m_Ui->filterLibraryWidget->readSettings(prefs.data());
+  m_FilterLibraryWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->endGroup();
@@ -495,6 +496,25 @@ void SIMPLView_UI::setupGui()
   QWidget* issuesWidget = new QWidget(this);
   m_IssuesUi->setupUi(issuesWidget);
 
+  // Setup overlay buttons
+  m_Ui->filterListOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_Ui->filterListOverlayBtn->setSide(SVOverlayWidgetButton::TargetSide::Left);
+  m_Ui->filterListOverlayBtn->setSource(createFilterListWidget());
+  m_Ui->filterInputOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_Ui->issuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_Ui->issuesOverlayBtn->setSource(issuesWidget);
+
+  m_Ui->issuesOverlayBtn->addOverlappingButton(m_Ui->filterInputOverlayBtn);
+  m_Ui->issuesOverlayBtn->addOverlappingButton(m_Ui->filterListOverlayBtn);
+
+  m_Ui->filterInputOverlayBtn->addOverlappingButton(m_Ui->issuesOverlayBtn);
+  m_Ui->filterInputOverlayBtn->addOverlappingButton(m_Ui->filterListOverlayBtn);
+
+  m_Ui->filterListOverlayBtn->addOverlappingButton(m_Ui->issuesOverlayBtn);
+  m_Ui->filterListOverlayBtn->addOverlappingButton(m_Ui->filterInputOverlayBtn);
+  m_Ui->filterListOverlayBtn->setChecked(true);
+
+  // Set Tab Positions
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
   setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North); 
   setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North); 
@@ -522,10 +542,10 @@ void SIMPLView_UI::setupGui()
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
-  m_Ui->filterLibraryWidget->refreshFilterGroups();
+  m_FilterLibraryWidget->refreshFilterGroups();
 
   // Read the toolbox settings and update the filter list
-  m_Ui->filterListWidget->loadFilterList();
+  m_FilterListWidget->loadFilterList();
 
 #if 0
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
@@ -571,20 +591,27 @@ void SIMPLView_UI::setupGui()
   m_Ui->pipelineDockWidget->installEventFilter(this);
   m_Ui->stdOutDockWidget->installEventFilter(this);
 #endif
+}
 
-  // Setup overlay buttons
-  m_Ui->filterOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_Ui->issuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_Ui->issuesOverlayBtn->setSource(issuesWidget);
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+QWidget* SIMPLView_UI::createFilterListWidget()
+{
+  QTabWidget* tabWidget = new QTabWidget(this);
 
-  QVector<SVOverlayWidgetButton*> issuesOverlayVector;
-  issuesOverlayVector.push_back(m_Ui->filterOverlayBtn);
-  m_Ui->issuesOverlayBtn->setOverlappingButtons(issuesOverlayVector);
+  m_FilterListWidget = new FilterListToolboxWidget(tabWidget);
+  m_FilterListWidget->loadFilterList();
+  m_FilterLibraryWidget = new FilterLibraryToolboxWidget(tabWidget);
+  m_BookmarksWidget = new BookmarksToolboxWidget(tabWidget);
 
-  QVector<SVOverlayWidgetButton*> filterOverlayVector;
-  filterOverlayVector.push_back(m_Ui->issuesOverlayBtn);
-  m_Ui->filterOverlayBtn->setOverlappingButtons(filterOverlayVector);
-  update();
+  tabWidget->addTab(m_FilterListWidget, "Filter  List");
+  tabWidget->addTab(m_FilterLibraryWidget, "Filter Library");
+  tabWidget->addTab(m_BookmarksWidget, "Bookmarks");
+  tabWidget->setElideMode(Qt::TextElideMode::ElideNone);
+  tabWidget->setUsesScrollButtons(false);
+
+  return tabWidget;
 }
 
 // -----------------------------------------------------------------------------
@@ -668,7 +695,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   QAction* actionRedo = viewWidget->getActionRedo();
 
   // Bookmarks Actions
-  BookmarksTreeView* bookmarksView = m_Ui->bookmarksWidget->getBookmarksTreeView();
+  BookmarksTreeView* bookmarksView = m_BookmarksWidget->getBookmarksTreeView();
   QAction* actionAddBookmark = bookmarksView->getActionAddBookmark();
   QAction* actionNewFolder = bookmarksView->getActionAddBookmarkFolder();
   QAction* actionClearBookmarks = bookmarksView->getActionClearBookmarks();
@@ -778,14 +805,14 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
 
   /* Filter Library Widget Connections */
-  connect(m_Ui->filterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
+  connect(m_FilterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Filter List Widget Connections */
-  connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
+  connect(m_FilterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
-  connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
+  connect(m_BookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
+  connect(m_BookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
   //connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
 
@@ -1008,14 +1035,20 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
       // m_Ui->stdOutDockWidget->setVisible(true);
-      m_Ui->issuesOverlayBtn->setChecked(true);
+      if (!m_Ui->filterInputOverlayBtn->isChecked())
+      {
+        m_Ui->issuesOverlayBtn->setChecked(true);
+      }
     }
 
     // Allow status messages to open the issuesDockWidget as well
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
     {
       // m_Ui->issuesDockWidget->setVisible(true);
-      m_Ui->issuesOverlayBtn->setChecked(true);
+      if (!m_Ui->filterInputOverlayBtn->isChecked())
+      {
+        m_Ui->issuesOverlayBtn->setChecked(true);
+      }
     }
 
     QString text = "<span style=\" color:#000000;\" >";
@@ -1031,10 +1064,10 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 void SIMPLView_UI::pipelineDidFinish()
 {
   // Re-enable FilterListToolboxWidget signals - resume adding filters
-  m_Ui->filterListWidget->blockSignals(false);
+  m_FilterListWidget->blockSignals(false);
 
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
-  m_Ui->filterLibraryWidget->blockSignals(false);
+  m_FilterLibraryWidget->blockSignals(false);
 
   QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
   qSort(selectedIndexes);
@@ -1174,8 +1207,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
-    m_Ui->filterOverlayBtn->setSource(nullptr);
-    m_Ui->filterOverlayBtn->setChecked(false);
+    m_Ui->filterInputOverlayBtn->setSource(nullptr);
+    m_Ui->filterInputOverlayBtn->setChecked(false);
     return;
   }
 
@@ -1209,8 +1242,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   // Set the widget into the frame
   if(nullptr != widget)
   {
-    m_Ui->filterOverlayBtn->setSource(widget);
-    m_Ui->filterOverlayBtn->setChecked(true);
+    m_Ui->filterInputOverlayBtn->setSource(widget);
+    m_Ui->filterInputOverlayBtn->setChecked(true);
   }
 }
 
@@ -1234,7 +1267,7 @@ void SIMPLView_UI::clearFilterInputWidget()
   if(nullptr != m_FilterInputWidget)
   {
     m_FilterInputWidget->hide();
-    m_Ui->filterOverlayBtn->setSource(nullptr);
+    m_Ui->filterInputOverlayBtn->setSource(nullptr);
     m_FilterInputWidget->setParent(nullptr);
   }
 #endif
@@ -1263,7 +1296,10 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
     // m_Ui->issuesDockWidget->setVisible(hasErrors);
-    m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+    if (!m_Ui->filterInputOverlayBtn->isChecked())
+    {
+      m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+    }
   }
 
   SIMPLView::DockWidgetSettings::HideDockSetting stdOutSetting = StandardOutputWidget::GetHideDockSetting();
@@ -1271,8 +1307,13 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
     // m_Ui->stdOutDockWidget->setVisible(hasErrors);
-    m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+    if(!m_Ui->filterInputOverlayBtn->isChecked())
+    {
+      m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+    }
   }
+
+  m_Ui->issuesOverlayBtn->setProperty("error", hasErrors);
 }
 
 // -----------------------------------------------------------------------------

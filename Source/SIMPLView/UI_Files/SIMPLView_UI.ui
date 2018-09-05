@@ -60,47 +60,22 @@
         </property>
         <item row="0" column="0">
          <widget class="QSplitter" name="splitter">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QSplitter" name="filterSplitter">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+          <widget class="PipelineListWidget" name="pipelineListWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
            </property>
-           <widget class="PipelineListWidget" name="pipelineListWidget" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>1</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-           <widget class="QTabWidget" name="filterTabWidget">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
-            <widget class="FilterListToolboxWidget" name="filterListWidget">
-             <attribute name="title">
-              <string>Filter List</string>
-             </attribute>
-            </widget>
-            <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget">
-             <attribute name="title">
-              <string>Filter Library</string>
-             </attribute>
-            </widget>
-            <widget class="BookmarksToolboxWidget" name="bookmarksWidget">
-             <attribute name="title">
-              <string>Bookmarks</string>
-             </attribute>
-            </widget>
-           </widget>
           </widget>
           <widget class="VSMainWidget2" name="visualizationWidget" native="true">
            <property name="sizePolicy">
@@ -156,14 +131,30 @@
             </spacer>
            </item>
            <item>
+            <widget class="SVOverlayWidgetButton" name="filterListOverlayBtn">
+             <property name="toolTip">
+              <string>Show / Hide Filter List</string>
+             </property>
+             <property name="text">
+              <string>Filter List</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="SVOverlayWidgetButton" name="issuesOverlayBtn">
+             <property name="toolTip">
+              <string>Show / Hide Pipeline Issues</string>
+             </property>
              <property name="text">
               <string>Pipeline Issues</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="SVOverlayWidgetButton" name="filterOverlayBtn">
+            <widget class="SVOverlayWidgetButton" name="filterInputOverlayBtn">
+             <property name="toolTip">
+              <string>Show / Hide Filter Inputs</string>
+             </property>
              <property name="text">
               <string>Filter Input</string>
              </property>
@@ -197,24 +188,6 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>FilterLibraryToolboxWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">FilterLibraryToolboxWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>BookmarksToolboxWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">BookmarksToolboxWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>FilterListToolboxWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">FilterListToolboxWidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>PipelineListWidget</class>
    <extends>QWidget</extends>
