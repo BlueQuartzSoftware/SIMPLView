@@ -80,6 +80,7 @@
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
+#include "SVWidgetsLib/Widgets/SVOverlayWidgetButton.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 #include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
@@ -496,23 +497,31 @@ void SIMPLView_UI::setupGui()
   QWidget* issuesWidget = new QWidget(this);
   m_IssuesUi->setupUi(issuesWidget);
 
+  m_FilterInputOverlayBtn = new SVOverlayWidgetButton("Filter Input");
+  m_FilterListOverlayBtn = new SVOverlayWidgetButton("Filter List");
+  m_IssuesOverlayBtn = new SVOverlayWidgetButton("Pipeline Issues");
+
+  m_Ui->statusbar->addPermanentWidget(m_FilterListOverlayBtn);
+  m_Ui->statusbar->addPermanentWidget(m_IssuesOverlayBtn);
+  m_Ui->statusbar->addPermanentWidget(m_FilterInputOverlayBtn);
+
   // Setup overlay buttons
-  m_Ui->filterListOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_Ui->filterListOverlayBtn->setSide(SVOverlayWidgetButton::TargetSide::Left);
-  m_Ui->filterListOverlayBtn->setSource(createFilterListWidget());
-  m_Ui->filterInputOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_Ui->issuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_Ui->issuesOverlayBtn->setSource(issuesWidget);
+  m_FilterListOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_FilterListOverlayBtn->setSide(SVOverlayWidgetButton::TargetSide::Left);
+  m_FilterListOverlayBtn->setSource(createFilterListWidget());
+  m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_IssuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_IssuesOverlayBtn->setSource(issuesWidget);
 
-  m_Ui->issuesOverlayBtn->addOverlappingButton(m_Ui->filterInputOverlayBtn);
-  m_Ui->issuesOverlayBtn->addOverlappingButton(m_Ui->filterListOverlayBtn);
+  m_IssuesOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
+  m_IssuesOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
 
-  m_Ui->filterInputOverlayBtn->addOverlappingButton(m_Ui->issuesOverlayBtn);
-  m_Ui->filterInputOverlayBtn->addOverlappingButton(m_Ui->filterListOverlayBtn);
+  m_FilterInputOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
+  m_FilterInputOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
 
-  m_Ui->filterListOverlayBtn->addOverlappingButton(m_Ui->issuesOverlayBtn);
-  m_Ui->filterListOverlayBtn->addOverlappingButton(m_Ui->filterInputOverlayBtn);
-  m_Ui->filterListOverlayBtn->setChecked(true);
+  m_FilterListOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
+  m_FilterListOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
+  m_FilterListOverlayBtn->setChecked(true);
 
   // Set Tab Positions
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
@@ -1033,9 +1042,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
     {
       // m_Ui->stdOutDockWidget->setVisible(true);
-      if (!m_Ui->filterInputOverlayBtn->isChecked())
+      if (!m_FilterInputOverlayBtn->isChecked())
       {
-        m_Ui->issuesOverlayBtn->setChecked(true);
+        m_IssuesOverlayBtn->setChecked(true);
       }
     }
 
@@ -1043,9 +1052,9 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
     if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
     {
       // m_Ui->issuesDockWidget->setVisible(true);
-      if (!m_Ui->filterInputOverlayBtn->isChecked())
+      if (!m_FilterInputOverlayBtn->isChecked())
       {
-        m_Ui->issuesOverlayBtn->setChecked(true);
+        m_IssuesOverlayBtn->setChecked(true);
       }
     }
 
@@ -1205,8 +1214,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
-    m_Ui->filterInputOverlayBtn->setSource(nullptr);
-    m_Ui->filterInputOverlayBtn->setChecked(false);
+    m_FilterInputOverlayBtn->setSource(nullptr);
+    m_FilterInputOverlayBtn->setChecked(false);
     return;
   }
 
@@ -1238,10 +1247,10 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   emit widget->endPathFiltering();
 
   // Set the widget into the frame
-  m_Ui->filterInputOverlayBtn->setSource(widget);
+  m_FilterInputOverlayBtn->setSource(widget);
   if(nullptr != widget)
   {
-    m_Ui->filterInputOverlayBtn->setChecked(true);
+    m_FilterInputOverlayBtn->setChecked(true);
   }
 }
 
@@ -1265,7 +1274,7 @@ void SIMPLView_UI::clearFilterInputWidget()
   if(nullptr != m_FilterInputWidget)
   {
     m_FilterInputWidget->hide();
-    m_Ui->filterInputOverlayBtn->setSource(nullptr);
+    m_FilterInputOverlayBtn->setSource(nullptr);
     m_FilterInputWidget->setParent(nullptr);
   }
 #endif
@@ -1294,9 +1303,9 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
     // m_Ui->issuesDockWidget->setVisible(hasErrors);
-    if (!m_Ui->filterInputOverlayBtn->isChecked())
+    if (!m_FilterInputOverlayBtn->isChecked())
     {
-      m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+      m_IssuesOverlayBtn->setChecked(hasErrors);
     }
   }
 
@@ -1305,15 +1314,15 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
     // m_Ui->stdOutDockWidget->setVisible(hasErrors);
-    if(!m_Ui->filterInputOverlayBtn->isChecked())
+    if(!m_FilterInputOverlayBtn->isChecked())
     {
-      m_Ui->issuesOverlayBtn->setChecked(hasErrors);
+      m_IssuesOverlayBtn->setChecked(hasErrors);
     }
   }
 
-  m_Ui->issuesOverlayBtn->setProperty("error", hasErrors);
-  qApp->style()->unpolish(m_Ui->issuesOverlayBtn);
-  qApp->style()->polish(m_Ui->issuesOverlayBtn);
+  m_IssuesOverlayBtn->setProperty("error", hasErrors);
+  qApp->style()->unpolish(m_IssuesOverlayBtn);
+  qApp->style()->polish(m_IssuesOverlayBtn);
 }
 
 // -----------------------------------------------------------------------------

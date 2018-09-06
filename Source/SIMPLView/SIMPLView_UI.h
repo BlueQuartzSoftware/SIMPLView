@@ -76,6 +76,7 @@ class StatusBarWidget;
 class PipelineTreeView;
 class PipelineModel;
 class PipelineListWidget;
+class SVOverlayWidgetButton;
 class SVPipelineViewWidget;
 class SIMPLViewMenuItems;
 
@@ -372,6 +373,9 @@ class SIMPLView_UI : public QMainWindow
     FilterListToolboxWidget*                m_FilterListWidget = nullptr;
     FilterLibraryToolboxWidget*             m_FilterLibraryWidget = nullptr;
     BookmarksToolboxWidget*                 m_BookmarksWidget = nullptr;
+    SVOverlayWidgetButton*                  m_FilterInputOverlayBtn = nullptr;
+    SVOverlayWidgetButton*                  m_FilterListOverlayBtn = nullptr;
+    SVOverlayWidgetButton*                  m_IssuesOverlayBtn = nullptr;
 
     /**
      * @brief createSIMPLViewMenu
