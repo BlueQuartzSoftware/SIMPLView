@@ -506,11 +506,11 @@ void SIMPLView_UI::setupGui()
   m_Ui->statusbar->addPermanentWidget(m_FilterInputOverlayBtn);
 
   // Setup overlay buttons
-  m_FilterListOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_FilterListOverlayBtn->setTarget(m_Ui->visualizationContainer);
   m_FilterListOverlayBtn->setSide(SVOverlayWidgetButton::TargetSide::Left);
   m_FilterListOverlayBtn->setSource(createFilterListWidget());
-  m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationWidget);
-  m_IssuesOverlayBtn->setTarget(m_Ui->visualizationWidget);
+  m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationContainer);
+  m_IssuesOverlayBtn->setTarget(m_Ui->visualizationContainer);
   m_IssuesOverlayBtn->setSource(issuesWidget);
 
   m_IssuesOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
