@@ -1215,7 +1215,6 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   if(widget == nullptr)
   {
     m_FilterInputOverlayBtn->setSource(nullptr);
-    m_FilterInputOverlayBtn->setChecked(false);
     return;
   }
 
@@ -1273,7 +1272,6 @@ void SIMPLView_UI::clearFilterInputWidget()
 #else
   if(nullptr != m_FilterInputWidget)
   {
-    m_FilterInputWidget->hide();
     m_FilterInputOverlayBtn->setSource(nullptr);
     m_FilterInputWidget->setParent(nullptr);
   }
