@@ -1217,8 +1217,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
     emit m_FilterInputWidget->endDataStructureFiltering();
   }
 
-  // Clear the filter input widget
-  clearFilterInputWidget();
+  // Do not clear the filter input widget to avoid flickering in the overlay widget.
+  // Setting the source to widget will do whatever is required on its own
 
   // Set FilterInputWidget
   m_FilterInputWidget = widget;
@@ -1238,9 +1238,9 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   emit widget->endPathFiltering();
 
   // Set the widget into the frame
+  m_Ui->filterInputOverlayBtn->setSource(widget);
   if(nullptr != widget)
   {
-    m_Ui->filterInputOverlayBtn->setSource(widget);
     m_Ui->filterInputOverlayBtn->setChecked(true);
   }
 }
