@@ -515,13 +515,23 @@ void SIMPLView_UI::setupGui()
 
   m_IssuesOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
   m_IssuesOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
+  m_IssuesOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
+  m_IssuesOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
 
   m_FilterInputOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
   m_FilterInputOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
+  m_FilterInputOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
+  m_FilterInputOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
 
   m_FilterListOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
   m_FilterListOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
+  m_FilterListOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
+  m_FilterListOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
   m_FilterListOverlayBtn->setChecked(true);
+
+  m_Ui->visualizationWidget->addOverlayButton(m_IssuesOverlayBtn);
+  m_Ui->visualizationWidget->addOverlayButton(m_FilterInputOverlayBtn);
+  m_Ui->visualizationWidget->addOverlayButton(m_FilterListOverlayBtn);
 
   // Set Tab Positions
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
