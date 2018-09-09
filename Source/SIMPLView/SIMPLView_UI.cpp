@@ -504,6 +504,8 @@ void SIMPLView_UI::setupGui()
   m_Ui->statusbar->addPermanentWidget(m_FilterListOverlayBtn);
   m_Ui->statusbar->addPermanentWidget(m_IssuesOverlayBtn);
   m_Ui->statusbar->addPermanentWidget(m_FilterInputOverlayBtn);
+  m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getFilterListOverlayButton());
+  m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
 
   // Setup overlay buttons
   m_FilterListOverlayBtn->setTarget(m_Ui->visualizationContainer);
