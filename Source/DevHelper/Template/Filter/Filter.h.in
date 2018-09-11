@@ -9,10 +9,12 @@
 #include "SIMPLib/Filtering/AbstractFilter.h"
 
 @Filter_H_Includes@
+#include "@PluginName@/@PluginName@Plugin.h"
+
 /**
  * @brief The @ClassName@ class. See [Filter documentation](@ref @ClassNameLowerCase@) for details.
  */
-class @ClassName@ : public AbstractFilter
+class @PluginName@_EXPORT @ClassName@ : public AbstractFilter
 {
   Q_OBJECT
 
