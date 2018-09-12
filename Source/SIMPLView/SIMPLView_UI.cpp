@@ -292,7 +292,7 @@ bool SIMPLView_UI::savePipelineAs()
 
   if(ret == QMessageBox::Yes)
   {
-    m_BookmarksWidget->getBookmarksTreeView()->addBookmark(filePath, QModelIndex());
+    m_Ui->bookmarksWidget->getBookmarksTreeView()->addBookmark(filePath, QModelIndex());
   }
 
   return true;
@@ -383,15 +383,15 @@ void SIMPLView_UI::readSettings()
 
   // Read dock widget settings
   prefs->beginGroup("Bookmarks Widget");
-  m_BookmarksWidget->readSettings(prefs.data());
+  m_Ui->bookmarksWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->beginGroup("Filter List Widget");
-  m_FilterListWidget->readSettings(prefs.data());
+  m_Ui->filterListWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->beginGroup("Filter Library Widget");
-  m_FilterLibraryWidget->readSettings(prefs.data());
+  m_Ui->filterLibraryWidget->readSettings(prefs.data());
   prefs->endGroup();
 
   prefs->endGroup();
@@ -498,48 +498,39 @@ void SIMPLView_UI::setupGui()
   m_IssuesUi->setupUi(issuesWidget);
 
   m_FilterInputOverlayBtn = new SVOverlayWidgetButton("Filter Input");
-  m_FilterListOverlayBtn = new SVOverlayWidgetButton("Filter List");
+  // m_FilterListOverlayBtn = new SVOverlayWidgetButton("Filter List");
   m_IssuesOverlayBtn = new SVOverlayWidgetButton("Pipeline Issues");
 
-  m_Ui->statusbar->addPermanentWidget(m_FilterListOverlayBtn);
+  // m_Ui->statusbar->addPermanentWidget(m_FilterListOverlayBtn);
   m_Ui->statusbar->addPermanentWidget(m_IssuesOverlayBtn);
   m_Ui->statusbar->addPermanentWidget(m_FilterInputOverlayBtn);
   m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getFilterListOverlayButton());
   m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
 
   // Setup overlay buttons
-  m_FilterListOverlayBtn->setTarget(m_Ui->visualizationContainer);
-  m_FilterListOverlayBtn->setSide(SVOverlayWidgetButton::TargetSide::Left);
-  m_FilterListOverlayBtn->setSource(createFilterListWidget());
   m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationContainer);
   m_IssuesOverlayBtn->setTarget(m_Ui->visualizationContainer);
   m_IssuesOverlayBtn->setSource(issuesWidget);
 
   m_IssuesOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
-  m_IssuesOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
-  m_IssuesOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
   m_IssuesOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
 
   m_FilterInputOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
-  m_FilterInputOverlayBtn->addOverlappingButton(m_FilterListOverlayBtn);
-  m_FilterInputOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
   m_FilterInputOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
-
-  m_FilterListOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
-  m_FilterListOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
-  m_FilterListOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getFilterListOverlayButton());
-  m_FilterListOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
-  m_FilterListOverlayBtn->setChecked(true);
+  
+  m_Ui->visualizationWidget->getFilterListOverlayButton()->setDockWidget(this, m_Ui->filterToolboxDockWidget);
+  m_Ui->visualizationWidget->getFilterListOverlayButton()->setExpandsEntireDistance(true);
+  m_Ui->visualizationWidget->getFilterListOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
+  m_Ui->visualizationWidget->getViewSettingsOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
 
   m_Ui->visualizationWidget->addOverlayButton(m_IssuesOverlayBtn);
   m_Ui->visualizationWidget->addOverlayButton(m_FilterInputOverlayBtn);
-  m_Ui->visualizationWidget->addOverlayButton(m_FilterListOverlayBtn);
 
   // Set Tab Positions
-  setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::LeftDockWidgetArea, QTabWidget::TabPosition::North); 
+  setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::LeftDockWidgetArea, QTabWidget::TabPosition::North);
 
   SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
 
@@ -563,10 +554,10 @@ void SIMPLView_UI::setupGui()
 
   // This will set the initial list of filters in the FilterListToolboxWidget
   // Tell the Filter Library that we have more Filters (potentially)
-  m_FilterLibraryWidget->refreshFilterGroups();
+  m_Ui->filterLibraryWidget->refreshFilterGroups();
 
   // Read the toolbox settings and update the filter list
-  m_FilterListWidget->loadFilterList();
+  m_Ui->filterListWidget->loadFilterList();
 
 #if 0
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
@@ -593,9 +584,10 @@ void SIMPLView_UI::setupGui()
 
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_IssuesUi->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
-#if 0
-  connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
+  // connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 
+  connectDockWidgetSignalsSlots(m_Ui->filterToolboxDockWidget);
+#if 0
   connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->dataBrowserDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->filterLibraryDockWidget);
@@ -603,7 +595,10 @@ void SIMPLView_UI::setupGui()
   connectDockWidgetSignalsSlots(m_Ui->issuesDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->pipelineDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->stdOutDockWidget);
+#endif
 
+  m_Ui->filterToolboxDockWidget->installEventFilter(this);
+#if 0
   m_Ui->bookmarksDockWidget->installEventFilter(this);
   m_Ui->dataBrowserDockWidget->installEventFilter(this);
   m_Ui->filterLibraryDockWidget->installEventFilter(this);
@@ -612,27 +607,6 @@ void SIMPLView_UI::setupGui()
   m_Ui->pipelineDockWidget->installEventFilter(this);
   m_Ui->stdOutDockWidget->installEventFilter(this);
 #endif
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-QWidget* SIMPLView_UI::createFilterListWidget()
-{
-  QTabWidget* tabWidget = new QTabWidget(this);
-
-  m_FilterListWidget = new FilterListToolboxWidget(tabWidget);
-  m_FilterListWidget->loadFilterList();
-  m_FilterLibraryWidget = new FilterLibraryToolboxWidget(tabWidget);
-  m_BookmarksWidget = new BookmarksToolboxWidget(tabWidget);
-
-  tabWidget->addTab(m_FilterListWidget, "Filter  List");
-  tabWidget->addTab(m_FilterLibraryWidget, "Filter Library");
-  tabWidget->addTab(m_BookmarksWidget, "Bookmarks");
-  tabWidget->setElideMode(Qt::TextElideMode::ElideNone);
-  tabWidget->setUsesScrollButtons(false);
-
-  return tabWidget;
 }
 
 // -----------------------------------------------------------------------------
@@ -716,7 +690,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   QAction* actionRedo = viewWidget->getActionRedo();
 
   // Bookmarks Actions
-  BookmarksTreeView* bookmarksView = m_BookmarksWidget->getBookmarksTreeView();
+  BookmarksTreeView* bookmarksView = m_Ui->bookmarksWidget->getBookmarksTreeView();
   QAction* actionAddBookmark = bookmarksView->getActionAddBookmark();
   QAction* actionNewFolder = bookmarksView->getActionAddBookmarkFolder();
   QAction* actionClearBookmarks = bookmarksView->getActionClearBookmarks();
@@ -756,6 +730,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
     m_MenuView->addSeparator();
   }
 
+  m_MenuView->addAction(m_Ui->filterToolboxDockWidget->toggleViewAction());
 #if 0
   m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
@@ -826,16 +801,16 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(docRequester, SIGNAL(showFilterDocUrl(const QUrl&)), this, SLOT(showFilterHelpUrl(const QUrl&)));
 
   /* Filter Library Widget Connections */
-  connect(m_FilterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
+  connect(m_Ui->filterLibraryWidget, &FilterLibraryToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Filter List Widget Connections */
-  connect(m_FilterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
+  connect(m_Ui->filterListWidget, &FilterListToolboxWidget::filterItemDoubleClicked, pipelineView, &SVPipelineView::addFilterFromClassName);
 
   /* Bookmarks Widget Connections */
-  connect(m_BookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
-  connect(m_BookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
+  connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::bookmarkActivated, this, &SIMPLView_UI::activateBookmark);
+  connect(m_Ui->bookmarksWidget, SIGNAL(updateStatusBar(const QString&)), this, SLOT(setStatusBarMessage(const QString&)));
 
-  //connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
+  // connect(m_Ui->bookmarksWidget, &BookmarksToolboxWidget::raiseBookmarksDockWidget, [=] { showDockWidget(m_Ui->bookmarksDockWidget); });
 
   /* Pipeline List Widget Connections */
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineCanceled, pipelineView, &SVPipelineView::cancelPipeline);
@@ -1083,10 +1058,10 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
 void SIMPLView_UI::pipelineDidFinish()
 {
   // Re-enable FilterListToolboxWidget signals - resume adding filters
-  m_FilterListWidget->blockSignals(false);
+  m_Ui->filterListWidget->blockSignals(false);
 
   // Re-enable FilterLibraryToolboxWidget signals - resume adding filters
-  m_FilterLibraryWidget->blockSignals(false);
+  m_Ui->filterLibraryWidget->blockSignals(false);
 
   QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
   qSort(selectedIndexes);
