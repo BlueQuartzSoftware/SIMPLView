@@ -523,8 +523,8 @@ void SIMPLView_UI::setupGui()
   m_Ui->visualizationWidget->getFilterListOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
   m_Ui->visualizationWidget->getViewSettingsOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
 
-  m_Ui->visualizationWidget->addOverlayButton(m_IssuesOverlayBtn);
-  m_Ui->visualizationWidget->addOverlayButton(m_FilterInputOverlayBtn);
+  m_Ui->visualizationWidget->getViewSettingsOverlayButton()->addOverlappingButton(m_IssuesOverlayBtn);
+  m_Ui->visualizationWidget->getViewSettingsOverlayButton()->addOverlappingButton(m_FilterInputOverlayBtn);
 
   // Set Tab Positions
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North);
