@@ -730,7 +730,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
     m_MenuView->addSeparator();
   }
 
-  m_MenuView->addAction(m_Ui->filterToolboxDockWidget->toggleViewAction());
+  //m_MenuView->addAction(m_Ui->filterToolboxDockWidget->toggleViewAction());
 #if 0
   m_MenuView->addAction(m_Ui->filterListDockWidget->toggleViewAction());
   m_MenuView->addAction(m_Ui->filterLibraryDockWidget->toggleViewAction());
