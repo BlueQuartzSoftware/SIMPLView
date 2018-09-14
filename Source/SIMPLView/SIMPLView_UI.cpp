@@ -609,6 +609,7 @@ void SIMPLView_UI::setupGui()
 #endif
 
   m_Ui->filterToolboxDockWidget->installEventFilter(this);
+  m_Ui->pipelineViewDockWidget->installEventFilter(this);
 #if 0
   m_Ui->bookmarksDockWidget->installEventFilter(this);
   m_Ui->dataBrowserDockWidget->installEventFilter(this);
