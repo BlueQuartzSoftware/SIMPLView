@@ -501,11 +501,20 @@ void SIMPLView_UI::setupGui()
   // m_FilterListOverlayBtn = new SVOverlayWidgetButton("Filter List");
   m_IssuesOverlayBtn = new SVOverlayWidgetButton("Pipeline Issues");
 
-  // m_Ui->statusbar->addPermanentWidget(m_FilterListOverlayBtn);
-  m_Ui->statusbar->addPermanentWidget(m_IssuesOverlayBtn);
-  m_Ui->statusbar->addPermanentWidget(m_FilterInputOverlayBtn);
-  m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getFilterListOverlayButton());
-  m_Ui->statusbar->addPermanentWidget(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
+  QWidget* svStatusBarButtons = new QWidget();
+  QHBoxLayout* svButtonLayout = new QHBoxLayout();
+  svButtonLayout->setMargin(0);
+  svButtonLayout->addWidget(m_IssuesOverlayBtn);
+  svButtonLayout->addWidget(m_FilterInputOverlayBtn);
+  svStatusBarButtons->setLayout(svButtonLayout);
+  m_Ui->statusbar->addPermanentWidget(svStatusBarButtons);
+  QWidget* visStatusBarButtons = new QWidget();
+  QHBoxLayout* visButtonLayout = new QHBoxLayout();
+  visButtonLayout->setMargin(0);
+  visButtonLayout->addWidget(m_Ui->visualizationWidget->getFilterListOverlayButton());
+  visButtonLayout->addWidget(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
+  visStatusBarButtons->setLayout(visButtonLayout);
+  m_Ui->statusbar->addPermanentWidget(visStatusBarButtons);
 
   // Setup overlay buttons
   m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationContainer);
