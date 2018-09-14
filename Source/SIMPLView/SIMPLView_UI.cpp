@@ -559,6 +559,7 @@ void SIMPLView_UI::setupGui()
   // Read the toolbox settings and update the filter list
   m_Ui->filterListWidget->loadFilterList();
 
+  splitDockWidget(m_Ui->filterToolboxDockWidget, m_Ui->pipelineViewDockWidget, Qt::Orientation::Horizontal);
 #if 0
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
   tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
@@ -587,6 +588,7 @@ void SIMPLView_UI::setupGui()
   // connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 
   connectDockWidgetSignalsSlots(m_Ui->filterToolboxDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->pipelineViewDockWidget);
 #if 0
   connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->dataBrowserDockWidget);
