@@ -35,11 +35,7 @@
 
 #include "AboutSIMPLView.h"
 
-#include "SIMPLib/SIMPLib.h"
-
 #include <H5public.h>
-
-#include "SIMPLib/SIMPLib.h"
 
 #if SIMPL_USE_PARALLEL_ALGORITHMS
 #include <tbb/tbb_stddef.h>
@@ -48,23 +44,22 @@
 #include <Eigen/Core>
 #include <Eigen/src/Core/util/Macros.h>
 
-
-
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 
-#include "SVWidgetsLib/Widgets/SVStyle.h"
+#include <QtWidgets/QAction>
 
+#include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/SIMPLibVersion.h"
+
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #include "SIMPLView/SIMPLView/License/SIMPLViewLicenseFiles.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"
-
-
 
 // -----------------------------------------------------------------------------
 //
