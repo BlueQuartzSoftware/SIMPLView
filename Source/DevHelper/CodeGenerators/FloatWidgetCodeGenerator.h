@@ -64,8 +64,10 @@ class FloatWidgetCodeGenerator : public FPCodeGenerator
   protected:
     FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     FloatWidgetCodeGenerator(const FloatWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FloatWidgetCodeGenerator&) = delete;           // Move assignment Not Implemented
+    FloatWidgetCodeGenerator(FloatWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    FloatWidgetCodeGenerator& operator=(const FloatWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    FloatWidgetCodeGenerator& operator=(FloatWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

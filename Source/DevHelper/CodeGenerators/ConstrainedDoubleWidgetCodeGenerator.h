@@ -64,8 +64,10 @@ class ConstrainedDoubleWidgetCodeGenerator : public FPCodeGenerator
   protected:
     ConstrainedDoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     ConstrainedDoubleWidgetCodeGenerator(const ConstrainedDoubleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ConstrainedDoubleWidgetCodeGenerator&) = delete;                       // Move assignment Not Implemented
+    ConstrainedDoubleWidgetCodeGenerator(ConstrainedDoubleWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    ConstrainedDoubleWidgetCodeGenerator& operator=(const ConstrainedDoubleWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    ConstrainedDoubleWidgetCodeGenerator& operator=(ConstrainedDoubleWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

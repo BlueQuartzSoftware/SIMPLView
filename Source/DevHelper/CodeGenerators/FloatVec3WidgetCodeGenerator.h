@@ -64,8 +64,10 @@ class FloatVec3WidgetCodeGenerator : public FPCodeGenerator
   protected:
     FloatVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     FloatVec3WidgetCodeGenerator(const FloatVec3WidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FloatVec3WidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
+    FloatVec3WidgetCodeGenerator(FloatVec3WidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    FloatVec3WidgetCodeGenerator& operator=(const FloatVec3WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    FloatVec3WidgetCodeGenerator& operator=(FloatVec3WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

@@ -66,8 +66,10 @@ class ComparisonSelectionWidgetCodeGenerator : public FPCodeGenerator
   protected:
     ComparisonSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     ComparisonSelectionWidgetCodeGenerator(const ComparisonSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ComparisonSelectionWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
+    ComparisonSelectionWidgetCodeGenerator(ComparisonSelectionWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    ComparisonSelectionWidgetCodeGenerator& operator=(const ComparisonSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    ComparisonSelectionWidgetCodeGenerator& operator=(ComparisonSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

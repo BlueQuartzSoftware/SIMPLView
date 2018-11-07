@@ -66,8 +66,10 @@ class DynamicTableWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DynamicTableWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DynamicTableWidgetCodeGenerator(const DynamicTableWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DynamicTableWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
+    DynamicTableWidgetCodeGenerator(DynamicTableWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DynamicTableWidgetCodeGenerator& operator=(const DynamicTableWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DynamicTableWidgetCodeGenerator& operator=(DynamicTableWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

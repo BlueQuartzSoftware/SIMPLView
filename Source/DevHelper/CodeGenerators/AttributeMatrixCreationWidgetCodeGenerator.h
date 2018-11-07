@@ -64,8 +64,10 @@ class AttributeMatrixCreationWidgetCodeGenerator : public FPCodeGenerator
   protected:
     AttributeMatrixCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     AttributeMatrixCreationWidgetCodeGenerator(const AttributeMatrixCreationWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const AttributeMatrixCreationWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
+    AttributeMatrixCreationWidgetCodeGenerator(AttributeMatrixCreationWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    AttributeMatrixCreationWidgetCodeGenerator& operator=(const AttributeMatrixCreationWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    AttributeMatrixCreationWidgetCodeGenerator& operator=(AttributeMatrixCreationWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

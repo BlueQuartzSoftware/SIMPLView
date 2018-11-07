@@ -239,7 +239,10 @@ private:
 
   int m_minSplashTime;
 
+public:
   SIMPLViewApplication(const SIMPLViewApplication&) = delete; // Copy Constructor Not Implemented
-  void operator=(const SIMPLViewApplication&);                // Move assignment Not Implemented
+  SIMPLViewApplication(SIMPLViewApplication&&) = delete;      // Move Constructor Not Implemented
+  SIMPLViewApplication& operator=(const SIMPLViewApplication&) = delete; // Copy Assignment Not Implemented
+  SIMPLViewApplication& operator=(SIMPLViewApplication&&) = delete;      // Move Assignment Not Implemented
 };
 

@@ -64,8 +64,10 @@ class LinkedBooleanWidgetCodeGenerator : public FPCodeGenerator
   protected:
     LinkedBooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     LinkedBooleanWidgetCodeGenerator(const LinkedBooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const LinkedBooleanWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
+    LinkedBooleanWidgetCodeGenerator(LinkedBooleanWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    LinkedBooleanWidgetCodeGenerator& operator=(const LinkedBooleanWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    LinkedBooleanWidgetCodeGenerator& operator=(LinkedBooleanWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

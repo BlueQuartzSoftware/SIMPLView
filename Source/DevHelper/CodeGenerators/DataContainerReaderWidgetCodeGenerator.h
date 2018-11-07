@@ -66,8 +66,10 @@ class DataContainerReaderWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DataContainerReaderWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DataContainerReaderWidgetCodeGenerator(const DataContainerReaderWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataContainerReaderWidgetCodeGenerator&) = delete;                         // Move assignment Not Implemented
+    DataContainerReaderWidgetCodeGenerator(DataContainerReaderWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DataContainerReaderWidgetCodeGenerator& operator=(const DataContainerReaderWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DataContainerReaderWidgetCodeGenerator& operator=(DataContainerReaderWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 
