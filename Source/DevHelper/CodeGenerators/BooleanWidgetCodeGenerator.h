@@ -64,8 +64,10 @@ class BooleanWidgetCodeGenerator : public FPCodeGenerator
   protected:
     BooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     BooleanWidgetCodeGenerator(const BooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const BooleanWidgetCodeGenerator&) = delete;             // Move assignment Not Implemented
+    BooleanWidgetCodeGenerator(BooleanWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    BooleanWidgetCodeGenerator& operator=(const BooleanWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    BooleanWidgetCodeGenerator& operator=(BooleanWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

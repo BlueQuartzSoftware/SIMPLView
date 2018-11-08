@@ -64,8 +64,10 @@ class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
   protected:
     FileListInfoWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     FileListInfoWidgetCodeGenerator(const FileListInfoWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const FileListInfoWidgetCodeGenerator&) = delete;                  // Move assignment Not Implemented
+    FileListInfoWidgetCodeGenerator(FileListInfoWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    FileListInfoWidgetCodeGenerator& operator=(const FileListInfoWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    FileListInfoWidgetCodeGenerator& operator=(FileListInfoWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

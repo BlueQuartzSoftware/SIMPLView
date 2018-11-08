@@ -55,8 +55,10 @@ class CodeGenFactory
   protected:
     CodeGenFactory();
 
-  private:
+  public:
     CodeGenFactory(const CodeGenFactory&) = delete; // Copy Constructor Not Implemented
-    void operator=(const CodeGenFactory&) = delete; // Move assignment Not Implemented
+    CodeGenFactory(CodeGenFactory&&) = delete;      // Move Constructor Not Implemented
+    CodeGenFactory& operator=(const CodeGenFactory&) = delete; // Copy Assignment Not Implemented
+    CodeGenFactory& operator=(CodeGenFactory&&) = delete;      // Move Assignment Not Implemented
 };
 

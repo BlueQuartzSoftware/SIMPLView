@@ -85,7 +85,10 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
 
     QAction* m_CloseAction = nullptr;
 
+  public:
     AboutSIMPLView(const AboutSIMPLView&) = delete; // Copy Constructor Not Implemented
-    void operator=(const AboutSIMPLView&) = delete; // Move assignment Not Implemented
+    AboutSIMPLView(AboutSIMPLView&&) = delete;      // Move Constructor Not Implemented
+    AboutSIMPLView& operator=(const AboutSIMPLView&) = delete; // Copy Assignment Not Implemented
+    AboutSIMPLView& operator=(AboutSIMPLView&&) = delete;      // Move Assignment Not Implemented
 };
 

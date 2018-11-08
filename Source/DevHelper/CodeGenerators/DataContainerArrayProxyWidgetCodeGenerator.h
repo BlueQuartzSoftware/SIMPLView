@@ -65,8 +65,10 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DataContainerArrayProxyWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DataContainerArrayProxyWidgetCodeGenerator(const DataContainerArrayProxyWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete;                             // Move assignment Not Implemented
+    DataContainerArrayProxyWidgetCodeGenerator(DataContainerArrayProxyWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DataContainerArrayProxyWidgetCodeGenerator& operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DataContainerArrayProxyWidgetCodeGenerator& operator=(DataContainerArrayProxyWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

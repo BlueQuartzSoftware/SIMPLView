@@ -66,8 +66,10 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
   protected:
     AxisAngleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     AxisAngleWidgetCodeGenerator(const AxisAngleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const AxisAngleWidgetCodeGenerator&) = delete;               // Move assignment Not Implemented
+    AxisAngleWidgetCodeGenerator(AxisAngleWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    AxisAngleWidgetCodeGenerator& operator=(const AxisAngleWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    AxisAngleWidgetCodeGenerator& operator=(AxisAngleWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

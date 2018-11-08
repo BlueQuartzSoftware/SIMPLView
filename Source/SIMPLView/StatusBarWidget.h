@@ -118,8 +118,10 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      */
     void setupGui();
 
-  private:
+  public:
     StatusBarWidget(const StatusBarWidget&) = delete; // Copy Constructor Not Implemented
-    void operator=(const StatusBarWidget&) = delete;  // Operator '=' Not Implemented
+    StatusBarWidget(StatusBarWidget&&) = delete;      // Move Constructor Not Implemented
+    StatusBarWidget& operator=(const StatusBarWidget&) = delete; // Copy Assignment Not Implemented
+    StatusBarWidget& operator=(StatusBarWidget&&) = delete;      // Move Assignment Not Implemented
 };
 
