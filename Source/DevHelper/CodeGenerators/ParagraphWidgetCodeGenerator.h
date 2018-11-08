@@ -62,8 +62,10 @@ public:
 protected:
   ParagraphWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-private:
+public:
   ParagraphWidgetCodeGenerator(const ParagraphWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-  void operator=(const ParagraphWidgetCodeGenerator&);                        // Move assignment Not Implemented
+  ParagraphWidgetCodeGenerator(ParagraphWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+  ParagraphWidgetCodeGenerator& operator=(const ParagraphWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+  ParagraphWidgetCodeGenerator& operator=(ParagraphWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

@@ -64,8 +64,10 @@ class DataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DataContainerSelectionWidgetCodeGenerator(const DataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DataContainerSelectionWidgetCodeGenerator&) = delete;                            // Move assignment Not Implemented
+    DataContainerSelectionWidgetCodeGenerator(DataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DataContainerSelectionWidgetCodeGenerator& operator=(const DataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DataContainerSelectionWidgetCodeGenerator& operator=(DataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

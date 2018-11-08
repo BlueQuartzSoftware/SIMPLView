@@ -64,8 +64,10 @@ class ThirdOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
   protected:
     ThirdOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     ThirdOrderPolynomialWidgetCodeGenerator(const ThirdOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ThirdOrderPolynomialWidgetCodeGenerator&) = delete;                          // Move assignment Not Implemented
+    ThirdOrderPolynomialWidgetCodeGenerator(ThirdOrderPolynomialWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    ThirdOrderPolynomialWidgetCodeGenerator& operator=(const ThirdOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    ThirdOrderPolynomialWidgetCodeGenerator& operator=(ThirdOrderPolynomialWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

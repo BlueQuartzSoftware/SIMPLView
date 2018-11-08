@@ -64,8 +64,10 @@ class DynamicChoiceWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DynamicChoiceWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DynamicChoiceWidgetCodeGenerator(const DynamicChoiceWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DynamicChoiceWidgetCodeGenerator&) = delete;                   // Move assignment Not Implemented
+    DynamicChoiceWidgetCodeGenerator(DynamicChoiceWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DynamicChoiceWidgetCodeGenerator& operator=(const DynamicChoiceWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DynamicChoiceWidgetCodeGenerator& operator=(DynamicChoiceWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

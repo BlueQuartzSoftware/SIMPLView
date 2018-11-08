@@ -80,7 +80,10 @@ class AddFilterParameter : public QWidget, public Ui::AddFilterParameter
     bool filledOutCheck();
     bool filledOutCheck_NoVarName();
 
-    AddFilterParameter(const AddFilterParameter&);    // Copy Constructor Not Implemented
-    void operator=(const AddFilterParameter&);        // Move assignment Not Implemented
+  public:
+    AddFilterParameter(const AddFilterParameter&) = delete;            // Copy Constructor Not Implemented
+    AddFilterParameter(AddFilterParameter&&) = delete;                 // Move Constructor Not Implemented
+    AddFilterParameter& operator=(const AddFilterParameter&) = delete; // Copy Assignment Not Implemented
+    AddFilterParameter& operator=(AddFilterParameter&&) = delete;      // Move Assignment Not Implemented
 };
 

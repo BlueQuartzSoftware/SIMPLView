@@ -66,7 +66,7 @@ class PMGeneratorTreeItem : public QTreeWidgetItem
   private:
     PMDirGenerator* fileGenPtr;
 
-    PMGeneratorTreeItem(const PMGeneratorTreeItem& rhs);  // Copy Constructor Not Implemented
+    PMGeneratorTreeItem(const PMGeneratorTreeItem& rhs) = delete;  // Copy Constructor Not Implemented
     void operator=(const PMGeneratorTreeItem& rhs);       // Move assignment Not Implemented
 };
 

@@ -64,8 +64,10 @@ class ScalarTypeWidgetCodeGenerator : public FPCodeGenerator
   protected:
     ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     ScalarTypeWidgetCodeGenerator(const ScalarTypeWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const ScalarTypeWidgetCodeGenerator&) = delete;                // Move assignment Not Implemented
+    ScalarTypeWidgetCodeGenerator(ScalarTypeWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    ScalarTypeWidgetCodeGenerator& operator=(const ScalarTypeWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    ScalarTypeWidgetCodeGenerator& operator=(ScalarTypeWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

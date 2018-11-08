@@ -64,8 +64,10 @@ class DoubleWidgetCodeGenerator : public FPCodeGenerator
   protected:
     DoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     DoubleWidgetCodeGenerator(const DoubleWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const DoubleWidgetCodeGenerator&) = delete;            // Move assignment Not Implemented
+    DoubleWidgetCodeGenerator(DoubleWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    DoubleWidgetCodeGenerator& operator=(const DoubleWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    DoubleWidgetCodeGenerator& operator=(DoubleWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

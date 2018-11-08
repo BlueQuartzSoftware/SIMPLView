@@ -64,8 +64,10 @@ class IntVec3WidgetCodeGenerator : public FPCodeGenerator
   protected:
     IntVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     IntVec3WidgetCodeGenerator(const IntVec3WidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const IntVec3WidgetCodeGenerator&) = delete;             // Move assignment Not Implemented
+    IntVec3WidgetCodeGenerator(IntVec3WidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    IntVec3WidgetCodeGenerator& operator=(const IntVec3WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    IntVec3WidgetCodeGenerator& operator=(IntVec3WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

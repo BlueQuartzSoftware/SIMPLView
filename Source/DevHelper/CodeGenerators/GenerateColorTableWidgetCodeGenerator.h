@@ -66,8 +66,10 @@ class GenerateColorTableWidgetCodeGenerator : public FPCodeGenerator
   protected:
     GenerateColorTableWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
-  private:
+  public:
     GenerateColorTableWidgetCodeGenerator(const GenerateColorTableWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    void operator=(const GenerateColorTableWidgetCodeGenerator&) = delete;                        // Move assignment Not Implemented
+    GenerateColorTableWidgetCodeGenerator(GenerateColorTableWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    GenerateColorTableWidgetCodeGenerator& operator=(const GenerateColorTableWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    GenerateColorTableWidgetCodeGenerator& operator=(GenerateColorTableWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

@@ -396,8 +396,11 @@ class SIMPLView_UI : public QMainWindow
      */
     PipelineModel* getPipelineModel();
 
-    SIMPLView_UI(const SIMPLView_UI&);    // Copy Constructor Not Implemented
-    void operator=(const SIMPLView_UI&);  // Move assignment Not Implemented
+  public:
+    SIMPLView_UI(const SIMPLView_UI&) = delete;            // Copy Constructor Not Implemented
+    SIMPLView_UI(SIMPLView_UI&&) = delete;                 // Move Constructor Not Implemented
+    SIMPLView_UI& operator=(const SIMPLView_UI&) = delete; // Copy Assignment Not Implemented
+    SIMPLView_UI& operator=(SIMPLView_UI&&) = delete;      // Move Assignment Not Implemented
 };
 
 
