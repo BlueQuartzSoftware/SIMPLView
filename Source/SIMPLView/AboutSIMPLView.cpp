@@ -79,10 +79,9 @@ AboutSIMPLView::AboutSIMPLView(QWidget* parent) :
 AboutSIMPLView::~AboutSIMPLView()
 {
 #if defined (Q_OS_MAC)
-  if (m_CloseAction != nullptr)
-  {
+
     delete m_CloseAction;
-  }
+
 #endif
 }
 
