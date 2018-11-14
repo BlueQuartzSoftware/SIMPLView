@@ -74,7 +74,7 @@ void InitFonts(const QStringList& fontList)
   {
     QFile res(*constIterator);
     // qDebug() << "font path: " << res.fileName();
-    if(res.open(QIODevice::ReadOnly) == false)
+    if(!res.open(QIODevice::ReadOnly))
     {
       qDebug() << "ERROR opening font resource: " << res.fileName();
     }
@@ -213,6 +213,6 @@ int main(int argc, char* argv[])
   QtSDocServer::Instance();
 #endif
 
-  int err = qtapp.exec();
+  int err = SIMPLViewApplication::exec();
   return err;
 }

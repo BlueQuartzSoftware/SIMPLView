@@ -382,7 +382,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   // THIS IS A VERY IMPORTANT LINE: It will register all the known filters in the dream3d library. This
   // will NOT however get filters from plugins. We are going to have to figure out how to compile filters
   // into their own plugin and load the plugins from a command line.
-  filterManager->RegisterKnownFilters(filterManager);
+  FilterManager::RegisterKnownFilters(filterManager);
 
   PluginManager* pluginManager = PluginManager::Instance();
   QList<PluginProxy::Pointer> proxies = AboutPlugins::readPluginCache();
@@ -404,13 +404,13 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     QString fileName = fi.fileName();
     QObject* plugin = loader->instance();
     qDebug() << "    Pointer: " << plugin << "\n";
-    if(plugin)
+    if(plugin != nullptr)
     {
       ISIMPLibPlugin* ipPlugin = qobject_cast<ISIMPLibPlugin*>(plugin);
-      if(ipPlugin)
+      if(ipPlugin != nullptr)
       {
         QString pluginName = ipPlugin->getPluginFileName();
-        if(loadingMap.value(pluginName, true) == true)
+        if(loadingMap.value(pluginName, true))
         {
           QString msg = QObject::tr("Loading Plugin %1  ").arg(fileName);
           this->m_SplashScreen->showMessage(msg, Qt::AlignVCenter | Qt::AlignRight, Qt::white);
@@ -615,7 +615,7 @@ void SIMPLViewApplication::listenShowSIMPLViewHelpTriggered()
   SVUserManualDialog::LaunchHelpDialog(helpURL);
 #else
   bool didOpen = QDesktopServices::openUrl(helpURL);
-  if(false == didOpen)
+  if(!didOpen)
   {
     QMessageBox msgBox;
     msgBox.setText(QString("Error Opening Help File"));
@@ -666,7 +666,7 @@ void SIMPLViewApplication::listenSetDataFolderTriggered()
 
   validator->setSIMPLDataDirectory(dataDir);
 
-  if (m_ActiveWindow)
+  if(m_ActiveWindow != nullptr)
   {
     m_ActiveWindow->setStatusBarMessage(tr("%1 Data Directory set successfully to '%2'.").arg(QApplication::applicationName()).arg(dataDir));
   }
@@ -697,8 +697,7 @@ void SIMPLViewApplication::checkForUpdatesAtStartup()
     QDate lastUpdateCheckDate = updatePrefs.value(UpdateCheckDialog::GetUpdateCheckKey(), QString("")).toDate();
     updatePrefs.endGroup();
 
-    QDate systemDate;
-    QDate currentDateToday = systemDate.currentDate();
+    QDate currentDateToday = QDate::currentDate();
 
     QDate dailyThreshold = lastUpdateCheckDate.addDays(1);
     QDate weeklyThreshold = lastUpdateCheckDate.addDays(7);
@@ -755,7 +754,7 @@ void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
   /* If any of the load checkboxes were changed, display a dialog warning
   * the user that they must restart SIMPLView to see the changes.
   */
-  if(dialog.getLoadPreferencesDidChange() == true)
+  if(dialog.getLoadPreferencesDidChange())
   {
     QMessageBox msgBox;
     msgBox.setText(QString("%1 must be restarted to allow these changes to take effect.").arg(BrandedStrings::ApplicationName));
@@ -812,7 +811,7 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
   newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
 
-  if (m_ActiveWindow)
+  if(m_ActiveWindow != nullptr)
   {
     newInstance->move(m_ActiveWindow->x() + 45, m_ActiveWindow->y() + 45);
   }
@@ -852,14 +851,14 @@ void SIMPLViewApplication::listenExitApplicationTriggered()
     SIMPLView_UI* dream3dWindow = m_SIMPLViewInstances[i];
     if(nullptr != dream3dWindow)
     {
-      if(dream3dWindow->close() == false)
+      if(!dream3dWindow->close())
       {
         shouldReallyClose = false;
       }
     }
   }
 
-  if(shouldReallyClose == true)
+  if(shouldReallyClose)
   {
     quit();
   }
@@ -932,7 +931,7 @@ bool SIMPLViewApplication::event(QEvent* event)
     // This needs to be here to prevent the close event from firing twice when quitting DREAM3D from the macOS dock.
     return false;
   }
-  else if (event->type() == QEvent::FileOpen)
+  if(event->type() == QEvent::FileOpen)
   {
     QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
     QString filePath = openEvent->file();
@@ -991,7 +990,7 @@ void SIMPLViewApplication::readSettings()
   SVStyle* styles = SVStyle::Instance();
   QString themeFilePath = prefs->value("Theme File Path", QString()).toString();
   QFileInfo fi(themeFilePath);
-  if (themeFilePath.isEmpty() == false && BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
+  if(!themeFilePath.isEmpty() && BrandedStrings::LoadedThemeNames.contains(fi.baseName()))
   {
     styles->loadStyleSheet(themeFilePath);
   }

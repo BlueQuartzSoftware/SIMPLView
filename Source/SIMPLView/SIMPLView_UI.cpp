@@ -124,7 +124,7 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 
   // Register all the known filterWidgets
   m_FilterWidgetManager = FilterWidgetManager::Instance();
-  m_FilterWidgetManager->RegisterKnownFilterWidgets();
+  FilterWidgetManager::RegisterKnownFilterWidgets();
 
   // Calls the Parent Class to do all the Widget Initialization that were created
   // using the QDesigner program
@@ -199,10 +199,8 @@ bool SIMPLView_UI::savePipeline()
     // When the file hasn't been saved before, the same functionality as a "Save As" occurs...
     return savePipelineAs();
   }
-  else
-  {
+
     filePath = windowFilePath();
-  }
 
   // Fix the separators
   filePath = QDir::toNativeSeparators(filePath);
@@ -238,7 +236,7 @@ bool SIMPLView_UI::savePipelineAs()
 {
   QString proposedFile = m_LastOpenedFilePath + QDir::separator() + "Untitled.json";
   QString filePath = QFileDialog::getSaveFileName(this, tr("Save Pipeline To File"), proposedFile, tr("Json File (*.json);;SIMPLView File (*.dream3d);;All Files (*.*)"));
-  if(true == filePath.isEmpty())
+  if(filePath.isEmpty())
   {
     return false;
   }
@@ -299,7 +297,7 @@ bool SIMPLView_UI::savePipelineAs()
 void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
 {
   SIMPLView_UI* instance = dream3dApp->getActiveInstance();
-  if(instance != nullptr && instance->isWindowModified() == false && instance->getPipelineModel()->isEmpty())
+  if(instance != nullptr && !instance->isWindowModified() && instance->getPipelineModel()->isEmpty())
   {
     instance->openPipeline(filePath);
   }
@@ -325,7 +323,7 @@ void SIMPLView_UI::activateBookmark(const QString& filePath, bool execute)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::closeEvent(QCloseEvent* event)
 {
-  if(m_Ui->pipelineListWidget->getPipelineView()->isPipelineCurrentlyRunning() == true)
+  if(m_Ui->pipelineListWidget->getPipelineView()->isPipelineCurrentlyRunning())
   {
     QMessageBox runningPipelineBox;
     runningPipelineBox.setWindowTitle("Pipeline is Running");
@@ -673,7 +671,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_SIMPLViewMenu->addMenu(m_MenuView);
 
   QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  if (themeNames.size() > 0)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  if(!themeNames.empty()) // We are not counting the Default theme when deciding whether or not to add the theme menu
   {
     m_ThemeActionGroup = new QActionGroup(this);
     m_MenuThemes = dream3dApp->createThemeMenu(m_ThemeActionGroup, m_SIMPLViewMenu);
@@ -817,7 +815,7 @@ void SIMPLView_UI::connectDockWidgetSignalsSlots(QDockWidget* dockWidget)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showDockWidget(QDockWidget* dockWidget)
 {
-  if (tabifiedDockWidgets(dockWidget).isEmpty() && dockWidget->toggleViewAction()->isChecked() == false)
+  if(tabifiedDockWidgets(dockWidget).isEmpty() && !dockWidget->toggleViewAction()->isChecked())
   {
     dockWidget->toggleViewAction()->trigger();
   }
@@ -897,26 +895,24 @@ void SIMPLView_UI::setLoadedPlugins(QVector<ISIMPLibPlugin*> plugins)
 QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
 {
 
-  if(this->isWindowModified() == true)
+  if(this->isWindowModified())
   {
     int r = QMessageBox::warning(this, BrandedStrings::ApplicationName, tr("The Pipeline has been modified.\nDo you want to save your changes?"), QMessageBox::Save | QMessageBox::Default,
                                  QMessageBox::Discard, QMessageBox::Cancel | QMessageBox::Escape);
     if(r == QMessageBox::Save)
     {
-      if(savePipeline() == true)
+      if(savePipeline())
       {
         return QMessageBox::Save;
       }
-      else
-      {
+
         return QMessageBox::Cancel;
-      }
     }
-    else if(r == QMessageBox::Discard)
+    if(r == QMessageBox::Discard)
     {
       return QMessageBox::Discard;
     }
-    else if(r == QMessageBox::Cancel)
+    if(r == QMessageBox::Cancel)
     {
       return QMessageBox::Cancel;
     }
@@ -1022,7 +1018,7 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 #else
   QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
-  if(false == didOpen)
+  if(!didOpen)
   {
     QMessageBox msgBox;
     msgBox.setText(QString("Error Opening Help File"));
@@ -1044,7 +1040,7 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
   SVUserManualDialog::LaunchHelpDialog(helpURL);
 #else
   bool didOpen = QDesktopServices::openUrl(helpURL);
-  if(false == didOpen)
+  if(!didOpen)
   {
     QMessageBox msgBox;
     msgBox.setText(QString("Error Opening Help File"));
@@ -1116,7 +1112,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
     return;
   }
 
-  if(m_FilterInputWidget)
+  if(m_FilterInputWidget != nullptr)
   {
     emit m_FilterInputWidget->endPathFiltering();
     emit m_FilterInputWidget->endViewPaths();
@@ -1152,10 +1148,10 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 void SIMPLView_UI::clearFilterInputWidget()
 {
   QLayoutItem* item = m_Ui->fiwFrameVLayout->takeAt(0);
-  if(item)
+  if(item != nullptr)
   {
     QWidget* w = item->widget();
-    if(w)
+    if(w != nullptr)
     {
       w->hide();
       w->setParent(nullptr);
