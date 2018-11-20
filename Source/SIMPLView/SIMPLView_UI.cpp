@@ -113,8 +113,6 @@
 SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
 , m_Ui(new Ui::SIMPLView_UI)
-, m_FilterManager(nullptr)
-, m_FilterWidgetManager(nullptr)
 , m_LastOpenedFilePath(QDir::homePath())
 {
   // Register all of the Filters we know about - the rest will be loaded through plugins
