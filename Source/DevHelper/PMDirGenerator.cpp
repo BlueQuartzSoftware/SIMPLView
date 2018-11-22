@@ -53,16 +53,13 @@ PMDirGenerator::PMDirGenerator(QString outputDir, QString pathTemplate, QString 
   m_DoesGenerateOutput(false),
   m_TreeWidgetItem(wi)
 {
-
 }
-
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 PMDirGenerator::~PMDirGenerator()
 {
-
 }
 
 // -----------------------------------------------------------------------------

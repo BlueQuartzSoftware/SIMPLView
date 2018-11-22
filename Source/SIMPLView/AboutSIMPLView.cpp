@@ -175,6 +175,4 @@ void AboutSIMPLView::loadResourceFile(const QString qresourceFile)
 // -----------------------------------------------------------------------------
 void AboutSIMPLView::readVersions()
 {
-
 }
-

@@ -971,7 +971,6 @@ void PluginMaker::on_m_OutputDir_textChanged(const QString& text)
 // -----------------------------------------------------------------------------
 void PluginMaker::generationError(const QString& test)
 {
-
 }
 
 // -----------------------------------------------------------------------------

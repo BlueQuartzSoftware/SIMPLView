@@ -57,7 +57,6 @@ AddFilterParameter::AddFilterParameter(QWidget* parent) :
 // -----------------------------------------------------------------------------
 AddFilterParameter::~AddFilterParameter()
 {
-
 }
 
 // -----------------------------------------------------------------------------

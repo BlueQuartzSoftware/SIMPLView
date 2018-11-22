@@ -41,7 +41,6 @@
 FloatVec3WidgetCodeGenerator::FloatVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
   FPCodeGenerator(humanLabel, propertyName, category, initValue)
 {
-
 }
 
 // -----------------------------------------------------------------------------
