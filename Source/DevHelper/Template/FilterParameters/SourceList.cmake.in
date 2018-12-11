@@ -10,12 +10,10 @@ set(_FilterParameters
 foreach(f ${_FilterParameters} )
   set (${PLUGIN_NAME}_FilterParameters_SRCS
       ${${PLUGIN_NAME}_FilterParameters_SRCS}
-      ${${PLUGIN_NAME}_SOURCE_DIR}/FilterParameters/ImportVectorImageStackFilterParameter.cpp
   )
 
   set (${PLUGIN_NAME}_FilterParameters_HDRS
       ${${PLUGIN_NAME}_FilterParameters_HDRS}
-      ${${PLUGIN_NAME}_SOURCE_DIR}/FilterParameters/ImportVectorImageStackFilterParameter.h
   )
 endforeach()
 
