@@ -201,14 +201,13 @@ PluginProperties(TARGET_NAME ${plug_target_name}
 target_link_libraries(${plug_target_name}
                     Qt5::Core
                     SIMPLib
-                    ${ITK_LIBRARIES}
 )
-if(MSVC)
-  set_target_properties(${plug_target_name} PROPERTIES LINK_FLAGS_DEBUG "/INCREMENTAL:NO" )
-endif()
 
+# if(MSVC)
+#   set_target_properties(${plug_target_name} PROPERTIES LINK_FLAGS_DEBUG "/INCREMENTAL:NO" )
+# endif()
 
-if(BUILD_TESTING)
+if(SIMPL_BUILD_TESTING)
   include(${${PLUGIN_NAME}_SOURCE_DIR}/Test/CMakeLists.txt)
 endif()
 
