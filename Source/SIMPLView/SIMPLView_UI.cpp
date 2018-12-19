@@ -968,9 +968,10 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       m_Ui->issuesDockWidget->setVisible(true);
     }
 
-    QString text = "<span style=\" color:#000000;\" >";
-    text.append(msg.getText());
-    text.append("</span>");
+    QString text;
+    QTextStream ts(&text);
+    ts << "<a style=\"color: " << SVStyle::Instance()->getQLabel_color().name(QColor::HexRgb) << ";\" >" << msg.getText() << "</span>";
+
     m_Ui->stdOutWidget->appendText(text);
   }
 }
@@ -1203,10 +1204,7 @@ void SIMPLView_UI::setStatusBarMessage(const QString& msg)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::addStdOutputMessage(const QString& msg)
 {
-  QString text = "<span style=\" color:#000000;\" >";
-  text.append(msg);
-  text.append("</span>");
-  m_Ui->stdOutWidget->appendText(text);
+  m_Ui->stdOutWidget->appendText(msg);
 }
 
 // -----------------------------------------------------------------------------
