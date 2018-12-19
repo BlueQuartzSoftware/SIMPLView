@@ -48,7 +48,6 @@
 #include "SIMPLView_UI.h"
 #include "StyleSheetEditor.h"
 
-#include "SVWidgetsLib/QtSupport/QtSStyles.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
@@ -161,30 +160,12 @@ int main(int argc, char* argv[])
   setlocale(LC_NUMERIC, "C");
 
   // Load the default font from SIMPL
-  QString firaSansFontPath(":/SIMPL/fonts/FiraSans-Regular.ttf");
-  int id = QFontDatabase::addApplicationFont(firaSansFontPath);
+  QStringList fontList;
+  fontList << QString(":/SIMPL/fonts/FiraSans-Regular.ttf") << QString(":/SIMPL/fonts/Lato-Regular.ttf") << QString(":/SIMPL/fonts/Lato-Black.ttf") << QString(":/SIMPL/fonts/Lato-BlackItalic.ttf")
+           << QString(":/SIMPL/fonts/Lato-Bold.ttf") << QString(":/SIMPL/fonts/Lato-BoldItalic.ttf") << QString(":/SIMPL/fonts/Lato-Hairline.ttf") << QString(":/SIMPL/fonts/Lato-HairlineItalic.ttf")
+           << QString(":/SIMPL/fonts/Lato-Italic.ttf") << QString(":/SIMPL/fonts/Lato-Light.ttf") << QString(":/SIMPL/fonts/Lato-LightItalic.ttf");
 
-  /* On Linux builds this will always return -1 */
-  if(id >= 0)
-  {
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-
-    QFont defaultFont(family);
-    defaultFont.setPixelSize(12);
-    qApp->setFont(defaultFont);
-//    qDebug() << "Default Font Loaded: " << firaSansFontPath;
-  }
-  else
-  {
-    qDebug() << "ERROR LOADING DEFAULT FONT: " << firaSansFontPath;
-  }
-
-  // This is the single standard font that ships with the open-source version
-  {
-    QStringList fontList;
-    fontList << firaSansFontPath;
-    InitFonts(fontList);
-  }
+  InitFonts(fontList);
 
   // Init any extra fonts that are needed by specialized versions of SIMPLView
   InitFonts(BrandedStrings::ExtraFonts);
