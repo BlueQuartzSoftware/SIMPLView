@@ -41,7 +41,6 @@
 ThirdOrderPolynomialWidgetCodeGenerator::ThirdOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
   FPCodeGenerator(humanLabel, propertyName, category, initValue)
 {
-
 }
 
 // -----------------------------------------------------------------------------

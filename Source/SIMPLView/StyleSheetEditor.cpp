@@ -54,8 +54,6 @@
 #include "StyleSheetEditor.h"
 #include "BrandedStrings.h"
 
-#include "SVWidgetsLib/QtSupport/QtSStyles.h"
-
 #include "ui_StyleSheetEditor.h"
 
 StyleSheetEditor::StyleSheetEditor(QWidget* parent)

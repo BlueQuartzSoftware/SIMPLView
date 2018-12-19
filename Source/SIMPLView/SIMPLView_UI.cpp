@@ -116,8 +116,6 @@ SIMPLView_UI::SIMPLView_UI(QWidget* parent)
 : QMainWindow(parent)
 , m_Ui(new Ui::SIMPLView_UI)
 , m_IssuesUi(new Ui::PipelineIssuesWidget)
-, m_FilterManager(nullptr)
-, m_FilterWidgetManager(nullptr)
 , m_LastOpenedFilePath(QDir::homePath())
 {
   // Register all of the Filters we know about - the rest will be loaded through plugins
@@ -1053,9 +1051,10 @@ void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
       }
     }
 
-    QString text = "<span style=\" color:#000000;\" >";
-    text.append(msg.getText());
-    text.append("</span>");
+    QString text;
+    QTextStream ts(&text);
+    ts << "<a style=\"color: " << SVStyle::Instance()->getQLabel_color().name(QColor::HexRgb) << ";\" >" << msg.getText() << "</span>";
+
     m_IssuesUi->stdOutWidget->appendText(text);
   }
 }
@@ -1331,10 +1330,7 @@ void SIMPLView_UI::setStatusBarMessage(const QString& msg)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::addStdOutputMessage(const QString& msg)
 {
-  QString text = "<span style=\" color:#000000;\" >";
-  text.append(msg);
-  text.append("</span>");
-  m_IssuesUi->stdOutWidget->appendText(text);
+  m_IssuesUi->stdOutWidget->appendText(msg);
 }
 
 // -----------------------------------------------------------------------------

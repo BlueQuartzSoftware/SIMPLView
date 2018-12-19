@@ -72,7 +72,6 @@ FilterMaker::FilterMaker(QWidget* parent) :
 // -----------------------------------------------------------------------------
 FilterMaker::~FilterMaker()
 {
-
 }
 
 // -----------------------------------------------------------------------------
@@ -926,11 +925,4 @@ QString FilterMaker::getDefaultFilterCPPIncludesContents()
 // -----------------------------------------------------------------------------
 void FilterMaker::generationError(const QString& test)
 {
-
 }
-
-
-
-
-
-
