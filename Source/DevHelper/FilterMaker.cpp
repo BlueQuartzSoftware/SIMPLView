@@ -353,13 +353,28 @@ void FilterMaker::updateFilterFileGenerators()
   if (contentsMap.size() > 0)
   {
     m_cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
-    m_cppGenerator->setInitListContents(contentsMap["Initialization List"]);
+
+    QString initList = contentsMap["Initialization List"];
+    if (!initList.isEmpty())
+    {
+      initList.prepend(":\n");
+    }
+
+    m_cppGenerator->setInitListContents(initList);
     m_cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
   }
   else
   {
     m_cppGenerator->setSetupFPContents(getDefaultSetupFPContents());
-    m_cppGenerator->setInitListContents(getDefaultInitListContents());
+
+    QString defaultInitList = getDefaultInitListContents();
+    if (!defaultInitList.isEmpty())
+    {
+      defaultInitList.prepend(":\n");
+    }
+
+    m_cppGenerator->setInitListContents(defaultInitList);
+
     m_cppGenerator->setFilterCPPIncludesContents(getDefaultFilterCPPIncludesContents());
   }
 
