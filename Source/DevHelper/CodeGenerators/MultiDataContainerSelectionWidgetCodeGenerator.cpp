@@ -76,8 +76,8 @@ QString MultiDataContainerSelectionWidgetCodeGenerator::generateFilterParameters
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(QVector<DataArrayPath>, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(QVector<DataArrayPath> " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(QStringList, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(QStringList " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
