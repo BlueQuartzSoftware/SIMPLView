@@ -95,7 +95,6 @@ void @ClassName@::execute()
     return;
   }
 
-  notifyStatusMessage(getHumanLabel(), "Complete");
 }
 
 // -----------------------------------------------------------------------------
