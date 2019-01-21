@@ -213,6 +213,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     text.replace("@InitList@", initListContents);
     text.replace("@Filter_H_Includes@", filterHIncludesContents);
     text.replace("@Filter_CPP_Includes@", filterCPPIncludesContents);
+    text.replace("@PYBindContents@", pyContents);
 
     // ****************************************************************
     // The following replacements need to happen after the above
@@ -409,6 +410,12 @@ void PMFileGenerator::setDataCheckContents(QString contents)
 void PMFileGenerator::setFPContents(QString contents)
 {
   fpContents = contents;
+}
+
+// -----------------------------------------------------------------------------
+void PMFileGenerator::setPyContents(const QString& contents)
+{
+  pyContents = contents;
 }
 
 // -----------------------------------------------------------------------------
