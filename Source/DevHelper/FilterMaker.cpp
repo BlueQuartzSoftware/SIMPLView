@@ -403,6 +403,7 @@ void FilterMaker::updateFilterFileGenerators()
   {
     m_hGenerator->setFPContents(contentsMap["Filter Parameters"]);
     m_hGenerator->setFilterHIncludesContents(contentsMap["Filter Header Includes"]);
+    m_hGenerator->setPyContents(contentsMap["Pybind Parameters"]);
   }
   else
   {
@@ -484,6 +485,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   QString initListContents = "\n";
   QString filterHIncludes = "";
   QString filterCPPIncludes = "";
+  QString PYContents = "";
 
   CodeGenFactory::Pointer factory = CodeGenFactory::New();
   for (int row = 0; row < filterParametersTable->rowCount(); row++)
@@ -511,6 +513,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     if (generator->generateFilterParameters().isEmpty() == false)
     {
       FPContents.append(generator->generateFilterParameters() + "\n\n");
+      PYContents.append("//    PYB11_PROPERTY(/* Insert the Proper type */ " + propertyName + " READ get" + propertyName + " WRITE set" + propertyName + ")\n");
     }
 
     if (generator->generateInitializationList().isEmpty() == false)
@@ -569,6 +572,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   map.insert("Initialization List", initListContents);
   map.insert("Filter Header Includes", filterHIncludes);
   map.insert("Filter Implementation Includes", filterCPPIncludes);
+  map.insert("Pybind Parameters", PYContents);
 
   return map;
 }
