@@ -109,12 +109,12 @@ void AboutSIMPLView::setupGui()
 
   setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-  QString aboutTitle = QString("About ") + BrandedStrings::ApplicationName;
-  setWindowTitle("About" + BrandedStrings::ApplicationName);
+  setWindowTitle("About " + BrandedStrings::ApplicationName);
   tabWidget->setTabText(tabWidget->indexOf(tab), "About" + BrandedStrings::ApplicationName);
   QString iconName = QString(":/icons/%1 (PNG)/128x128.png").arg(BrandedStrings::ApplicationName);
   label->setPixmap(QPixmap(iconName));
 
+  copyrightNotice->setText(BrandedStrings::CopyrightNotice);
 
 #if defined (Q_OS_MAC)
   m_CloseAction = new QAction(this);
@@ -127,7 +127,7 @@ void AboutSIMPLView::setupGui()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::setLicenseFiles(QStringList files)
+void AboutSIMPLView::setLicenseFiles(const QStringList &files)
 {
   m_licenseFiles = files;
   licenseCombo->clear();
@@ -147,7 +147,6 @@ void AboutSIMPLView::setLicenseFiles(QStringList files)
 // -----------------------------------------------------------------------------
 void AboutSIMPLView::on_licenseCombo_currentIndexChanged(int index)
 {
-  //qDebug() << "on_licenseCombo_action" << "\n";
   QString resourceFile = m_licenseFiles[licenseCombo->currentIndex()];
   loadResourceFile(resourceFile);
 }
@@ -155,7 +154,7 @@ void AboutSIMPLView::on_licenseCombo_currentIndexChanged(int index)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void AboutSIMPLView::loadResourceFile(const QString qresourceFile)
+void AboutSIMPLView::loadResourceFile(const QString& qresourceFile)
 {
   QFile inputFile(qresourceFile);
   inputFile.open(QIODevice::ReadOnly);
