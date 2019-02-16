@@ -58,9 +58,9 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="copyrightNotice">
          <property name="text">
-          <string>Copyright 2008-2016 BlueQuartz Software, LLC. All rights reserved.</string>
+          <string>TextLabel</string>
          </property>
         </widget>
        </item>
@@ -126,7 +126,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../../../../Resources/OpenSourceEdition/branded_files.qrc">:/icons/SIMPLView (PNG)/128x128.png</pixmap>
+          <pixmap>:/icons/SIMPLView (PNG)/128x128.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -214,8 +214,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../../../../Resources/OpenSourceEdition/branded_files.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
