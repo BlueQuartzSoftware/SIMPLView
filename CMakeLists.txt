@@ -1,4 +1,20 @@
 
+cmake_policy(SET CMP0002 NEW)
+cmake_policy(SET CMP0054 NEW)
+cmake_policy(SET CMP0079 NEW)
+cmake_policy(SET CMP0077 NEW)
+
+cmake_minimum_required(VERSION 3.13.0)
+
+# Request C++14 standard, using new CMake variables.
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS False)
+
+#--------------------------------------------------------------------------------------------------
+# Always write out the compile_commands.json file to help out things like QtCreator and VS Code
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 
 if(NOT "${DREAM3D_SDK}" STREQUAL "")
   include("${DREAM3D_SDK}/DREAM3D_SDK.cmake")
@@ -9,22 +25,14 @@ if(NOT "${DREAM3D_SDK}" STREQUAL "")
   endif()
 endif()
 
-# Request C++11 standard, using new CMake variables.
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_EXTENSIONS False)
-
-if(${CMAKE_MAJOR_VERSION} STREQUAL "3")
-  # CMake 3.1 introduces if() policies on dereferencing variables in quotes
-  cmake_policy(SET CMP0054 NEW)
-endif()
-
-cmake_minimum_required(VERSION 3.8.0)
-set(SIMPLViewProjGenerateVersion 0)
-
 #------------------------------------------------------------------------------
 # Create the Top level Project
 project(SIMPLViewProj VERSION 1.2.0.0)
+
+#------------------------------------------------------------------------------
+# Create the Top level Project
+#
+set(SIMPLViewProjGenerateVersion 0)
 get_property(SIMPLViewProj_VERSION_MAJOR GLOBAL PROPERTY SIMPLViewProj_VERSION_MAJOR)
 if("${SIMPLViewProj_VERSION_MAJOR}" STREQUAL "")
   set(SIMPLViewProj_VERSION_MAJOR "1")
@@ -70,8 +78,6 @@ if(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
     "Single Directory for all static libraries."
     )
 endif()
-
-
 
 #------------------------------------------------------------------------------
 # Find the Git Package for Versioning. It should be ok if Git is NOT found
@@ -276,10 +282,10 @@ endif()
 # SIMPL needs the Eigen library for Least Squares fit and Eigen
 # value/vector calculations.
 set(SIMPL_USE_EIGEN "")
-Find_Package(Eigen REQUIRED)
-if(EIGEN_FOUND)
-  message(STATUS "Found Eigen Library")
-  set(SIMPL_USE_EIGEN "1")
+Find_Package(Eigen3 REQUIRED)
+if(EIGEN3_FOUND)
+  message(STATUS "Eigen3: ${EIGEN3_VERSION_STRING}")
+  set(SIMPL_USE_EIGEN "1" CACHE INTERNAL "")
 else()
   message(WARNING "The Eigen Library is required for some algorithms to execute. These algorithms will be disabled.")
 endif()

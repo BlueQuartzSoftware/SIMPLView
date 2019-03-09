@@ -56,7 +56,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
      * are defined in a Qt resource file (*.qrc).
      * @param files The QString list of files to allow the About Box to load.
      */
-    void setLicenseFiles(QStringList files);
+    void setLicenseFiles(const QStringList& files);
 
   protected slots:
     void on_licenseCombo_currentIndexChanged(int index);
@@ -73,7 +73,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
      * system.
      * @param qresourceFile The source file to load of the form ":/SomeFile.xxx"
      */
-    void loadResourceFile(const QString qresourceFile);
+    void loadResourceFile(const QString& qresourceFile);
 
     /**
      * @brief readVersions

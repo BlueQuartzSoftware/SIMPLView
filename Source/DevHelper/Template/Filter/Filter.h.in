@@ -17,6 +17,10 @@
 class @PluginName@_EXPORT @ClassName@ : public AbstractFilter
 {
   Q_OBJECT
+    // clang-format off
+    PYB11_CREATE_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
+@PYBindContents@
+    // clang-format on
 
   public:
     SIMPL_SHARED_POINTERS(@ClassName@)

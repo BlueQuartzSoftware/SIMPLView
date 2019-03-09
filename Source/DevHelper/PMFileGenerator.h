@@ -69,6 +69,7 @@ class PMFileGenerator : public PMDirGenerator
     void setInitListContents(QString contents);
     void setFilterHIncludesContents(QString contents);
     void setFilterCPPIncludesContents(QString contents);
+    void setPyContents(const QString& contents);
 
     virtual QString generateFileContents(QString replaceStr = "");
 
@@ -89,6 +90,7 @@ class PMFileGenerator : public PMDirGenerator
     QString initListContents;
     QString filterHIncludesContents;
     QString filterCPPIncludesContents;
+    QString pyContents;
 
   private:
     QString m_FileName;
