@@ -59,6 +59,8 @@ class DoubleWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
+    QString generateInitializationList() override;
+
     virtual QList<QString> generateCPPIncludes();
 
   protected:

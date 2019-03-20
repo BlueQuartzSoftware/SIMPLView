@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type")
 {
 }
 

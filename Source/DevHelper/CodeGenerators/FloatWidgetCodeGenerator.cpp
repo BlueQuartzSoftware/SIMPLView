@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "float")
 {
 }
 

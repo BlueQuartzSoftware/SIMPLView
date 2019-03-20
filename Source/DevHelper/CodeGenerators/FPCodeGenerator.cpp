@@ -38,10 +38,11 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FPCodeGenerator::FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  m_PropertyName(propertyName),
-  m_HumanLabel(humanLabel),
-  m_InitValue(initValue)
+FPCodeGenerator::FPCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue, const QString& varType)
+: m_PropertyName(propertyName)
+, m_HumanLabel(humanLabel)
+, m_InitValue(initValue)
+, m_VariableType(varType)
 {
   if (category == "Parameter")
   {
@@ -62,10 +63,16 @@ FPCodeGenerator::FPCodeGenerator(QString humanLabel, QString propertyName, QStri
 }
 
 // -----------------------------------------------------------------------------
+FPCodeGenerator::Pointer FPCodeGenerator::New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
+{
+  Pointer sharedPtr(new FPCodeGenerator(humanLabel, propertyName, category, initValue, "UNKNOWN"));
+  return sharedPtr;
+}
+
+// -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FPCodeGenerator::~FPCodeGenerator()
-{}
+FPCodeGenerator::~FPCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -100,6 +107,12 @@ QString FPCodeGenerator::getInitValue()
 }
 
 // -----------------------------------------------------------------------------
+QString FPCodeGenerator::getVariableType()
+{
+  return m_VariableType;
+}
+
+// -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 QString FPCodeGenerator::generateSetupFilterParameters()
@@ -126,10 +139,19 @@ QString FPCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+QString FPCodeGenerator::generatePybindContents()
+{
+  // return "";
+  return QString("    PYB11_PROPERTY(" + getVariableType() + " " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 QString FPCodeGenerator::generateInitializationList()
 {
   QString contents;
-  if (getInitValue().isEmpty() == false)
+  if(!getInitValue().isEmpty())
   {
     QTextStream ss(&contents);
     ss << ",  m_" + getPropertyName() + "(" + getInitValue() + ")";

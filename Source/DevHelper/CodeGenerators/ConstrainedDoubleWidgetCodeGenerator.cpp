@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ConstrainedDoubleWidgetCodeGenerator::ConstrainedDoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+ConstrainedDoubleWidgetCodeGenerator::ConstrainedDoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "double")
 {
 }
 

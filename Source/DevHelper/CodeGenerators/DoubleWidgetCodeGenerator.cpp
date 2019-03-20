@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DoubleWidgetCodeGenerator::DoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+DoubleWidgetCodeGenerator::DoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "double")
 {
 }
 
@@ -81,6 +81,11 @@ QString DoubleWidgetCodeGenerator::generateFilterParameters()
   return contents;
 }
 
+// -----------------------------------------------------------------------------
+QString DoubleWidgetCodeGenerator::generateInitializationList()
+{
+  return QString(", m_" + getPropertyName() + "(" + getInitValue() + ")");
+}
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------

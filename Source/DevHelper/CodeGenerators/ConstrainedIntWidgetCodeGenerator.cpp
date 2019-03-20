@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ConstrainedIntWidgetCodeGenerator::ConstrainedIntWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+ConstrainedIntWidgetCodeGenerator::ConstrainedIntWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t")
 {
 }
 

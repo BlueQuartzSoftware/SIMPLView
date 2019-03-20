@@ -38,16 +38,15 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ComparisonSelectionAdvancedWidgetCodeGenerator::ComparisonSelectionAdvancedWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+ComparisonSelectionAdvancedWidgetCodeGenerator::ComparisonSelectionAdvancedWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "ComparisonInputs")
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ComparisonSelectionAdvancedWidgetCodeGenerator::~ComparisonSelectionAdvancedWidgetCodeGenerator()
-{}
+ComparisonSelectionAdvancedWidgetCodeGenerator::~ComparisonSelectionAdvancedWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
