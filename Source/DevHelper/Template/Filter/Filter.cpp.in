@@ -83,15 +83,13 @@ void @ClassName@::execute()
   if (getWarningCondition() < 0)
   {
     QString ss = QObject::tr("Some warning message");
-    setWarningCondition(-88888888);
-    notifyWarningMessage(getHumanLabel(), ss, getWarningCondition());
+    notifyWarningMessage("", ss, -88888888);
   }
 
   if (getErrorCondition() < 0)
   {
     QString ss = QObject::tr("Some error message");
-    setErrorCondition(-99999999);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    notifyErrorMessage("", ss, -99999999);
     return;
   }
 
