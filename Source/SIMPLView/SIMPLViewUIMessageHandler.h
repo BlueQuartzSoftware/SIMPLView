@@ -42,8 +42,8 @@ class SIMPLView_UI;
 class AbstractStatusMessage;
 
 /**
- * @class SIMPLViewUIMessageHandler SIMPLViewUIMessageHandler.h DREAM3DLib/Common/SIMPLViewUIMessageHandler.h
- * @brief This is the Message handler for the issues widget.  It is responsible for loading the issues table with new messages.
+ * @brief This message handler is used by SIMPLView_UI to display filter and pipeline status messages in the status bar
+ * and in the Pipeline Output dock widget.  It is also used to display pipeline progress in the progress bar.
  */
 class SIMPLib_EXPORT SIMPLViewUIMessageHandler : public AbstractMessageHandler
 {
