@@ -930,7 +930,7 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::processPipelineMessage(AbstractMessage::Pointer msg)
+void SIMPLView_UI::processPipelineMessage(const AbstractMessage::Pointer& msg)
 {
   SIMPLViewUIMessageHandler msgHandler(this);
   msg->visit(&msgHandler);

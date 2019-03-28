@@ -285,7 +285,7 @@ class SIMPLView_UI : public QMainWindow
      * @brief processPipelineMessage
      * @param msg
      */
-    void processPipelineMessage(AbstractMessage::Pointer msg);
+    void processPipelineMessage(const AbstractMessage::Pointer& msg);
 
     /**
     * @brief setFilterInputWidget

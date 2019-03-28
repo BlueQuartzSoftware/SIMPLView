@@ -33,8 +33,6 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#pragma once
-
 #include "SIMPLViewUIMessageHandler.h"
 
 #include "SIMPLib/Messages/FilterProgressMessage.h"
