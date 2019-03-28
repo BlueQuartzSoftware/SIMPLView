@@ -51,19 +51,22 @@ class SIMPLib_EXPORT SIMPLViewUIMessageHandler : public AbstractMessageHandler
     explicit SIMPLViewUIMessageHandler(SIMPLView_UI* uiWidget);
 
     /**
-     * @brief processMessage
+     * @brief Sets the SIMPLView_UI status bar and appends the standard output widget with
+     * incoming FilterStatusMessage's status message.
      * @param msg
      */
     void processMessage(const FilterStatusMessage* msg) const override;
 
     /**
-     * @brief processMessage
+     * @brief Sets the SIMPLView_UI progress bar with the incoming PipelineProgressMessage's
+     * progress value.
      * @param msg
      */
     void processMessage(const PipelineProgressMessage* msg) const override;
 
     /**
-     * @brief processMessage
+     * @brief Sets the SIMPLView_UI status bar and appends the standard output widget with
+     * incoming PipelineStatusMessage's status message.
      * @param msg
      */
     void processMessage(const PipelineStatusMessage* msg) const override;
