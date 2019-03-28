@@ -55,7 +55,7 @@ SIMPLViewUIMessageHandler::SIMPLViewUIMessageHandler(SIMPLView_UI* uiWidget)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUIMessageHandler::processMessage(FilterStatusMessage* msg) const
+void SIMPLViewUIMessageHandler::processMessage(const FilterStatusMessage* msg) const
 {
   QString statusMessage = msg->generateMessageString();
 
@@ -71,7 +71,7 @@ void SIMPLViewUIMessageHandler::processMessage(FilterStatusMessage* msg) const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUIMessageHandler::processMessage(PipelineProgressMessage* msg) const
+void SIMPLViewUIMessageHandler::processMessage(const PipelineProgressMessage* msg) const
 {
   float progValue = static_cast<float>(msg->getProgressValue()) / 100;
   m_UIWidget->m_Ui->pipelineListWidget->setProgressValue(progValue);
@@ -80,7 +80,7 @@ void SIMPLViewUIMessageHandler::processMessage(PipelineProgressMessage* msg) con
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLViewUIMessageHandler::processMessage(PipelineStatusMessage* msg) const
+void SIMPLViewUIMessageHandler::processMessage(const PipelineStatusMessage* msg) const
 {
   QString statusMessage = msg->generateMessageString();
 

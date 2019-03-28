@@ -54,19 +54,19 @@ class SIMPLib_EXPORT SIMPLViewUIMessageHandler : public AbstractMessageHandler
      * @brief processMessage
      * @param msg
      */
-    void processMessage(FilterStatusMessage* msg) const override;
+    void processMessage(const FilterStatusMessage* msg) const override;
 
     /**
      * @brief processMessage
      * @param msg
      */
-    void processMessage(PipelineProgressMessage* msg) const override;
+    void processMessage(const PipelineProgressMessage* msg) const override;
 
     /**
      * @brief processMessage
      * @param msg
      */
-    void processMessage(PipelineStatusMessage* msg) const override;
+    void processMessage(const PipelineStatusMessage* msg) const override;
 
   private:
     SIMPLView_UI* m_UIWidget = nullptr;
