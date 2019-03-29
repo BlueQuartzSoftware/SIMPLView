@@ -30,8 +30,8 @@
 // -----------------------------------------------------------------------------
 void @ClassName@::initialize()
 {
-  setErrorCondition(0);
-  setWarningCondition(0);
+  clearErrorCondition();
+  clearWarningCondition();
   setCancel(false);
 }
 
@@ -50,8 +50,8 @@ void @ClassName@::setupFilterParameters()
 // -----------------------------------------------------------------------------
 void @ClassName@::dataCheck()
 {
-  setErrorCondition(0);
-  setWarningCondition(0);
+  clearErrorCondition();
+  clearWarningCondition();
   @DataCheckContents@
 }
 
