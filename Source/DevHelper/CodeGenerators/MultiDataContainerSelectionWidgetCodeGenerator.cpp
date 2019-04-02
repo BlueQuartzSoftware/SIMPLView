@@ -38,16 +38,15 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MultiDataContainerSelectionWidgetCodeGenerator::MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+MultiDataContainerSelectionWidgetCodeGenerator::MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "QStringList")
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MultiDataContainerSelectionWidgetCodeGenerator::~MultiDataContainerSelectionWidgetCodeGenerator()
-{}
+MultiDataContainerSelectionWidgetCodeGenerator::~MultiDataContainerSelectionWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -85,7 +84,7 @@ QString MultiDataContainerSelectionWidgetCodeGenerator::generateFilterParameters
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QString> MultiDataContainerSelectionWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> MultiDataContainerSelectionWidgetCodeGenerator::generateHIncludes()
 {
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/MultiDataContainerSelectionFilterParameter.h\"");

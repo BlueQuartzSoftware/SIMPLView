@@ -59,7 +59,7 @@ class MultiDataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateFilterParameters();
 
-    virtual QList<QString> generateCPPIncludes();
+    virtual QList<QString> generateHIncludes();
 
   protected:
     MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
