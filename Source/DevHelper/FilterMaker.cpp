@@ -355,10 +355,10 @@ void FilterMaker::updateFilterFileGenerators()
     m_cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
 
     QString initList = contentsMap["Initialization List"];
-    if (!initList.isEmpty())
-    {
-      initList.prepend(":\n");
-    }
+    //    if (!initList.isEmpty())
+    //    {
+    //      initList.prepend(":\n");
+    //    }
 
     m_cppGenerator->setInitListContents(initList);
     m_cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
@@ -513,7 +513,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     if (generator->generateFilterParameters().isEmpty() == false)
     {
       FPContents.append(generator->generateFilterParameters() + "\n\n");
-      PYContents.append("//    PYB11_PROPERTY(/* Insert the Proper type */ " + propertyName + " READ get" + propertyName + " WRITE set" + propertyName + ")\n");
+      PYContents.append(generator->generatePybindContents());
     }
 
     if (generator->generateInitializationList().isEmpty() == false)

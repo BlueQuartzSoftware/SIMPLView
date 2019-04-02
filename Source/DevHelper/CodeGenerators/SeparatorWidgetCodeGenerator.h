@@ -61,6 +61,8 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
 
     virtual QString generateInitializationList();
 
+    QString generatePybindContents() override;
+
     virtual QList<QString> generateCPPIncludes();
 
   protected:

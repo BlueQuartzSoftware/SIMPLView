@@ -38,8 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FourthOrderPolynomialWidgetCodeGenerator::FourthOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+FourthOrderPolynomialWidgetCodeGenerator::FourthOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float4thOrderPoly_t")
 {
 }
 
