@@ -30,8 +30,8 @@
 // -----------------------------------------------------------------------------
 void @ClassName@::initialize()
 {
-  setErrorCondition(0);
-  setWarningCondition(0);
+  clearErrorCode();
+  clearWarningCode();
   setCancel(false);
 }
 
@@ -50,8 +50,8 @@ void @ClassName@::setupFilterParameters()
 // -----------------------------------------------------------------------------
 void @ClassName@::dataCheck()
 {
-  setErrorCondition(0);
-  setWarningCondition(0);
+  clearErrorCode();
+  clearWarningCode();
   @DataCheckContents@
 }
 
@@ -83,15 +83,13 @@ void @ClassName@::execute()
   if (getWarningCondition() < 0)
   {
     QString ss = QObject::tr("Some warning message");
-    setWarningCondition(-88888888);
-    notifyWarningMessage(getHumanLabel(), ss, getWarningCondition());
+    setWarningCondition(-88888888, ss);
   }
 
   if (getErrorCondition() < 0)
   {
     QString ss = QObject::tr("Some error message");
-    setErrorCondition(-99999999);
-    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    setErrorCondition(-99999999, ss);
     return;
   }
 

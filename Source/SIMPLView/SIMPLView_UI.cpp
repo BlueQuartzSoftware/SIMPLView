@@ -104,6 +104,7 @@
 #include "SIMPLView/SIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLViewUIMessageHandler.h"
 
 #include "BrandedStrings.h"
 
@@ -929,51 +930,10 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
+void SIMPLView_UI::processPipelineMessage(const AbstractMessage::Pointer& msg)
 {
-  if(msg.getType() == PipelineMessage::MessageType::ProgressValue)
-  {
-    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
-    m_Ui->pipelineListWidget->setProgressValue(progValue);
-  }
-  else if(msg.getType() == PipelineMessage::MessageType::StatusMessageAndProgressValue)
-  {
-    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
-    m_Ui->pipelineListWidget->setProgressValue(progValue);
-
-    if(nullptr != this->statusBar())
-    {
-      this->statusBar()->showMessage(msg.generateStatusString());
-    }
-  }
-  else if(msg.getType() == PipelineMessage::MessageType::StandardOutputMessage || msg.getType() == PipelineMessage::MessageType::StatusMessage)
-  {
-    if(msg.getType() == PipelineMessage::MessageType::StatusMessage)
-    {
-      if(nullptr != this->statusBar())
-      {
-        this->statusBar()->showMessage(msg.generateStatusString());
-      }
-    }
-
-    // Allow status messages to open the standard output widget
-    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
-    {
-      m_Ui->stdOutDockWidget->setVisible(true);
-    }
-
-    // Allow status messages to open the issuesDockWidget as well
-    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
-    {
-      m_Ui->issuesDockWidget->setVisible(true);
-    }
-
-    QString text;
-    QTextStream ts(&text);
-    ts << "<a style=\"color: " << SVStyle::Instance()->getQLabel_color().name(QColor::HexRgb) << ";\" >" << msg.getText() << "</span>";
-
-    m_Ui->stdOutWidget->appendText(text);
-  }
+  SIMPLViewUIMessageHandler msgHandler(this);
+  msg->visit(&msgHandler);
 }
 
 // -----------------------------------------------------------------------------
