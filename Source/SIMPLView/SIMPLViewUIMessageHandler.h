@@ -36,7 +36,6 @@
 #pragma once
 
 #include "SIMPLib/Messages/AbstractMessageHandler.h"
-#include "SIMPLib/SIMPLib.h"
 
 class SIMPLView_UI;
 class AbstractStatusMessage;
@@ -45,7 +44,7 @@ class AbstractStatusMessage;
  * @brief This message handler is used by SIMPLView_UI to display filter and pipeline status messages in the status bar
  * and in the Pipeline Output dock widget.  It is also used to display pipeline progress in the progress bar.
  */
-class SIMPLib_EXPORT SIMPLViewUIMessageHandler : public AbstractMessageHandler
+class SIMPLViewUIMessageHandler : public AbstractMessageHandler
 {
 public:
   explicit SIMPLViewUIMessageHandler(SIMPLView_UI* uiWidget);
