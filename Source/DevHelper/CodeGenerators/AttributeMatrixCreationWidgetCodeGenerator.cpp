@@ -38,16 +38,15 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixCreationWidgetCodeGenerator::AttributeMatrixCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue) :
-  FPCodeGenerator(humanLabel, propertyName, category, initValue)
+AttributeMatrixCreationWidgetCodeGenerator::AttributeMatrixCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "DataArrayPath")
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixCreationWidgetCodeGenerator::~AttributeMatrixCreationWidgetCodeGenerator()
-{}
+AttributeMatrixCreationWidgetCodeGenerator::~AttributeMatrixCreationWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //

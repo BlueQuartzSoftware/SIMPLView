@@ -58,11 +58,7 @@ class FPCodeGenerator
   public:
     SIMPL_SHARED_POINTERS(FPCodeGenerator)
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
-    {
-      Pointer sharedPtr(new FPCodeGenerator(humanLabel, propertyName, category, initValue));
-      return sharedPtr;
-    }
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
     virtual ~FPCodeGenerator();
 
@@ -74,23 +70,27 @@ class FPCodeGenerator
 
     virtual QString generateInitializationList();
 
+    virtual QString generatePybindContents();
+
     virtual QList<QString> generateHIncludes();
 
     virtual QList<QString> generateCPPIncludes();
 
   protected:
-    FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    FPCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue, const QString& varType);
 
     QString getPropertyName();
     QString getHumanLabel();
     QString getCategory();
     QString getInitValue();
+    QString getVariableType();
 
   private:
     QString m_PropertyName;
     QString m_HumanLabel;
     QString m_Category;
     QString m_InitValue;
+    QString m_VariableType = QString("Unknown");
 
   public:
     FPCodeGenerator(const FPCodeGenerator&) = delete; // Copy Constructor Not Implemented

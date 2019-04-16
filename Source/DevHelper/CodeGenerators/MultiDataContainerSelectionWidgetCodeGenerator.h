@@ -40,38 +40,34 @@
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class SeparatorWidgetCodeGenerator : public FPCodeGenerator
+class MultiDataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(SeparatorWidgetCodeGenerator)
+    SIMPL_SHARED_POINTERS(MultiDataContainerSelectionWidgetCodeGenerator)
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
-      Pointer sharedPtr(new SeparatorWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+      Pointer sharedPtr(new MultiDataContainerSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
     }
 
-    virtual ~SeparatorWidgetCodeGenerator();
+    virtual ~MultiDataContainerSelectionWidgetCodeGenerator();
 
     virtual QString generateSetupFilterParameters();
 
-    virtual QString generateWriteFilterParameters();
-
     virtual QString generateDataCheck();
 
-    virtual QString generateInitializationList();
+    virtual QString generateFilterParameters();
 
-    QString generatePybindContents() override;
-
-    virtual QList<QString> generateCPPIncludes();
+    virtual QList<QString> generateHIncludes();
 
   protected:
-    SeparatorWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
   public:
-    SeparatorWidgetCodeGenerator(const SeparatorWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
-    SeparatorWidgetCodeGenerator(SeparatorWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
-    SeparatorWidgetCodeGenerator& operator=(const SeparatorWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
-    SeparatorWidgetCodeGenerator& operator=(SeparatorWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+    MultiDataContainerSelectionWidgetCodeGenerator(const MultiDataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
+    MultiDataContainerSelectionWidgetCodeGenerator(MultiDataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
+    MultiDataContainerSelectionWidgetCodeGenerator& operator=(const MultiDataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+    MultiDataContainerSelectionWidgetCodeGenerator& operator=(MultiDataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 };
 

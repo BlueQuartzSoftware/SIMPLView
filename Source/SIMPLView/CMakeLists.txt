@@ -83,6 +83,7 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/SIMPLView_UI.cpp
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewUIMessageHandler.cpp
   ${SIMPLView_SOURCE_DIR}/StyleSheetEditor.cpp
   )
 
@@ -91,6 +92,7 @@ set(SIMPLView_SRCS
 set(SIMPLView_HDRS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewConstants.h
   ${BrandedSIMPLView_DIR}/BrandedStrings.h
+  ${SIMPLView_SOURCE_DIR}/SIMPLViewUIMessageHandler.h
 )
 
 #------------------------------------------------------------------

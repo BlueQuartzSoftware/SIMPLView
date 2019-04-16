@@ -33,37 +33,37 @@
 *
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "FloatWidgetCodeGenerator.h"
+#include "MultiDataContainerSelectionWidgetCodeGenerator.h"
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "float")
+MultiDataContainerSelectionWidgetCodeGenerator::MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "QStringList")
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FloatWidgetCodeGenerator::~FloatWidgetCodeGenerator()
-{}
+MultiDataContainerSelectionWidgetCodeGenerator::~MultiDataContainerSelectionWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FloatWidgetCodeGenerator::generateSetupFilterParameters()
+QString MultiDataContainerSelectionWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  out << "  parameters.push_back(SIMPL_NEW_FLOAT_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  out << "  MultiDataContainerSelectionFilterParameter::RequirementType mdcReq;\n  ";
+  out << "  parameters.push_back(SIMPL_NEW_MDC_SELECTION_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, mdcReq));";
   return s;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FloatWidgetCodeGenerator::generateDataCheck()
+QString MultiDataContainerSelectionWidgetCodeGenerator::generateDataCheck()
 {
   return "";
 }
@@ -71,12 +71,12 @@ QString FloatWidgetCodeGenerator::generateDataCheck()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FloatWidgetCodeGenerator::generateFilterParameters()
+QString MultiDataContainerSelectionWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(float, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(float " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(QStringList, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(QStringList " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -84,9 +84,9 @@ QString FloatWidgetCodeGenerator::generateFilterParameters()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QList<QString> FloatWidgetCodeGenerator::generateCPPIncludes()
+QList<QString> MultiDataContainerSelectionWidgetCodeGenerator::generateHIncludes()
 {
   QList<QString> list;
-  list.push_back("#include \"SIMPLib/FilterParameters/FloatFilterParameter.h\"");
+  list.push_back("#include \"SIMPLib/FilterParameters/MultiDataContainerSelectionFilterParameter.h\"");
   return list;
 }

@@ -79,6 +79,7 @@ class PipelineListWidget;
 class SVOverlayWidgetButton;
 class SVPipelineViewWidget;
 class SIMPLViewMenuItems;
+class SIMPLViewUIMessageHandler;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -96,6 +97,8 @@ class SIMPLView_UI : public QMainWindow
   public:
     SIMPLView_UI(QWidget* parent = nullptr);
     ~SIMPLView_UI() override;
+
+    friend SIMPLViewUIMessageHandler;
 
     /**
      * @brief eventFilter
@@ -285,7 +288,7 @@ class SIMPLView_UI : public QMainWindow
      * @brief processPipelineMessage
      * @param msg
      */
-    void processPipelineMessage(const PipelineMessage& msg);
+    void processPipelineMessage(const AbstractMessage::Pointer& msg);
 
     /**
     * @brief setFilterInputWidget

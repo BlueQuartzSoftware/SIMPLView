@@ -106,6 +106,7 @@
 #include "SIMPLView/SIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLViewUIMessageHandler.h"
 
 #include "BrandedStrings.h"
 
@@ -594,27 +595,9 @@ void SIMPLView_UI::setupGui()
 
   connectDockWidgetSignalsSlots(m_Ui->filterToolboxDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->pipelineViewDockWidget);
-#if 0
-  connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->dataBrowserDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->filterLibraryDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->filterListDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->issuesDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->pipelineDockWidget);
-  connectDockWidgetSignalsSlots(m_Ui->stdOutDockWidget);
-#endif
 
   m_Ui->filterToolboxDockWidget->installEventFilter(this);
   m_Ui->pipelineViewDockWidget->installEventFilter(this);
-#if 0
-  m_Ui->bookmarksDockWidget->installEventFilter(this);
-  m_Ui->dataBrowserDockWidget->installEventFilter(this);
-  m_Ui->filterLibraryDockWidget->installEventFilter(this);
-  m_Ui->filterListDockWidget->installEventFilter(this);
-  m_Ui->issuesDockWidget->installEventFilter(this);
-  m_Ui->pipelineDockWidget->installEventFilter(this);
-  m_Ui->stdOutDockWidget->installEventFilter(this);
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1004,59 +987,10 @@ void SIMPLView_UI::populateMenus(QObject* plugin)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SIMPLView_UI::processPipelineMessage(const PipelineMessage& msg)
+void SIMPLView_UI::processPipelineMessage(const AbstractMessage::Pointer& msg)
 {
-  if(msg.getType() == PipelineMessage::MessageType::ProgressValue)
-  {
-    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
-    m_Ui->pipelineListWidget->setProgressValue(progValue);
-  }
-  else if(msg.getType() == PipelineMessage::MessageType::StatusMessageAndProgressValue)
-  {
-    float progValue = static_cast<float>(msg.getProgressValue()) / 100;
-    m_Ui->pipelineListWidget->setProgressValue(progValue);
-
-    if(nullptr != this->statusBar())
-    {
-      this->statusBar()->showMessage(msg.generateStatusString());
-    }
-  }
-  else if(msg.getType() == PipelineMessage::MessageType::StandardOutputMessage || msg.getType() == PipelineMessage::MessageType::StatusMessage)
-  {
-    if(msg.getType() == PipelineMessage::MessageType::StatusMessage)
-    {
-      if(nullptr != this->statusBar())
-      {
-        this->statusBar()->showMessage(msg.generateStatusString());
-      }
-    }
-
-    // Allow status messages to open the standard output widget
-    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
-    {
-      // m_Ui->stdOutDockWidget->setVisible(true);
-      if (!m_FilterInputOverlayBtn->isChecked())
-      {
-        m_IssuesOverlayBtn->setChecked(true);
-      }
-    }
-
-    // Allow status messages to open the issuesDockWidget as well
-    if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
-    {
-      // m_Ui->issuesDockWidget->setVisible(true);
-      if (!m_FilterInputOverlayBtn->isChecked())
-      {
-        m_IssuesOverlayBtn->setChecked(true);
-      }
-    }
-
-    QString text;
-    QTextStream ts(&text);
-    ts << "<a style=\"color: " << SVStyle::Instance()->getQLabel_color().name(QColor::HexRgb) << ";\" >" << msg.getText() << "</span>";
-
-    m_IssuesUi->stdOutWidget->appendText(text);
-  }
+  SIMPLViewUIMessageHandler msgHandler(this);
+  msg->visit(&msgHandler);
 }
 
 // -----------------------------------------------------------------------------
