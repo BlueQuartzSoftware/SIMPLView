@@ -1037,7 +1037,7 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 // Launch the dialog
 #ifdef SIMPL_USE_QtWebEngine
   SVUserManualDialog::LaunchHelpDialog(className);
-#else
+#elif(defined(SIMPL_USE_MKDOCS) || defined(SIMPL_USE_DISCOUNT))
   QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(!didOpen)
@@ -1050,6 +1050,9 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
     msgBox.setIcon(QMessageBox::Critical);
     msgBox.exec();
   }
+#else
+  QMessageBox::StandardButton reply;
+  reply = QMessageBox::critical(this, tr("Documentation Error"), "Documentation was disabled in this build.", QMessageBox::Ok);
 #endif
 }
 

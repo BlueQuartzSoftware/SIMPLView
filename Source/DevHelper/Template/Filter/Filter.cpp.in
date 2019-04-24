@@ -76,17 +76,17 @@ void @ClassName@::execute()
 {
   initialize();
   dataCheck();
-  if(getErrorCondition() < 0) { return; }
+  if(getErrorCode() < 0) { return; }
 
   if (getCancel()) { return; }
 
-  if (getWarningCondition() < 0)
+  if (getWarningCode() < 0)
   {
     QString ss = QObject::tr("Some warning message");
     setWarningCondition(-88888888, ss);
   }
 
-  if (getErrorCondition() < 0)
+  if (getErrorCode() < 0)
   {
     QString ss = QObject::tr("Some error message");
     setErrorCondition(-99999999, ss);
