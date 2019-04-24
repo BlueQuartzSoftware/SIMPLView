@@ -42,16 +42,15 @@
 
 #include <QtGui/QFontDatabase>
 
-#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-#include "SVWidgetsLib/SVWidgetsLib.h"
-#include "SVWidgetsLib/Widgets/SVStyle.h"
-
+#include "BrandedStrings.h"
 #include "SIMPLView.h"
 #include "SIMPLViewApplication.h"
 #include "SIMPLView_UI.h"
 #include "StyleSheetEditor.h"
 
-#include "BrandedStrings.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
+#include "SVWidgetsLib/SVWidgetsLib.h"
+#include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #ifdef Q_WS_X11
 #include <QPlastiqueStyle>
