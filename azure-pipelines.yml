@@ -3,17 +3,28 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- develop
+stages:
+- stage: Build
+  jobs:
+  - job: macOS
+    pool:
+      name: BlueQuartz Self Hosted
+    steps:
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
 
-pool:
-  name: BlueQuartz Self Hosted
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'
+  - job: Windows
+    pool:
+      name: BlueQuartz Self Hosted
+    steps:
+    - script: echo Goodbye Cruel World!
+      displayName: 'Run a one-line script'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'
