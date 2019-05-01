@@ -9,8 +9,9 @@ stages:
   - job: macOS
     pool:
       name: BlueQuartz Self Hosted
+      demands: agent.os -equals Windows_NT
     steps:
-    - script: echo Hello, world!
+    - script: echo FROM Freaking Windows? Maybe!
       displayName: 'Run a one-line script'
 
     - script: |
@@ -20,8 +21,9 @@ stages:
   - job: Windows
     pool:
       name: BlueQuartz Self Hosted
+      demands: agent.os -equals Darwin
     steps:
-    - script: echo Goodbye Cruel World!
+    - script: echo Hello Mojave!
       displayName: 'Run a one-line script'
 
     - script: |
