@@ -325,7 +325,7 @@ class SIMPLView_UI : public QMainWindow
 
   private:
     QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
-    QSharedPointer<Ui::PipelineIssuesWidget>        m_IssuesUi;
+    //QSharedPointer<Ui::PipelineIssuesWidget>        m_IssuesUi;
     QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
     QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
@@ -367,8 +367,8 @@ class SIMPLView_UI : public QMainWindow
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
 
-    SVOverlayWidgetButton*                  m_FilterInputOverlayBtn = nullptr;
-    SVOverlayWidgetButton*                  m_IssuesOverlayBtn = nullptr;
+    //SVOverlayWidgetButton*                  m_FilterInputOverlayBtn = nullptr;
+    //SVOverlayWidgetButton*                  m_IssuesOverlayBtn = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

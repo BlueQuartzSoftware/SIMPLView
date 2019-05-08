@@ -100,24 +100,20 @@ void SIMPLViewUIMessageHandler::appendStatusMessageToPipelineOutput(const QStrin
   // Allow status messages to open the standard output widget
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == StandardOutputWidget::GetHideDockSetting())
   {
-    if(!m_UIWidget->m_IssuesOverlayBtn->isChecked())
-    {
-      m_UIWidget->m_IssuesOverlayBtn->setChecked(true);
-    }
+    //if(!m_UIWidget->m_IssuesOverlayBtn->isChecked())
+    //{
+    //  m_UIWidget->m_IssuesOverlayBtn->setChecked(true);
+    //}
   }
 
   // Allow status messages to open the issuesDockWidget as well
   if(SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == IssuesWidget::GetHideDockSetting())
   {
-    if(!m_UIWidget->m_FilterInputOverlayBtn->isChecked())
-    {
-      m_UIWidget->m_IssuesOverlayBtn->setChecked(true);
-    }
+    //if(!m_UIWidget->m_FilterInputOverlayBtn->isChecked())
+    //{
+    //  m_UIWidget->m_IssuesOverlayBtn->setChecked(true);
+    //}
   }
 
-  //  QString text;
-  //  QTextStream ts(&text);
-  //  ts << "<a style=\"color: " << SVStyle::Instance()->getQLabel_color().name(QColor::HexRgb) << ";\" >" << statusMessage << "</span>";
-
-  m_UIWidget->m_IssuesUi->stdOutWidget->appendText(statusMessage);
+  m_UIWidget->m_Ui->stdOutWidget->appendText(statusMessage);
 }
