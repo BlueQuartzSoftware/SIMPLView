@@ -56,6 +56,7 @@
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 #include "SVWidgetsLib/Widgets/PopUpWidget.h"
+#include "SVWidgetsLib/Widgets/SVDockWidgetButton.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 //-- UIC generated Header
@@ -369,6 +370,10 @@ class SIMPLView_UI : public QMainWindow
 
     //SVOverlayWidgetButton*                  m_FilterInputOverlayBtn = nullptr;
     //SVOverlayWidgetButton*                  m_IssuesOverlayBtn = nullptr;
+    SVDockWidgetButton*                     m_IssuesWidgetDockBtn = nullptr;
+    SVDockWidgetButton*                     m_StdOutputDockBtn = nullptr;
+    SVDockWidgetButton*                     m_RenderPropDockBtn = nullptr;
+    SVDockWidgetButton*                     m_VisFiltersDockBtn = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

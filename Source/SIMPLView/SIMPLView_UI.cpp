@@ -494,42 +494,25 @@ void SIMPLView_UI::setupGui()
   //QWidget* issuesWidget = new QWidget(this);
   //m_IssuesUi->setupUi(issuesWidget);
 
-  //m_FilterInputOverlayBtn = new SVOverlayWidgetButton("Filter Input");
-  //m_IssuesOverlayBtn = new SVOverlayWidgetButton("Pipeline Issues");
+  m_IssuesWidgetDockBtn = new SVDockWidgetButton(m_Ui->issuesDockWidget);
+  m_StdOutputDockBtn = new SVDockWidgetButton(m_Ui->stdOutDockWidget);
+  m_RenderPropDockBtn = new SVDockWidgetButton(m_Ui->renderPropertiesDockWidget);
+  m_VisFiltersDockBtn = new SVDockWidgetButton(m_Ui->visualizationFiltersDockWidget);
 
   QWidget* svStatusBarButtons = new QWidget();
   QHBoxLayout* svButtonLayout = new QHBoxLayout();
   svButtonLayout->setMargin(0);
-  //svButtonLayout->addWidget(m_IssuesOverlayBtn);
-  //svButtonLayout->addWidget(m_FilterInputOverlayBtn);
+  svButtonLayout->addWidget(m_IssuesWidgetDockBtn);
+  svButtonLayout->addWidget(m_StdOutputDockBtn);
+  svButtonLayout->addWidget(m_RenderPropDockBtn);
+  svButtonLayout->addWidget(m_VisFiltersDockBtn);
   svStatusBarButtons->setLayout(svButtonLayout);
   m_Ui->statusbar->addPermanentWidget(svStatusBarButtons);
   QWidget* visStatusBarButtons = new QWidget();
   QHBoxLayout* visButtonLayout = new QHBoxLayout();
   visButtonLayout->setMargin(0);
-  //visButtonLayout->addWidget(m_Ui->visualizationWidget->getFilterListOverlayButton());
-  //visButtonLayout->addWidget(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
   visStatusBarButtons->setLayout(visButtonLayout);
   m_Ui->statusbar->addPermanentWidget(visStatusBarButtons);
-
-  // Setup overlay buttons
-  //m_FilterInputOverlayBtn->setTarget(m_Ui->visualizationContainer);
-  //m_IssuesOverlayBtn->setTarget(m_Ui->visualizationContainer);
-  //m_IssuesOverlayBtn->setSource(issuesWidget);
-
-  //m_IssuesOverlayBtn->addOverlappingButton(m_FilterInputOverlayBtn);
-  //m_IssuesOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
-
-  //m_FilterInputOverlayBtn->addOverlappingButton(m_IssuesOverlayBtn);
-  //m_FilterInputOverlayBtn->addOverlappingButton(m_Ui->visualizationWidget->getViewSettingsOverlayButton());
-  //
-  //m_Ui->visualizationWidget->getFilterListOverlayButton()->setDockWidget(this, m_Ui->filterToolboxDockWidget);
-  //m_Ui->visualizationWidget->getFilterListOverlayButton()->setExpandsEntireDistance(true);
-  //m_Ui->visualizationWidget->getFilterListOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
-  //m_Ui->visualizationWidget->getViewSettingsOverlayButton()->setOverlappingButtons(QVector<SVOverlayWidgetButton*>());
-
-  //m_Ui->visualizationWidget->getViewSettingsOverlayButton()->addOverlappingButton(m_IssuesOverlayBtn);
-  //m_Ui->visualizationWidget->getViewSettingsOverlayButton()->addOverlappingButton(m_FilterInputOverlayBtn);
 
   //m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->visualFilterSettingsWidget);
   m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
