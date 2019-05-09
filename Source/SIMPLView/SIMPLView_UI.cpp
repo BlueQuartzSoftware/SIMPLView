@@ -376,6 +376,14 @@ void SIMPLView_UI::readSettings()
   readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
   prefs->endGroup();
 
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::RenderPropertiesGroupName);
+  readDockWidgetSettings(prefs.data(), m_Ui->renderPropertiesDockWidget);
+  prefs->endGroup();
+
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationFiltersGroupName);
+  readDockWidgetSettings(prefs.data(), m_Ui->visualizationFiltersDockWidget);
+  prefs->endGroup();
+
   prefs->endGroup();
 
   prefs->beginGroup("ToolboxSettings");
