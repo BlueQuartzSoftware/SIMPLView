@@ -35,6 +35,8 @@
 
 #include "SIMPLView_UI.h"
 
+#include <algorithm>
+
 //-- Qt Includes
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
@@ -367,11 +369,11 @@ void SIMPLView_UI::readSettings()
   prefs->beginGroup(SIMPLView::DockWidgetSettings::GroupName);
 
   prefs->beginGroup(SIMPLView::DockWidgetSettings::IssuesDockGroupName);
-  //readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
+  readDockWidgetSettings(prefs.data(), m_Ui->issuesDockWidget);
   prefs->endGroup();
 
   prefs->beginGroup(SIMPLView::DockWidgetSettings::StandardOutputGroupName);
-  //readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
+  readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
   prefs->endGroup();
 
   prefs->endGroup();
@@ -438,6 +440,38 @@ void SIMPLView_UI::readDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void SIMPLView_UI::readSplitterSettings(QtSSettings* prefs, QSplitter* split)
+{
+  int curHeight = split->sizes()[0];
+  QString name = split->objectName();
+  QVariant var = prefs->value(split->objectName(), curHeight);
+  if(var.canConvert<int>())
+  {
+    int fiwHeight = var.toInt();
+    auto currentSizes = split->sizes();
+    int totalHeight = std::accumulate(currentSizes.begin(), currentSizes.end(), 0);
+    QList<int> sizes = { fiwHeight, totalHeight - fiwHeight };
+    split->setSizes(sizes);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::writeSplitterSettings(QtSSettings* prefs, QSplitter* split)
+{
+  if(nullptr == m_FilterInputWidget)
+  {
+    return;
+  }
+
+  QString name = split->objectName();
+  prefs->setValue(split->objectName(), split->sizes()[0]);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void SIMPLView_UI::readVersionCheckSettings()
 {
 }
@@ -452,6 +486,12 @@ void SIMPLView_UI::writeSettings()
 
   // Have the version check widet write its preferences.
   writeVersionCheckSettings();
+
+  // Write main slider settings
+  QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationSliderGroupName);
+  writeSplitterSettings(prefs.data(), m_Ui->svMainAreaSplitter);
+  prefs->endGroup();
 }
 
 // -----------------------------------------------------------------------------
@@ -834,6 +874,17 @@ void SIMPLView_UI::connectSignalsSlots()
   connect(m_Ui->pipelineListWidget, &PipelineListWidget::pipelineOutput, [=](FilterPipeline::Pointer pipeline, DataContainerArray::Pointer dca) {
     m_Ui->visualizationWidget->getController()->reloadPipelineOutput(pipeline, dca);
   });
+
+  /* FilterInputWidget Splitter */
+  connect(m_Ui->svMainAreaSplitter, &QSplitter::splitterMoved, [=](int pos, int index) {
+    if(m_FilterInputWidget != nullptr)
+    {
+      QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+      prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationSliderGroupName);
+      writeSplitterSettings(prefs.data(), m_Ui->svMainAreaSplitter);
+      prefs->endGroup();
+    }
+    });
 }
 
 // -----------------------------------------------------------------------------
@@ -1134,7 +1185,8 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
     return;
   }
 
-  if(m_FilterInputWidget != nullptr)
+  bool prevInputNull = (nullptr == m_FilterInputWidget);
+  if(!prevInputNull)
   {
     emit m_FilterInputWidget->endPathFiltering();
     emit m_FilterInputWidget->endViewPaths();
@@ -1162,11 +1214,14 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   // Set the widget into the frame
   m_Ui->fiwFrameVLayout->addWidget(m_FilterInputWidget);
   m_FilterInputWidget->show();
-  //m_FilterInputOverlayBtn->setSource(widget);
-  //if(nullptr != widget)
-  //{
-  //  m_FilterInputOverlayBtn->setChecked(true);
-  //}
+  m_Ui->filterInputWidgetContainer->show();
+  if(prevInputNull)
+  {
+    QSharedPointer<QtSSettings> prefs = QSharedPointer<QtSSettings>(new QtSSettings());
+    prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationSliderGroupName);
+    readSplitterSettings(prefs.data(), m_Ui->svMainAreaSplitter);
+    prefs->endGroup();
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -1193,6 +1248,15 @@ void SIMPLView_UI::clearFilterInputWidget()
     m_FilterInputWidget->setParent(nullptr);
   }
 #endif
+
+  if(nullptr == m_FilterInputWidget)
+  {
+    m_Ui->filterInputWidgetContainer->hide();
+    QList<int> sizes = m_Ui->svMainAreaSplitter->sizes();
+    int totalSize = std::accumulate(sizes.begin(), sizes.end(), 0);
+    sizes = { 0, totalSize };
+    m_Ui->svMainAreaSplitter->setSizes(sizes);
+  }
 
   m_FilterInputWidget = nullptr;
 }

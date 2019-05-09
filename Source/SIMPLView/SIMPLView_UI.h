@@ -234,6 +234,20 @@ class SIMPLView_UI : public QMainWindow
     void writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw);
 
     /**
+     * @brief readSplitterSettings
+     * @param prefs
+     * @param split
+     */
+    void readSplitterSettings(QtSSettings* prefs, QSplitter* split);
+
+    /**
+     * @brief writeSplitterSettings
+     * @param prefs
+     * @param split
+     */
+    void writeSplitterSettings(QtSSettings* prefs, QSplitter* split);
+
+    /**
      * @brief Checks the currently open file for changes that need to be saved
      * @return QMessageBox::StandardButton
      */
@@ -326,7 +340,6 @@ class SIMPLView_UI : public QMainWindow
 
   private:
     QSharedPointer<Ui::SIMPLView_UI>        m_Ui;
-    //QSharedPointer<Ui::PipelineIssuesWidget>        m_IssuesUi;
     QMenuBar*                               m_SIMPLViewMenu = nullptr;
 
     QVector<ISIMPLibPlugin*>                m_LoadedPlugins;
@@ -368,8 +381,6 @@ class SIMPLView_UI : public QMainWindow
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
 
-    //SVOverlayWidgetButton*                  m_FilterInputOverlayBtn = nullptr;
-    //SVOverlayWidgetButton*                  m_IssuesOverlayBtn = nullptr;
     SVDockWidgetButton*                     m_IssuesWidgetDockBtn = nullptr;
     SVDockWidgetButton*                     m_StdOutputDockBtn = nullptr;
     SVDockWidgetButton*                     m_RenderPropDockBtn = nullptr;

@@ -34,7 +34,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="svMainAreaSplitter">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -141,8 +141,8 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>250</width>
-     <height>500</height>
+     <width>150</width>
+     <height>250</height>
     </size>
    </property>
    <property name="features">
@@ -176,7 +176,7 @@
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="visualRenderProperties">
-    <layout class="QGridLayout" name="gridLayout_3">
+    <layout class="QGridLayout" name="renderPropertiesDockLayout">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -209,7 +209,7 @@
           <height>391</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_7">
+        <layout class="QVBoxLayout" name="renderPropertiesScrollLayout">
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -224,7 +224,7 @@
          </property>
          <item>
           <widget class="QWidget" name="visibilityGroup" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <layout class="QVBoxLayout" name="visibilityLayout">
             <property name="spacing">
              <number>4</number>
             </property>
@@ -262,7 +262,7 @@
          </item>
          <item>
           <widget class="QWidget" name="colorMappingGroup" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="colorMappingLayout">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -297,7 +297,7 @@
          </item>
          <item>
           <widget class="QWidget" name="transformationGroup" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <layout class="QVBoxLayout" name="transformLayout">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -331,8 +331,8 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_4" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_6">
+          <widget class="QWidget" name="advSettingsGroup" native="true">
+           <layout class="QVBoxLayout" name="advSettingsLayout">
             <property name="leftMargin">
              <number>1</number>
             </property>
@@ -448,8 +448,22 @@
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <widget class="VSFilterView" name="visualFilterView" native="true"/>
-           <widget class="VSFilterSettingsWidget" name="visualFilterSettingsWidget" native="true"/>
+           <widget class="VSFilterView" name="visualFilterView" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+           <widget class="VSFilterSettingsWidget" name="visualFilterSettingsWidget" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+           </widget>
           </widget>
          </item>
         </layout>
