@@ -1291,9 +1291,9 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }
 
-  //m_IssuesOverlayBtn->setProperty("error", hasErrors);
-  //qApp->style()->unpolish(m_IssuesOverlayBtn);
-  //qApp->style()->polish(m_IssuesOverlayBtn);
+  m_IssuesWidgetDockBtn->setProperty("error", hasErrors);
+  qApp->style()->unpolish(m_IssuesWidgetDockBtn);
+  qApp->style()->polish(m_IssuesWidgetDockBtn);
 }
 
 // -----------------------------------------------------------------------------
