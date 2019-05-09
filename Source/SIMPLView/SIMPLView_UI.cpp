@@ -490,10 +490,6 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setupGui()
 {
-  // Setup pipeline issues widget
-  //QWidget* issuesWidget = new QWidget(this);
-  //m_IssuesUi->setupUi(issuesWidget);
-
   m_IssuesWidgetDockBtn = new SVDockWidgetButton(m_Ui->issuesDockWidget);
   m_StdOutputDockBtn = new SVDockWidgetButton(m_Ui->stdOutDockWidget);
   m_RenderPropDockBtn = new SVDockWidgetButton(m_Ui->renderPropertiesDockWidget);
@@ -514,7 +510,7 @@ void SIMPLView_UI::setupGui()
   visStatusBarButtons->setLayout(visButtonLayout);
   m_Ui->statusbar->addPermanentWidget(visStatusBarButtons);
 
-  //m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->visualFilterSettingsWidget);
+  m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->visualFilterSettingsWidget);
   m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
   m_Ui->visualizationWidget->setVisibilitySettingsWidget(m_Ui->visibilityWidget);
   m_Ui->visualizationWidget->setColorMappingWidget(m_Ui->colorMappingWidget);
