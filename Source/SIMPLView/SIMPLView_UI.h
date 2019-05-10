@@ -385,6 +385,7 @@ class SIMPLView_UI : public QMainWindow
     SVDockWidgetButton*                     m_StdOutputDockBtn = nullptr;
     SVDockWidgetButton*                     m_RenderPropDockBtn = nullptr;
     SVDockWidgetButton*                     m_VisFiltersDockBtn = nullptr;
+    SVDockWidgetButton*                     m_VisFilterSettingsDockBtn = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

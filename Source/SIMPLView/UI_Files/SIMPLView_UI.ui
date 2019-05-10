@@ -206,7 +206,7 @@
           <x>0</x>
           <y>0</y>
           <width>238</width>
-          <height>391</height>
+          <height>447</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="renderPropertiesScrollLayout">
@@ -241,20 +241,6 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QPushButton" name="visibilityGroupBtn">
-              <property name="text">
-               <string>Visibility Settings</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="VSVisibilitySettingsWidget" name="visibilityWidget" native="true"/>
             </item>
            </layout>
@@ -275,20 +261,6 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QPushButton" name="ColorMappingGroupBtn">
-              <property name="text">
-               <string>Color Mapping</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="VSColorMappingWidget" name="colorMappingWidget" native="true"/>
             </item>
@@ -311,20 +283,6 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QPushButton" name="transformGroupBtn">
-              <property name="text">
-               <string>Transform</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="VSTransformWidget" name="transformWidget" native="true"/>
             </item>
            </layout>
@@ -345,20 +303,6 @@
             <property name="bottomMargin">
              <number>1</number>
             </property>
-            <item>
-             <widget class="QPushButton" name="advSettingsGroupBtn">
-              <property name="text">
-               <string>Advanced Settings</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line_6">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="VSAdvancedVisibilitySettingsWidget" name="advVisibilityWidget" native="true">
               <property name="enabled">
@@ -402,7 +346,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="visualFiltersContainer">
+   <widget class="VSFilterView" name="visualFilterView">
     <layout class="QGridLayout" name="visualFiltersLayout">
      <property name="leftMargin">
       <number>0</number>
@@ -416,60 +360,6 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item row="0" column="0">
-      <widget class="SVScrollArea" name="visualFiltersScrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="visualFiltersContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>238</width>
-          <height>291</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>1</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QSplitter" name="visualFiltersSplitter">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <widget class="VSFilterView" name="visualFilterView" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>1</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-           <widget class="VSFilterSettingsWidget" name="visualFilterSettingsWidget" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>50</height>
-             </size>
-            </property>
-           </widget>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -490,6 +380,15 @@
     <number>8</number>
    </attribute>
    <widget class="StandardOutputWidget" name="stdOutWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="vsFilterSettingsDockWidget">
+   <property name="windowTitle">
+    <string>Visualization Filter Settings</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="VSFilterSettingsWidget" name="visualFilterSettingsWidget"/>
   </widget>
  </widget>
  <customwidgets>

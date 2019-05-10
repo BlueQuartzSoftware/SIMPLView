@@ -384,6 +384,10 @@ void SIMPLView_UI::readSettings()
   readDockWidgetSettings(prefs.data(), m_Ui->visualizationFiltersDockWidget);
   prefs->endGroup();
 
+  prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationFilterSettingsGroupName);
+  readDockWidgetSettings(prefs.data(), m_Ui->vsFilterSettingsDockWidget);
+  prefs->endGroup();
+
   prefs->endGroup();
 
   prefs->beginGroup("ToolboxSettings");
@@ -542,6 +546,7 @@ void SIMPLView_UI::setupGui()
   m_StdOutputDockBtn = new SVDockWidgetButton(m_Ui->stdOutDockWidget);
   m_RenderPropDockBtn = new SVDockWidgetButton(m_Ui->renderPropertiesDockWidget);
   m_VisFiltersDockBtn = new SVDockWidgetButton(m_Ui->visualizationFiltersDockWidget);
+  m_VisFilterSettingsDockBtn = new SVDockWidgetButton(m_Ui->vsFilterSettingsDockWidget);
 
   QWidget* svStatusBarButtons = new QWidget();
   QHBoxLayout* svButtonLayout = new QHBoxLayout();
@@ -550,6 +555,7 @@ void SIMPLView_UI::setupGui()
   svButtonLayout->addWidget(m_StdOutputDockBtn);
   svButtonLayout->addWidget(m_RenderPropDockBtn);
   svButtonLayout->addWidget(m_VisFiltersDockBtn);
+  svButtonLayout->addWidget(m_VisFilterSettingsDockBtn);
   svStatusBarButtons->setLayout(svButtonLayout);
   m_Ui->statusbar->addPermanentWidget(svStatusBarButtons);
   QWidget* visStatusBarButtons = new QWidget();
