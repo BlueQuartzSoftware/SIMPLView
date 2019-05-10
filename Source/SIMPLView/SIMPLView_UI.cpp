@@ -82,6 +82,7 @@
 #include "SVWidgetsLib/Widgets/PipelineItemDelegate.h"
 #include "SVWidgetsLib/Widgets/PipelineListWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
+#include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 #include "SVWidgetsLib/Widgets/SVOverlayWidgetButton.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
@@ -376,6 +377,7 @@ void SIMPLView_UI::readSettings()
   readDockWidgetSettings(prefs.data(), m_Ui->stdOutDockWidget);
   prefs->endGroup();
 
+#if 0
   prefs->beginGroup(SIMPLView::DockWidgetSettings::RenderPropertiesGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->renderPropertiesDockWidget);
   prefs->endGroup();
@@ -387,6 +389,7 @@ void SIMPLView_UI::readSettings()
   prefs->beginGroup(SIMPLView::DockWidgetSettings::VisualizationFilterSettingsGroupName);
   readDockWidgetSettings(prefs.data(), m_Ui->vsFilterSettingsDockWidget);
   prefs->endGroup();
+#endif
 
   prefs->endGroup();
 
@@ -542,35 +545,6 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setupGui()
 {
-  m_IssuesWidgetDockBtn = new SVDockWidgetButton(m_Ui->issuesDockWidget);
-  m_StdOutputDockBtn = new SVDockWidgetButton(m_Ui->stdOutDockWidget);
-  m_RenderPropDockBtn = new SVDockWidgetButton(m_Ui->renderPropertiesDockWidget);
-  m_VisFiltersDockBtn = new SVDockWidgetButton(m_Ui->visualizationFiltersDockWidget);
-  m_VisFilterSettingsDockBtn = new SVDockWidgetButton(m_Ui->vsFilterSettingsDockWidget);
-
-  QWidget* svStatusBarButtons = new QWidget();
-  QHBoxLayout* svButtonLayout = new QHBoxLayout();
-  svButtonLayout->setMargin(0);
-  svButtonLayout->addWidget(m_IssuesWidgetDockBtn);
-  svButtonLayout->addWidget(m_StdOutputDockBtn);
-  svButtonLayout->addWidget(m_RenderPropDockBtn);
-  svButtonLayout->addWidget(m_VisFiltersDockBtn);
-  svButtonLayout->addWidget(m_VisFilterSettingsDockBtn);
-  svStatusBarButtons->setLayout(svButtonLayout);
-  m_Ui->statusbar->addPermanentWidget(svStatusBarButtons);
-  QWidget* visStatusBarButtons = new QWidget();
-  QHBoxLayout* visButtonLayout = new QHBoxLayout();
-  visButtonLayout->setMargin(0);
-  visStatusBarButtons->setLayout(visButtonLayout);
-  m_Ui->statusbar->addPermanentWidget(visStatusBarButtons);
-
-  m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->visualFilterSettingsWidget);
-  m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
-  m_Ui->visualizationWidget->setVisibilitySettingsWidget(m_Ui->visibilityWidget);
-  m_Ui->visualizationWidget->setColorMappingWidget(m_Ui->colorMappingWidget);
-  m_Ui->visualizationWidget->setTransformWidget(m_Ui->transformWidget);
-  m_Ui->visualizationWidget->setAdvancedVisibilityWidget(m_Ui->advVisibilityWidget);
-
   // Set Tab Positions
   setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North);
   setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North);
@@ -615,18 +589,30 @@ void SIMPLView_UI::setupGui()
   // Shortcut to close the window
   new QShortcut(QKeySequence(QKeySequence::Close), this, SLOT(close()));
 
-  //  m_StatusBar = new StatusBarWidget();
-  //  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
+  m_StatusBar = new StatusBarWidget();
+  this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
 
-  //  m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
-  //  m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
-  //  m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
-  //  m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
-  //  m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
-  //  m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
-  //  m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+#if 0
+  //m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
+  //m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
+  //m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
+  //m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
+  //m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
+#endif
+  m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
+  m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
+  m_StatusBar->setButtonAction(m_Ui->renderPropertiesDockWidget, StatusBarWidget::Button::RenderProperties);
+  m_StatusBar->setButtonAction(m_Ui->visualizationFiltersDockWidget, StatusBarWidget::Button::VisualFilters);
+  m_StatusBar->setButtonAction(m_Ui->vsFilterSettingsDockWidget, StatusBarWidget::Button::VisualFilterSettings);
 
-  //  m_StatusBar->readSettings();
+  m_Ui->visualizationWidget->setFilterSettingsWidget(m_Ui->visualFilterSettingsWidget);
+  m_Ui->visualizationWidget->setFilterView(m_Ui->visualFilterView);
+  m_Ui->visualizationWidget->setVisibilitySettingsWidget(m_Ui->visibilityWidget);
+  m_Ui->visualizationWidget->setColorMappingWidget(m_Ui->colorMappingWidget);
+  m_Ui->visualizationWidget->setTransformWidget(m_Ui->transformWidget);
+  m_Ui->visualizationWidget->setAdvancedVisibilityWidget(m_Ui->advVisibilityWidget);
+
+  m_StatusBar->readSettings();
 
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
@@ -1305,9 +1291,10 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
      m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }
 
-  m_IssuesWidgetDockBtn->setProperty("error", hasErrors);
-  qApp->style()->unpolish(m_IssuesWidgetDockBtn);
-  qApp->style()->polish(m_IssuesWidgetDockBtn);
+  //m_StatusBar->setStyleSheet(m_StatusBar->generateStyleSheet(hasErrors));
+  //m_IssuesWidgetDockBtn->setProperty("error", hasErrors);
+  //qApp->style()->unpolish(m_IssuesWidgetDockBtn);
+  //qApp->style()->polish(m_IssuesWidgetDockBtn);
 }
 
 // -----------------------------------------------------------------------------

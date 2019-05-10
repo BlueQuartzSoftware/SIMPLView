@@ -56,7 +56,6 @@
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 #include "SVWidgetsLib/Widgets/PopUpWidget.h"
-#include "SVWidgetsLib/Widgets/SVDockWidgetButton.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
 
 //-- UIC generated Header
@@ -81,6 +80,7 @@ class SVOverlayWidgetButton;
 class SVPipelineViewWidget;
 class SIMPLViewMenuItems;
 class SIMPLViewUIMessageHandler;
+class StatusBarWidget;
 
 /**
 * @class SIMPLView_UI SIMPLView_UI Applications/SIMPLView/SIMPLView_UI.h
@@ -347,7 +347,7 @@ class SIMPLView_UI : public QMainWindow
     FilterManager*                          m_FilterManager = nullptr;
     FilterWidgetManager*                    m_FilterWidgetManager = nullptr;
 
-//    StatusBarWidget*                        m_StatusBar = nullptr;
+    StatusBarWidget*                        m_StatusBar = nullptr;
 
     QString                                 m_LastOpenedFilePath;
 
@@ -380,12 +380,6 @@ class SIMPLView_UI : public QMainWindow
     QAction*                                m_ActionShowDataFolder = nullptr;
 
     QActionGroup*                           m_ThemeActionGroup = nullptr;
-
-    SVDockWidgetButton*                     m_IssuesWidgetDockBtn = nullptr;
-    SVDockWidgetButton*                     m_StdOutputDockBtn = nullptr;
-    SVDockWidgetButton*                     m_RenderPropDockBtn = nullptr;
-    SVDockWidgetButton*                     m_VisFiltersDockBtn = nullptr;
-    SVDockWidgetButton*                     m_VisFilterSettingsDockBtn = nullptr;
 
     /**
      * @brief createSIMPLViewMenu

@@ -383,7 +383,7 @@
   </widget>
   <widget class="QDockWidget" name="vsFilterSettingsDockWidget">
    <property name="windowTitle">
-    <string>Visualization Filter Settings</string>
+    <string>Visualization Filter Input</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
