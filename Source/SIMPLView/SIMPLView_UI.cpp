@@ -578,7 +578,7 @@ void SIMPLView_UI::setupGui()
   // Read the toolbox settings and update the filter list
   m_Ui->filterListWidget->loadFilterList();
 
-  splitDockWidget(m_Ui->filterToolboxDockWidget, m_Ui->pipelineViewDockWidget, Qt::Orientation::Horizontal);
+  //splitDockWidget(m_Ui->filterToolboxDockWidget, m_Ui->pipelineViewDockWidget, Qt::Orientation::Horizontal);
 #if 0
   tabifyDockWidget(m_Ui->filterListDockWidget, m_Ui->filterLibraryDockWidget);
   tabifyDockWidget(m_Ui->filterLibraryDockWidget, m_Ui->bookmarksDockWidget);
@@ -592,13 +592,11 @@ void SIMPLView_UI::setupGui()
   m_StatusBar = new StatusBarWidget();
   this->statusBar()->insertPermanentWidget(0, m_StatusBar, 0);
 
-#if 0
-  //m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
-  //m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
-  //m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
-  //m_StatusBar->setButtonAction(m_Ui->pipelineDockWidget, StatusBarWidget::Button::Pipeline);
+  m_StatusBar->setButtonAction(m_Ui->filterListDockWidget, StatusBarWidget::Button::FilterList);
+  m_StatusBar->setButtonAction(m_Ui->filterLibraryDockWidget, StatusBarWidget::Button::FilterLibrary);
+  m_StatusBar->setButtonAction(m_Ui->bookmarksDockWidget, StatusBarWidget::Button::Bookmarks);
+  m_StatusBar->setButtonAction(m_Ui->pipelineViewDockWidget, StatusBarWidget::Button::Pipeline);
   //m_StatusBar->setButtonAction(m_Ui->dataBrowserDockWidget, StatusBarWidget::Button::DataStructure);
-#endif
   m_StatusBar->setButtonAction(m_Ui->issuesDockWidget, StatusBarWidget::Button::Issues);
   m_StatusBar->setButtonAction(m_Ui->stdOutDockWidget, StatusBarWidget::Button::Console);
   m_StatusBar->setButtonAction(m_Ui->renderPropertiesDockWidget, StatusBarWidget::Button::RenderProperties);
@@ -618,11 +616,15 @@ void SIMPLView_UI::setupGui()
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   // connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
 
-  connectDockWidgetSignalsSlots(m_Ui->filterToolboxDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->pipelineViewDockWidget);
-
-  m_Ui->filterToolboxDockWidget->installEventFilter(this);
-  m_Ui->pipelineViewDockWidget->installEventFilter(this);
+  connectDockWidgetSignalsSlots(m_Ui->filterListDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->filterLibraryDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->issuesDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->stdOutDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->renderPropertiesDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->visualizationFiltersDockWidget);
+  connectDockWidgetSignalsSlots(m_Ui->vsFilterSettingsDockWidget);
 }
 
 // -----------------------------------------------------------------------------

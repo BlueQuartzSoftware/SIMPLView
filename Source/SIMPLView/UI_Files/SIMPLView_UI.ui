@@ -17,7 +17,7 @@
    <bool>true</bool>
   </property>
   <property name="dockOptions">
-   <set>QMainWindow::AllowNestedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging</set>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -74,64 +74,6 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="filterToolboxDockWidget">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string>Filter Toolbox</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="toolboxWidget">
-    <layout class="QGridLayout" name="toolboxLayout">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <property name="spacing">
-      <number>4</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QTabWidget" name="toolboxTabWidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="usesScrollButtons">
-        <bool>false</bool>
-       </property>
-       <widget class="FilterListToolboxWidget" name="filterListWidget">
-        <attribute name="title">
-         <string>Filter List</string>
-        </attribute>
-       </widget>
-       <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget">
-        <attribute name="title">
-         <string>Filter Library</string>
-        </attribute>
-       </widget>
-       <widget class="BookmarksToolboxWidget" name="bookmarksWidget">
-        <attribute name="title">
-         <string>Bookmarks</string>
-        </attribute>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <widget class="QDockWidget" name="pipelineViewDockWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -206,7 +148,7 @@
           <x>0</x>
           <y>0</y>
           <width>238</width>
-          <height>447</height>
+          <height>255</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="renderPropertiesScrollLayout">
@@ -389,6 +331,33 @@
     <number>2</number>
    </attribute>
    <widget class="VSFilterSettingsWidget" name="visualFilterSettingsWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="filterListDockWidget">
+   <property name="windowTitle">
+    <string>Filter List</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="FilterListToolboxWidget" name="filterListWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="filterLibraryDockWidget">
+   <property name="windowTitle">
+    <string>Filter Library</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="FilterLibraryToolboxWidget" name="filterLibraryWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="bookmarksDockWidget">
+   <property name="windowTitle">
+    <string>Bookmarks</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="BookmarksToolboxWidget" name="bookmarksWidget"/>
   </widget>
  </widget>
  <customwidgets>
