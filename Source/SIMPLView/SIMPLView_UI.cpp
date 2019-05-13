@@ -1158,6 +1158,7 @@ void SIMPLView_UI::filterSelectionChanged(const QItemSelection& selected, const 
   }
   else
   {
+    m_FilterInputWidget = nullptr;
     clearFilterInputWidget();
     if(getDataStructureWidget())
     {
@@ -1173,6 +1174,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 {
   if(widget == nullptr)
   {
+    m_FilterInputWidget = nullptr;
     clearFilterInputWidget();
     return;
   }
@@ -1249,8 +1251,6 @@ void SIMPLView_UI::clearFilterInputWidget()
     sizes = { 0, totalSize };
     m_Ui->svMainAreaSplitter->setSizes(sizes);
   }
-
-  m_FilterInputWidget = nullptr;
 }
 
 // -----------------------------------------------------------------------------
