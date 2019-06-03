@@ -39,7 +39,7 @@
 //
 // -----------------------------------------------------------------------------
 IntVec3WidgetCodeGenerator::IntVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "IntVec3_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "IntVec3Type")
 {
 }
 
@@ -75,8 +75,8 @@ QString IntVec3WidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(IntVec3_t, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(IntVec3_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(IntVec3Type, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(IntVec3Type " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }

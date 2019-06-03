@@ -94,6 +94,7 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec2WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.h
@@ -144,6 +145,7 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/GenerateColorTableWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputFileWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/InputPathWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec2WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntVec3WidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/IntWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/LinkedBooleanWidgetCodeGenerator.cpp
