@@ -37,7 +37,6 @@
 
 #pragma once
 
-#include <QtCore/QObject>
 
 //-- UIC generated Header
 #include "ui_AboutSIMPLView.h"

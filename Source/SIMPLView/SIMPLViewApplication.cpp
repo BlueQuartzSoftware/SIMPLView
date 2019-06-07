@@ -46,10 +46,7 @@
 #include <QtCore/QThread>
 
 #include <QtGui/QBitmap>
-#include <QtGui/QBitmap>
-#include <QtGui/QClipboard>
 #include <QtGui/QDesktopServices>
-#include <QtGui/QIcon>
 #include <QtGui/QScreen>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QSplashScreen>
