@@ -41,13 +41,11 @@
 //-- Qt Includes
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtCore/QList>
 #include <QtCore/QVector>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
 #include <QtGui/QResizeEvent>
-#include <QtWidgets/QToolBar>
 
 #include "SIMPLib/Filtering/FilterManager.h"
 #include "SIMPLib/Plugin/ISIMPLibPlugin.h"

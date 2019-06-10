@@ -35,10 +35,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
-#include <QtCore/QSettings>
 #include <QtCore/QString>
-#include <QtCore/QDirIterator>
-#include <QtCore/QJsonDocument>
 
 #include <QtGui/QFontDatabase>
 

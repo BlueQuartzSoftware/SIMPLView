@@ -35,8 +35,6 @@
 
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtCore/QSettings>
 
 #include <QtWidgets/QWidget>
 

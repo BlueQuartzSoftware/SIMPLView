@@ -37,20 +37,15 @@
 #include "PluginMaker.h"
 #include <iostream>
 
-
-
-#include <QtCore/QtDebug>
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
-#include <QtWidgets/QWidget>
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QTreeWidgetItem>
-#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QApplication>
-#include <QtCore/QSize>
+#include <QtWidgets/QTreeWidgetItem>
+#include <QtWidgets/QWidget>
 
 #include "SVWidgetsLib/QtSupport/QtSFileCompleter.h"
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
