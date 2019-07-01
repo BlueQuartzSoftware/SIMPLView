@@ -38,26 +38,15 @@
 #include <algorithm>
 
 //-- Qt Includes
-#include <QtCore/QDateTime>
 #include <QtCore/QDir>
-#include <QtCore/QDirIterator>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QFileInfoList>
-#include <QtCore/QMimeData>
-#include <QtCore/QProcess>
 #include <QtCore/QString>
-#include <QtCore/QThread>
 #include <QtCore/QUrl>
-#include <QtGui/QClipboard>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QDesktopServices>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QListWidget>
-#include <QtWidgets/QScrollBar>
 #include <QtWidgets/QShortcut>
-#include <QtWidgets/QToolButton>
 
 //-- SIMPLView Includes
 #include "SIMPLib/Common/Constants.h"

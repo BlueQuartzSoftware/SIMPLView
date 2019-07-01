@@ -35,12 +35,10 @@
 
 #pragma once
 
-#include <QtCore/QSet>
 #include <QtCore/QSharedPointer>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QUndoStack>
 
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 

@@ -36,14 +36,9 @@
 
 #pragma once
 
-#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
-#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QTreeWidgetItem>
-#include <QtGui/QCloseEvent>
-#include <QtCore/QSettings>
-#include <QtCore/QSignalMapper>
 
 #include "ui_PluginMaker.h"
 #include "FilterBundler.h"

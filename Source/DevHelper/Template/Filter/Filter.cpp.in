@@ -40,7 +40,7 @@ void @ClassName@::initialize()
 // -----------------------------------------------------------------------------
 void @ClassName@::setupFilterParameters()
 {
-  FilterParameterVector parameters;
+  FilterParameterVectorType parameters;
 @SetupFPContents@
   setFilterParameters(parameters);
 }

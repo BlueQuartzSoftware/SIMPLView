@@ -521,7 +521,9 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
       QString initEntry = generator->generateInitializationList();
       if(row == 0)
       {
-        initEntry = initEntry.replace(",", ":");
+        // Replace only the first occurance of "," with ":"
+        int startIndex = initEntry.indexOf(",");
+        initEntry.replace(startIndex, 1, ":");
       }
       initListContents.append(initEntry + "\n");
     }
