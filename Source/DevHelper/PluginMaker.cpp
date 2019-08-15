@@ -519,9 +519,7 @@ void PluginMaker::setupGui()
     gen->setDisplaySuffix("Filters");
     gen->setDoesGenerateOutput(false);
     gen->setNameChangeable(true);
-    connect(m_PluginName, SIGNAL(textChanged(QString)),
-            gen, SLOT(pluginNameChanged(QString)));
-
+    connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
   }
 
   //// TreeItem for a Filter Class source filfe
@@ -802,7 +800,6 @@ void PluginMaker::setupGui()
             gen, SLOT(pluginNameChanged(QString)));
   }
 
-
   //// TreeItem for the actual filter Documentation
   PMGeneratorTreeItem* filterHTML = new PMGeneratorTreeItem(F_namefilters);
   filterHTML->setText(0, "Unknown Plugin Name");
@@ -879,7 +876,7 @@ void PluginMaker::on_generateButton_clicked()
                                                       "Please enter a Plugin Name."));
     return;
   }
-  else if (pluginDir == "")
+  if(pluginDir == "")
   {
     emit updateStatusBar("Generation Failed --- Please provide a plugin directory");
     QMessageBox::critical(this, tr("PluginMaker"), tr("The file generation was unsuccessful.\n"
@@ -900,13 +897,14 @@ void PluginMaker::on_generateButton_clicked()
 
   parentPath = parentPath + QDir::separator() + "SourceList.cmake";
   //Write to file
-  QFile f(parentPath);
-  if ( f.open(QIODevice::WriteOnly | QIODevice::Text) )
   {
-    QTextStream out(&f);
-    out << text;
+    QFile f(parentPath);
+    if(f.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      QTextStream out(&f);
+      out << text;
+    }
   }
-
 
   pathTemplate = "@PluginName@/Documentation/";
   parentPath = m_OutputDir->text() + QDir::separator() + pathTemplate.replace("@PluginName@", pluginName);
@@ -914,6 +912,40 @@ void PluginMaker::on_generateButton_clicked()
 
   QDir dir2(parentPath);
   dir2.mkpath(parentPath);
+
+  // Data Folder
+  pathTemplate = "@PluginName@/Data/@PluginName@";
+  parentPath = m_OutputDir->text() + QDir::separator() + pathTemplate.replace("@PluginName@", pluginName);
+  parentPath = QDir::toNativeSeparators(parentPath);
+  dir2 = QDir(parentPath);
+  dir2.mkpath(parentPath);
+  // Write to file
+  parentPath = parentPath + QDir::separator() + "ReadMe.txt";
+  {
+    QFile f(parentPath);
+    if(f.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      QTextStream out(&f);
+      out << "Place Example Data in this folder. It will be copied to the Data directory of the DREAM.3D distribution.";
+    }
+  }
+
+  // ExamplePipelines Folder
+  pathTemplate = "@PluginName@/ExamplePipelines/@PluginName@";
+  parentPath = m_OutputDir->text() + QDir::separator() + pathTemplate.replace("@PluginName@", pluginName);
+  parentPath = QDir::toNativeSeparators(parentPath);
+  dir2 = QDir(parentPath);
+  dir2.mkpath(parentPath);
+  // Write to file
+  parentPath = parentPath + QDir::separator() + "ReadMe.txt";
+  {
+    QFile f(parentPath);
+    if(f.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      QTextStream out(&f);
+      out << "Place Example Pipelines in this folder. It will be copied to the Example Pipelines directory of the DREAM.3D distribution.";
+    }
+  }
 
   emit updateStatusBar("Generation Completed");
 }
