@@ -34,9 +34,7 @@ m_DidLoad(false)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-@PluginName@Plugin::~@PluginName@Plugin()
-{
-}
+@PluginName@Plugin::~@PluginName@Plugin() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -163,14 +161,10 @@ QMap<QString, QString> @PluginName@Plugin::getThirdPartyLicenses()
 {
   QMap<QString, QString> licenseMap;
   QList<QString> fileStrList;
-  fileStrList.push_back(":/ThirdParty/HDF5.txt");
-  fileStrList.push_back(":/ThirdParty/Boost.txt");
-  fileStrList.push_back(":/ThirdParty/Qt.txt");
-  fileStrList.push_back(":/ThirdParty/Qwt.txt");
 
-  for (QList<QString>::iterator iter = fileStrList.begin(); iter != fileStrList.end(); iter++)
+  for(const auto& item : fileStrList)
   {
-    QFile file(*iter);
+    QFile file(item);
     QFileInfo licenseFileInfo(file);
 
     if ( licenseFileInfo.exists() )
