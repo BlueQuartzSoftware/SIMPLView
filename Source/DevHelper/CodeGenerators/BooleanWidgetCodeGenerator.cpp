@@ -34,12 +34,13 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "BooleanWidgetCodeGenerator.h"
+#include <QtCore/QTextStream>
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 BooleanWidgetCodeGenerator::BooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "bool")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "bool", true)
 {
 }
 
@@ -89,4 +90,10 @@ QList<QString> BooleanWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/BooleanFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+BooleanWidgetCodeGenerator::Pointer BooleanWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

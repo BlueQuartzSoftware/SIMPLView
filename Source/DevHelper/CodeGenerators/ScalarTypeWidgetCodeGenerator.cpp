@@ -35,11 +35,13 @@
 
 #include "ScalarTypeWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type", true)
 {
 }
 
@@ -89,4 +91,10 @@ QList<QString> ScalarTypeWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ScalarTypeFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ScalarTypeWidgetCodeGenerator::Pointer ScalarTypeWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

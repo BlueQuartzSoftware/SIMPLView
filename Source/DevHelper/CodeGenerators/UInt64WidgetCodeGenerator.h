@@ -33,7 +33,8 @@
 
 #pragma once
 
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
@@ -41,7 +42,12 @@
 class UInt64WidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  SIMPL_SHARED_POINTERS(UInt64WidgetCodeGenerator)
+  using Self = UInt64WidgetCodeGenerator;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer();
 
   static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
@@ -65,4 +71,6 @@ public:
   UInt64WidgetCodeGenerator(UInt64WidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
   UInt64WidgetCodeGenerator& operator=(const UInt64WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
   UInt64WidgetCodeGenerator& operator=(UInt64WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+private:
 };

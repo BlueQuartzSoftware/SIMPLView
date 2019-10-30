@@ -33,6 +33,8 @@
 
 #include "IntVec2WidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -88,4 +90,10 @@ QList<QString> IntVec2WidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/IntVec2FilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+IntVec2WidgetCodeGenerator::Pointer IntVec2WidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

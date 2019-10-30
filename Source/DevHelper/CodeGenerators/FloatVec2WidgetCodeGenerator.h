@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class FloatVec2WidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(FloatVec2WidgetCodeGenerator)
+    using Self = FloatVec2WidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,11 +59,11 @@ class FloatVec2WidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~FloatVec2WidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
     virtual QList<QString> generateHIncludes();
 
@@ -69,5 +75,7 @@ class FloatVec2WidgetCodeGenerator : public FPCodeGenerator
     FloatVec2WidgetCodeGenerator(FloatVec2WidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     FloatVec2WidgetCodeGenerator& operator=(const FloatVec2WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     FloatVec2WidgetCodeGenerator& operator=(FloatVec2WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

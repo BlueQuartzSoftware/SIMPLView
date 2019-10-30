@@ -1,12 +1,3 @@
-#--////////////////////////////////////////////////////////////////////////////
-#--
-#--  Copyright (c) 2015 BlueQuartz Software, LLC
-#--  All rights reserved.
-#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
-#--
-#-- This code was partly written under US Air Force Contract FA8650-07-D-5800
-#--
-#--////////////////////////////////////////////////////////////////////////////
 PROJECT( DevHelper VERSION ${SIMPLViewProj_VERSION_MAJOR}.${SIMPLViewProj_VERSION_MINOR}.${SIMPLViewProj_VERSION_PATCH})
 
 

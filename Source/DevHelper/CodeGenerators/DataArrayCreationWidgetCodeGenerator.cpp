@@ -34,6 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "DataArrayCreationWidgetCodeGenerator.h"
+#include <QtCore/QTextStream>
 
 // -----------------------------------------------------------------------------
 //
@@ -90,4 +91,10 @@ QList<QString> DataArrayCreationWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DataArrayCreationFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DataArrayCreationWidgetCodeGenerator::Pointer DataArrayCreationWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

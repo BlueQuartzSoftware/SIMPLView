@@ -35,6 +35,8 @@
 
 #include "FileListInfoWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> FileListInfoWidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/FileListInfoFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+FileListInfoWidgetCodeGenerator::Pointer FileListInfoWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

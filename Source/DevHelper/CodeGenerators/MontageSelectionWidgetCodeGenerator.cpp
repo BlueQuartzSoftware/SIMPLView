@@ -33,6 +33,8 @@
 
 #include "MontageSelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -88,4 +90,10 @@ QList<QString> MontageSelectionWidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/MontageSelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+MontageSelectionWidgetCodeGenerator::Pointer MontageSelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

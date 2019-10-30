@@ -35,6 +35,8 @@
 
 #include "MultiDataContainerSelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> MultiDataContainerSelectionWidgetCodeGenerator::generateHIncludes
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/MultiDataContainerSelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+MultiDataContainerSelectionWidgetCodeGenerator::Pointer MultiDataContainerSelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

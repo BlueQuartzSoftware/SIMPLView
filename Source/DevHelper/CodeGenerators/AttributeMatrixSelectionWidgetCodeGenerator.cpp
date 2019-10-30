@@ -35,6 +35,8 @@
 
 #include "AttributeMatrixSelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -46,8 +48,7 @@ AttributeMatrixSelectionWidgetCodeGenerator::AttributeMatrixSelectionWidgetCodeG
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-AttributeMatrixSelectionWidgetCodeGenerator::~AttributeMatrixSelectionWidgetCodeGenerator()
-{}
+AttributeMatrixSelectionWidgetCodeGenerator::~AttributeMatrixSelectionWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -90,4 +91,10 @@ QList<QString> AttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncludes(
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/AttributeMatrixSelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+AttributeMatrixSelectionWidgetCodeGenerator::Pointer AttributeMatrixSelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

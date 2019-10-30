@@ -36,16 +36,26 @@
 #pragma once
 
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "SVWidgetsLib/Filter_Parameter_CodeGenFactory_Includes.cpp"
 
 class CodeGenFactory
 {
-  public:
-    SIMPL_SHARED_POINTERS(CodeGenFactory)
-    SIMPL_STATIC_NEW_MACRO(CodeGenFactory)
-
+public:
+  using Self = CodeGenFactory;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer()
+  {
+    return Pointer(static_cast<Self*>(nullptr));
+  }
+  static Pointer New()
+  {
+    Pointer sharedPtr(new(Self));
+    return sharedPtr;
+  }
     /**
     * @brief Creates a new instance for this code generator.
     * @return

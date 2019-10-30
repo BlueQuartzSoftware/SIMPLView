@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(FileListInfoWidgetCodeGenerator)
+    using Self = FileListInfoWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,11 +59,11 @@ class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~FileListInfoWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
     virtual QList<QString> generateHIncludes();
 
@@ -69,5 +75,7 @@ class FileListInfoWidgetCodeGenerator : public FPCodeGenerator
     FileListInfoWidgetCodeGenerator(FileListInfoWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     FileListInfoWidgetCodeGenerator& operator=(const FileListInfoWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     FileListInfoWidgetCodeGenerator& operator=(FileListInfoWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

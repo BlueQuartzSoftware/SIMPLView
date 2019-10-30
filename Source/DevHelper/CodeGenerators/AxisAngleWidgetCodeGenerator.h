@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(AxisAngleWidgetCodeGenerator)
+    using Self = AxisAngleWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,13 +59,13 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~AxisAngleWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
     virtual QList<QString> generateHIncludes();
 
@@ -71,5 +77,7 @@ class AxisAngleWidgetCodeGenerator : public FPCodeGenerator
     AxisAngleWidgetCodeGenerator(AxisAngleWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     AxisAngleWidgetCodeGenerator& operator=(const AxisAngleWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     AxisAngleWidgetCodeGenerator& operator=(AxisAngleWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

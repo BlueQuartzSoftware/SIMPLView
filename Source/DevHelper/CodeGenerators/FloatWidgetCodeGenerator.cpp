@@ -35,11 +35,13 @@
 
 #include "FloatWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "float")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "float", true)
 {
 }
 
@@ -89,4 +91,10 @@ QList<QString> FloatWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/FloatFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+FloatWidgetCodeGenerator::Pointer FloatWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

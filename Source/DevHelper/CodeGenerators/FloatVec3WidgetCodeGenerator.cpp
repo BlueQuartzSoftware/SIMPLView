@@ -35,6 +35,8 @@
 
 #include "FloatVec3WidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> FloatVec3WidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/FloatVec3FilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+FloatVec3WidgetCodeGenerator::Pointer FloatVec3WidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

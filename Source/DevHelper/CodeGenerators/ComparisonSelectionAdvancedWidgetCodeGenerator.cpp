@@ -34,6 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "ComparisonSelectionAdvancedWidgetCodeGenerator.h"
+#include <QtCore/QTextStream>
 
 // -----------------------------------------------------------------------------
 //
@@ -99,4 +100,10 @@ QList<QString> ComparisonSelectionAdvancedWidgetCodeGenerator::generateCPPInclud
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ComparisonSelectionAdvancedFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ComparisonSelectionAdvancedWidgetCodeGenerator::Pointer ComparisonSelectionAdvancedWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

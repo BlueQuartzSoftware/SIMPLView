@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class RangeWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(RangeWidgetCodeGenerator)
+    using Self = RangeWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,11 +59,11 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~RangeWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
     virtual QList<QString> generateHIncludes();
 
@@ -69,5 +75,7 @@ class RangeWidgetCodeGenerator : public FPCodeGenerator
     RangeWidgetCodeGenerator(RangeWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     RangeWidgetCodeGenerator& operator=(const RangeWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     RangeWidgetCodeGenerator& operator=(RangeWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

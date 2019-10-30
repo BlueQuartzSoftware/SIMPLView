@@ -35,6 +35,8 @@
 
 #include "DynamicTableWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -100,4 +102,10 @@ QList<QString> DynamicTableWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DynamicTableFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DynamicTableWidgetCodeGenerator::Pointer DynamicTableWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

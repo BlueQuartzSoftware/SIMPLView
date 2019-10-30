@@ -35,6 +35,8 @@
 
 #include "SecondOrderPolynomialWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> SecondOrderPolynomialWidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/SecondOrderPolynomialFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+SecondOrderPolynomialWidgetCodeGenerator::Pointer SecondOrderPolynomialWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

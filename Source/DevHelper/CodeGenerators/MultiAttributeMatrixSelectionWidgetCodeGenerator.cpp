@@ -35,6 +35,8 @@
 
 #include "MultiAttributeMatrixSelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -90,4 +92,10 @@ QList<QString> MultiAttributeMatrixSelectionWidgetCodeGenerator::generateCPPIncl
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/MultiAttributeMatrixSelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+MultiAttributeMatrixSelectionWidgetCodeGenerator::Pointer MultiAttributeMatrixSelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

@@ -35,22 +35,29 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class CodeGenFactory
 {
   public:
-    SIMPL_SHARED_POINTERS(CodeGenFactory)
-    SIMPL_STATIC_NEW_MACRO(CodeGenFactory)
+    using Self = CodeGenFactory;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
+
+    static Pointer New();
 
     /**
     * @brief Creates a new instance for this code generator.
     * @return
     */
-    FPCodeGenerator::Pointer create(QString humanLabel, QString propertyName, QString fpType, QString fpCategory, QString initValue);
+    FPCodeGenerator::Pointer create(const QString& humanLabel, const QString& propertyName, const QString& fpType, const QString& fpCategory, const QString& initValue);
 
   protected:
     CodeGenFactory();
@@ -60,5 +67,7 @@ class CodeGenFactory
     CodeGenFactory(CodeGenFactory&&) = delete;      // Move Constructor Not Implemented
     CodeGenFactory& operator=(const CodeGenFactory&) = delete; // Copy Assignment Not Implemented
     CodeGenFactory& operator=(CodeGenFactory&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

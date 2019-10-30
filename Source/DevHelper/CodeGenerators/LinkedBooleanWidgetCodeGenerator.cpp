@@ -35,11 +35,13 @@
 
 #include "LinkedBooleanWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 LinkedBooleanWidgetCodeGenerator::LinkedBooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "bool")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "bool", true)
 {
 }
 
@@ -89,4 +91,10 @@ QList<QString> LinkedBooleanWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/LinkedBooleanFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+LinkedBooleanWidgetCodeGenerator::Pointer LinkedBooleanWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

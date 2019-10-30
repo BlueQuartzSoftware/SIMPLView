@@ -35,6 +35,8 @@
 
 #include "SeparatorWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -97,4 +99,10 @@ QList<QString> SeparatorWidgetCodeGenerator::generateCPPIncludes()
 QString SeparatorWidgetCodeGenerator::generatePybindContents()
 {
   return "";
+}
+
+// -----------------------------------------------------------------------------
+SeparatorWidgetCodeGenerator::Pointer SeparatorWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

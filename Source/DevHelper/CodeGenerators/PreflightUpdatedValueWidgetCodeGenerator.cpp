@@ -35,6 +35,8 @@
 
 #include "PreflightUpdatedValueWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> PreflightUpdatedValueWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/PreflightUpdatedValueFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+PreflightUpdatedValueWidgetCodeGenerator::Pointer PreflightUpdatedValueWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

@@ -35,7 +35,10 @@
 
 #include "SIMPLViewUIMessageHandler.h"
 
+#include <QtCore/QTextStream>
+
 #include "SIMPLib/Messages/FilterProgressMessage.h"
+
 #include "SIMPLib/Messages/FilterStatusMessage.h"
 #include "SIMPLib/Messages/PipelineProgressMessage.h"
 #include "SIMPLib/Messages/PipelineStatusMessage.h"

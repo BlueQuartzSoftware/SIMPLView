@@ -48,13 +48,7 @@ class PMDirGenerator : public QObject
     Q_OBJECT
 
   public:
-
-    PMDirGenerator(QString outputDir, QString pathTemplate,
-                   QString dirName,
-                   QString codeTemplateResourcePath,
-                   QTreeWidgetItem* wi,
-                   QObject* parent = 0);
-
+    PMDirGenerator(QString outputDir, QString pathTemplate, QString dirName, QString codeTemplateResourcePath, QTreeWidgetItem* wi, QObject* parent = nullptr);
 
     virtual ~PMDirGenerator();
 

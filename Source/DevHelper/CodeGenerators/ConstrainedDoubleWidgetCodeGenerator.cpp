@@ -35,11 +35,13 @@
 
 #include "ConstrainedDoubleWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 ConstrainedDoubleWidgetCodeGenerator::ConstrainedDoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "double")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "double", true)
 {
 }
 
@@ -89,4 +91,10 @@ QList<QString> ConstrainedDoubleWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ConstrainedDoubleFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ConstrainedDoubleWidgetCodeGenerator::Pointer ConstrainedDoubleWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

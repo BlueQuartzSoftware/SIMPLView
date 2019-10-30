@@ -35,8 +35,11 @@
 
 #pragma once
 
+#include <memory>
+
+#include <QtCore/QString>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 // stringised version of line number (must be done in two steps)
 #define STRINGISE(N) #N
@@ -56,9 +59,14 @@
 class FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(FPCodeGenerator)
+    using Self = FPCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
-    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
+    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue);
 
     virtual ~FPCodeGenerator();
 
@@ -66,7 +74,7 @@ class FPCodeGenerator
 
     virtual QString generateDataCheck();
 
-    virtual QString generateFilterParameters();
+    virtual QString generateFilterAccessorDeclarations();
 
     virtual QString generateInitializationList();
 
@@ -76,8 +84,19 @@ class FPCodeGenerator
 
     virtual QList<QString> generateCPPIncludes();
 
+    virtual QString generateFilterParameterDefinitions();
+
+    virtual QString generateFilterParameterDeclarations();
+
+    /**
+     * @deprecated
+     * @brief generateFilterParameters
+     * @return
+     */
+    virtual QString generateFilterParameters();
+
   protected:
-    FPCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue, const QString& varType);
+    FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue, QString varType, bool podType = false);
 
     QString getPropertyName();
     QString getHumanLabel();
@@ -91,6 +110,7 @@ class FPCodeGenerator
     QString m_Category;
     QString m_InitValue;
     QString m_VariableType = QString("Unknown");
+    bool m_PODType = false;
 
   public:
     FPCodeGenerator(const FPCodeGenerator&) = delete; // Copy Constructor Not Implemented

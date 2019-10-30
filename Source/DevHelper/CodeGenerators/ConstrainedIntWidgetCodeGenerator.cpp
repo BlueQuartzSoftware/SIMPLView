@@ -34,12 +34,13 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "ConstrainedIntWidgetCodeGenerator.h"
+#include <QtCore/QTextStream>
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 ConstrainedIntWidgetCodeGenerator::ConstrainedIntWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t", true)
 {
 }
 
@@ -76,7 +77,7 @@ QString ConstrainedIntWidgetCodeGenerator::generateFilterParameters()
   QString contents;
   QTextStream ss(&contents);
   ss << "    SIMPL_FILTER_PARAMETER(int, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(int " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    Q_PROPERTY(int32_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -89,4 +90,10 @@ QList<QString> ConstrainedIntWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ConstrainedIntFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ConstrainedIntWidgetCodeGenerator::Pointer ConstrainedIntWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

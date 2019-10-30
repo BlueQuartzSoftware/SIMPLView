@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(PreflightUpdatedValueWidgetCodeGenerator)
+    using Self = PreflightUpdatedValueWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,13 +59,13 @@ class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~PreflightUpdatedValueWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     PreflightUpdatedValueWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -69,5 +75,7 @@ class PreflightUpdatedValueWidgetCodeGenerator : public FPCodeGenerator
     PreflightUpdatedValueWidgetCodeGenerator(PreflightUpdatedValueWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     PreflightUpdatedValueWidgetCodeGenerator& operator=(const PreflightUpdatedValueWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     PreflightUpdatedValueWidgetCodeGenerator& operator=(PreflightUpdatedValueWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

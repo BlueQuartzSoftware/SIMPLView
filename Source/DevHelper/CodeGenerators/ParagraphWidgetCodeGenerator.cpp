@@ -33,6 +33,8 @@
 
 #include "ParagraphWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -86,4 +88,10 @@ QList<QString> ParagraphWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ParagraphFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ParagraphWidgetCodeGenerator::Pointer ParagraphWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

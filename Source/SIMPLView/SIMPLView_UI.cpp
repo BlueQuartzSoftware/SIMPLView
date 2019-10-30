@@ -47,7 +47,10 @@
 #include <QtWidgets/QShortcut>
 
 //-- SIMPLView Includes
+#include <QtCore/QDebug>
+
 #include "SIMPLib/Common/Constants.h"
+
 #include "SIMPLib/Common/DocRequestManager.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/Filtering/FilterManager.h"

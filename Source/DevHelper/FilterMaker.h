@@ -67,7 +67,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     };
 
     FilterMaker(QWidget* parent = nullptr);
-    ~FilterMaker();
+    ~FilterMaker() override;
 
     bool validityCheck();
 

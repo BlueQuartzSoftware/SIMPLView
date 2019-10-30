@@ -35,6 +35,8 @@
 
 #include "DataContainerReaderWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -113,4 +115,10 @@ QList<QString> DataContainerReaderWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DataContainerReaderFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DataContainerReaderWidgetCodeGenerator::Pointer DataContainerReaderWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

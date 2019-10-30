@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class SeparatorWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(SeparatorWidgetCodeGenerator)
+    using Self = SeparatorWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,17 +59,17 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~SeparatorWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
     virtual QString generateWriteFilterParameters();
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
     virtual QString generateInitializationList();
 
     QString generatePybindContents() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     SeparatorWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -73,5 +79,7 @@ class SeparatorWidgetCodeGenerator : public FPCodeGenerator
     SeparatorWidgetCodeGenerator(SeparatorWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     SeparatorWidgetCodeGenerator& operator=(const SeparatorWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     SeparatorWidgetCodeGenerator& operator=(SeparatorWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

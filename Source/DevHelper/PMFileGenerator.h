@@ -53,35 +53,32 @@ class PMFileGenerator : public PMDirGenerator
     Q_OBJECT
 
   public:
-    PMFileGenerator(QString outputDir,
-                    QString pathTemplate,
-                    QString fileName,
-                    QString codeTemplateResourcePath,
-                    QTreeWidgetItem* wi,
-                    QObject* parent = 0);
-    virtual ~PMFileGenerator();
+    PMFileGenerator(QString outputDir, QString pathTemplate, QString fileName, QString codeTemplateResourcePath, QTreeWidgetItem* wi, QObject* parent = nullptr);
+    ~PMFileGenerator() override;
 
     QString getFileName();
 
-    void setSetupFPContents(QString contents);
-    void setDataCheckContents(QString contents);
-    void setFPContents(QString contents);
-    void setInitListContents(QString contents);
-    void setFilterHIncludesContents(QString contents);
-    void setFilterCPPIncludesContents(QString contents);
+    void setSetupFPContents(const QString& contents);
+    void setDataCheckContents(const QString& contents);
+    void setFPContents(const QString& contents);
+    void setInitListContents(const QString& contents);
+    void setFilterHIncludesContents(const QString& contents);
+    void setFilterCPPIncludesContents(const QString& contents);
     void setPyContents(const QString& contents);
+    void setFilterParameterDefinitions(const QString& contents);
+    void setFilterParameterDeclarations(const QString& contents);
 
-    virtual QString generateFileContents(QString replaceStr = "");
+    QString generateFileContents(QString replaceStr = "") override;
 
     QString createReplacementString(FileType type, QSet<QString> names);
 
   public slots:
-    virtual void generateOutput();
+    void generateOutput() override;
 
   protected slots:
-    virtual void pluginNameChanged (const QString& plugname);
-    virtual void outputDirChanged (const QString& outputDir);
-    virtual void generateOutputWithFilterNames(QSet<QString> names);
+    void pluginNameChanged(const QString& plugname) override;
+    void outputDirChanged(const QString& outputDir) override;
+    void generateOutputWithFilterNames(QSet<QString> names);
 
   protected:
     QString setupFPContents;
@@ -91,11 +88,13 @@ class PMFileGenerator : public PMDirGenerator
     QString filterHIncludesContents;
     QString filterCPPIncludesContents;
     QString pyContents;
+    QString filterCPPFilterParameterDefinitions;
+    QString filterHFilterParameterDeclarations;
 
   private:
     QString m_FileName;
 
-    QString getFileContents(QString replaceStr);
+    QString getFileContents(const QString& replaceStr);
 };
 
 

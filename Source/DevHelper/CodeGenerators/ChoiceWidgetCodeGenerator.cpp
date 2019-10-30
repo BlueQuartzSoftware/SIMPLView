@@ -35,11 +35,13 @@
 
 #include "ChoiceWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 ChoiceWidgetCodeGenerator::ChoiceWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int", true)
 {
 }
 
@@ -102,4 +104,10 @@ QList<QString> ChoiceWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ChoiceFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ChoiceWidgetCodeGenerator::Pointer ChoiceWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

@@ -35,14 +35,18 @@
 
 #include "FPCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FPCodeGenerator::FPCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue, const QString& varType)
-: m_PropertyName(propertyName)
-, m_HumanLabel(humanLabel)
-, m_InitValue(initValue)
-, m_VariableType(varType)
+FPCodeGenerator::FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue, QString varType, bool podType)
+: m_PropertyName(std::move(propertyName))
+, m_HumanLabel(std::move(humanLabel))
+, m_Category(std::move(category))
+, m_InitValue(std::move(initValue))
+, m_VariableType(std::move(varType))
+, m_PODType(podType)
 {
   if (category == "Parameter")
   {
@@ -63,9 +67,9 @@ FPCodeGenerator::FPCodeGenerator(const QString& humanLabel, const QString& prope
 }
 
 // -----------------------------------------------------------------------------
-FPCodeGenerator::Pointer FPCodeGenerator::New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
+FPCodeGenerator::Pointer FPCodeGenerator::New(QString humanLabel, QString propertyName, QString category, QString initValue)
 {
-  Pointer sharedPtr(new FPCodeGenerator(humanLabel, propertyName, category, initValue, "UNKNOWN"));
+  Pointer sharedPtr(new FPCodeGenerator(std::move(humanLabel), std::move(propertyName), std::move(category), std::move(initValue), "UNKNOWN", false));
   return sharedPtr;
 }
 
@@ -131,9 +135,24 @@ QString FPCodeGenerator::generateDataCheck()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString FPCodeGenerator::generateFilterParameters()
+QString FPCodeGenerator::generateFilterAccessorDeclarations()
 {
-  return "";
+  QString contents;
+  QTextStream ss(&contents);
+  ss << "    /**\n    * @brief Sets the value for Filter Parameter for " << getPropertyName() << "\n    * @param value The new value to use.\n    */\n";
+  if(m_PODType)
+  {
+    ss << "    void set" << getPropertyName() << "(" << getVariableType() << " value);\n";
+  }
+  else
+  {
+    ss << "    void set" << getPropertyName() << "(const " << getVariableType() << "& value);\n";
+  }
+  ss << "    /**\n    * @brief Gets the Filter Parameter value for " << getPropertyName() << "\n    * @return The value for " << getPropertyName() << "\n    */\n";
+  ss << "    " << getVariableType() << " get" << getPropertyName() << "() const;\n";
+  ss << "    Q_PROPERTY(" << getVariableType() << " " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+
+  return contents;
 }
 
 // -----------------------------------------------------------------------------
@@ -174,4 +193,48 @@ QList<QString> FPCodeGenerator::generateHIncludes()
 QList<QString> FPCodeGenerator::generateCPPIncludes()
 {
   return QList<QString>();
+}
+
+// -----------------------------------------------------------------------------
+QString FPCodeGenerator::generateFilterParameterDeclarations()
+{
+  QString data;
+  QTextStream out(&data);
+  out << "    " << getVariableType() << "  m_" << getPropertyName() << ";\n";
+  return data;
+}
+
+// -----------------------------------------------------------------------------
+QString FPCodeGenerator::generateFilterParameterDefinitions()
+{
+  QString data;
+  QTextStream out(&data);
+  out << "// -----------------------------------------------------------------------------\n";
+  if(m_PODType)
+  {
+    out << "void @ClassName@::set" << getPropertyName() << "(" << getVariableType() << " value)\n";
+  }
+  else
+  {
+    out << "void @ClassName@::set" << getPropertyName() << "(const " << getVariableType() << "& value)\n";
+  }
+  out << "{\n";
+  out << "    m_" << getPropertyName() << " = value;\n";
+  out << "}\n";
+  out << "// -----------------------------------------------------------------------------\n";
+  out << getVariableType() << " @ClassName@::get" << getPropertyName() << "() const\n";
+  out << "{\n  return m_" << getPropertyName() << ";\n}\n";
+
+  return data;
+}
+
+// -----------------------------------------------------------------------------
+FPCodeGenerator::Pointer FPCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
+}
+
+QString FPCodeGenerator::generateFilterParameters()
+{
+  return {""};
 }

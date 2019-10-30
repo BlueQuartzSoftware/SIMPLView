@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class DoubleWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(DoubleWidgetCodeGenerator)
+    using Self = DoubleWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,15 +59,15 @@ class DoubleWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~DoubleWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
     QString generateInitializationList() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     DoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -71,5 +77,7 @@ class DoubleWidgetCodeGenerator : public FPCodeGenerator
     DoubleWidgetCodeGenerator(DoubleWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     DoubleWidgetCodeGenerator& operator=(const DoubleWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     DoubleWidgetCodeGenerator& operator=(DoubleWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

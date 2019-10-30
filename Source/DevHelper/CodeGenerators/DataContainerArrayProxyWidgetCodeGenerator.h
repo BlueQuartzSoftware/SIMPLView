@@ -35,8 +35,9 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 #include "SIMPLib/DataContainers/DataContainerArrayProxy.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
@@ -44,7 +45,12 @@
 class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(DataContainerArrayProxyWidgetCodeGenerator)
+    using Self = DataContainerArrayProxyWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -54,13 +60,13 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~DataContainerArrayProxyWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     DataContainerArrayProxyWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -70,5 +76,7 @@ class DataContainerArrayProxyWidgetCodeGenerator : public FPCodeGenerator
     DataContainerArrayProxyWidgetCodeGenerator(DataContainerArrayProxyWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     DataContainerArrayProxyWidgetCodeGenerator& operator=(const DataContainerArrayProxyWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     DataContainerArrayProxyWidgetCodeGenerator& operator=(DataContainerArrayProxyWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 
