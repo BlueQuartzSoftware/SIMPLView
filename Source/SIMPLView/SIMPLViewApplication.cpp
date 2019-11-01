@@ -51,7 +51,10 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QSplashScreen>
 
+#include <QtCore/QDebug>
+
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
+
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/Plugin/PluginManager.h"

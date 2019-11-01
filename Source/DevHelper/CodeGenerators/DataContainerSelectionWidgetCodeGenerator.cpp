@@ -35,6 +35,8 @@
 
 #include "DataContainerSelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -76,8 +78,8 @@ QString DataContainerSelectionWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(QString, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(QString " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(DataArrayPath, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(DataArrayPath " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -90,4 +92,10 @@ QList<QString> DataContainerSelectionWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DataContainerSelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DataContainerSelectionWidgetCodeGenerator::Pointer DataContainerSelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class DataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(DataContainerSelectionWidgetCodeGenerator)
+    using Self = DataContainerSelectionWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,13 +59,13 @@ class DataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~DataContainerSelectionWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     DataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -69,5 +75,7 @@ class DataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
     DataContainerSelectionWidgetCodeGenerator(DataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     DataContainerSelectionWidgetCodeGenerator& operator=(const DataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     DataContainerSelectionWidgetCodeGenerator& operator=(DataContainerSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

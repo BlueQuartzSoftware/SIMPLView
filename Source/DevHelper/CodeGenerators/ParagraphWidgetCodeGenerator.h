@@ -33,7 +33,8 @@
 
 #pragma once
 
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
@@ -41,7 +42,12 @@
 class ParagraphWidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  SIMPL_SHARED_POINTERS(ParagraphWidgetCodeGenerator)
+  using Self = ParagraphWidgetCodeGenerator;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer();
 
   static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
   {
@@ -51,13 +57,13 @@ public:
 
   virtual ~ParagraphWidgetCodeGenerator();
 
-  virtual QString generateSetupFilterParameters();
+  QString generateSetupFilterParameters() override;
 
-  virtual QString generateDataCheck();
+  QString generateDataCheck() override;
 
-  virtual QString generateFilterParameters();
+  QString generateFilterParameters() override;
 
-  virtual QList<QString> generateCPPIncludes();
+  QList<QString> generateCPPIncludes() override;
 
 protected:
   ParagraphWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -67,5 +73,7 @@ public:
   ParagraphWidgetCodeGenerator(ParagraphWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
   ParagraphWidgetCodeGenerator& operator=(const ParagraphWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
   ParagraphWidgetCodeGenerator& operator=(ParagraphWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+private:
 };
 

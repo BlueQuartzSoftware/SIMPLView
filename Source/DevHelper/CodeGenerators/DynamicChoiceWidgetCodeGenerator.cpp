@@ -35,11 +35,13 @@
 
 #include "DynamicChoiceWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 DynamicChoiceWidgetCodeGenerator::DynamicChoiceWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t", true)
 {
 }
 
@@ -76,8 +78,8 @@ QString DynamicChoiceWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(QString, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(QString " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(int32_t, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(int32_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
@@ -90,4 +92,10 @@ QList<QString> DynamicChoiceWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DynamicChoiceFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DynamicChoiceWidgetCodeGenerator::Pointer DynamicChoiceWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

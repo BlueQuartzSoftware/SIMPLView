@@ -35,6 +35,8 @@
 
 #include "RangeWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> RangeWidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/RangeFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+RangeWidgetCodeGenerator::Pointer RangeWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

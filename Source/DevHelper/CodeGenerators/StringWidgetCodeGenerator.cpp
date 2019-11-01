@@ -35,6 +35,8 @@
 
 #include "StringWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> StringWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/StringFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+StringWidgetCodeGenerator::Pointer StringWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

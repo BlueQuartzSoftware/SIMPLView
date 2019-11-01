@@ -35,6 +35,8 @@
 
 #include "InputFileWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> InputFileWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/InputFileFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+InputFileWidgetCodeGenerator::Pointer InputFileWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

@@ -35,6 +35,8 @@
 
 #include "ThirdOrderPolynomialWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> ThirdOrderPolynomialWidgetCodeGenerator::generateHIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/ThirdOrderPolynomialFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+ThirdOrderPolynomialWidgetCodeGenerator::Pointer ThirdOrderPolynomialWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

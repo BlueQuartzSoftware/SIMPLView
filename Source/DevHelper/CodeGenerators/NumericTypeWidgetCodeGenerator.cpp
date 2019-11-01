@@ -35,11 +35,13 @@
 
 #include "NumericTypeWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 NumericTypeWidgetCodeGenerator::NumericTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type", true)
 {
 }
 
@@ -89,4 +91,10 @@ QList<QString> NumericTypeWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/NumericTypeFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+NumericTypeWidgetCodeGenerator::Pointer NumericTypeWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

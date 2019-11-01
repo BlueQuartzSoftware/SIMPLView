@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class InputPathWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(InputPathWidgetCodeGenerator)
+    using Self = InputPathWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,13 +59,13 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~InputPathWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     InputPathWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -69,5 +75,7 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
     InputPathWidgetCodeGenerator(InputPathWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     InputPathWidgetCodeGenerator& operator=(const InputPathWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     InputPathWidgetCodeGenerator& operator=(InputPathWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

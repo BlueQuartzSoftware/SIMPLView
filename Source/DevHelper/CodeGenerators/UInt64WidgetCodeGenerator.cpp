@@ -33,11 +33,13 @@
 
 #include "UInt64WidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 UInt64WidgetCodeGenerator::UInt64WidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "uint64_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "uint64_t", true)
 {
 }
 
@@ -102,3 +104,9 @@ QList<QString> UInt64WidgetCodeGenerator::generateCPPIncludes()
 //{
 //  return QString("    PYB11_PROPERTY(uint64_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
 //}
+
+// -----------------------------------------------------------------------------
+UInt64WidgetCodeGenerator::Pointer UInt64WidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
+}

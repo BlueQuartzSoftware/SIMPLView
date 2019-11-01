@@ -55,24 +55,17 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FilterMaker::FilterMaker(QWidget* parent) :
-  QWidget(parent),
-  m_cppGenerator(NULL),
-  m_hGenerator(NULL),
-  m_htmlGenerator(NULL),
-  m_testGenerator(NULL)
+FilterMaker::FilterMaker(QWidget* parent)
+: QWidget(parent)
 {
   setupUi(this);
-
   setupGui();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FilterMaker::~FilterMaker()
-{
-}
+FilterMaker::~FilterMaker() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -150,7 +143,7 @@ void FilterMaker::on_selectBtn_clicked()
                                                          m_OpenDialogLastDirectory,
                                                          QFileDialog::ShowDirsOnly);
 
-  if (pluginPath.isEmpty() == false)
+  if(!pluginPath.isEmpty())
   {
     pluginDir->setText(pluginPath);
   }
@@ -161,7 +154,7 @@ void FilterMaker::on_selectBtn_clicked()
 // -----------------------------------------------------------------------------
 void FilterMaker::on_codeChooser_currentIndexChanged(int index)
 {
-  if (validityCheck() == false)
+  if(!validityCheck())
   {
     codeViewer->clear();
     return;
@@ -332,17 +325,12 @@ void FilterMaker::updateFilterFileGenerators()
   QString pathTemplate = "@PluginName@Filters/";
   QString resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.cpp.in");
 
-  if (NULL != m_cppGenerator)
+  if(nullptr != m_cppGenerator)
   {
     m_cppGenerator.clear();
   }
 
-  m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
-                                     pathTemplate,
-                                     QString(filterName + ".cpp"),
-                                     resourceTemplate,
-                                     nullptr,
-                                     this));
+  m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".cpp"), resourceTemplate, nullptr, this));
 
   connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -350,7 +338,7 @@ void FilterMaker::updateFilterFileGenerators()
   m_cppGenerator->setPluginName(fi.baseName());
   m_cppGenerator->setFilterName(filterName);
 
-  if (contentsMap.size() > 0)
+  if(!contentsMap.empty())
   {
     m_cppGenerator->setSetupFPContents(contentsMap["Setup Filter Parameters"]);
 
@@ -362,6 +350,7 @@ void FilterMaker::updateFilterFileGenerators()
 
     m_cppGenerator->setInitListContents(initList);
     m_cppGenerator->setFilterCPPIncludesContents(contentsMap["Filter Implementation Includes"]);
+    m_cppGenerator->setFilterParameterDefinitions(contentsMap["Filter Parameters Definitions"]);
   }
   else
   {
@@ -382,16 +371,11 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Filter/Filter.h.in");
 
-  if (NULL != m_hGenerator)
+  if(nullptr != m_hGenerator)
   {
     m_hGenerator.clear();
   }
-  m_hGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
-                                   pathTemplate,
-                                   QString(filterName + ".h"),
-                                   resourceTemplate,
-                                   nullptr,
-                                   this));
+  m_hGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".h"), resourceTemplate, nullptr, this));
 
   connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -399,11 +383,12 @@ void FilterMaker::updateFilterFileGenerators()
   m_hGenerator->setPluginName(fi.baseName());
   m_hGenerator->setFilterName(filterName);
 
-  if (contentsMap.size() > 0)
+  if(!contentsMap.empty())
   {
     m_hGenerator->setFPContents(contentsMap["Filter Parameters"]);
     m_hGenerator->setFilterHIncludesContents(contentsMap["Filter Header Includes"]);
     m_hGenerator->setPyContents(contentsMap["Pybind Parameters"]);
+    m_hGenerator->setFilterParameterDeclarations(contentsMap["Filter Parameters Declarations"]);
   }
   else
   {
@@ -416,16 +401,11 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Documentation/@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
 
-  if (NULL != m_htmlGenerator)
+  if(nullptr != m_htmlGenerator)
   {
     m_htmlGenerator.clear();
   }
-  m_htmlGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
-                                      pathTemplate,
-                                      QString(filterName + ".md"),
-                                      resourceTemplate,
-                                      nullptr,
-                                      this));
+  m_htmlGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".md"), resourceTemplate, nullptr, this));
 
   connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -437,16 +417,11 @@ void FilterMaker::updateFilterFileGenerators()
   pathTemplate = "Test";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Test/FilterTest.cpp.in");
 
-  if (nullptr != m_testGenerator)
+  if(nullptr != m_testGenerator)
   {
     m_testGenerator.clear();
   }
-  m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText,
-                                      pathTemplate,
-                                      QString(filterName + "Test.cpp"),
-                                      resourceTemplate,
-                                      nullptr,
-                                      this));
+  m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + "Test.cpp"), resourceTemplate, nullptr, this));
 
   connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)),
           this, SLOT(generationError(const QString&)));
@@ -486,6 +461,8 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   QString filterHIncludes = "";
   QString filterCPPIncludes = "";
   QString PYContents = "";
+  QString fpDefinitions = "";
+  QString fpDeclarations = "";
 
   CodeGenFactory::Pointer factory = CodeGenFactory::New();
   for (int row = 0; row < filterParametersTable->rowCount(); row++)
@@ -500,23 +477,32 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     QSet<QString> cppIncludesSet;
 
     FPCodeGenerator::Pointer generator = factory->create(humanName, propertyName, type, category, initValue);
-    if (generator->generateSetupFilterParameters().isEmpty() == false)
+    if(!generator->generateSetupFilterParameters().isEmpty())
     {
       setupFPContents.append(generator->generateSetupFilterParameters() + "\n");
     }
 
-    if (generator->generateDataCheck().isEmpty() == false)
+    QString dataCheckCode = generator->generateDataCheck();
+    if(!dataCheckCode.isEmpty())
     {
-      dataCheckContents.append(generator->generateDataCheck() + "\n");
+      dataCheckContents.append(dataCheckCode + "\n");
     }
 
-    if (generator->generateFilterParameters().isEmpty() == false)
+    QString fpAccessorCode = generator->generateFilterParameterDefinitions();
+    if(!fpAccessorCode.isEmpty())
     {
-      FPContents.append(generator->generateFilterParameters() + "\n\n");
+      fpDefinitions.append(fpAccessorCode);
+    }
+
+    QString fpHeaderCode = generator->generateFilterAccessorDeclarations();
+    if(!fpHeaderCode.isEmpty())
+    {
+      FPContents.append(fpHeaderCode + "\n\n");
       PYContents.append(generator->generatePybindContents());
+      fpDeclarations.append(generator->generateFilterParameterDeclarations());
     }
 
-    if (generator->generateInitializationList().isEmpty() == false)
+    if(!generator->generateInitializationList().isEmpty())
     {
       QString initEntry = generator->generateInitializationList();
       if(row == 0)
@@ -528,12 +514,12 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
       initListContents.append(initEntry + "\n");
     }
 
-    if (generator->generateHIncludes().isEmpty() == false)
+    if(!generator->generateHIncludes().isEmpty())
     {
       QList<QString> hIncludes = generator->generateHIncludes();
       for (int i=0; i<hIncludes.size(); i++)
       {
-        if (hIncludesSet.contains(hIncludes[i]) == false)
+        if(!hIncludesSet.contains(hIncludes[i]))
         {
           filterHIncludes.append(hIncludes[i]);
           filterHIncludes.append("\n");
@@ -542,12 +528,12 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
       }
     }
 
-    if (generator->generateCPPIncludes().isEmpty() == false)
+    if(!generator->generateCPPIncludes().isEmpty())
     {
       QList<QString> cppIncludes = generator->generateCPPIncludes();
       for (int i=0; i<cppIncludes.size(); i++)
       {
-        if (cppIncludesSet.contains(cppIncludes[i]) == false)
+        if(!cppIncludesSet.contains(cppIncludes[i]))
         {
           filterCPPIncludes.append(cppIncludes[i]);
           filterCPPIncludes.append("\n");
@@ -575,6 +561,8 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   map.insert("Filter Header Includes", filterHIncludes);
   map.insert("Filter Implementation Includes", filterCPPIncludes);
   map.insert("Pybind Parameters", PYContents);
+  map.insert("Filter Parameters Definitions", fpDefinitions);
+  map.insert("Filter Parameters Declarations", fpDeclarations);
 
   return map;
 }
@@ -599,7 +587,7 @@ void FilterMaker::updateSourceList()
 
   QString namespaceStr = createNamespaceString();
   // Check to make sure we don't already have this filter in the namespace
-  if (contents.contains(namespaceStr) == true)
+  if(contents.contains(namespaceStr))
   {
     return;
   }

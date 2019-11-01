@@ -35,6 +35,8 @@
 
 #include "OutputPathWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> OutputPathWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/OutputPathFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+OutputPathWidgetCodeGenerator::Pointer OutputPathWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

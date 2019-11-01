@@ -34,6 +34,7 @@
 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "AttributeMatrixCreationWidgetCodeGenerator.h"
+#include <QtCore/QTextStream>
 
 // -----------------------------------------------------------------------------
 //
@@ -71,22 +72,15 @@ QString AttributeMatrixCreationWidgetCodeGenerator::generateDataCheck()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString AttributeMatrixCreationWidgetCodeGenerator::generateFilterParameters()
-{
-  QString contents;
-  QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(DataArrayPath, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(DataArrayPath " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
-
-  return contents;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
 QList<QString> AttributeMatrixCreationWidgetCodeGenerator::generateCPPIncludes()
 {
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/AttributeMatrixCreationFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+AttributeMatrixCreationWidgetCodeGenerator::Pointer AttributeMatrixCreationWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

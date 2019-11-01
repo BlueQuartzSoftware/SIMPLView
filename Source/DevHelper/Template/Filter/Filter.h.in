@@ -5,135 +5,153 @@
 #pragma once
 
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 #include "SIMPLib/Filtering/AbstractFilter.h"
 
 @Filter_H_Includes@
 #include "@PluginName@/@PluginName@Plugin.h"
-
+    
 /**
  * @brief The @ClassName@ class. See [Filter documentation](@ref @ClassNameLowerCase@) for details.
  */
 class @PluginName@_EXPORT @ClassName@ : public AbstractFilter
 {
   Q_OBJECT
-    // clang-format off
-    PYB11_CREATE_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
-@PYBindContents@
-    // clang-format on
 
-  public:
-    SIMPL_SHARED_POINTERS(@ClassName@)
-    SIMPL_FILTER_NEW_MACRO(@ClassName@)
-    SIMPL_TYPE_MACRO_SUPER_OVERRIDE(@ClassName@, AbstractFilter)
+#ifdef SIMPL_ENABLE_PYTHON
+  // clang-format off
+  PYB11_CREATE_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
+  @PYBindContents@
+  // clang-format on
+#endif
 
-    ~@ClassName@() override;
+public:
 
+  using Self = @ClassName@;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer();
+
+  static std::shared_ptr<@ClassName@> New();
+
+  /**
+   * @brief Returns the name of the class for @ClassName@
+   */
+  QString getNameOfClass() const override;
+
+  /**
+   * @brief Returns the name of the class for @ClassName@
+   */
+  static QString ClassName();
+
+  ~@ClassName@() override;
+  
 @FPContents@
 
-    /**
-     * @brief getCompiledLibraryName Reimplemented from @see AbstractFilter class
-     */
-    const QString getCompiledLibraryName() const override;
+  /**
+   * @brief getCompiledLibraryName Reimplemented from @see AbstractFilter class
+   */
+  QString getCompiledLibraryName() const override;
 
-    /**
-     * @brief getBrandingString Returns the branding string for the filter, which is a tag
-     * used to denote the filter's association with specific plugins
-     * @return Branding string
-    */
-    const QString getBrandingString() const override;
+  /**
+   * @brief getBrandingString Returns the branding string for the filter, which is a tag
+   * used to denote the filter's association with specific plugins
+   * @return Branding string
+   */
+  QString getBrandingString() const override;
 
-    /**
-     * @brief getFilterVersion Returns a version string for this filter. Default
-     * value is an empty string.
-     * @return
-     */
-    const QString getFilterVersion() const override;
+  /**
+   * @brief getFilterVersion Returns a version string for this filter. Default
+   * value is an empty string.
+   * @return
+   */
+  QString getFilterVersion() const override;
 
-    /**
-     * @brief newFilterInstance Reimplemented from @see AbstractFilter class
-     */
-    AbstractFilter::Pointer newFilterInstance(bool copyFilterParameters) const override;
+  /**
+   * @brief newFilterInstance Reimplemented from @see AbstractFilter class
+   */
+  AbstractFilter::Pointer newFilterInstance(bool copyFilterParameters) const override;
 
-    /**
-     * @brief getGroupName Reimplemented from @see AbstractFilter class
-     */
-    const QString getGroupName() const override;
+  /**
+   * @brief getGroupName Reimplemented from @see AbstractFilter class
+   */
+  QString getGroupName() const override;
 
-    /**
-     * @brief getSubGroupName Reimplemented from @see AbstractFilter class
-     */
-    const QString getSubGroupName() const override;
+  /**
+   * @brief getSubGroupName Reimplemented from @see AbstractFilter class
+   */
+  QString getSubGroupName() const override;
 
-    /**
-     * @brief getUuid Return the unique identifier for this filter.
-     * @return A QUuid object.
-     */
-    const QUuid getUuid() override;
-  
-    /**
-     * @brief getHumanLabel Reimplemented from @see AbstractFilter class
-     */
-    const QString getHumanLabel() const override;
+  /**
+   * @brief getUuid Return the unique identifier for this filter.
+   * @return A QUuid object.
+   */
+  QUuid getUuid() const override;
 
-    /**
-     * @brief setupFilterParameters Reimplemented from @see AbstractFilter class
-     */
-    void setupFilterParameters() override;
+  /**
+   * @brief getHumanLabel Reimplemented from @see AbstractFilter class
+   */
+  QString getHumanLabel() const override;
 
-    /**
-     * @brief execute Reimplemented from @see AbstractFilter class
-     */
-    void execute() override;
+  /**
+   * @brief setupFilterParameters Reimplemented from @see AbstractFilter class
+   */
+  void setupFilterParameters() override;
 
-    /**
-    * @brief preflight Reimplemented from @see AbstractFilter class
-    */
-    void preflight() override;
+  /**
+   * @brief execute Reimplemented from @see AbstractFilter class
+   */
+  void execute() override;
 
-  signals:
-    /**
-     * @brief updateFilterParameters Emitted when the Filter requests all the latest Filter parameters
-     * be pushed from a user-facing control (such as a widget)
-     * @param filter Filter instance pointer 
-     */
-    void updateFilterParameters(AbstractFilter* filter);
+  /**
+   * @brief preflight Reimplemented from @see AbstractFilter class
+   */
+  void preflight() override;
 
-    /**
-     * @brief parametersChanged Emitted when any Filter parameter is changed internally
-     */
-    void parametersChanged();
+signals:
+  /**
+   * @brief updateFilterParameters Emitted when the Filter requests all the latest Filter parameters
+   * be pushed from a user-facing control (such as a widget)
+   * @param filter Filter instance pointer
+   */
+  void updateFilterParameters(AbstractFilter * filter);
 
-    /**
-     * @brief preflightAboutToExecute Emitted just before calling dataCheck()
-     */
-    void preflightAboutToExecute();
+  /**
+   * @brief parametersChanged Emitted when any Filter parameter is changed internally
+   */
+  void parametersChanged();
 
-    /**
-     * @brief preflightExecuted Emitted just after calling dataCheck()
-     */
-    void preflightExecuted();
+  /**
+   * @brief preflightAboutToExecute Emitted just before calling dataCheck()
+   */
+  void preflightAboutToExecute();
 
-  protected:
-    @ClassName@();
+  /**
+   * @brief preflightExecuted Emitted just after calling dataCheck()
+   */
+  void preflightExecuted();
 
-    /**
-    * @brief dataCheck Checks for the appropriate parameter values and availability of arrays
-    */
-    void dataCheck();
+protected:
+  @ClassName@();
 
-    /**
-    * @brief Initializes all the private instance variables.
-    */
-    void initialize();
-  private:
+  /**
+   * @brief dataCheck Checks for the appropriate parameter values and availability of arrays
+   */
+  void dataCheck();
 
-  
-  public:
-    @ClassName@(const @ClassName@&) = delete;             // Copy Constructor Not Implemented
-    @ClassName@& operator=(const @ClassName@&) = delete;  // Copy Assignment Not Implemented
-    @ClassName@(@ClassName@&&) = delete;                  // Move Constructor Not Implemented
-    @ClassName@& operator=(@ClassName@&&) = delete;       // Move Assignment Not Implemented
+  /**
+   * @brief Initializes all the private instance variables.
+   */
+  void initialize();
 
+private: 
+@Filter_Parameter_Declarations@
+
+public:
+  @ClassName@(const @ClassName@&) = delete;            // Copy Constructor Not Implemented
+  @ClassName@& operator=(const @ClassName@&) = delete; // Copy Assignment Not Implemented
+  @ClassName@(@ClassName@ &&) = delete;                // Move Constructor Not Implemented
+  @ClassName@& operator=(@ClassName@&&) = delete;      // Move Assignment Not Implemented
 };
 

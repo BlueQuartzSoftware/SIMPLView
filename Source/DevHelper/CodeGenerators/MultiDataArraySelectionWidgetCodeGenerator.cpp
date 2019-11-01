@@ -35,6 +35,8 @@
 
 #include "MultiDataArraySelectionWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -90,4 +92,10 @@ QList<QString> MultiDataArraySelectionWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/MultiDataArraySelectionFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+MultiDataArraySelectionWidgetCodeGenerator::Pointer MultiDataArraySelectionWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

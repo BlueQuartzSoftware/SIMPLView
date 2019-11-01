@@ -35,6 +35,8 @@
 
 #include "AxisAngleWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -100,4 +102,10 @@ QList<QString> AxisAngleWidgetCodeGenerator::generateHIncludes()
   list.push_back("#include \"EbsdLib/EbsdConstants.h\"");
   list.push_back("#include \"SIMPLib/FilterParameters/AxisAngleInput.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+AxisAngleWidgetCodeGenerator::Pointer AxisAngleWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

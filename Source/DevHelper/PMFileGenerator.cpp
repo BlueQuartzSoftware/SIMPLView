@@ -185,7 +185,7 @@ QString PMFileGenerator::generateFileContents(QString replaceStr)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-QString PMFileGenerator::getFileContents(QString replaceStr)
+QString PMFileGenerator::getFileContents(const QString& replaceStr)
 {
   //Get text feature values from widget
   QString pluginName = getPluginName();
@@ -195,7 +195,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
   QString className = fi.baseName();
   QString text = "";
 
-  if (pluginName.isEmpty() == true)
+  if(pluginName.isEmpty())
   {
     return text;
   }
@@ -214,6 +214,8 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     text.replace("@Filter_H_Includes@", filterHIncludesContents);
     text.replace("@Filter_CPP_Includes@", filterCPPIncludesContents);
     text.replace("@PYBindContents@", pyContents);
+    text.replace("@Filter_Parameter_Definitions@", filterCPPFilterParameterDefinitions);
+    text.replace("@Filter_Parameter_Declarations@", filterHFilterParameterDeclarations);
 
     // ****************************************************************
     // The following replacements need to happen after the above
@@ -233,12 +235,11 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     ushort w1 = 200;
     ushort w2 = 300;
 
-    QString libName = pluginName;
     uchar b[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     int32_t i = 0;
-    while(i < 8 && i < libName.size())
+    while(i < 8 && i < pluginName.size())
     {
-      b[i] = static_cast<uint8_t>(libName.at(i).toLatin1());
+      b[i] = static_cast<uint8_t>(pluginName.at(i).toLatin1());
       i++;
     }
     QUuid uuid = QUuid(l, w1, w2, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
@@ -246,7 +247,7 @@ QString PMFileGenerator::getFileContents(QString replaceStr)
     QUuid p1 = QUuid::createUuidV5(uuid, nameSpace);
     text.replace("@Uuid@", p1.toString());
 
-    if (replaceStr.isEmpty() == false)
+    if(!replaceStr.isEmpty())
     {
       text.replace("@AddTestText@", replaceStr);    // Replace token for Test/CMakeLists.txt file
       text.replace("@Namespaces@", replaceStr);   // Replace token for Test/TestFileLocations.h.in file
@@ -274,7 +275,7 @@ void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
   QString pluginName = getPluginName();
   QString pluginDir = getOutputDir();
 
-  if (pluginName.isEmpty() == true || pluginDir.isEmpty() == true)
+  if(pluginName.isEmpty() || pluginDir.isEmpty())
   {
     return;
   }
@@ -297,7 +298,7 @@ void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
     text.replace("@FilterGroup@", pluginName);
     text.replace("@FilterSubgroup@", pluginName);
 
-    if (names.isEmpty() == false)
+    if(!names.isEmpty())
     {
       if (getFileName() == "TestFileLocations.h.in")
       {
@@ -391,7 +392,7 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PMFileGenerator::setSetupFPContents(QString contents)
+void PMFileGenerator::setSetupFPContents(const QString& contents)
 {
   setupFPContents = contents;
 }
@@ -399,7 +400,7 @@ void PMFileGenerator::setSetupFPContents(QString contents)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PMFileGenerator::setDataCheckContents(QString contents)
+void PMFileGenerator::setDataCheckContents(const QString& contents)
 {
   dataCheckContents = contents;
 }
@@ -407,7 +408,7 @@ void PMFileGenerator::setDataCheckContents(QString contents)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PMFileGenerator::setFPContents(QString contents)
+void PMFileGenerator::setFPContents(const QString& contents)
 {
   fpContents = contents;
 }
@@ -421,7 +422,7 @@ void PMFileGenerator::setPyContents(const QString& contents)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PMFileGenerator::setInitListContents(QString contents)
+void PMFileGenerator::setInitListContents(const QString& contents)
 {
   initListContents = contents;
 }
@@ -429,18 +430,25 @@ void PMFileGenerator::setInitListContents(QString contents)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void PMFileGenerator::setFilterHIncludesContents(QString contents)
+void PMFileGenerator::setFilterHIncludesContents(const QString& contents)
 {
   filterHIncludesContents = contents;
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void PMFileGenerator::setFilterCPPIncludesContents(QString contents)
+void PMFileGenerator::setFilterCPPIncludesContents(const QString& contents)
 {
   filterCPPIncludesContents = contents;
 }
 
+// -----------------------------------------------------------------------------
+void PMFileGenerator::setFilterParameterDefinitions(const QString& contents)
+{
+  filterCPPFilterParameterDefinitions = contents;
+}
 
-
+// -----------------------------------------------------------------------------
+void PMFileGenerator::setFilterParameterDeclarations(const QString& contents)
+{
+  filterHFilterParameterDeclarations = contents;
+}

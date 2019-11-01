@@ -33,7 +33,8 @@
 
 #pragma once
 
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
@@ -41,7 +42,13 @@
 class LinkedPathCreationWidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  SIMPL_SHARED_POINTERS(LinkedPathCreationWidgetCodeGenerator)
+  using Self = LinkedPathCreationWidgetCodeGenerator;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer();
+
   /**
    * @brief LinkedPathCreationWidgetCodeGenerator
    * @param humanLabel
@@ -80,4 +87,6 @@ public:
   LinkedPathCreationWidgetCodeGenerator(LinkedPathCreationWidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
   LinkedPathCreationWidgetCodeGenerator& operator=(const LinkedPathCreationWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
   LinkedPathCreationWidgetCodeGenerator& operator=(LinkedPathCreationWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+private:
 };

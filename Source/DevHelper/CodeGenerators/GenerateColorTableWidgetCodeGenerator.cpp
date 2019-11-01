@@ -35,6 +35,8 @@
 
 #include "GenerateColorTableWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -108,4 +110,10 @@ QList<QString> GenerateColorTableWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/GenerateColorTableFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+GenerateColorTableWidgetCodeGenerator::Pointer GenerateColorTableWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

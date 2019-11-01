@@ -4,6 +4,8 @@
 
 #include "@ClassName@.h"
 
+#include <QtCore/QTextStream>
+
 #include "SIMPLib/Common/Constants.h"
 
 @Filter_CPP_Includes@
@@ -111,7 +113,7 @@ AbstractFilter::Pointer @ClassName@::newFilterInstance(bool copyFilterParameters
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getCompiledLibraryName() const
+QString @ClassName@::getCompiledLibraryName() const
 { 
   return @PluginName@Constants::@PluginName@BaseName;
 }
@@ -119,7 +121,7 @@ const QString @ClassName@::getCompiledLibraryName() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getBrandingString() const
+QString @ClassName@::getBrandingString() const
 {
   return "@PluginName@";
 }
@@ -127,7 +129,7 @@ const QString @ClassName@::getBrandingString() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getFilterVersion() const
+QString @ClassName@::getFilterVersion() const
 {
   QString version;
   QTextStream vStream(&version);
@@ -138,7 +140,7 @@ const QString @ClassName@::getFilterVersion() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getGroupName() const
+QString @ClassName@::getGroupName() const
 { 
   return SIMPL::FilterGroups::Unsupported; 
 }
@@ -146,7 +148,7 @@ const QString @ClassName@::getGroupName() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getSubGroupName() const
+QString @ClassName@::getSubGroupName() const
 { 
   return "@PluginName@"; 
 }
@@ -154,17 +156,48 @@ const QString @ClassName@::getSubGroupName() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QString @ClassName@::getHumanLabel() const
+QString @ClassName@::getHumanLabel() const
 { 
   return "@ClassName@"; 
 }
 
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-const QUuid @ClassName@::getUuid()
+QUuid @ClassName@::getUuid() const
 {
   return QUuid("@Uuid@");
 }
+
+// -----------------------------------------------------------------------------
+@ClassName@::Pointer @ClassName@::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
+}
+
+// -----------------------------------------------------------------------------
+std::shared_ptr<@ClassName@> @ClassName@::New()
+{
+  struct make_shared_enabler : public @ClassName@
+  {
+  };
+  std::shared_ptr<make_shared_enabler> val = std::make_shared<make_shared_enabler>();
+  val->setupFilterParameters();
+  return val;
+}
+
+// -----------------------------------------------------------------------------
+QString @ClassName@::getNameOfClass() const
+{
+  return QString("@ClassName@");
+}
+
+// -----------------------------------------------------------------------------
+QString @ClassName@::ClassName()
+{
+  return QString("@ClassName@");
+}
+
+
+@Filter_Parameter_Definitions@
 

@@ -35,19 +35,20 @@
 
 #include "DataContainerArrayProxyWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 DataContainerArrayProxyWidgetCodeGenerator::DataContainerArrayProxyWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "DataArrayPath")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "DataContainerArrayProxy")
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataContainerArrayProxyWidgetCodeGenerator::~DataContainerArrayProxyWidgetCodeGenerator()
-{}
+DataContainerArrayProxyWidgetCodeGenerator::~DataContainerArrayProxyWidgetCodeGenerator() = default;
 
 // -----------------------------------------------------------------------------
 //
@@ -89,4 +90,10 @@ QList<QString> DataContainerArrayProxyWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/DataContainerArrayProxyFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+DataContainerArrayProxyWidgetCodeGenerator::Pointer DataContainerArrayProxyWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }

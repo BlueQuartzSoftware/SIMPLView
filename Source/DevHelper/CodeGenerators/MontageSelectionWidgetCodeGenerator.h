@@ -33,7 +33,8 @@
 
 #pragma once
 
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
@@ -41,7 +42,12 @@
 class MontageSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  SIMPL_SHARED_POINTERS(MontageSelectionWidgetCodeGenerator)
+  using Self = MontageSelectionWidgetCodeGenerator;
+  using Pointer = std::shared_ptr<Self>;
+  using ConstPointer = std::shared_ptr<const Self>;
+  using WeakPointer = std::weak_ptr<Self>;
+  using ConstWeakPointer = std::weak_ptr<Self>;
+  static Pointer NullPointer();
 
   static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
   {
@@ -51,11 +57,11 @@ public:
 
   virtual ~MontageSelectionWidgetCodeGenerator();
 
-  virtual QString generateSetupFilterParameters();
+  QString generateSetupFilterParameters() override;
 
-  virtual QString generateDataCheck();
+  QString generateDataCheck() override;
 
-  virtual QString generateFilterParameters();
+  QString generateFilterParameters() override;
 
   virtual QList<QString> generateHIncludes();
 
@@ -67,4 +73,6 @@ public:
   MontageSelectionWidgetCodeGenerator(MontageSelectionWidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
   MontageSelectionWidgetCodeGenerator& operator=(const MontageSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
   MontageSelectionWidgetCodeGenerator& operator=(MontageSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+private:
 };

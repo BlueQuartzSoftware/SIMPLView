@@ -35,15 +35,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include "SIMPLib/SIMPLib.h"
-#include "SIMPLib/Common/SIMPLibSetGetMacros.h"
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 class AttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
   public:
-    SIMPL_SHARED_POINTERS(AttributeMatrixSelectionWidgetCodeGenerator)
+    using Self = AttributeMatrixSelectionWidgetCodeGenerator;
+    using Pointer = std::shared_ptr<Self>;
+    using ConstPointer = std::shared_ptr<const Self>;
+    using WeakPointer = std::weak_ptr<Self>;
+    using ConstWeakPointer = std::weak_ptr<Self>;
+    static Pointer NullPointer();
 
     static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
     {
@@ -53,13 +59,13 @@ class AttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
 
     virtual ~AttributeMatrixSelectionWidgetCodeGenerator();
 
-    virtual QString generateSetupFilterParameters();
+    QString generateSetupFilterParameters() override;
 
-    virtual QString generateDataCheck();
+    QString generateDataCheck() override;
 
-    virtual QString generateFilterParameters();
+    QString generateFilterParameters() override;
 
-    virtual QList<QString> generateCPPIncludes();
+    QList<QString> generateCPPIncludes() override;
 
   protected:
     AttributeMatrixSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
@@ -69,5 +75,7 @@ class AttributeMatrixSelectionWidgetCodeGenerator : public FPCodeGenerator
     AttributeMatrixSelectionWidgetCodeGenerator(AttributeMatrixSelectionWidgetCodeGenerator&&) = delete;      // Move Constructor Not Implemented
     AttributeMatrixSelectionWidgetCodeGenerator& operator=(const AttributeMatrixSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
     AttributeMatrixSelectionWidgetCodeGenerator& operator=(AttributeMatrixSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+
+  private:
 };
 

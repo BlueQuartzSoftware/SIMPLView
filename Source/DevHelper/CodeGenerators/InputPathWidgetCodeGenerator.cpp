@@ -35,6 +35,8 @@
 
 #include "InputPathWidgetCodeGenerator.h"
 
+#include <QtCore/QTextStream>
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -89,4 +91,10 @@ QList<QString> InputPathWidgetCodeGenerator::generateCPPIncludes()
   QList<QString> list;
   list.push_back("#include \"SIMPLib/FilterParameters/InputPathFilterParameter.h\"");
   return list;
+}
+
+// -----------------------------------------------------------------------------
+InputPathWidgetCodeGenerator::Pointer InputPathWidgetCodeGenerator::NullPointer()
+{
+  return Pointer(static_cast<Self*>(nullptr));
 }
