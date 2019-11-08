@@ -105,6 +105,8 @@ set(DevHelper_CodeGenerator_HDRS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.h
   ${DevHelper_SOURCE_DIR}/CodeGenerators/UInt64WidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/MontageStructureSelectionWidgetCodeGenerator.h
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerGridSelectionWidgetCodeGenerator.h
   )
 
 set(DevHelper_CodeGenerator_SRCS
@@ -157,6 +159,8 @@ set(DevHelper_CodeGenerator_SRCS
   ${DevHelper_SOURCE_DIR}/CodeGenerators/StringWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/ThirdOrderPolynomialWidgetCodeGenerator.cpp
   ${DevHelper_SOURCE_DIR}/CodeGenerators/UInt64WidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/MontageStructureSelectionWidgetCodeGenerator.cpp
+  ${DevHelper_SOURCE_DIR}/CodeGenerators/DataContainerGridSelectionWidgetCodeGenerator.cpp
   )
 
 cmp_IDE_SOURCE_PROPERTIES( "DevHelper/CodeGenerators" "${DevHelper_CodeGenerator_HDRS}" "${DevHelper_CodeGenerator_SRCS}" "${PROJECT_INSTALL_HEADERS}")
