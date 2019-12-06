@@ -1,5 +1,6 @@
 /* ============================================================================
  * Copyright (c) 2019 BlueQuartz Software, LLC
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -11,9 +12,9 @@
  * list of conditions and the following disclaimer in the documentation and/or
  * other materials provided with the distribution.
  *
- * Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
- * contributors may be used to endorse or promote products derived from this software
- * without specific prior written permission.
+ * Neither the names of any of the BlueQuartz Software contributors
+ * may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -26,11 +27,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * The code contained herein was partially funded by the followig contracts:
- *    United States Air Force Prime Contract FA8650-15-D-5231
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
 #pragma once
 
 #include <memory>
@@ -39,10 +37,10 @@
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class IntVec2WidgetCodeGenerator : public FPCodeGenerator
+class DataContainerGridSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  using Self = IntVec2WidgetCodeGenerator;
+  using Self = DataContainerGridSelectionWidgetCodeGenerator;
   using Pointer = std::shared_ptr<Self>;
   using ConstPointer = std::shared_ptr<const Self>;
   using WeakPointer = std::weak_ptr<Self>;
@@ -51,11 +49,11 @@ public:
 
   static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
   {
-    Pointer sharedPtr(new IntVec2WidgetCodeGenerator(humanLabel, propertyName, category, initValue));
+    Pointer sharedPtr(new DataContainerGridSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
     return sharedPtr;
   }
 
-  virtual ~IntVec2WidgetCodeGenerator();
+  virtual ~DataContainerGridSelectionWidgetCodeGenerator();
 
   QString generateSetupFilterParameters() override;
 
@@ -63,16 +61,16 @@ public:
 
   QString generateFilterParameters() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateCPPIncludes() override;
 
 protected:
-  IntVec2WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+  DataContainerGridSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
 
 public:
-  IntVec2WidgetCodeGenerator(const IntVec2WidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented
-  IntVec2WidgetCodeGenerator(IntVec2WidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
-  IntVec2WidgetCodeGenerator& operator=(const IntVec2WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
-  IntVec2WidgetCodeGenerator& operator=(IntVec2WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+  DataContainerGridSelectionWidgetCodeGenerator(const DataContainerGridSelectionWidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented
+  DataContainerGridSelectionWidgetCodeGenerator(DataContainerGridSelectionWidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
+  DataContainerGridSelectionWidgetCodeGenerator& operator=(const DataContainerGridSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+  DataContainerGridSelectionWidgetCodeGenerator& operator=(DataContainerGridSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 
 private:
 };

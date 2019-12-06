@@ -1,5 +1,5 @@
 /* ============================================================================
- * Copyright (c) 2019 BlueQuartz Software, LLC
+ * Copyright (c) 2009-2016 BlueQuartz Software, LLC
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,9 +26,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * The code contained herein was partially funded by the followig contracts:
- *    United States Air Force Prime Contract FA8650-15-D-5231
- *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #pragma once
@@ -39,23 +36,19 @@
 
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
-class IntVec2WidgetCodeGenerator : public FPCodeGenerator
+class MontageStructureSelectionWidgetCodeGenerator : public FPCodeGenerator
 {
 public:
-  using Self = IntVec2WidgetCodeGenerator;
+  using Self = MontageStructureSelectionWidgetCodeGenerator;
   using Pointer = std::shared_ptr<Self>;
   using ConstPointer = std::shared_ptr<const Self>;
   using WeakPointer = std::weak_ptr<Self>;
   using ConstWeakPointer = std::weak_ptr<const Self>;
   static Pointer NullPointer();
 
-  static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
-  {
-    Pointer sharedPtr(new IntVec2WidgetCodeGenerator(humanLabel, propertyName, category, initValue));
-    return sharedPtr;
-  }
+  static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
-  virtual ~IntVec2WidgetCodeGenerator();
+  ~MontageStructureSelectionWidgetCodeGenerator() override;
 
   QString generateSetupFilterParameters() override;
 
@@ -63,16 +56,16 @@ public:
 
   QString generateFilterParameters() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateCPPIncludes() override;
 
 protected:
-  IntVec2WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+  MontageStructureSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
 public:
-  IntVec2WidgetCodeGenerator(const IntVec2WidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented
-  IntVec2WidgetCodeGenerator(IntVec2WidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
-  IntVec2WidgetCodeGenerator& operator=(const IntVec2WidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
-  IntVec2WidgetCodeGenerator& operator=(IntVec2WidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
+  MontageStructureSelectionWidgetCodeGenerator(const MontageStructureSelectionWidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented
+  MontageStructureSelectionWidgetCodeGenerator(MontageStructureSelectionWidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
+  MontageStructureSelectionWidgetCodeGenerator& operator=(const MontageStructureSelectionWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
+  MontageStructureSelectionWidgetCodeGenerator& operator=(MontageStructureSelectionWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
 
 private:
 };
