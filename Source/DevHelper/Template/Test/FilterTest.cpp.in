@@ -35,17 +35,6 @@ class @ClassName@
   // -----------------------------------------------------------------------------
   //
   // -----------------------------------------------------------------------------
-  void RemoveTestFiles()
-  {
-  #if REMOVE_TEST_FILES
-    QFile::remove(UnitTest::@ClassName@::TestFile1);
-    QFile::remove(UnitTest::@ClassName@::TestFile2);
-  #endif
-  }
-
-  // -----------------------------------------------------------------------------
-  //
-  // -----------------------------------------------------------------------------
   int TestFilterAvailability()
   {
     // Now instantiate the @ClassName@ Filter from the FilterManager
@@ -70,9 +59,8 @@ class @ClassName@
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    /* Please write @ClassName@ test code here.
     *
-    * Your IO test files are:
-    * UnitTest::@ClassName@::TestFile1
-    * UnitTest::@ClassName@::TestFile2
+    * To create IO test files, please edit the file template at @PluginName@/Test/TestFileLocations.h.in.
+    * Add a @ClassName@ namespace inside the UnitTest namespace, and add your test file paths to your new namespace.
     *
     * SIMPLib provides some macros that will throw exceptions when a test fails
     * and thus report that during testing. These macros are located in the
@@ -102,8 +90,6 @@ class @ClassName@
     DREAM3D_REGISTER_TEST( TestFilterAvailability() );
 
     DREAM3D_REGISTER_TEST( Test@ClassName@() )
-
-    DREAM3D_REGISTER_TEST( RemoveTestFiles() )
   }
 
   private:
