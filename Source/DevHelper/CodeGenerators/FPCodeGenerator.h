@@ -66,7 +66,7 @@ class FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue);
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
     virtual ~FPCodeGenerator();
 
@@ -96,7 +96,7 @@ class FPCodeGenerator
     virtual QString generateFilterParameters();
 
   protected:
-    FPCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue, QString varType, bool podType = false);
+    FPCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue, const QString& varType, bool podType = false);
 
     QString getPropertyName();
     QString getHumanLabel();
