@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IntVec3WidgetCodeGenerator::IntVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+IntVec3WidgetCodeGenerator::IntVec3WidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "IntVec3Type")
 {
 }

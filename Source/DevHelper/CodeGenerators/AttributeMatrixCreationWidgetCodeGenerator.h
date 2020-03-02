@@ -51,7 +51,7 @@ class AttributeMatrixCreationWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new AttributeMatrixCreationWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -66,7 +66,7 @@ class AttributeMatrixCreationWidgetCodeGenerator : public FPCodeGenerator
     QList<QString> generateCPPIncludes() override;
 
   protected:
-    AttributeMatrixCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    AttributeMatrixCreationWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     AttributeMatrixCreationWidgetCodeGenerator(const AttributeMatrixCreationWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented

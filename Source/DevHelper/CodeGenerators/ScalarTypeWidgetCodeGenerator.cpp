@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+ScalarTypeWidgetCodeGenerator::ScalarTypeWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "SIMPL::NumericTypes::Type", true)
 {
 }

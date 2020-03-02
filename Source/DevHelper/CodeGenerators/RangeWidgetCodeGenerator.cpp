@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-RangeWidgetCodeGenerator::RangeWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+RangeWidgetCodeGenerator::RangeWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "FPRangePair")
 {
 }

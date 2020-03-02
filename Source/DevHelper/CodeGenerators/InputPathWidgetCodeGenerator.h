@@ -51,7 +51,7 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new InputPathWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -68,7 +68,7 @@ class InputPathWidgetCodeGenerator : public FPCodeGenerator
     QList<QString> generateCPPIncludes() override;
 
   protected:
-    InputPathWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    InputPathWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     InputPathWidgetCodeGenerator(const InputPathWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented

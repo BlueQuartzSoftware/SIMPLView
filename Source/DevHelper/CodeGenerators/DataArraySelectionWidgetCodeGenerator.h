@@ -51,7 +51,7 @@ class DataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new DataArraySelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -68,7 +68,7 @@ class DataArraySelectionWidgetCodeGenerator : public FPCodeGenerator
     QList<QString> generateCPPIncludes() override;
 
   protected:
-    DataArraySelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    DataArraySelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     DataArraySelectionWidgetCodeGenerator(const DataArraySelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented

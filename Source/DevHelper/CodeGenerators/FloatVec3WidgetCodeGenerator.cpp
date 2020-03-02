@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FloatVec3WidgetCodeGenerator::FloatVec3WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+FloatVec3WidgetCodeGenerator::FloatVec3WidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "FloatVec3Type")
 {
 }

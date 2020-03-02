@@ -47,7 +47,7 @@ public:
   using ConstWeakPointer = std::weak_ptr<const Self>;
   static Pointer NullPointer();
 
-  static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+  static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
   {
     Pointer sharedPtr(new DataContainerGridSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
     return sharedPtr;
@@ -64,7 +64,7 @@ public:
   QList<QString> generateCPPIncludes() override;
 
 protected:
-  DataContainerGridSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+  DataContainerGridSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
 public:
   DataContainerGridSelectionWidgetCodeGenerator(const DataContainerGridSelectionWidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented

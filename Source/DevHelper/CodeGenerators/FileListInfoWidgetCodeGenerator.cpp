@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FileListInfoWidgetCodeGenerator::FileListInfoWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+FileListInfoWidgetCodeGenerator::FileListInfoWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "FileListInfo_t")
 {
 }

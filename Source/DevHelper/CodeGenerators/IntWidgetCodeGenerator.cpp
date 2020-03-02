@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IntWidgetCodeGenerator::IntWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+IntWidgetCodeGenerator::IntWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "int32_t", true)
 {
 }

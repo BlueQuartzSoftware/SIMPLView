@@ -51,7 +51,7 @@ class SecondOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new SecondOrderPolynomialWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -68,7 +68,7 @@ class SecondOrderPolynomialWidgetCodeGenerator : public FPCodeGenerator
     virtual QList<QString> generateHIncludes();
 
   protected:
-    SecondOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    SecondOrderPolynomialWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     SecondOrderPolynomialWidgetCodeGenerator(const SecondOrderPolynomialWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
