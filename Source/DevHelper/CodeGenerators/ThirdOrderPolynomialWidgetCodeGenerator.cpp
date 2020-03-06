@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ThirdOrderPolynomialWidgetCodeGenerator::ThirdOrderPolynomialWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+ThirdOrderPolynomialWidgetCodeGenerator::ThirdOrderPolynomialWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float3rdOrderPoly_t")
 {
 }

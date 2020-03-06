@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MultiAttributeMatrixSelectionWidgetCodeGenerator::MultiAttributeMatrixSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+MultiAttributeMatrixSelectionWidgetCodeGenerator::MultiAttributeMatrixSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "QVector<DataArrayPath>")
 {
 }

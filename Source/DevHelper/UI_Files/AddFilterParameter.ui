@@ -122,6 +122,15 @@
    <header>QtSFSDropLabel.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>varName</tabstop>
+  <tabstop>humanName</tabstop>
+  <tabstop>type</tabstop>
+  <tabstop>category</tabstop>
+  <tabstop>initValue</tabstop>
+  <tabstop>cancelBtn</tabstop>
+  <tabstop>addFilterParameterBtn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

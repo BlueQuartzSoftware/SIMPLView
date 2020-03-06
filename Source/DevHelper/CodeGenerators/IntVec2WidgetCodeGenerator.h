@@ -49,7 +49,7 @@ public:
   using ConstWeakPointer = std::weak_ptr<const Self>;
   static Pointer NullPointer();
 
-  static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+  static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
   {
     Pointer sharedPtr(new IntVec2WidgetCodeGenerator(humanLabel, propertyName, category, initValue));
     return sharedPtr;
@@ -66,7 +66,7 @@ public:
   virtual QList<QString> generateHIncludes();
 
 protected:
-  IntVec2WidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+  IntVec2WidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
 public:
   IntVec2WidgetCodeGenerator(const IntVec2WidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented

@@ -49,7 +49,7 @@ public:
   using ConstWeakPointer = std::weak_ptr<const Self>;
   static Pointer NullPointer();
 
-  static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+  static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
   {
     Pointer sharedPtr(new MontageSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
     return sharedPtr;
@@ -66,7 +66,7 @@ public:
   virtual QList<QString> generateHIncludes();
 
 protected:
-  MontageSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+  MontageSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
 public:
   MontageSelectionWidgetCodeGenerator(const MontageSelectionWidgetCodeGenerator&) = delete;            // Copy Constructor Not Implemented

@@ -51,7 +51,7 @@ class ComparisonSelectionWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new ComparisonSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -70,7 +70,7 @@ class ComparisonSelectionWidgetCodeGenerator : public FPCodeGenerator
     QList<QString> generateCPPIncludes() override;
 
   protected:
-    ComparisonSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    ComparisonSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     ComparisonSelectionWidgetCodeGenerator(const ComparisonSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented

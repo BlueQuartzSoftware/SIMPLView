@@ -39,7 +39,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataArrayCreationWidgetCodeGenerator::DataArrayCreationWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+DataArrayCreationWidgetCodeGenerator::DataArrayCreationWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "DataArrayPath")
 {
 }

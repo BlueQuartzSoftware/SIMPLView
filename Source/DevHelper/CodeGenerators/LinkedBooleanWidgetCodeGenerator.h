@@ -51,7 +51,7 @@ class LinkedBooleanWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new LinkedBooleanWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -68,7 +68,7 @@ class LinkedBooleanWidgetCodeGenerator : public FPCodeGenerator
     QList<QString> generateCPPIncludes() override;
 
   protected:
-    LinkedBooleanWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    LinkedBooleanWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     LinkedBooleanWidgetCodeGenerator(const LinkedBooleanWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented

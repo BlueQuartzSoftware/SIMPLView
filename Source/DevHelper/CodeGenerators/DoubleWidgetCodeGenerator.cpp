@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DoubleWidgetCodeGenerator::DoubleWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+DoubleWidgetCodeGenerator::DoubleWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "double", true)
 {
 }

@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+FloatWidgetCodeGenerator::FloatWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "float", true)
 {
 }

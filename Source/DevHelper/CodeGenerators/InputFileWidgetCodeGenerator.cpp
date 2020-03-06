@@ -40,7 +40,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-InputFileWidgetCodeGenerator::InputFileWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue)
+InputFileWidgetCodeGenerator::InputFileWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
 : FPCodeGenerator(humanLabel, propertyName, category, initValue, "QString")
 {
 }

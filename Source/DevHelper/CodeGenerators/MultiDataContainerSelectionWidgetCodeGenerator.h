@@ -51,7 +51,7 @@ class MultiDataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
     using ConstWeakPointer = std::weak_ptr<const Self>;
     static Pointer NullPointer();
 
-    static Pointer New(QString humanLabel, QString propertyName, QString category, QString initValue)
+    static Pointer New(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
     {
       Pointer sharedPtr(new MultiDataContainerSelectionWidgetCodeGenerator(humanLabel, propertyName, category, initValue));
       return sharedPtr;
@@ -68,7 +68,7 @@ class MultiDataContainerSelectionWidgetCodeGenerator : public FPCodeGenerator
     virtual QList<QString> generateHIncludes();
 
   protected:
-    MultiDataContainerSelectionWidgetCodeGenerator(QString humanLabel, QString propertyName, QString category, QString initValue);
+    MultiDataContainerSelectionWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
 
   public:
     MultiDataContainerSelectionWidgetCodeGenerator(const MultiDataContainerSelectionWidgetCodeGenerator&) = delete; // Copy Constructor Not Implemented
