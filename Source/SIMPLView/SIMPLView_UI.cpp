@@ -35,6 +35,8 @@
 
 #include "SIMPLView_UI.h"
 
+#include <algorithm>
+
 //-- Qt Includes
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -848,7 +850,7 @@ void SIMPLView_UI::handlePipelineChanges()
 
   SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
   QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-  qSort(selectedIndexes);
+  std::sort(selectedIndexes.begin(), selectedIndexes.end());
 
   if(selectedIndexes.size() == 1)
   {
@@ -940,7 +942,7 @@ void SIMPLView_UI::pipelineDidFinish()
   m_Ui->filterLibraryWidget->blockSignals(false);
 
   QModelIndexList selectedIndexes = m_Ui->pipelineListWidget->getPipelineView()->selectionModel()->selectedRows();
-  qSort(selectedIndexes);
+  std::sort(selectedIndexes.begin(), selectedIndexes.end());
 
   if(selectedIndexes.size() == 1)
   {
@@ -1024,7 +1026,7 @@ void SIMPLView_UI::filterSelectionChanged(const QItemSelection& selected, const 
   PipelineModel* pipelineModel = pipelineView->getPipelineModel();
 
   QModelIndexList selectedIndexes = pipelineView->selectionModel()->selectedRows();
-  qSort(selectedIndexes);
+  std::sort(selectedIndexes.begin(), selectedIndexes.end());
 
   // Animate a selection border for selected indexes
   for(const QModelIndex& index : selected.indexes())
