@@ -161,7 +161,7 @@ QString FPCodeGenerator::generateFilterAccessorDeclarations()
 QString FPCodeGenerator::generatePybindContents()
 {
   // return "";
-  return QString("    PYB11_PROPERTY(" + getVariableType() + " " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
+  return QString("  PYB11_PROPERTY(" + getVariableType() + " " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
 }
 
 // -----------------------------------------------------------------------------

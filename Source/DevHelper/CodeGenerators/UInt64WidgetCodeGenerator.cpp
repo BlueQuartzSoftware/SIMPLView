@@ -102,7 +102,7 @@ QList<QString> UInt64WidgetCodeGenerator::generateCPPIncludes()
 // -----------------------------------------------------------------------------
 // QString UInt64WidgetCodeGenerator::generatePybindContents()
 //{
-//  return QString("    PYB11_PROPERTY(uint64_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
+//  return QString("  PYB11_PROPERTY(uint64_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")\n");
 //}
 
 // -----------------------------------------------------------------------------
