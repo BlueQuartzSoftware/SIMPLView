@@ -30,3 +30,14 @@ SIMPL_GenerateUnitTestFile(PLUGIN_NAME ${PLUGIN_NAME}
                                         ${${PLUGIN_NAME}_PARENT_BINARY_DIR}
 )
 
+if(SIMPL_ENABLE_PYTHON)
+  set(PLUGIN_PYTHON_TESTS
+  )
+
+  include(${SIMPLProj_SOURCE_DIR}/Wrapping/Python/Binding/CreatePybind11Module.cmake)
+
+  CreatePythonTests(PREFIX "PY_${PLUGIN_NAME}"
+    INPUT_DIR ${${PLUGIN_NAME}Test_SOURCE_DIR}/Python
+    TEST_NAMES ${PLUGIN_PYTHON_TESTS}
+  )
+endif()

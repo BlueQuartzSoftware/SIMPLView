@@ -17,12 +17,12 @@ class @PluginName@_EXPORT @ClassName@ : public AbstractFilter
 {
   Q_OBJECT
 
-#ifdef SIMPL_ENABLE_PYTHON
   // clang-format off
-  PYB11_CREATE_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
+  PYB11_BEGIN_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
+  PYB11_FILTER()
   @PYBindContents@
+  PYB11_END_BINDINGS()
   // clang-format on
-#endif
 
 public:
 
