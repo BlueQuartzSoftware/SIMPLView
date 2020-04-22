@@ -20,6 +20,8 @@ class @PluginName@_EXPORT @ClassName@ : public AbstractFilter
   // clang-format off
   PYB11_BEGIN_BINDINGS(@ClassName@ SUPERCLASS AbstractFilter)
   PYB11_FILTER()
+  PYB11_SHARED_POINTERS(@ClassName@)
+  PYB11_FILTER_NEW_MACRO(@ClassName@)
   @PYBindContents@
   PYB11_END_BINDINGS()
   // clang-format on
@@ -33,7 +35,7 @@ public:
   using ConstWeakPointer = std::weak_ptr<const Self>;
   static Pointer NullPointer();
 
-  static std::shared_ptr<@ClassName@> New();
+  static Pointer New();
 
   /**
    * @brief Returns the name of the class for @ClassName@
