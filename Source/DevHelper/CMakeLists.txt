@@ -275,9 +275,15 @@ set_target_properties(TemplateFileCopy PROPERTIES FOLDER ZZ_COPY_FILES)
 # the HTML help files
 add_dependencies(${PROJECT_NAME} TemplateFileCopy)
 
-#- This installs all the help files. Note that we assume a flat directory structure
-#- in the "Help" folder, ie, all html files, images, etc are all in the "Help"
-#- folder and NOT in any subfolders beyond that.
-install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template
-        DESTINATION .
-        COMPONENT Applications )
+# --------------------------------------------------------------------
+# Generate install rules for the template files
+if(APPLE)
+  install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template
+          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}/Resources"
+          COMPONENT Applications)
+else()
+  install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template  
+          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
+          COMPONENT Applications)
+endif()
+
