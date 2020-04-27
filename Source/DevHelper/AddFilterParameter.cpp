@@ -35,6 +35,7 @@
 #include "AddFilterParameter.h"
 
 #include <iostream>
+#include <algorithm>
 
 #include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
