@@ -69,9 +69,9 @@ StyleSheetEditor::StyleSheetEditor(QWidget* parent)
 
   connect(&m_FileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(qssFileChanged(const QString&)));
 
-  QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/Midnight.json");
+  QString styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/BrandedDREAM3D/DREAM3D/StyleSheets/Midnight.json");
   m_Ui->jsonFilePath->setText(styleSheetPath);
-  styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/DREAM3D/ExternalProjects/BrandedDREAM3D/DREAM3D/StyleSheets/Midnight.css");
+  styleSheetPath = QString("%1/%2").arg(QDir::homePath(), 1).arg("DREAM3D-Dev/BrandedDREAM3D/DREAM3D/StyleSheets/Midnight.css");
   m_Ui->cssFilePath->setText(styleSheetPath);
   on_reloadButton_stateChanged(Qt::Checked);
 }
