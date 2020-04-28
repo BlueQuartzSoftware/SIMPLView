@@ -277,13 +277,20 @@ add_dependencies(${PROJECT_NAME} TemplateFileCopy)
 
 # --------------------------------------------------------------------
 # Generate install rules for the template files
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 if(APPLE)
-  install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template
-          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}/Resources"
-          COMPONENT Applications)
+  if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template
+            DESTINATION "${PROJECT_NAME}${EXE_DEBUG_EXTENSION}.app/Contents/Resources"
+            COMPONENT Applications)
+  else()
+    install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template
+            DESTINATION "${PROJECT_NAME}.app/Contents/Resources"
+            COMPONENT Applications)    
+  endif()
 else()
   install(DIRECTORY ${DevHelper_SOURCE_DIR}/Template  
-          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
+          DESTINATION "."
           COMPONENT Applications)
 endif()
 
