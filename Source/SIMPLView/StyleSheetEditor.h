@@ -74,8 +74,7 @@ private slots:
   void qssFileChanged(const QString& filePath);
   void on_jsonFilePath_returnPressed();
   void on_cssFilePath_returnPressed();
-  
-  
+
 private:
   void loadStyleSheet(const QString& sheetName);
 
@@ -83,4 +82,3 @@ private:
 
   QFileSystemWatcher m_FileWatcher;
 };
-

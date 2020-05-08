@@ -94,7 +94,7 @@ void InitFonts(const QStringList& fontList)
 // -----------------------------------------------------------------------------
 void InitStyleSheetEditor()
 {
-  //SVStyle* style = SVStyle::Instance();
+  // SVStyle* style = SVStyle::Instance();
 
   StyleSheetEditor* styleSheetEditor = new StyleSheetEditor(nullptr);
   styleSheetEditor->show();

@@ -47,27 +47,20 @@
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
 
-
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-PMFileGenerator::PMFileGenerator(QString outputDir,
-                                 QString pathTemplate,
-                                 QString fileName,
-                                 QString codeTemplateResourcePath,
-                                 QTreeWidgetItem* wi,
-                                 QObject* parent):
-  PMDirGenerator(outputDir, pathTemplate, QString(""), codeTemplateResourcePath, wi, parent),
-  setupFPContents(""),
-  fpContents(""),
-  dataCheckContents(""),
-  initListContents(""),
-  filterHIncludesContents(""),
-  filterCPPIncludesContents(""),
-  m_FileName(fileName)
+PMFileGenerator::PMFileGenerator(QString outputDir, QString pathTemplate, QString fileName, QString codeTemplateResourcePath, QTreeWidgetItem* wi, QObject* parent)
+: PMDirGenerator(outputDir, pathTemplate, QString(""), codeTemplateResourcePath, wi, parent)
+, setupFPContents("")
+, fpContents("")
+, dataCheckContents("")
+, initListContents("")
+, filterHIncludesContents("")
+, filterCPPIncludesContents("")
+, m_FileName(fileName)
 {
-  if (nullptr != wi)
+  if(nullptr != wi)
   {
     wi->setText(0, fileName);
   }
@@ -78,7 +71,6 @@ PMFileGenerator::PMFileGenerator(QString outputDir,
 // -----------------------------------------------------------------------------
 PMFileGenerator::~PMFileGenerator()
 {
-  
 }
 
 // -----------------------------------------------------------------------------
@@ -96,7 +88,7 @@ void PMFileGenerator::pluginNameChanged(const QString& pluginName)
 {
   QString pin = cleanName(pluginName);
 
-  if (pin.isEmpty() == true)
+  if(pin.isEmpty() == true)
   {
     setPluginName("Unknown Plugin Name");
   }
@@ -107,15 +99,15 @@ void PMFileGenerator::pluginNameChanged(const QString& pluginName)
 
   m_FilterName = pin + "Filter";
 
-  if (isNameChangeable() == false)
+  if(isNameChangeable() == false)
   {
     return;
   }
   m_FileName = pin + getDisplaySuffix();
 
-  if (nullptr != getTreeWidgetItem())
+  if(nullptr != getTreeWidgetItem())
   {
-    getTreeWidgetItem()->setText(0, m_FileName );
+    getTreeWidgetItem()->setText(0, m_FileName);
   }
 }
 
@@ -124,7 +116,7 @@ void PMFileGenerator::pluginNameChanged(const QString& pluginName)
 // -----------------------------------------------------------------------------
 void PMFileGenerator::outputDirChanged(const QString& outputDir)
 {
-//  qDebug() << "PMFileGenerator::outputDirChanged" << "\n";
+  //  qDebug() << "PMFileGenerator::outputDirChanged" << "\n";
   setOutputDir(outputDir);
 }
 
@@ -133,24 +125,24 @@ void PMFileGenerator::outputDirChanged(const QString& outputDir)
 // -----------------------------------------------------------------------------
 void PMFileGenerator::generateOutput()
 {
-//  qDebug() << "PMFileGenerator::generateOutput" << "\n";
-  if (doesGenerateOutput() == false)
+  //  qDebug() << "PMFileGenerator::generateOutput" << "\n";
+  if(doesGenerateOutput() == false)
   {
     return;
   }
 
-  //Get text feature values from widget
+  // Get text feature values from widget
   QString pluginName = getPluginName();
   QString pluginDir = getOutputDir();
 
-  if (pluginName.isEmpty() == true || pluginDir.isEmpty() == true)
+  if(pluginName.isEmpty() == true || pluginDir.isEmpty() == true)
   {
     return;
   }
 
   QString contents = getFileContents(QString());
 
-  if (contents.isEmpty() == false)
+  if(contents.isEmpty() == false)
   {
     QString parentPath = getOutputDir() + QDir::separator() + getPathTemplate().replace("@PluginName@", getPluginName());
     parentPath = QDir::toNativeSeparators(parentPath);
@@ -160,9 +152,9 @@ void PMFileGenerator::generateOutput()
 
     parentPath = parentPath + QDir::separator() + m_FileName;
 
-    //Write to file
+    // Write to file
     QFile f(parentPath);
-    if ( f.open(QIODevice::WriteOnly | QIODevice::Text) )
+    if(f.open(QIODevice::WriteOnly | QIODevice::Text))
     {
       QTextStream out(&f);
       out << contents;
@@ -187,7 +179,7 @@ QString PMFileGenerator::generateFileContents(QString replaceStr)
 // -----------------------------------------------------------------------------
 QString PMFileGenerator::getFileContents(const QString& replaceStr)
 {
-  //Get text feature values from widget
+  // Get text feature values from widget
   QString pluginName = getPluginName();
   QString pluginDir = getOutputDir();
   QString filterName = getFilterName();
@@ -200,9 +192,9 @@ QString PMFileGenerator::getFileContents(const QString& replaceStr)
     return text;
   }
 
-  //Open file
+  // Open file
   QFile rfile(getCodeTemplateResourcePath());
-  if (rfile.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(rfile.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&rfile);
     text = in.readAll();
@@ -249,8 +241,8 @@ QString PMFileGenerator::getFileContents(const QString& replaceStr)
 
     if(!replaceStr.isEmpty())
     {
-      text.replace("@AddTestText@", replaceStr);    // Replace token for Test/CMakeLists.txt file
-      text.replace("@Namespaces@", replaceStr);   // Replace token for Test/TestFileLocations.h.in file
+      text.replace("@AddTestText@", replaceStr); // Replace token for Test/CMakeLists.txt file
+      text.replace("@Namespaces@", replaceStr);  // Replace token for Test/TestFileLocations.h.in file
     }
     // ****************************************************************
 
@@ -266,12 +258,12 @@ QString PMFileGenerator::getFileContents(const QString& replaceStr)
 void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
 {
   //  qDebug() << "PMFileGenerator::generateOutput" << "\n";
-  if (doesGenerateOutput() == false)
+  if(doesGenerateOutput() == false)
   {
     return;
   }
 
-  //Get text feature values from widget
+  // Get text feature values from widget
   QString pluginName = getPluginName();
   QString pluginDir = getOutputDir();
 
@@ -282,9 +274,9 @@ void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
 
   //  QString classNameLowerCase = m_ClassName.toLower();
 
-  //Open file
+  // Open file
   QFile rfile(getCodeTemplateResourcePath());
-  if (rfile.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(rfile.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&rfile);
     QString text = in.readAll();
@@ -300,21 +292,21 @@ void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
 
     if(!names.isEmpty())
     {
-      if (getFileName() == "TestFileLocations.h.in")
+      if(getFileName() == "TestFileLocations.h.in")
       {
         QString replaceStr = createReplacementString(TESTFILELOCATIONS, names);
-        text.replace("@Namespaces@", replaceStr);   // Replace token for Test/TestFileLocations.h.in file
+        text.replace("@Namespaces@", replaceStr); // Replace token for Test/TestFileLocations.h.in file
       }
-      else if (getFileName() == "CMakeLists.txt")
+      else if(getFileName() == "CMakeLists.txt")
       {
         QString replaceStr = createReplacementString(CMAKELISTS, names);
-        text.replace("@AddTestText@", replaceStr);    // Replace token for Test/CMakeLists.txt file
+        text.replace("@AddTestText@", replaceStr); // Replace token for Test/CMakeLists.txt file
       }
     }
     else
     {
-      text.replace("\n  @Namespaces@\n", "");   // Replace token for Test/TestFileLocations.h.in file
-      text.replace("\n@AddTestText@\n", "");    // Replace token for Test/CMakeLists.txt file
+      text.replace("\n  @Namespaces@\n", ""); // Replace token for Test/TestFileLocations.h.in file
+      text.replace("\n@AddTestText@\n", "");  // Replace token for Test/CMakeLists.txt file
     }
 
     QString parentPath = getOutputDir() + QDir::separator() + getPathTemplate().replace("@PluginName@", getPluginName());
@@ -324,9 +316,9 @@ void PMFileGenerator::generateOutputWithFilterNames(QSet<QString> names)
     dir.mkpath(parentPath);
 
     parentPath = parentPath + QDir::separator() + m_FileName;
-    //Write to file
+    // Write to file
     QFile f(parentPath);
-    if (f.open(QIODevice::WriteOnly | QIODevice::Text))
+    if(f.open(QIODevice::WriteOnly | QIODevice::Text))
     {
       QTextStream out(&f);
       out << text;
@@ -343,15 +335,15 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
 
   QString replaceStr = "";
   QTextStream rsOut(&replaceStr);
-  if (type == CMAKELISTS)
+  if(type == CMAKELISTS)
   {
     // Build up the huge string full of namespaces using names
     QSet<QString>::iterator iter = names.begin();
-    while (iter != names.end())
+    while(iter != names.end())
     {
       QString name = *iter;
 
-      if (name == "@PluginName@Filter")
+      if(name == "@PluginName@Filter")
       {
         name.replace("@PluginName@", pluginName);
       }
@@ -359,15 +351,15 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
       ++iter;
     }
   }
-  else if (type == TESTFILELOCATIONS)
+  else if(type == TESTFILELOCATIONS)
   {
     // Build up the huge string full of namespaces using names
     QSet<QString>::iterator iter = names.begin();
-    while (iter != names.end())
+    while(iter != names.end())
     {
       QString name = *iter;
 
-      if (name == "@PluginName@Filter")
+      if(name == "@PluginName@Filter")
       {
         name.replace("@PluginName@", pluginName);
       }
@@ -377,7 +369,7 @@ QString PMFileGenerator::createReplacementString(FileType type, QSet<QString> na
       replaceStr.append("    const QString TestFile1(\"@TEST_TEMP_DIR@/TestFile1.txt\");\n");
       replaceStr.append("    const QString TestFile2(\"@TEST_TEMP_DIR@/TestFile2.txt\");\n");
       replaceStr.append("  }\n");
-      if (++iter != names.end())
+      if(++iter != names.end())
       {
         replaceStr.append("\n");
       }

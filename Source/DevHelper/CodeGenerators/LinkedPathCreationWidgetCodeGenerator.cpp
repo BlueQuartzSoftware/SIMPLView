@@ -55,7 +55,7 @@ QString LinkedPathCreationWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  //out << "  parameters.push_back(SIMPL_NEW_AM_WITH_LINKED_DC_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
+  // out << "  parameters.push_back(SIMPL_NEW_AM_WITH_LINKED_DC_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@));";
   out << "#error The correct code for the LinkedPathCreation Filter Parameter needs to be inserted here. Please see the documentation for the filter parameter.";
   return s;
 }

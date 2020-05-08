@@ -1,37 +1,37 @@
 /* ============================================================================
-* Copyright (c) 2009-2016 BlueQuartz Software, LLC
-*
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted provided that the following conditions are met:
-*
-* Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-*
-* Redistributions in binary form must reproduce the above copyright notice, this
-* list of conditions and the following disclaimer in the documentation and/or
-* other materials provided with the distribution.
-*
-* Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
-* contributors may be used to endorse or promote products derived from this software
-* without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-* USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-* The code contained herein was partially funded by the followig contracts:
-*    United States Air Force Prime Contract FA8650-07-D-5800
-*    United States Air Force Prime Contract FA8650-10-D-5210
-*    United States Prime Contract Navy N00173-07-C-2068
-*
-* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ * Copyright (c) 2009-2016 BlueQuartz Software, LLC
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
+ * contributors may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The code contained herein was partially funded by the followig contracts:
+ *    United States Air Force Prime Contract FA8650-07-D-5800
+ *    United States Air Force Prime Contract FA8650-10-D-5210
+ *    United States Prime Contract Navy N00173-07-C-2068
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #include "FilterMaker.h"
 
@@ -49,8 +49,6 @@
 #include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
-
-
 
 // -----------------------------------------------------------------------------
 //
@@ -138,10 +136,7 @@ void FilterMaker::on_filterName_textChanged(const QString& text)
 // -----------------------------------------------------------------------------
 void FilterMaker::on_selectBtn_clicked()
 {
-  QString pluginPath = QFileDialog::getExistingDirectory(this,
-                                                         tr("Select Plugin Folder"),
-                                                         m_OpenDialogLastDirectory,
-                                                         QFileDialog::ShowDirsOnly);
+  QString pluginPath = QFileDialog::getExistingDirectory(this, tr("Select Plugin Folder"), m_OpenDialogLastDirectory, QFileDialog::ShowDirsOnly);
 
   if(!pluginPath.isEmpty())
   {
@@ -163,15 +158,15 @@ void FilterMaker::on_codeChooser_currentIndexChanged(int index)
   // Update generators with new information from table
   updateFilterFileGenerators();
 
-  if (index == H_INDEX)
+  if(index == H_INDEX)
   {
     codeViewer->setText(m_hGenerator->generateFileContents());
   }
-  else if (index == CPP_INDEX)
+  else if(index == CPP_INDEX)
   {
     codeViewer->setText(m_cppGenerator->generateFileContents());
   }
-  else if (index == DOC_INDEX)
+  else if(index == DOC_INDEX)
   {
     codeViewer->setText(m_htmlGenerator->generateFileContents());
   }
@@ -265,7 +260,7 @@ void FilterMaker::addFilterParameterToTable(AddFilterParameter* widget)
   int row = filterParametersTable->rowCount();
   filterParametersTable->insertRow(row);
 
-  if (type == "SeparatorWidget")
+  if(type == "SeparatorWidget")
   {
     varNameItem->setFlags(Qt::NoItemFlags);
     initValueItem->setFlags(Qt::NoItemFlags);
@@ -312,7 +307,7 @@ void FilterMaker::updateFilterFileGenerators()
   QString filterName = this->filterName->text();
   QString pluginDirText = this->pluginDir->text();
 
-  if (pluginDirText.isEmpty() || filterName.isEmpty())
+  if(pluginDirText.isEmpty() || filterName.isEmpty())
   {
     return;
   }
@@ -332,8 +327,7 @@ void FilterMaker::updateFilterFileGenerators()
 
   m_cppGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".cpp"), resourceTemplate, nullptr, this));
 
-  connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)),
-          this, SLOT(generationError(const QString&)));
+  connect(m_cppGenerator.data(), SIGNAL(outputError(const QString&)), this, SLOT(generationError(const QString&)));
   m_cppGenerator->setDoesGenerateOutput(true);
   m_cppGenerator->setPluginName(fi.baseName());
   m_cppGenerator->setFilterName(filterName);
@@ -357,7 +351,7 @@ void FilterMaker::updateFilterFileGenerators()
     m_cppGenerator->setSetupFPContents(getDefaultSetupFPContents());
 
     QString defaultInitList = getDefaultInitListContents();
-    if (!defaultInitList.isEmpty())
+    if(!defaultInitList.isEmpty())
     {
       defaultInitList.prepend(":\n");
     }
@@ -377,8 +371,7 @@ void FilterMaker::updateFilterFileGenerators()
   }
   m_hGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".h"), resourceTemplate, nullptr, this));
 
-  connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)),
-          this, SLOT(generationError(const QString&)));
+  connect(m_hGenerator.data(), SIGNAL(outputError(const QString&)), this, SLOT(generationError(const QString&)));
   m_hGenerator->setDoesGenerateOutput(true);
   m_hGenerator->setPluginName(fi.baseName());
   m_hGenerator->setFilterName(filterName);
@@ -396,7 +389,6 @@ void FilterMaker::updateFilterFileGenerators()
     m_hGenerator->setFilterHIncludesContents(getDefaultFilterHIncludesContents());
   }
 
-
   // Documentation.md file
   pathTemplate = "Documentation/@PluginName@Filters/";
   resourceTemplate = QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Documentation/Filter/Documentation.md.in");
@@ -407,8 +399,7 @@ void FilterMaker::updateFilterFileGenerators()
   }
   m_htmlGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + ".md"), resourceTemplate, nullptr, this));
 
-  connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)),
-          this, SLOT(generationError(const QString&)));
+  connect(m_htmlGenerator.data(), SIGNAL(outputError(const QString&)), this, SLOT(generationError(const QString&)));
   m_htmlGenerator->setDoesGenerateOutput(true);
   m_htmlGenerator->setPluginName(fi.baseName());
   m_htmlGenerator->setFilterName(filterName);
@@ -423,8 +414,7 @@ void FilterMaker::updateFilterFileGenerators()
   }
   m_testGenerator = QSharedPointer<PMFileGenerator>(new PMFileGenerator(pluginDirText, pathTemplate, QString(filterName + "Test.cpp"), resourceTemplate, nullptr, this));
 
-  connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)),
-          this, SLOT(generationError(const QString&)));
+  connect(m_testGenerator.data(), SIGNAL(outputError(const QString&)), this, SLOT(generationError(const QString&)));
   m_testGenerator->setDoesGenerateOutput(true);
   m_testGenerator->setPluginName(fi.baseName());
   m_testGenerator->setFilterName(filterName);
@@ -449,7 +439,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
 {
   QMap<QString, QString> map;
 
-  if (filterParametersTable->rowCount() <= 0)
+  if(filterParametersTable->rowCount() <= 0)
   {
     return map;
   }
@@ -465,7 +455,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
   QString fpDeclarations = "";
 
   CodeGenFactory::Pointer factory = CodeGenFactory::New();
-  for (int row = 0; row < filterParametersTable->rowCount(); row++)
+  for(int row = 0; row < filterParametersTable->rowCount(); row++)
   {
     QString propertyName = filterParametersTable->item(row, VAR_NAME)->text();
     QString humanName = filterParametersTable->item(row, HUMAN_NAME)->text();
@@ -517,7 +507,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     if(!generator->generateHIncludes().isEmpty())
     {
       QList<QString> hIncludes = generator->generateHIncludes();
-      for (int i=0; i<hIncludes.size(); i++)
+      for(int i = 0; i < hIncludes.size(); i++)
       {
         if(!hIncludesSet.contains(hIncludes[i]))
         {
@@ -531,7 +521,7 @@ QMap<QString, QString> FilterMaker::getFunctionContents()
     if(!generator->generateCPPIncludes().isEmpty())
     {
       QList<QString> cppIncludes = generator->generateCPPIncludes();
-      for (int i=0; i<cppIncludes.size(); i++)
+      for(int i = 0; i < cppIncludes.size(); i++)
       {
         if(!cppIncludesSet.contains(cppIncludes[i]))
         {
@@ -596,29 +586,29 @@ void FilterMaker::updateSourceList()
   QStringList list = contents.split(QRegExp("\\n"));
   QStringListIterator sourceLines(list);
   QString searchString = "set(_PublicFilters";
-  if (!isPublic())
+  if(!isPublic())
   {
     searchString = "set(_PrivateFilters";
   }
 
-  while (sourceLines.hasNext())
+  while(sourceLines.hasNext())
   {
     QString line = sourceLines.next();
-    if (line.contains(searchString) && !keepGoing)
+    if(line.contains(searchString) && !keepGoing)
     {
       outLines.push_back(line);
-      while (sourceLines.hasNext())
+      while(sourceLines.hasNext())
       {
         line = sourceLines.next();
-        if (line.contains(filterName) && !keepGoing)
+        if(line.contains(filterName) && !keepGoing)
         {
           outLines.push_back(line);
           keepGoing = true;
         }
-        else if (line.contains(")"))
+        else if(line.contains(")"))
         {
           // We never found the filter name so lets add it back in
-          if (!keepGoing)
+          if(!keepGoing)
           {
             outLines.push_back("  " + filterName);
           }
@@ -639,7 +629,7 @@ void FilterMaker::updateSourceList()
   }
 
   source.remove();
-  if (source.open(QIODevice::WriteOnly))
+  if(source.open(QIODevice::WriteOnly))
   {
     source.write(outLines.join("\n").toLatin1().data());
     source.close();
@@ -664,7 +654,7 @@ void FilterMaker::updateTestLocations()
 
   QString namespaceStr = createNamespaceString();
   // Check to make sure we don't already have this filter in the namespace
-  if (contents.contains(namespaceStr) == true)
+  if(contents.contains(namespaceStr) == true)
   {
     return;
   }
@@ -674,10 +664,10 @@ void FilterMaker::updateTestLocations()
   QStringListIterator sourceLines(list);
   QString searchString = "#endif";
 
-  while (sourceLines.hasNext())
+  while(sourceLines.hasNext())
   {
     QString line = sourceLines.next();
-    if (line.contains(searchString))
+    if(line.contains(searchString))
     {
       QString str;
       QTextStream outStream(&str);
@@ -694,13 +684,12 @@ void FilterMaker::updateTestLocations()
   }
 
   source.remove();
-  if (source.open(QIODevice::WriteOnly))
+  if(source.open(QIODevice::WriteOnly))
   {
     source.write(outLines.join("\n").toLatin1().data());
     source.close();
   }
 }
-
 
 // -----------------------------------------------------------------------------
 //
@@ -712,7 +701,6 @@ void FilterMaker::updateTestList()
 
   QString testPath = pluginDir + "/Test/CMakeLists.txt";
   testPath = QDir::toNativeSeparators(testPath);
-
 
   QFile source(testPath);
   source.open(QFile::ReadOnly);
@@ -765,9 +753,8 @@ bool FilterMaker::validityCheck()
 
   QFileInfo filtersDirInfo(filtersDir);
 
-  if (filterName.isEmpty() == false && filterName.contains(QRegExp("[^a-zA-Z_-/\\s]")) == false
-      && filterName.contains(QRegExp("(Filter|Plugin)$")) == false && pluginDir.isEmpty() == false
-      && filtersDirInfo.exists() == true)
+  if(filterName.isEmpty() == false && filterName.contains(QRegExp("[^a-zA-Z_-/\\s]")) == false && filterName.contains(QRegExp("(Filter|Plugin)$")) == false && pluginDir.isEmpty() == false &&
+     filtersDirInfo.exists() == true)
   {
     // No Errors
     generateBtn->setEnabled(true);
@@ -784,7 +771,7 @@ bool FilterMaker::validityCheck()
     errorString->setTextFormat(Qt::PlainText);
     errorString->setTextInteractionFlags(Qt::NoTextInteraction);
 
-    if (filterName.contains(QRegExp("[^a-zA-Z_-/\\s]")) == true)
+    if(filterName.contains(QRegExp("[^a-zA-Z_-/\\s]")) == true)
     {
       // Filter name has illegal characters
       QString linkText = "<a href=#openWindow>Learn More.</a>";
@@ -792,25 +779,25 @@ bool FilterMaker::validityCheck()
       errorString->setTextFormat(Qt::RichText);
       errorString->setTextInteractionFlags(Qt::TextBrowserInteraction);
     }
-    else if (filterName.contains(QRegExp("(Filter|Plugin)$")) == true)
+    else if(filterName.contains(QRegExp("(Filter|Plugin)$")) == true)
     {
       // Filter name has "Filter" or "Plugin" at the end of the name
       generateBtn->setEnabled(false);
       errorString->setText("Filter names cannot contain the words 'Filter' or 'Plugin' at the end of the name.\nPlease choose a different filter name.");
     }
-    else if (pluginDir.isEmpty() == true)
+    else if(pluginDir.isEmpty() == true)
     {
       // The directory is empty
       generateBtn->setEnabled(false);
       errorString->setText("The plugin directory cannot be empty.\nPlease select a valid plugin directory.");
     }
-    else if (filtersDirInfo.exists() == false)
+    else if(filtersDirInfo.exists() == false)
     {
       // The directory is not a specified plugin directory
       generateBtn->setEnabled(false);
       errorString->setText("The specified directory is not a valid plugin directory.\nPlease select a valid plugin directory.");
     }
-    else if (filterName.isEmpty() == true)
+    else if(filterName.isEmpty() == true)
     {
       // The directory is empty
       generateBtn->setEnabled(false);
@@ -828,9 +815,9 @@ QString FilterMaker::getDefaultSetupFPContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/SetupFilterParameters.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();
@@ -846,9 +833,9 @@ QString FilterMaker::getDefaultDataCheckContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/DataCheck.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();
@@ -864,9 +851,9 @@ QString FilterMaker::getDefaultFPContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/Q_PROPERTY_FILTER_PARAMETER.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();
@@ -882,9 +869,9 @@ QString FilterMaker::getDefaultInitListContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/InitList.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();
@@ -900,9 +887,9 @@ QString FilterMaker::getDefaultFilterHIncludesContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterHIncludes.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();
@@ -918,9 +905,9 @@ QString FilterMaker::getDefaultFilterCPPIncludesContents()
 {
   QString contents = "";
 
-  //Open file
+  // Open file
   QFile file(QtSApplicationFileInfo::GenerateFileSystemPath("/Template/Contents/FilterCPPIncludes.in"));
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if(file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     QTextStream in(&file);
     contents = in.readAll();

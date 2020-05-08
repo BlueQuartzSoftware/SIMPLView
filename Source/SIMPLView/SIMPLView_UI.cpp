@@ -192,7 +192,7 @@ bool SIMPLView_UI::savePipeline()
     return savePipelineAs();
   }
 
-    filePath = windowFilePath();
+  filePath = windowFilePath();
 
   // Fix the separators
   filePath = QDir::toNativeSeparators(filePath);
@@ -478,10 +478,10 @@ void SIMPLView_UI::writeDockWidgetSettings(QtSSettings* prefs, QDockWidget* dw)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::setupGui()
 {
-  setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North); 
-  setTabPosition(Qt::DockWidgetArea::LeftDockWidgetArea, QTabWidget::TabPosition::North); 
+  setTabPosition(Qt::DockWidgetArea::TopDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::RightDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::BottomDockWidgetArea, QTabWidget::TabPosition::North);
+  setTabPosition(Qt::DockWidgetArea::LeftDockWidgetArea, QTabWidget::TabPosition::North);
 
   SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
 
@@ -704,7 +704,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuAdvanced->addSeparator();
   m_MenuAdvanced->addAction(actionClearBookmarks);
 
-  #if defined SIMPL_RELATIVE_PATH_CHECK
+#if defined SIMPL_RELATIVE_PATH_CHECK
 
   m_MenuDataDirectory = new QMenu("Data Directory", this);
   m_ActionSetDataFolder = new QAction("Set Location...", this);
@@ -717,7 +717,7 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_MenuHelp->addMenu(m_MenuDataDirectory);
   m_MenuDataDirectory->addAction(m_ActionSetDataFolder);
   m_MenuDataDirectory->addAction(m_ActionShowDataFolder);
-  #endif
+#endif
 
   m_MenuHelp->addSeparator();
   m_MenuHelp->addAction(m_ActionAboutSIMPLView);
@@ -757,7 +757,7 @@ void SIMPLView_UI::connectSignalsSlots()
 
   /* Pipeline View Connections */
   connect(pipelineView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SIMPLView_UI::filterSelectionChanged);
-  connect(pipelineView, &SVPipelineView::filterParametersChanged, [=] (AbstractFilter::Pointer filter) {
+  connect(pipelineView, &SVPipelineView::filterParametersChanged, [=](AbstractFilter::Pointer filter) {
     m_Ui->dataBrowserWidget->filterActivated(filter);
     markDocumentAsDirty();
   });
@@ -822,10 +822,10 @@ int SIMPLView_UI::openPipeline(const QString& filePath)
 {
   SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
   int err = pipelineView->openPipeline(filePath);
-  if (err >= 0)
+  if(err >= 0)
   {
     PipelineModel* model = pipelineView->getPipelineModel();
-    if (model->rowCount() > 0)
+    if(model->rowCount() > 0)
     {
       QModelIndex index = model->index(0, PipelineItem::PipelineItemData::Contents);
       pipelineView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
@@ -898,7 +898,7 @@ QMessageBox::StandardButton SIMPLView_UI::checkDirtyDocument()
         return QMessageBox::Save;
       }
 
-        return QMessageBox::Cancel;
+      return QMessageBox::Cancel;
     }
     if(r == QMessageBox::Discard)
     {
@@ -1133,15 +1133,13 @@ void SIMPLView_UI::issuesTableHasErrors(bool hasErrors, int errCount, int warnCo
   Q_UNUSED(warnCount)
 
   SIMPLView::DockWidgetSettings::HideDockSetting errorTableSetting = IssuesWidget::GetHideDockSetting();
-  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting 
-     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == errorTableSetting || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == errorTableSetting)
   {
     m_Ui->issuesDockWidget->setVisible(hasErrors);
   }
 
   SIMPLView::DockWidgetSettings::HideDockSetting stdOutSetting = StandardOutputWidget::GetHideDockSetting();
-  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == stdOutSetting 
-     || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
+  if(SIMPLView::DockWidgetSettings::HideDockSetting::OnError == stdOutSetting || SIMPLView::DockWidgetSettings::HideDockSetting::OnStatusAndError == stdOutSetting)
   {
     m_Ui->stdOutDockWidget->setVisible(hasErrors);
   }

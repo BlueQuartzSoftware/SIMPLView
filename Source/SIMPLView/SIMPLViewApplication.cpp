@@ -1,37 +1,37 @@
 /* ============================================================================
-* Copyright (c) 2009-2016 BlueQuartz Software, LLC
-*
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted provided that the following conditions are met:
-*
-* Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-*
-* Redistributions in binary form must reproduce the above copyright notice, this
-* list of conditions and the following disclaimer in the documentation and/or
-* other materials provided with the distribution.
-*
-* Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
-* contributors may be used to endorse or promote products derived from this software
-* without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-* USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-* The code contained herein was partially funded by the followig contracts:
-*    United States Air Force Prime Contract FA8650-07-D-5800
-*    United States Air Force Prime Contract FA8650-10-D-5210
-*    United States Prime Contract Navy N00173-07-C-2068
-*
-* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ * Copyright (c) 2009-2016 BlueQuartz Software, LLC
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of BlueQuartz Software, the US Air Force, nor the names of its
+ * contributors may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The code contained herein was partially funded by the followig contracts:
+ *    United States Air Force Prime Contract FA8650-07-D-5800
+ *    United States Air Force Prime Contract FA8650-10-D-5210
+ *    United States Prime Contract Navy N00173-07-C-2068
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #include "SIMPLViewApplication.h"
 
 #if !defined(_MSC_VER)
@@ -103,7 +103,7 @@ void fillVersionData(UpdateCheck::SIMPLVersionData_t& data)
   data.buildDate = SIMPLView::Version::BuildDate();
   data.appName = BrandedStrings::ApplicationName;
 }
-}
+} // namespace Detail
 
 // -----------------------------------------------------------------------------
 //
@@ -460,19 +460,16 @@ void SIMPLViewApplication::updateRecentFileList(const QString& file)
 
   // Get the list from the static object
   QStringList filePaths = QtSRecentFileList::Instance()->fileList();
-  for (int i = 0; i < filePaths.size(); i++)
+  for(int i = 0; i < filePaths.size(); i++)
   {
     QString filePath = filePaths[i];
     QAction* action = m_MenuRecentFiles->addAction(QtSRecentFileList::Instance()->parentAndFileName(filePath));
-//    action->setVisible(true);
-    connect(action, &QAction::triggered, [=] {
-      dream3dApp->newInstanceFromFile(filePath);
-    });
+    //    action->setVisible(true);
+    connect(action, &QAction::triggered, [=] { dream3dApp->newInstanceFromFile(filePath); });
   }
 
   m_MenuRecentFiles->addSeparator();
   m_MenuRecentFiles->addAction(m_ActionClearRecentFiles);
-
 }
 
 // -----------------------------------------------------------------------------
@@ -552,7 +549,7 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     cacheClearedBox.setIcon(QMessageBox::Information);
     cacheClearedBox.exec();
 
-    if (cacheClearedBox.clickedButton() == restartNowBtn)
+    if(cacheClearedBox.clickedButton() == restartNowBtn)
     {
       listenExitApplicationTriggered();
       QProcess::startDetached(QApplication::applicationFilePath());
@@ -658,7 +655,7 @@ void SIMPLViewApplication::listenSetDataFolderTriggered()
 {
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = QFileDialog::getExistingDirectory(nullptr, tr("Set %1 Data Directory").arg(QApplication::applicationName()), validator->getSIMPLDataDirectory());
-  if (dataDir.isEmpty())
+  if(dataDir.isEmpty())
   {
     return;
   }
@@ -751,8 +748,8 @@ void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
   dialog.writePluginCache();
 
   /* If any of the load checkboxes were changed, display a dialog warning
-  * the user that they must restart SIMPLView to see the changes.
-  */
+   * the user that they must restart SIMPLView to see the changes.
+   */
   if(dialog.getLoadPreferencesDidChange())
   {
     QMessageBox msgBox;
@@ -868,7 +865,7 @@ void SIMPLViewApplication::listenExitApplicationTriggered()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::dream3dWindowChanged(SIMPLView_UI* instance)
 {
-  if (instance->isActiveWindow())
+  if(instance->isActiveWindow())
   {
     m_ActiveWindow = instance;
   }
@@ -905,14 +902,14 @@ void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 {
   m_SIMPLViewInstances.removeAll(window);
 
-  if (m_SIMPLViewInstances.isEmpty())
+  if(m_SIMPLViewInstances.isEmpty())
   {
     m_ActiveWindow = nullptr;
   }
 
 #if defined(Q_OS_MAC)
 #else
-  if (m_SIMPLViewInstances.size() <= 0)
+  if(m_SIMPLViewInstances.size() <= 0)
   {
     quit();
   }
@@ -924,8 +921,8 @@ void SIMPLViewApplication::unregisterSIMPLViewWindow(SIMPLView_UI* window)
 // -----------------------------------------------------------------------------
 bool SIMPLViewApplication::event(QEvent* event)
 {
-  #if defined(Q_OS_MAC)
-  if (event->type() == QEvent::Close)
+#if defined(Q_OS_MAC)
+  if(event->type() == QEvent::Close)
   {
     // This needs to be here to prevent the close event from firing twice when quitting DREAM3D from the macOS dock.
     return false;
@@ -937,7 +934,7 @@ bool SIMPLViewApplication::event(QEvent* event)
 
     newInstanceFromFile(filePath);
   }
-  #endif
+#endif
 
   return QApplication::event(event);
 }
@@ -963,11 +960,11 @@ void SIMPLViewApplication::writeSettings()
   QString themeFilePath = styles->getCurrentThemeFilePath();
   prefs->setValue("Theme File Path", themeFilePath);
 
-  #if defined SIMPL_RELATIVE_PATH_CHECK
+#if defined SIMPL_RELATIVE_PATH_CHECK
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = validator->getSIMPLDataDirectory();
   prefs->setValue("Data Directory", dataDir);
-  #endif
+#endif
 
   prefs->endGroup();
 
@@ -994,23 +991,25 @@ void SIMPLViewApplication::readSettings()
     styles->loadStyleSheet(themeFilePath);
   }
 
-  #if defined SIMPL_RELATIVE_PATH_CHECK
+#if defined SIMPL_RELATIVE_PATH_CHECK
   SIMPLDataPathValidator* validator = SIMPLDataPathValidator::Instance();
   QString dataDir = prefs->value("Data Directory", QString()).toString();
 
-
-  if (dataDir.isEmpty())
+  if(dataDir.isEmpty())
   {
     QString dataDirectory = validator->getSIMPLDataDirectory();
     QString msg = tr("The %1 data directory location has been set to '%2'.\n\nIf you would like to change the data directory location, "
-                     "please choose 'Set Location...' from the Data Directory menu in the Help menu.").arg(applicationName()).arg(dataDirectory).arg(applicationName());
+                     "please choose 'Set Location...' from the Data Directory menu in the Help menu.")
+                      .arg(applicationName())
+                      .arg(dataDirectory)
+                      .arg(applicationName());
     QMessageBox::information(nullptr, tr("%1 Data Directory Location").arg(applicationName()), msg, QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Ok);
   }
   else
   {
     validator->setSIMPLDataDirectory(dataDir);
   }
-  #endif
+#endif
 
   prefs->endGroup();
 }
@@ -1156,7 +1155,7 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_DefaultMenuBar->addMenu(m_MenuView);
 
   QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  if (themeNames.size() > 1)  // We are not counting the Default theme when deciding whether or not to add the theme menu
+  if(themeNames.size() > 1) // We are not counting the Default theme when deciding whether or not to add the theme menu
   {
     m_ThemeActionGroup = new QActionGroup(this);
     m_MenuThemes = createThemeMenu(m_ThemeActionGroup, m_DefaultMenuBar);
@@ -1226,9 +1225,7 @@ QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget*
   QMenu* menuThemes = new QMenu("Themes", parent);
 
   QString themePath = ":/SIMPL/StyleSheets/Default.json";
-  QAction* action = menuThemes->addAction("Default", [=] {
-    style->loadStyleSheet(themePath);
-  });
+  QAction* action = menuThemes->addAction("Default", [=] { style->loadStyleSheet(themePath); });
   action->setCheckable(true);
   if(themePath == style->getCurrentThemeFilePath())
   {
@@ -1237,12 +1234,10 @@ QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget*
   actionGroup->addAction(action);
 
   QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  for (int i = 0; i < themeNames.size(); i++)
+  for(int i = 0; i < themeNames.size(); i++)
   {
     QString themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeNames[i] + ".json";
-    QAction* action = menuThemes->addAction(themeNames[i], [=] {
-      style->loadStyleSheet(themePath);
-    });
+    QAction* action = menuThemes->addAction(themeNames[i], [=] { style->loadStyleSheet(themePath); });
     action->setCheckable(true);
     if(themePath == style->getCurrentThemeFilePath())
     {
