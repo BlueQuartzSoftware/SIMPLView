@@ -63,7 +63,7 @@ public:
 
   QString generateFilterParameters() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateHIncludes() override;
 
 protected:
   IntVec2WidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);

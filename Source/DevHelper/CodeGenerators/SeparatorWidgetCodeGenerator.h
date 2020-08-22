@@ -65,7 +65,7 @@ public:
 
   QString generateDataCheck() override;
 
-  virtual QString generateInitializationList();
+  QString generateInitializationList() override;
 
   QString generatePybindContents() override;
 

@@ -65,7 +65,7 @@ public:
 
   QString generateFilterParameters() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateHIncludes() override;
 
 protected:
   FileListInfoWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);

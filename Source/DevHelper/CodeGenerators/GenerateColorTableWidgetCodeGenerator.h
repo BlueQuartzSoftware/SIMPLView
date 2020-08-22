@@ -65,7 +65,7 @@ public:
 
   QString generateFilterParameters() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateHIncludes() override;
 
   QList<QString> generateCPPIncludes() override;
 

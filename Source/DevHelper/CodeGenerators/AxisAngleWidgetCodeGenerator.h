@@ -67,7 +67,7 @@ public:
 
   QList<QString> generateCPPIncludes() override;
 
-  virtual QList<QString> generateHIncludes();
+  QList<QString> generateHIncludes() override;
 
 protected:
   AxisAngleWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue);
