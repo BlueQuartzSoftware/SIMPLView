@@ -80,7 +80,7 @@ PluginMaker::PluginMaker(QWidget* parent)
     cmPluginGen->setNameChangeable(true);                                                                                                                                                              \
     connect(m_PluginName, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(pluginNameChanged(QString)));                                                                                                \
     connect(m_OutputDir, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(outputDirChanged(QString)));                                                                                                  \
-    connect(generateButton, SIGNAL(clicked()), cmPluginGen, SLOT(generateOutput()));                                                                                                                   \
+    connect(this, &PluginMaker::startGeneration, cmPluginGen, &PMFileGenerator::generateOutput);                                                                                                       \
     connect(cmPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));                                                                                                          \
   }
 
@@ -112,6 +112,8 @@ void PluginMaker::setupGui()
   selectButton->setToolTip("Select Directory");
   generateButton->setToolTip("Generate File Structure");
 
+  connect(this, &PluginMaker::startGeneration, this, &PluginMaker::testFileLocationsHandler);
+
   PMGeneratorTreeItem* F_main = new PMGeneratorTreeItem(treeWidget);
   F_main->setText(0, "Unknown Plugin Name");
   {
@@ -135,7 +137,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), clangFormatGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), clangFormatGen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), clangFormatGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, clangFormatGen, &PMFileGenerator::generateOutput);
     connect(clangFormatGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -152,7 +154,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), constantsPluginGen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), constantsPluginGen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), constantsPluginGen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, constantsPluginGen, &PMFileGenerator::generateOutput);
   connect(constantsPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   //// This is for the @PluginName@Plugin.cpp File Generation
@@ -168,7 +170,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), cppPluginGen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), cppPluginGen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), cppPluginGen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, cppPluginGen, &PMFileGenerator::generateOutput);
   connect(cppPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   //// This is for the @PluginName@Plugin.h File Generation
@@ -184,7 +186,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), hPluginGen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), hPluginGen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), hPluginGen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, hPluginGen, &PMFileGenerator::generateOutput);
   connect(hPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   F_res = new PMGeneratorTreeItem(F_main);
@@ -202,7 +204,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), gen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, gen, &PMFileGenerator::generateOutput);
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     gen->setDoesGenerateOutput(true);
   }
@@ -221,7 +223,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), gen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, gen, &PMFileGenerator::generateOutput);
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     gen->setDoesGenerateOutput(true);
   }
@@ -252,7 +254,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), gen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, gen, &PMFileGenerator::generateOutput);
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     gen->setDoesGenerateOutput(true);
   }
@@ -272,7 +274,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), gen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, gen, &PMFileGenerator::generateOutput);
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -291,7 +293,6 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), this, SLOT(testFileLocationsHandler()));
     connect(this, SIGNAL(clicked(QSet<QString>)), gen, SLOT(generateOutputWithFilterNames(QSet<QString>)));
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
@@ -310,7 +311,6 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), this, SLOT(testFileLocationsHandler()));
     connect(this, SIGNAL(clicked(QSet<QString>)), gen, SLOT(generateOutputWithFilterNames(QSet<QString>)));
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
@@ -329,7 +329,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), testgen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), testgen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), testgen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, testgen, &PMFileGenerator::generateOutput);
   connect(testgen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   F_doc = new PMGeneratorTreeItem(F_main);
@@ -347,7 +347,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), gen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), gen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), gen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, gen, &PMFileGenerator::generateOutput);
     connect(gen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     gen->setDoesGenerateOutput(true);
   }
@@ -387,7 +387,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), cppFilterGen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), cppFilterGen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), cppFilterGen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, cppFilterGen, &PMFileGenerator::generateOutput);
   connect(cppFilterGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   //// TreeItem for a Filter Class Header
@@ -403,7 +403,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), hFilterGen, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), hFilterGen, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), hFilterGen, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, hFilterGen, &PMFileGenerator::generateOutput);
   connect(hFilterGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   //// TreeItem for the SourceList.cmake file that will compile all the filters
@@ -427,7 +427,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), cmPluginGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, cmPluginGen, &PMFileGenerator::generateOutput);
     connect(cmPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -449,7 +449,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), cmPluginGen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), cmPluginGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, cmPluginGen, &PMFileGenerator::generateOutput);
     connect(cmPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
     //// This is for the @PluginName@GuiPlugin.cpp File Generation
@@ -465,7 +465,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), cppPluginGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), cppPluginGen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), cppPluginGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, cppPluginGen, &PMFileGenerator::generateOutput);
     connect(cppPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
     //// This is for the @PluginName@GuiPlugin.h File Generation
@@ -481,7 +481,7 @@ void PluginMaker::setupGui()
     connect(m_PluginName, SIGNAL(textChanged(QString)), hPluginGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), hPluginGen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), hPluginGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, hPluginGen, &PMFileGenerator::generateOutput);
     connect(hPluginGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -509,7 +509,7 @@ void PluginMaker::setupGui()
     fpwFilterGen->setNameChangeable(false);
     connect(m_PluginName, SIGNAL(textChanged(QString)), fpwFilterGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), fpwFilterGen, SLOT(outputDirChanged(QString)));
-    connect(generateButton, SIGNAL(clicked()), fpwFilterGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, fpwFilterGen, &PMFileGenerator::generateOutput);
     connect(fpwFilterGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -537,7 +537,7 @@ void PluginMaker::setupGui()
     fpwFilterGen->setNameChangeable(false);
     connect(m_PluginName, SIGNAL(textChanged(QString)), fpwFilterGen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), fpwFilterGen, SLOT(outputDirChanged(QString)));
-    connect(generateButton, SIGNAL(clicked()), fpwFilterGen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, fpwFilterGen, &PMFileGenerator::generateOutput);
     connect(fpwFilterGen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
   }
 
@@ -567,7 +567,7 @@ void PluginMaker::setupGui()
   connect(m_PluginName, SIGNAL(textChanged(QString)), htmlFilterDoc, SLOT(pluginNameChanged(QString)));
   connect(m_OutputDir, SIGNAL(textChanged(QString)), htmlFilterDoc, SLOT(outputDirChanged(QString)));
   // For "Directories" this probably isn't needed
-  connect(generateButton, SIGNAL(clicked()), htmlFilterDoc, SLOT(generateOutput()));
+  connect(this, &PluginMaker::startGeneration, htmlFilterDoc, &PMFileGenerator::generateOutput);
   connect(htmlFilterDoc, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
   FilterBundler fb2(cppFilterGen, hFilterGen, htmlFilterDoc, testgen, true);
@@ -607,6 +607,12 @@ void PluginMaker::on_generateButton_clicked()
   QFileInfo fi(pluginPath);
   if(fi.exists())
   {
+    QMessageBox::StandardButton result = QMessageBox::warning(this, "Confirm Plugin Overwrite", QString("Plugin path \"%1\" already exists. Do you want to replace it?").arg(pluginPath),
+                                                              QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No, QMessageBox::StandardButton::No);
+    if(result == QMessageBox::StandardButton::No)
+    {
+      return;
+    }
     QDir dir(pluginPath);
     dir.removeRecursively();
   }
@@ -693,6 +699,8 @@ void PluginMaker::on_generateButton_clicked()
     }
   }
 
+  emit startGeneration();
+
   emit updateStatusBar("Generation Completed");
 }
 
@@ -769,7 +777,7 @@ void PluginMaker::on_addFilterBtn_clicked()
     connect(m_PluginName, SIGNAL(textChanged(QString)), cppgen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), cppgen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), cppgen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, cppgen, &PMFileGenerator::generateOutput);
     connect(cppgen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     cppgen->setDoesGenerateOutput(true);
     cppgen->setNameChangeable(false);
@@ -789,7 +797,7 @@ void PluginMaker::on_addFilterBtn_clicked()
     connect(m_PluginName, SIGNAL(textChanged(QString)), hgen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), hgen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), hgen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, hgen, &PMFileGenerator::generateOutput);
     connect(hgen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     hgen->setDoesGenerateOutput(true);
     hgen->setNameChangeable(false);
@@ -808,7 +816,7 @@ void PluginMaker::on_addFilterBtn_clicked()
     connect(m_PluginName, SIGNAL(textChanged(QString)), htmlgen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), htmlgen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), htmlgen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, htmlgen, &PMFileGenerator::generateOutput);
     connect(htmlgen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
     htmlgen->setDoesGenerateOutput(true);
     htmlgen->setNameChangeable(false);
@@ -835,7 +843,7 @@ void PluginMaker::on_addFilterBtn_clicked()
     connect(m_PluginName, SIGNAL(textChanged(QString)), testgen, SLOT(pluginNameChanged(QString)));
     connect(m_OutputDir, SIGNAL(textChanged(QString)), testgen, SLOT(outputDirChanged(QString)));
     // For "Directories" this probably isn't needed
-    connect(generateButton, SIGNAL(clicked()), testgen, SLOT(generateOutput()));
+    connect(this, &PluginMaker::startGeneration, testgen, &PMFileGenerator::generateOutput);
     connect(testgen, SIGNAL(outputError(QString)), this, SLOT(generationError(QString)));
 
     // htmlgen->setNameChangeable(false);

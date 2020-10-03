@@ -72,6 +72,7 @@ protected slots:
 signals:
   void clicked(QSet<QString> names);
   void updateStatusBar(QString message);
+  void startGeneration();
 
 private:
   QString m_OpenDialogLastDirectory;
