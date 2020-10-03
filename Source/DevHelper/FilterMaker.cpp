@@ -177,7 +177,25 @@ void FilterMaker::on_codeChooser_currentIndexChanged(int index)
 // -----------------------------------------------------------------------------
 void FilterMaker::on_generateBtn_clicked()
 {
-  QString filterName = this->filterName->text();
+  QFileInfo pluginDirInfo(getPluginDir());
+  QDir pluginDir(getPluginDir());
+  QString pluginName = pluginDirInfo.baseName();
+  QString filterName = getFilterName();
+
+  bool testExists = pluginDir.exists(QString("Test/%1Test.cpp").arg(filterName));
+  bool docExists = pluginDir.exists(QString("Documentation/%1Filters/%1.md").arg(pluginName, filterName));
+  bool cppExists = pluginDir.exists(QString("%1Filters/%2.cpp").arg(pluginName, filterName));
+  bool hExists = pluginDir.exists(QString("%1Filters/%2.h").arg(pluginName, filterName));
+
+  if(testExists || docExists || cppExists || hExists)
+  {
+    QMessageBox::StandardButton result = QMessageBox::warning(this, "Confirm Filter Overwrite", QString("Filter \"%1\" already exists. Do you want to replace it?").arg(filterName),
+                                                              QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No, QMessageBox::StandardButton::No);
+    if(result == QMessageBox::StandardButton::No)
+    {
+      return;
+    }
+  }
 
   // Update all filter file generators with information from table
   updateFilterFileGenerators();
