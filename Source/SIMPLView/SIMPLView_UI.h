@@ -39,18 +39,18 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
-#include <QtWidgets/QWidget>
+#include <QtGui/QResizeEvent>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
-#include <QtGui/QResizeEvent>
+#include <QtWidgets/QWidget>
 
 #include "SIMPLib/Filtering/FilterManager.h"
-#include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 #include "SIMPLib/Filtering/FilterPipeline.h"
+#include "SIMPLib/Plugin/ISIMPLibPlugin.h"
 
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
-#include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 #include "SVWidgetsLib/QtSupport/QtSSettings.h"
+#include "SVWidgetsLib/Widgets/FilterInputWidget.h"
 
 //-- UIC generated Header
 #include "ui_SIMPLView_UI.h"

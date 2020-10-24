@@ -45,15 +45,15 @@
 #include <QtWidgets/QTreeWidgetItem>
 #include <QtWidgets/QWidget>
 
-#include "SVWidgetsLib/QtSupport/QtSFileCompleter.h"
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
+#include "SVWidgetsLib/QtSupport/QtSFileCompleter.h"
 
 #include "AddFilterWidget.h"
+#include "BrandedStrings.h"
 #include "FilterBundler.h"
 #include "PMDirGenerator.h"
 #include "PMFileGenerator.h"
 #include "PMGeneratorTreeItem.h"
-#include "BrandedStrings.h"
 
 // -----------------------------------------------------------------------------
 //

@@ -53,13 +53,13 @@
 
 #include <QtCore/QDebug>
 
+#include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 #include "SIMPLib/Plugin/PluginProxy.h"
 #include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
-#include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
@@ -69,19 +69,19 @@
 #ifdef SIMPL_USE_QtWebEngine
 #include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
 #endif
-#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
 #include "SIMPLView/AboutSIMPLView.h"
-#include "SIMPLView/SIMPLView_UI.h"
-#include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLViewConstants.h"
+#include "SIMPLView/SIMPLViewVersion.h"
+#include "SIMPLView/SIMPLView_UI.h"
 
 #include "BrandedStrings.h"
 

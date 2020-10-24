@@ -42,11 +42,11 @@
 
 #include <QtCore/QTextStream>
 
+#include "DevHelper/CodeGenerators/CodeGenFactory.h"
+#include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 #include "DevHelper/FilterBundler.h"
 #include "DevHelper/PMDirGenerator.h"
 #include "DevHelper/PMGeneratorTreeItem.h"
-#include "DevHelper/CodeGenerators/CodeGenFactory.h"
-#include "DevHelper/CodeGenerators/FPCodeGenerator.h"
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationFileInfo.h"
 

@@ -42,8 +42,8 @@
 
 #include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 
-#include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
+#include "DevHelper/PluginMaker.h"
 
 #include "SIMPLView/License/DevHelperLicenseFiles.h"
 

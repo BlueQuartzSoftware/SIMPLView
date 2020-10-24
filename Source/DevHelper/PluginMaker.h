@@ -39,8 +39,8 @@
 #include <QtCore/QVector>
 #include <QtWidgets/QTreeWidgetItem>
 
-#include "ui_PluginMaker.h"
 #include "FilterBundler.h"
+#include "ui_PluginMaker.h"
 
 class PluginMaker : public QWidget, public Ui::PluginMaker
 {

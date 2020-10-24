@@ -34,8 +34,8 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #include <QApplication>
 
-#include "DevHelper.h"
 #include "BrandedStrings.h"
+#include "DevHelper.h"
 
 int main(int argc, char* argv[])
 {

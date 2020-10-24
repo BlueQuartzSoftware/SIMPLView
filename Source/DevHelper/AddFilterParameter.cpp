@@ -34,11 +34,11 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #include "AddFilterParameter.h"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
-#include "DevHelper/PluginMaker.h"
 #include "DevHelper/FilterMaker.h"
+#include "DevHelper/PluginMaker.h"
 
 // -----------------------------------------------------------------------------
 //

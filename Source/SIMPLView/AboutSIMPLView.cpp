@@ -50,9 +50,9 @@
 #include <QtWidgets/QAction>
 
 #include "SIMPLib/SIMPLib.h"
+#include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/Filtering/AbstractFilter.h"
 #include "SIMPLib/Filtering/FilterManager.h"
-#include "SIMPLib/SIMPLibVersion.h"
 
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 

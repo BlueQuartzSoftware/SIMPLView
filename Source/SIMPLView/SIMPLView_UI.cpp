@@ -61,10 +61,10 @@
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
+#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-#include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/Widgets/BookmarksModel.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/BookmarksTreeView.h"
@@ -96,8 +96,8 @@
 #include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewApplication.h"
 #include "SIMPLView/SIMPLViewConstants.h"
-#include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLViewUIMessageHandler.h"
+#include "SIMPLView/SIMPLViewVersion.h"
 
 #include "BrandedStrings.h"
 

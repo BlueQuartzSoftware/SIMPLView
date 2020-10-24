@@ -50,9 +50,9 @@
 
 #include <QtWidgets>
 
+#include "BrandedStrings.h"
 #include "SVStyle.h"
 #include "StyleSheetEditor.h"
-#include "BrandedStrings.h"
 
 #include "ui_StyleSheetEditor.h"
 
