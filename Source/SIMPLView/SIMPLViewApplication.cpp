@@ -61,7 +61,6 @@
 #include "SIMPLib/Plugin/PluginProxy.h"
 #include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
-#include "SVWidgetsLib/QtSupport/QtSApplicationAboutBoxDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 
