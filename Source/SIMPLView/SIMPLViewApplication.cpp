@@ -1227,9 +1227,7 @@ QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget*
   QMenu* menuThemes = new QMenu("Themes", parent);
 
   QString themePath = ":/SIMPL/StyleSheets/Default.json";
-  QAction* action = menuThemes->addAction("Default", [=] {
-    style->loadStyleSheet(themePath);
-  });
+  QAction* action = menuThemes->addAction("Default", [=] { style->loadStyleSheet(themePath); });
   action->setCheckable(true);
   if(themePath == style->getCurrentThemeFilePath())
   {
@@ -1237,13 +1235,22 @@ QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget*
   }
   actionGroup->addAction(action);
 
-  QStringList themeNames = BrandedStrings::LoadedThemeNames;
-  for (int i = 0; i < themeNames.size(); i++)
+  themePath = ":/SIMPL/StyleSheets/Default_DarkMode.json";
+  action = menuThemes->addAction("Default Dark", [=] { style->loadStyleSheet(themePath); });
+  action->setCheckable(true);
+  if(themePath == style->getCurrentThemeFilePath())
   {
-    QString themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeNames[i] + ".json";
-    QAction* action = menuThemes->addAction(themeNames[i], [=] {
-      style->loadStyleSheet(themePath);
-    });
+    action->setChecked(true);
+  }
+  actionGroup->addAction(action);
+
+  int32_t numThemes = BrandedStrings::LoadedThemeNames.size();
+  QStringList themeNames = BrandedStrings::LoadedThemeNames;
+  QStringList themeFiles = BrandedStrings::LoadedThemeFilePaths;
+  for(int32_t i = 0; i < numThemes; i++)
+  {
+    QString themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeFiles[i];
+    QAction* action = menuThemes->addAction(themeNames[i], [=] { style->loadStyleSheet(themePath); });
     action->setCheckable(true);
     if(themePath == style->getCurrentThemeFilePath())
     {
