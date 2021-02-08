@@ -75,6 +75,4 @@ public:
   MultiInputFileWidgetCodeGenerator(MultiInputFileWidgetCodeGenerator&&) = delete;                 // Move Constructor Not Implemented
   MultiInputFileWidgetCodeGenerator& operator=(const MultiInputFileWidgetCodeGenerator&) = delete; // Copy Assignment Not Implemented
   MultiInputFileWidgetCodeGenerator& operator=(MultiInputFileWidgetCodeGenerator&&) = delete;      // Move Assignment Not Implemented
-
-private:
 };
