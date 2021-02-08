@@ -57,7 +57,7 @@ public:
     return sharedPtr;
   }
 
-  virtual ~MultiInputFileWidgetCodeGenerator();
+  ~MultiInputFileWidgetCodeGenerator() override;
 
   QString generateSetupFilterParameters() override;
 
