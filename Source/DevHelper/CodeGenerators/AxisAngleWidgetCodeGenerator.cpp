@@ -41,7 +41,7 @@
 //
 // -----------------------------------------------------------------------------
 AxisAngleWidgetCodeGenerator::AxisAngleWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "AxisAngleInput_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "AxisAngleInput")
 {
 }
 
@@ -78,8 +78,8 @@ QString AxisAngleWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(AxisAngleInput_t, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(AxisAngleInput_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(AxisAngleInput, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(AxisAngleInput " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
