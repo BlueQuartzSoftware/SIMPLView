@@ -50,19 +50,19 @@ FPCodeGenerator::FPCodeGenerator(const QString& humanLabel, const QString& prope
 {
   if(m_Category == "Parameter")
   {
-    m_Category = "FilterParameter::Parameter";
+    m_Category = "FilterParameter::Category::Parameter";
   }
   else if(m_Category == "Required Arrays")
   {
-    m_Category = "FilterParameter::RequiredArray";
+    m_Category = "FilterParameter::Category::RequiredArray";
   }
   else if(m_Category == "Created Arrays")
   {
-    m_Category = "FilterParameter::CreatedArray";
+    m_Category = "FilterParameter::Category::CreatedArray";
   }
   else
   {
-    m_Category = "FilterParameter::Uncategorized";
+    m_Category = "FilterParameter::Category::Uncategorized";
   }
 }
 
