@@ -41,7 +41,7 @@
 //
 // -----------------------------------------------------------------------------
 SecondOrderPolynomialWidgetCodeGenerator::SecondOrderPolynomialWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float2ndOrderPoly_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float2ndOrderPolynomial")
 {
 }
 
@@ -78,8 +78,8 @@ QString SecondOrderPolynomialWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(Float2ndOrderPoly_t, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(Float2ndOrderPoly_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(Float2ndOrderPolynomial, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(Float2ndOrderPolynomial " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
