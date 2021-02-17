@@ -41,7 +41,7 @@
 //
 // -----------------------------------------------------------------------------
 FourthOrderPolynomialWidgetCodeGenerator::FourthOrderPolynomialWidgetCodeGenerator(const QString& humanLabel, const QString& propertyName, const QString& category, const QString& initValue)
-: FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float4thOrderPoly_t")
+: FPCodeGenerator(humanLabel, propertyName, category, initValue, "Float4thOrderPolynomial")
 {
 }
 
@@ -78,8 +78,8 @@ QString FourthOrderPolynomialWidgetCodeGenerator::generateFilterParameters()
 {
   QString contents;
   QTextStream ss(&contents);
-  ss << "    SIMPL_FILTER_PARAMETER(Float4thOrderPoly_t, " + getPropertyName() + ")\n";
-  ss << "    Q_PROPERTY(Float4thOrderPoly_t " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
+  ss << "    SIMPL_FILTER_PARAMETER(Float4thOrderPolynomial, " + getPropertyName() + ")\n";
+  ss << "    Q_PROPERTY(Float4thOrderPolynomial " + getPropertyName() + " READ get" + getPropertyName() + " WRITE set" + getPropertyName() + ")";
 
   return contents;
 }
