@@ -1091,7 +1091,13 @@ void SIMPLViewApplication::reloadPythonFilters()
     messageBox.setDefaultButton(QMessageBox::StandardButton::Ok);
     messageBox.exec();
   };
-  PythonLoader::loadPythonFilters(*filterManager, PythonLoader::defaultPythonFilterPaths(), pythonErrorCallback);
+  auto pythonLoadedCallback = [this](const std::string& pyClass, const std::string& filePath) {
+    for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+    {
+      instance->addStdOutputMessage(QString("Loaded \"%1\" from \"%2\"").arg(QString::fromStdString(pyClass), QString::fromStdString(filePath)));
+    }
+  };
+  PythonLoader::loadPythonFilters(*filterManager, PythonLoader::defaultPythonFilterPaths(), pythonErrorCallback, pythonLoadedCallback);
 
   for(SIMPLView_UI* instance : m_SIMPLViewInstances)
   {
