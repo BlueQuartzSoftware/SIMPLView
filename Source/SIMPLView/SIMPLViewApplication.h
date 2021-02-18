@@ -40,6 +40,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
 
+#include "SIMPLib/SIMPLib.h"
+
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 
 #define dream3dApp (static_cast<SIMPLViewApplication*>(qApp))
@@ -119,6 +121,9 @@ public:
    */
   QMenu* getRecentFilesMenu();
 
+Q_SIGNALS:
+  void filterFactoriesUpdated();
+
 public Q_SLOTS:
   void listenNewInstanceTriggered();
   void listenOpenPipelineTriggered();
@@ -131,6 +136,9 @@ public Q_SLOTS:
   void listenExitApplicationTriggered();
   void listenSetDataFolderTriggered();
   void listenShowDataFolderTriggered();
+#ifdef SIMPL_EMBED_PYTHON
+  void reloadPythonFilters();
+#endif
 
   SIMPLView_UI* getNewSIMPLViewInstance();
 

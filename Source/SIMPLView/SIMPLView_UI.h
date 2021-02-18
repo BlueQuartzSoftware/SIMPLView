@@ -139,6 +139,42 @@ public:
    */
   void showDockWidget(QDockWidget* dockWidget);
 
+  /**
+   * @brief Returns true if the given filter UUID is in the pipeline model
+   * @param uuid
+   * @return
+   */
+  bool hasFilterInPipeline(const QUuid& uuid) const;
+
+  /**
+   * @brief Returns true if the undo stack is clean
+   * @return
+   */
+  bool undoStackIsClear() const;
+
+  /**
+   * @brief Clears the undo stack
+   */
+  void clearUndoStack();
+
+  /**
+   * @brief Returns pipeline in json form
+   * @return
+   */
+  QJsonObject serializePipeline() const;
+
+  /**
+   * @brief Adds filters to pipeline from json
+   * @param json
+   */
+  void deserializePipeline(const QJsonObject& json);
+
+  /**
+   * @brief Clears the pipeline optionally playing the animation
+   * @param playAnimation
+   */
+  void clearPipeline(bool playAnimation);
+
 public Q_SLOTS:
   /**
    * @brief setFilterBeingDragged

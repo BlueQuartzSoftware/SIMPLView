@@ -39,6 +39,8 @@
 
 #include <QtGui/QFontDatabase>
 
+#include <QtWidgets/QInputDialog>
+
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
@@ -58,6 +60,15 @@
 
 #ifdef SIMPL_USE_MKDOCS
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
+
+#ifdef SIMPL_EMBED_PYTHON
+// undef slots since a Python header uses slots
+#undef slots
+
+#include <pybind11/embed.h>
+
+#include "SIMPLib/Python/PythonLoader.h"
 #endif
 
 // -----------------------------------------------------------------------------
@@ -143,6 +154,34 @@ int main(int argc, char* argv[])
   QCoreApplication::setApplicationName(BrandedStrings::ApplicationName);
 
   SIMPLViewApplication qtapp(argc, argv);
+
+#ifdef SIMPL_EMBED_PYTHON
+  if(!PythonLoader::checkPythonHome())
+  {
+    QMessageBox::StandardButton result =
+        QMessageBox::warning(nullptr, "Warning", "\"PYTHONHOME\" not set. This environment variable must be set for embedded Python to work. Would you like to set it now?",
+                             QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
+
+    if(result != QMessageBox::StandardButton::Yes)
+    {
+      return 2;
+    }
+
+    QString pythonHome = QInputDialog::getText(nullptr, "Set PYTHONHOME", "PYTHONHOME");
+
+    if(pythonHome.isEmpty() || !PythonLoader::setPythonHome(pythonHome.toStdString()))
+    {
+      QMessageBox::critical(nullptr, "Error", "Failed to set \"PYTHONHOME\".");
+      return 3;
+    }
+  }
+
+  // Python interpreter must be created before calling SIMPLViewApplication::initialize since it will try to load Python filters
+  pybind11::scoped_interpreter interpreter_guard{};
+
+  // Release Python GIL to allow the main and worker threads to lock as needed
+  pybind11::gil_scoped_release gil_release_guard{};
+#endif
 
   if(!qtapp.initialize(argc, argv))
   {
