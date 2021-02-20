@@ -181,7 +181,6 @@ void delay(int seconds)
 // -----------------------------------------------------------------------------
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
-
   Q_UNUSED(argc)
   Q_UNUSED(argv)
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
@@ -228,12 +227,6 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
 
   // Load application plugins.
   QVector<ISIMPLibPlugin*> plugins = loadPlugins();
-
-  FilterManager* filterManager = FilterManager::Instance();
-
-#ifdef SIMPL_EMBED_PYTHON
-  reloadPythonFilters();
-#endif
 
   // give GUI components time to update before the mainwindow is shown
   QApplication::instance()->processEvents();

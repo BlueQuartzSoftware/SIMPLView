@@ -39,7 +39,7 @@
 
 #include <QtGui/QFontDatabase>
 
-#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QFileDialog>
 
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
@@ -63,11 +63,6 @@
 #endif
 
 #ifdef SIMPL_EMBED_PYTHON
-// undef slots since a Python header uses slots
-#undef slots
-
-#include <pybind11/embed.h>
-
 #include "SIMPLib/Python/PythonLoader.h"
 #endif
 
@@ -156,37 +151,53 @@ int main(int argc, char* argv[])
   SIMPLViewApplication qtapp(argc, argv);
 
 #ifdef SIMPL_EMBED_PYTHON
-  if(!PythonLoader::checkPythonHome())
+  bool hasPythonHome = PythonLoader::checkPythonHome();
+  bool enablePython = hasPythonHome;
+
+  if(!hasPythonHome)
   {
     QMessageBox::StandardButton result =
         QMessageBox::warning(nullptr, "Warning", "\"PYTHONHOME\" not set. This environment variable must be set for embedded Python to work. Would you like to set it now?",
                              QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
 
-    if(result != QMessageBox::StandardButton::Yes)
+    if(result == QMessageBox::StandardButton::Yes)
     {
-      return 2;
-    }
+      QString pythonHome = QFileDialog::getExistingDirectory(nullptr, "Set PYTHONHOME");
 
-    QString pythonHome = QInputDialog::getText(nullptr, "Set PYTHONHOME", "PYTHONHOME");
-
-    if(pythonHome.isEmpty() || !PythonLoader::setPythonHome(pythonHome.toStdString()))
-    {
-      QMessageBox::critical(nullptr, "Error", "Failed to set \"PYTHONHOME\".");
-      return 3;
+      if(pythonHome.isEmpty() && !PythonLoader::setPythonHome(pythonHome.toStdString()))
+      {
+        QMessageBox::critical(nullptr, "Error", "Failed to set \"PYTHONHOME\".");
+      }
+      else
+      {
+        enablePython = true;
+      }
     }
   }
 
+  if(!enablePython)
+  {
+    QMessageBox::warning(nullptr, "Warning", "Python filters disabled.");
+  }
+
   // Python interpreter must be created before calling SIMPLViewApplication::initialize since it will try to load Python filters
-  pybind11::scoped_interpreter interpreter_guard{};
+  PythonLoader::ScopedInterpreter interpreter_guard{enablePython};
 
   // Release Python GIL to allow the main and worker threads to lock as needed
-  pybind11::gil_scoped_release gil_release_guard{};
+  PythonLoader::GILScopedRelease gil_release_guard{enablePython};
 #endif
 
   if(!qtapp.initialize(argc, argv))
   {
     return 1;
   }
+
+#ifdef SIMPL_EMBED_PYTHON
+  if(enablePython)
+  {
+    qtapp.reloadPythonFilters();
+  }
+#endif
 
 #if defined(Q_OS_MAC)
   dream3dApp->setQuitOnLastWindowClosed(false);
