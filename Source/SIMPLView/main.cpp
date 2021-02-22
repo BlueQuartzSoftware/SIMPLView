@@ -196,6 +196,7 @@ int main(int argc, char* argv[])
   if(enablePython)
   {
     qtapp.reloadPythonFilters();
+    PythonLoader::addToPythonPath(PythonLoader::defaultSIMPLPythonLibPath());
   }
 #endif
 
