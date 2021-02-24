@@ -65,7 +65,7 @@ QString ChoiceWidgetCodeGenerator::generateSetupFilterParameters()
   ss << "    parameter->setHumanLabel(\"" + getHumanLabel() + "\");\n";
   ss << "    parameter->setPropertyName(\"" + getPropertyName() + "\");\n";
   ss << "    \n";
-  ss << "    QVector<QString> choices;          // Please add choices to the choices QVector to finish this widget\n";
+  ss << "    std::vector<QString> choices;          // Please add choices to the choices std::vector to finish this widget\n";
   ss << "    parameter->setChoices(choices);\n";
   ss << "    parameter->setCategory(" + getCategory() + ");\n";
   ss << "    parameter->setSetterCallback(SIMPL_BIND_SETTER(@FilterName@, this, " + getPropertyName() + "));\n";

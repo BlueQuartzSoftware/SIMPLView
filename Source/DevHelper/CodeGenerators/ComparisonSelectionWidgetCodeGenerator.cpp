@@ -59,7 +59,7 @@ QString ComparisonSelectionWidgetCodeGenerator::generateSetupFilterParameters()
   QString s;
   QTextStream out(&s);
   out << "  // Please fill in the QVariant and QVector parameters to complete the setup\n";
-  out << "  parameters.push_back(SIMPL_NEW_COMP_SEL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, QVector<QString>(), true));";
+  out << "  parameters.push_back(SIMPL_NEW_COMP_SEL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, std::vector<QString>(), true));";
   return s;
 }
 

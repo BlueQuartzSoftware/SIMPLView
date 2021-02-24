@@ -59,7 +59,7 @@ QString LinkedBooleanWidgetCodeGenerator::generateSetupFilterParameters()
 {
   QString s;
   QTextStream out(&s);
-  out << "  parameters.push_back(SIMPL_NEW_LINKED_BOOL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, QStringList()));";
+  out << "  parameters.push_back(SIMPL_NEW_LINKED_BOOL_FP(\"" << getHumanLabel() << "\", " << getPropertyName() << ", " << getCategory() << ", @FilterName@, std::vector<QString>()));";
   return s;
 }
 
