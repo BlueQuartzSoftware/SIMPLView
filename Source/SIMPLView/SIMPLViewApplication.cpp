@@ -63,11 +63,6 @@
 
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
-
-#include "SIMPLView/SIMPLView.h"
-#ifdef SIMPL_USE_QtWebEngine
-#include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
-#endif
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
@@ -77,6 +72,7 @@
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
+#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/AboutSIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
@@ -606,9 +602,6 @@ void SIMPLViewApplication::listenShowSIMPLViewHelpTriggered()
 #endif
 
   QUrl helpURL(s);
-#ifdef SIMPL_USE_QtWebEngine
-  SVUserManualDialog::LaunchHelpDialog(helpURL);
-#else
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(!didOpen)
   {
@@ -620,7 +613,6 @@ void SIMPLViewApplication::listenShowSIMPLViewHelpTriggered()
     msgBox.setIcon(QMessageBox::Critical);
     msgBox.exec();
   }
-#endif
 }
 
 // -----------------------------------------------------------------------------

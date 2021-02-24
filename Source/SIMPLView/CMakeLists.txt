@@ -182,12 +182,6 @@ file(READ "${QT_PLUGINS_FILE}" QT_PLUGINS)
 
 list(APPEND ${PROJECT_NAME}_LINK_LIBS SVWidgetsLib)
 
-#------------------------------------------------------------------
-# Add QtWebApp library if needed
-if(SIMPL_USE_QtWebEngine)
-  list(APPEND ${PROJECT_NAME}_LINK_LIBS QtWebAppLib)
-endif()
-
 BuildQtAppBundle(
     TARGET ${SIMPLView_APPLICATION_NAME}
     SOURCES ${${PROJECT_NAME}_PROJECT_SRCS}
@@ -219,13 +213,6 @@ target_include_directories(${SIMPLView_APPLICATION_NAME}
                     ${BrandedSIMPLView_DIR}
                     ${SIMPLProj_BINARY_DIR}/SVWidgetsLib
 )
-#------------------------------------------------------------------
-# Add QtWebApp include path if needed
-if(SIMPL_USE_QtWebEngine)
-  target_include_directories(${SIMPLView_APPLICATION_NAME}
-                              PUBLIC 
-                                ${SIMPLViewProj_SOURCE_DIR}/3rdParty)
-endif()
 
 target_include_directories(${SIMPLView_APPLICATION_NAME}
                   PUBLIC 

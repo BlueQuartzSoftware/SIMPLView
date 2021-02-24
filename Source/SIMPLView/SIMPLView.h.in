@@ -10,8 +10,6 @@
 /* Defines the type of Release that is being built */
 #define SIMPLViewProj_RELEASE_TYPE "@SIMPLViewProj_RELEASE_TYPE@"
 
-#cmakedefine SIMPL_USE_QtWebEngine
-
 /* Defined if SIMPL uses the style sheet editor for applying custom style sheets */
 #cmakedefine SIMPLView_USE_STYLESHEETEDITOR
 

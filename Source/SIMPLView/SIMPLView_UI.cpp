@@ -75,12 +75,9 @@
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 #include "SVWidgetsLib/Widgets/StatusBarWidget.h"
 #include "SVWidgetsLib/Widgets/util/AddFilterCommand.h"
-#ifdef SIMPL_USE_QtWebEngine
-#include "SVWidgetsLib/Widgets/SVUserManualDialog.h"
-#else
+
 #include <QtGui/QDesktopServices>
 #include <QtWidgets/QMessageBox>
-#endif
 
 #ifdef SIMPL_USE_MKDOCS
 #define URL_GENERATOR QtSDocServer
@@ -965,9 +962,7 @@ void SIMPLView_UI::pipelineDidFinish()
 void SIMPLView_UI::showFilterHelp(const QString& className)
 {
 // Launch the dialog
-#ifdef SIMPL_USE_QtWebEngine
-  SVUserManualDialog::LaunchHelpDialog(className);
-#elif(defined(SIMPL_USE_MKDOCS) || defined(SIMPL_USE_DISCOUNT))
+#if(defined(SIMPL_USE_MKDOCS) || defined(SIMPL_USE_DISCOUNT))
   QUrl helpURL = URL_GENERATOR::GenerateHTMLUrl(className);
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(!didOpen)
@@ -991,9 +986,6 @@ void SIMPLView_UI::showFilterHelp(const QString& className)
 // -----------------------------------------------------------------------------
 void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
 {
-#ifdef SIMPL_USE_QtWebEngine
-  SVUserManualDialog::LaunchHelpDialog(helpURL);
-#else
   bool didOpen = QDesktopServices::openUrl(helpURL);
   if(!didOpen)
   {
@@ -1005,7 +997,6 @@ void SIMPLView_UI::showFilterHelpUrl(const QUrl& helpURL)
     msgBox.setIcon(QMessageBox::Critical);
     msgBox.exec();
   }
-#endif
 }
 
 // -----------------------------------------------------------------------------
