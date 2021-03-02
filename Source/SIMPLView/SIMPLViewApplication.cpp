@@ -1100,7 +1100,6 @@ void SIMPLViewApplication::reloadPythonFilters()
   for(auto&& [instance, json] : savedPipelines)
   {
     instance->deserializePipeline(json);
-    instance->clearUndoStack();
   }
 
   emit filterFactoriesUpdated();
