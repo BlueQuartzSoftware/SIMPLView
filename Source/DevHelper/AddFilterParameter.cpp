@@ -90,7 +90,7 @@ void AddFilterParameter::on_addFilterParameterBtn_clicked()
 {
   /* SLOT: FilterMaker::addFilterParameterToTable()
      CONNECT: FilterMaker::on_addFilterParameterBtn_clicked() */
-  emit addBtnPressed(this);
+  Q_EMIT addBtnPressed(this);
 }
 
 // -----------------------------------------------------------------------------

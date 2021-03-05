@@ -54,7 +54,7 @@ public:
 protected:
   void setupGui();
 
-protected slots:
+protected Q_SLOTS:
   void on_selectButton_clicked();
   void on_generateButton_clicked();
 
@@ -69,7 +69,7 @@ protected slots:
 
   void testFileLocationsHandler();
 
-signals:
+Q_SIGNALS:
   void clicked(QSet<QString> names);
   void updateStatusBar(QString message);
   void startGeneration();

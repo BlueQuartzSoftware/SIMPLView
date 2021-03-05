@@ -67,9 +67,9 @@ class StyleSheetEditor : public QDialog
 public:
   StyleSheetEditor(QWidget* parent = nullptr);
 
-public slots:
+public Q_SLOTS:
 
-private slots:
+private Q_SLOTS:
   void on_reloadButton_stateChanged(int state);
   void qssFileChanged(const QString& filePath);
   void on_jsonFilePath_returnPressed();

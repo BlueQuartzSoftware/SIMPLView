@@ -71,10 +71,10 @@ public:
 
   QString createReplacementString(FileType type, QSet<QString> names);
 
-public slots:
+public Q_SLOTS:
   void generateOutput() override;
 
-protected slots:
+protected Q_SLOTS:
   void pluginNameChanged(const QString& plugname) override;
   void outputDirChanged(const QString& outputDir) override;
   void generateOutputWithFilterNames(QSet<QString> names);

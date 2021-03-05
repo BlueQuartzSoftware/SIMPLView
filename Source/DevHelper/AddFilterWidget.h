@@ -47,7 +47,7 @@ public:
   bool isPublic();
   bool getBtnClicked();
 
-protected slots:
+protected Q_SLOTS:
   void on_addfilterOKButton_clicked();
   void on_addfilterCancelButton_clicked();
   void on_filterName_textChanged(const QString& text);

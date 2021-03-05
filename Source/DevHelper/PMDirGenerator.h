@@ -80,12 +80,12 @@ public:
 protected:
   QString m_FilterName;
 
-protected slots:
+protected Q_SLOTS:
   virtual void pluginNameChanged(const QString& plugname);
   virtual void outputDirChanged(const QString& outputDir);
   virtual void generateOutput();
 
-signals:
+Q_SIGNALS:
   void outputError(const QString& message);
   void filterSourceError(const QString& message);
 

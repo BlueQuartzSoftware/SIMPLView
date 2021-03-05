@@ -163,7 +163,7 @@ void SIMPLView_UI::resizeEvent(QResizeEvent* event)
 {
   QMainWindow::resizeEvent(event);
 
-  emit parentResized();
+  Q_EMIT parentResized();
 
   // We need to write the window settings so that any new windows will open with these window settings
   writeWindowSettings();
@@ -1060,9 +1060,9 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
 
   if(m_FilterInputWidget != nullptr)
   {
-    emit m_FilterInputWidget->endPathFiltering();
-    emit m_FilterInputWidget->endViewPaths();
-    emit m_FilterInputWidget->endDataStructureFiltering();
+    Q_EMIT m_FilterInputWidget->endPathFiltering();
+    Q_EMIT m_FilterInputWidget->endViewPaths();
+    Q_EMIT m_FilterInputWidget->endDataStructureFiltering();
   }
 
   // Clear the filter input widget
@@ -1080,7 +1080,7 @@ void SIMPLView_UI::setFilterInputWidget(FilterInputWidget* widget)
   connect(getDataStructureWidget(), SIGNAL(endDataStructureFiltering()), widget, SIGNAL(endDataStructureFiltering()), Qt::ConnectionType::UniqueConnection);
   connect(getDataStructureWidget(), SIGNAL(applyPathToFilteringParameter(DataArrayPath)), widget, SIGNAL(applyPathToFilteringParameter(DataArrayPath)));
 
-  emit widget->endPathFiltering();
+  Q_EMIT widget->endPathFiltering();
 
   // Set the widget into the frame
   m_Ui->fiwFrameVLayout->addWidget(widget);
@@ -1159,7 +1159,7 @@ void SIMPLView_UI::changeEvent(QEvent* event)
 {
   if(event->type() == QEvent::ActivationChange)
   {
-    emit dream3dWindowChangedState(this);
+    Q_EMIT dream3dWindowChangedState(this);
   }
 }
 

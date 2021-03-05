@@ -119,7 +119,7 @@ public:
    */
   QMenu* getRecentFilesMenu();
 
-public slots:
+public Q_SLOTS:
   void listenNewInstanceTriggered();
   void listenOpenPipelineTriggered();
   void listenClearRecentFilesTriggered();
@@ -167,7 +167,7 @@ protected:
    */
   void checkForUpdatesAtStartup();
 
-protected slots:
+protected Q_SLOTS:
   /**
    * @brief versionCheckReply
    */
