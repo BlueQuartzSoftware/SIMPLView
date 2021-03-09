@@ -1102,7 +1102,7 @@ void SIMPLViewApplication::reloadPythonFilters()
     instance->deserializePipeline(json);
   }
 
-  emit filterFactoriesUpdated();
+  Q_EMIT filterFactoriesUpdated();
 }
 #endif
 
