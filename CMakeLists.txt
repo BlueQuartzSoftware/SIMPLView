@@ -298,15 +298,20 @@ configure_file(${PROJECT_RESOURCES_DIR}/SIMPLView/SIMPLViewLicense.txt
 
 # --------------------------------------------------------------------
 # Generate install rules for the text files
+set(license_install_dir "${DREAM3D_PACKAGE_DEST_PREFIX}")
+
 if(APPLE)
-  install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
-          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}/Resources"
-          COMPONENT Applications)
-else()
-  install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
-          DESTINATION "${DREAM3D_PACKAGE_DEST_PREFIX}"
-          COMPONENT Applications)
+  set(license_install_dir "${DREAM3D_PACKAGE_DEST_PREFIX}/Resources")
 endif()
+
+if(DREAM3D_ANACONDA)
+  set(license_install_dir "share/DREAM3D")
+endif()
+
+install(FILES ${SIMPLViewProj_BINARY_DIR}/SIMPLView/SIMPLViewLicense.txt 
+  DESTINATION ${license_install_dir}
+  COMPONENT Applications
+)
 
 #------------------------------------------------------------------------------
 # If we have not defined a "BrandedSIMPLView_DIR" then define it to the default

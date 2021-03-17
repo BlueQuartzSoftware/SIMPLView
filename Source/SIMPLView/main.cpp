@@ -111,6 +111,30 @@ void InitStyleSheetEditor()
 // -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+#ifdef DREAM3D_ANACONDA
+  {
+    constexpr const char k_QT_PLUGIN_PATH[] = "QT_PLUGIN_PATH";
+    constexpr const char k_PYTHONHOME[] = "PYTHONHOME";
+    QString qtPluginPath = qgetenv(k_QT_PLUGIN_PATH);
+    QString condaPrefix = qgetenv("CONDA_PREFIX");
+    if(qtPluginPath.isEmpty() && !condaPrefix.isEmpty())
+    {
+      QString absoluteQtPluginPath = QString("%1/Library/Plugins").arg(condaPrefix);
+      if(QDir(absoluteQtPluginPath).exists())
+      {
+        qputenv(k_QT_PLUGIN_PATH, absoluteQtPluginPath.toLocal8Bit());
+      }
+    }
+
+    QString pythonHome = qgetenv(k_PYTHONHOME);
+    if(pythonHome.isEmpty() && !condaPrefix.isEmpty())
+    {
+      qputenv(k_PYTHONHOME, condaPrefix.toLocal8Bit());
+    }
+    qputenv("DREAM3D_PLUGINS_LOADED", "1");
+  }
+#endif
+
 #ifdef Q_OS_X11
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)
