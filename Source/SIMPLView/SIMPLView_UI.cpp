@@ -690,11 +690,11 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   m_SIMPLViewMenu->addMenu(m_MenuPipeline);
   m_MenuPipeline->addAction(actionClearPipeline);
 #ifdef SIMPL_EMBED_PYTHON
-  QAction* reloadAction = new QAction("Reload Python Filters", this);
-  reloadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
-  m_MenuPipeline->addAction(reloadAction);
+  m_ActionReloadPython = new QAction("Reload Python Filters", this);
+  m_ActionReloadPython->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+  m_MenuPipeline->addAction(m_ActionReloadPython);
   SIMPLViewApplication* app = dream3dApp;
-  connect(reloadAction, &QAction::triggered, app, &SIMPLViewApplication::reloadPythonFilters);
+  connect(m_ActionReloadPython, &QAction::triggered, app, &SIMPLViewApplication::reloadPythonFilters);
 #endif
 
   // Create Help Menu
@@ -1238,3 +1238,11 @@ void SIMPLView_UI::clearPipeline(bool playAnimation)
   SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
   pipelineView->clearPipeline(playAnimation);
 }
+
+#ifdef SIMPL_EMBED_PYTHON
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::setPythonGUIEnabled(bool value)
+{
+  m_ActionReloadPython->setEnabled(value);
+}
+#endif

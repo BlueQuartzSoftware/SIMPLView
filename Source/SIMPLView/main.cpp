@@ -217,6 +217,7 @@ int main(int argc, char* argv[])
   }
 
 #ifdef SIMPL_EMBED_PYTHON
+  qtapp.setPythonGUIEnabled(enablePython);
   if(enablePython)
   {
     qtapp.reloadPythonFilters();

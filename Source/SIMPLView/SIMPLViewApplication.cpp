@@ -61,19 +61,19 @@
 #include "SIMPLib/Plugin/PluginProxy.h"
 #include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
-#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
-#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
-#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/AboutSIMPLView.h"
+#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLView_UI.h"
@@ -800,6 +800,9 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   newInstance->setLoadedPlugins(plugins);
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
   newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
+#ifdef SIMPL_EMBED_PYTHON
+  newInstance->setPythonGUIEnabled(m_PythonGUIEnabled);
+#endif
 
   if(m_ActiveWindow != nullptr)
   {
@@ -1104,6 +1107,17 @@ void SIMPLViewApplication::reloadPythonFilters()
 
   Q_EMIT filterFactoriesUpdated();
 }
+
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::setPythonGUIEnabled(bool value)
+{
+  m_PythonGUIEnabled = value;
+  m_ActionReloadPython->setEnabled(value);
+  for(auto instance : m_SIMPLViewInstances)
+  {
+    instance->setPythonGUIEnabled(value);
+  }
+}
 #endif
 
 // -----------------------------------------------------------------------------
@@ -1275,10 +1289,11 @@ void SIMPLViewApplication::createDefaultMenuBar()
   m_DefaultMenuBar->addMenu(m_MenuPipeline);
   m_MenuPipeline->addAction(m_ActionClearPipeline);
 #ifdef SIMPL_EMBED_PYTHON
-  QAction* reloadAction = new QAction("Reload Python Filters", m_DefaultMenuBar);
-  reloadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
-  m_MenuPipeline->addAction(reloadAction);
-  connect(reloadAction, &QAction::triggered, this, &SIMPLViewApplication::reloadPythonFilters);
+  m_ActionReloadPython = new QAction("Reload Python Filters", m_DefaultMenuBar);
+  m_ActionReloadPython->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+  m_ActionReloadPython->setEnabled(m_PythonGUIEnabled);
+  m_MenuPipeline->addAction(m_ActionReloadPython);
+  connect(m_ActionReloadPython, &QAction::triggered, this, &SIMPLViewApplication::reloadPythonFilters);
 #endif
 
   // Create Help Menu

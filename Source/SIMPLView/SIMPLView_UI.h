@@ -215,6 +215,15 @@ public Q_SLOTS:
    */
   void listenSavePipelineAsTriggered();
 
+#ifdef SIMPL_EMBED_PYTHON
+  /**
+   * @brief Enables/disables GUI elements for Python functionality based on value
+   * @param value
+   * @return
+   */
+  void setPythonGUIEnabled(bool value);
+#endif
+
 protected:
   /**
    * @brief populateMenus This is a planned API that plugins would use to add Menus to the main application
@@ -389,6 +398,10 @@ private:
   QAction* m_ActionClearCache = nullptr;
   QAction* m_ActionSetDataFolder = nullptr;
   QAction* m_ActionShowDataFolder = nullptr;
+
+#ifdef SIMPL_EMBED_PYTHON
+  QAction* m_ActionReloadPython = nullptr;
+#endif
 
   QActionGroup* m_ThemeActionGroup = nullptr;
 

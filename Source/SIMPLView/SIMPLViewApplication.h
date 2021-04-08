@@ -121,6 +121,15 @@ public:
    */
   QMenu* getRecentFilesMenu();
 
+#ifdef SIMPL_EMBED_PYTHON
+  /**
+   * @brief Enables/disables GUI elements for Python functionality based on value
+   * @param value
+   * @return
+   */
+  void setPythonGUIEnabled(bool value);
+#endif
+
 Q_SIGNALS:
   void filterFactoriesUpdated();
 
@@ -240,6 +249,11 @@ private:
   QAction* m_ActionShowDataBrowser = nullptr;
   QAction* m_ActionSetDataFolder = nullptr;
   QAction* m_ActionShowDataFolder = nullptr;
+
+#ifdef SIMPL_EMBED_PYTHON
+  QAction* m_ActionReloadPython = nullptr;
+  bool m_PythonGUIEnabled = false;
+#endif
 
   QActionGroup* m_ThemeActionGroup = nullptr;
 
