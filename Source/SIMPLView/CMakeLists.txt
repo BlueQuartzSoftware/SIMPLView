@@ -174,6 +174,10 @@ if(UNIX AND NOT APPLE)
     set(DEST_DIR "bin")
 endif()
 
+if(DREAM3D_ANACONDA)
+  set(DEST_DIR "bin")
+endif()
+
 get_property(SIMPLPluginList GLOBAL PROPERTY SIMPLPluginList)
 file(READ "${SIMPLPluginList}" SIMPLView_PLUGINS)
 
@@ -217,6 +221,10 @@ target_include_directories(${SIMPLView_APPLICATION_NAME}
 target_include_directories(${SIMPLView_APPLICATION_NAME}
                   PUBLIC 
                     ${SIMPLView_BINARY_DIR}/__/Common)
+
+if(DREAM3D_ANACONDA)
+  target_compile_definitions(${SIMPLView_APPLICATION_NAME} PRIVATE DREAM3D_ANACONDA)
+endif()
 
 if( SIMPLView_BUILD_DOCUMENTATION)
   message(STATUS "DREAM3D_PACKAGE_DEST_PREFIX: ${DREAM3D_PACKAGE_DEST_PREFIX}")

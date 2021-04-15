@@ -531,6 +531,8 @@ void SIMPLView_UI::setupGui()
   //  connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), m_StatusBar, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(tableHasErrors(bool, int, int)), this, SLOT(issuesTableHasErrors(bool, int, int)));
   connect(m_Ui->issuesWidget, SIGNAL(showTable(bool)), m_Ui->issuesDockWidget, SLOT(setVisible(bool)));
+  connect(dream3dApp, &SIMPLViewApplication::filterFactoriesUpdated, m_Ui->filterListWidget, &FilterListToolboxWidget::loadFilterList);
+  connect(dream3dApp, &SIMPLViewApplication::filterFactoriesUpdated, m_Ui->filterLibraryWidget, &FilterLibraryToolboxWidget::refreshFilterGroups);
 
   connectDockWidgetSignalsSlots(m_Ui->bookmarksDockWidget);
   connectDockWidgetSignalsSlots(m_Ui->dataBrowserDockWidget);
@@ -687,6 +689,13 @@ void SIMPLView_UI::createSIMPLViewMenuSystem()
   // Create Pipeline Menu
   m_SIMPLViewMenu->addMenu(m_MenuPipeline);
   m_MenuPipeline->addAction(actionClearPipeline);
+#ifdef SIMPL_EMBED_PYTHON
+  m_ActionReloadPython = new QAction("Reload Python Filters", this);
+  m_ActionReloadPython->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+  m_MenuPipeline->addAction(m_ActionReloadPython);
+  SIMPLViewApplication* app = dream3dApp;
+  connect(m_ActionReloadPython, &QAction::triggered, app, &SIMPLViewApplication::reloadPythonFilters);
+#endif
 
   // Create Help Menu
   m_SIMPLViewMenu->addMenu(m_MenuHelp);
@@ -1171,3 +1180,69 @@ PipelineModel* SIMPLView_UI::getPipelineModel()
   SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
   return pipelineView->getPipelineModel();
 }
+
+// -----------------------------------------------------------------------------
+bool SIMPLView_UI::hasFilterInPipeline(const QUuid& uuid) const
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  PipelineModel* model = pipelineView->getPipelineModel();
+  for(size_t i = 0; i < model->rowCount(); i++)
+  {
+    AbstractFilter::Pointer filter = model->filter(model->index(i, PipelineItem::Contents));
+    if(filter->getUuid() == uuid)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// -----------------------------------------------------------------------------
+bool SIMPLView_UI::undoStackIsClear() const
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+
+  return pipelineView->undoStackIsClear();
+}
+
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::clearUndoStack()
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+
+  pipelineView->clearUndoStack();
+}
+
+// -----------------------------------------------------------------------------
+QJsonObject SIMPLView_UI::serializePipeline() const
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  return pipelineView->getFilterPipeline()->toJson();
+}
+
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::deserializePipeline(const QJsonObject& json)
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
+  FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromJson(json, pipelineView);
+  auto filterContainer = pipeline->getFilterContainer();
+  std::vector<AbstractFilter::Pointer> filters(filterContainer.cbegin(), filterContainer.cend());
+  pipelineView->addFilters(filters);
+}
+
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::clearPipeline(bool playAnimation)
+{
+  SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
+  pipelineView->clearPipeline(playAnimation);
+}
+
+#ifdef SIMPL_EMBED_PYTHON
+// -----------------------------------------------------------------------------
+void SIMPLView_UI::setPythonGUIEnabled(bool value)
+{
+  m_ActionReloadPython->setEnabled(value);
+}
+#endif

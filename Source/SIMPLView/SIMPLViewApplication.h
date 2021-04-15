@@ -40,6 +40,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenuBar>
 
+#include "SIMPLib/SIMPLib.h"
+
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 
 #define dream3dApp (static_cast<SIMPLViewApplication*>(qApp))
@@ -119,6 +121,18 @@ public:
    */
   QMenu* getRecentFilesMenu();
 
+#ifdef SIMPL_EMBED_PYTHON
+  /**
+   * @brief Enables/disables GUI elements for Python functionality based on value
+   * @param value
+   * @return
+   */
+  void setPythonGUIEnabled(bool value);
+#endif
+
+Q_SIGNALS:
+  void filterFactoriesUpdated();
+
 public Q_SLOTS:
   void listenNewInstanceTriggered();
   void listenOpenPipelineTriggered();
@@ -131,6 +145,9 @@ public Q_SLOTS:
   void listenExitApplicationTriggered();
   void listenSetDataFolderTriggered();
   void listenShowDataFolderTriggered();
+#ifdef SIMPL_EMBED_PYTHON
+  void reloadPythonFilters();
+#endif
 
   SIMPLView_UI* getNewSIMPLViewInstance();
 
@@ -232,6 +249,11 @@ private:
   QAction* m_ActionShowDataBrowser = nullptr;
   QAction* m_ActionSetDataFolder = nullptr;
   QAction* m_ActionShowDataFolder = nullptr;
+
+#ifdef SIMPL_EMBED_PYTHON
+  QAction* m_ActionReloadPython = nullptr;
+  bool m_PythonGUIEnabled = false;
+#endif
 
   QActionGroup* m_ThemeActionGroup = nullptr;
 

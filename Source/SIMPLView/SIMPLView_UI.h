@@ -139,6 +139,42 @@ public:
    */
   void showDockWidget(QDockWidget* dockWidget);
 
+  /**
+   * @brief Returns true if the given filter UUID is in the pipeline model
+   * @param uuid
+   * @return
+   */
+  bool hasFilterInPipeline(const QUuid& uuid) const;
+
+  /**
+   * @brief Returns true if the undo stack is clean
+   * @return
+   */
+  bool undoStackIsClear() const;
+
+  /**
+   * @brief Clears the undo stack
+   */
+  void clearUndoStack();
+
+  /**
+   * @brief Returns pipeline in json form
+   * @return
+   */
+  QJsonObject serializePipeline() const;
+
+  /**
+   * @brief Adds filters to pipeline from json
+   * @param json
+   */
+  void deserializePipeline(const QJsonObject& json);
+
+  /**
+   * @brief Clears the pipeline optionally playing the animation
+   * @param playAnimation
+   */
+  void clearPipeline(bool playAnimation);
+
 public Q_SLOTS:
   /**
    * @brief setFilterBeingDragged
@@ -178,6 +214,15 @@ public Q_SLOTS:
    * @brief listenSavePipelineAsTriggered
    */
   void listenSavePipelineAsTriggered();
+
+#ifdef SIMPL_EMBED_PYTHON
+  /**
+   * @brief Enables/disables GUI elements for Python functionality based on value
+   * @param value
+   * @return
+   */
+  void setPythonGUIEnabled(bool value);
+#endif
 
 protected:
   /**
@@ -353,6 +398,10 @@ private:
   QAction* m_ActionClearCache = nullptr;
   QAction* m_ActionSetDataFolder = nullptr;
   QAction* m_ActionShowDataFolder = nullptr;
+
+#ifdef SIMPL_EMBED_PYTHON
+  QAction* m_ActionReloadPython = nullptr;
+#endif
 
   QActionGroup* m_ThemeActionGroup = nullptr;
 

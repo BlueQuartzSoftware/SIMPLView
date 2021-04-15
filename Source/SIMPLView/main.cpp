@@ -39,6 +39,8 @@
 
 #include <QtGui/QFontDatabase>
 
+#include <QtWidgets/QFileDialog>
+
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
@@ -58,6 +60,10 @@
 
 #ifdef SIMPL_USE_MKDOCS
 #include "SVWidgetsLib/QtSupport/QtSDocServer.h"
+#endif
+
+#ifdef SIMPL_EMBED_PYTHON
+#include "SIMPLib/Python/PythonLoader.h"
 #endif
 
 // -----------------------------------------------------------------------------
@@ -105,6 +111,30 @@ void InitStyleSheetEditor()
 // -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+#ifdef DREAM3D_ANACONDA
+  {
+    constexpr const char k_QT_PLUGIN_PATH[] = "QT_PLUGIN_PATH";
+    constexpr const char k_PYTHONHOME[] = "PYTHONHOME";
+    QString qtPluginPath = qgetenv(k_QT_PLUGIN_PATH);
+    QString condaPrefix = qgetenv("CONDA_PREFIX");
+    if(qtPluginPath.isEmpty() && !condaPrefix.isEmpty())
+    {
+      QString absoluteQtPluginPath = QString("%1/Library/Plugins").arg(condaPrefix);
+      if(QDir(absoluteQtPluginPath).exists())
+      {
+        qputenv(k_QT_PLUGIN_PATH, absoluteQtPluginPath.toLocal8Bit());
+      }
+    }
+
+    QString pythonHome = qgetenv(k_PYTHONHOME);
+    if(pythonHome.isEmpty() && !condaPrefix.isEmpty())
+    {
+      qputenv(k_PYTHONHOME, condaPrefix.toLocal8Bit());
+    }
+    qputenv("DREAM3D_PLUGINS_LOADED", "1");
+  }
+#endif
+
 #ifdef Q_OS_X11
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)
@@ -144,10 +174,56 @@ int main(int argc, char* argv[])
 
   SIMPLViewApplication qtapp(argc, argv);
 
+#ifdef SIMPL_EMBED_PYTHON
+  bool hasPythonHome = PythonLoader::checkPythonHome();
+  bool enablePython = hasPythonHome;
+
+  if(!hasPythonHome)
+  {
+    QMessageBox::StandardButton result =
+        QMessageBox::warning(nullptr, "Warning", "\"PYTHONHOME\" not set. This environment variable must be set for embedded Python to work. Would you like to set it now?",
+                             QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
+
+    if(result == QMessageBox::StandardButton::Yes)
+    {
+      QString pythonHome = QFileDialog::getExistingDirectory(nullptr, "Set PYTHONHOME");
+
+      if(pythonHome.isEmpty() && !PythonLoader::setPythonHome(pythonHome.toStdString()))
+      {
+        QMessageBox::critical(nullptr, "Error", "Failed to set \"PYTHONHOME\".");
+      }
+      else
+      {
+        enablePython = true;
+      }
+    }
+  }
+
+  if(!enablePython)
+  {
+    QMessageBox::warning(nullptr, "Warning", "Python filters disabled.");
+  }
+
+  // Python interpreter must be created before calling SIMPLViewApplication::initialize since it will try to load Python filters
+  PythonLoader::ScopedInterpreter interpreter_guard{enablePython};
+
+  // Release Python GIL to allow the main and worker threads to lock as needed
+  PythonLoader::GILScopedRelease gil_release_guard{enablePython};
+#endif
+
   if(!qtapp.initialize(argc, argv))
   {
     return 1;
   }
+
+#ifdef SIMPL_EMBED_PYTHON
+  qtapp.setPythonGUIEnabled(enablePython);
+  if(enablePython)
+  {
+    qtapp.reloadPythonFilters();
+    PythonLoader::addToPythonPath(PythonLoader::defaultSIMPLPythonLibPath());
+  }
+#endif
 
 #if defined(Q_OS_MAC)
   dream3dApp->setQuitOnLastWindowClosed(false);

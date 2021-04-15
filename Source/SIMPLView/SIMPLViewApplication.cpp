@@ -61,24 +61,28 @@
 #include "SIMPLib/Plugin/PluginProxy.h"
 #include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
-#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
-#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
+#include "SVWidgetsLib/QtSupport/QtSDocServer.h"
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
+#include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/Widgets/BookmarksToolboxWidget.h"
 #include "SVWidgetsLib/Widgets/PipelineModel.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
 
-#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/AboutSIMPLView.h"
+#include "SIMPLView/SIMPLView.h"
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLView_UI.h"
 
 #include "BrandedStrings.h"
+
+#ifdef SIMPL_EMBED_PYTHON
+#include "SIMPLib/Python/PythonLoader.h"
+#endif
 
 namespace Detail
 {
@@ -177,7 +181,6 @@ void delay(int seconds)
 // -----------------------------------------------------------------------------
 bool SIMPLViewApplication::initialize(int argc, char* argv[])
 {
-
   Q_UNUSED(argc)
   Q_UNUSED(argv)
   QApplication::setApplicationVersion(SIMPLib::Version::Complete());
@@ -797,6 +800,9 @@ SIMPLView_UI* SIMPLViewApplication::getNewSIMPLViewInstance()
   newInstance->setLoadedPlugins(plugins);
   newInstance->setAttribute(Qt::WA_DeleteOnClose);
   newInstance->setWindowTitle("[*]Untitled Pipeline - " + BrandedStrings::ApplicationName);
+#ifdef SIMPL_EMBED_PYTHON
+  newInstance->setPythonGUIEnabled(m_PythonGUIEnabled);
+#endif
 
   if(m_ActiveWindow != nullptr)
   {
@@ -1005,6 +1011,115 @@ void SIMPLViewApplication::readSettings()
   prefs->endGroup();
 }
 
+#ifdef SIMPL_EMBED_PYTHON
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::reloadPythonFilters()
+{
+  static const QString k_UndoStackMessageKey = "DisplayClearUndoStackMessageBox";
+
+  QtSSettings settings;
+  bool displayDialog = settings.value(k_UndoStackMessageKey, true).toBool();
+
+  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  {
+    if(!instance->undoStackIsClear())
+    {
+      int result = QMessageBox::StandardButton::Yes;
+
+      if(displayDialog)
+      {
+        QCheckBox* checkBox = new QCheckBox("Do not ask me this again");
+        QMessageBox messageBox;
+        messageBox.setWindowTitle("Warning");
+        messageBox.setText("In order to reload Python filters, the undo stack must be cleared. Continue?");
+        messageBox.setIcon(QMessageBox::Icon::Warning);
+        messageBox.addButton(QMessageBox::StandardButton::No);
+        messageBox.addButton(QMessageBox::StandardButton::Yes);
+        messageBox.setDefaultButton(QMessageBox::StandardButton::No);
+        // Takes ownership
+        messageBox.setCheckBox(checkBox);
+
+        result = messageBox.exec();
+
+        displayDialog = !checkBox->isChecked();
+        settings.setValue(k_UndoStackMessageKey, displayDialog);
+      }
+
+      switch(result)
+      {
+      case QMessageBox::StandardButton::Yes:
+        instance->clearUndoStack();
+        break;
+      default:
+        return;
+      }
+    }
+  }
+
+  FilterManager* filterManager = FilterManager::Instance();
+
+  std::vector<std::pair<SIMPLView_UI*, QJsonObject>> savedPipelines{};
+
+  QSet<QUuid> pythonUuids = filterManager->pythonFilterUuids();
+
+  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  {
+    if(std::any_of(pythonUuids.cbegin(), pythonUuids.cend(), [instance](const QUuid& uuid) { return instance->hasFilterInPipeline(uuid); }))
+    {
+      savedPipelines.push_back({instance, instance->serializePipeline()});
+      instance->clearPipeline(false);
+      instance->clearUndoStack();
+    }
+  }
+
+  for(const QUuid& uuid : pythonUuids)
+  {
+    filterManager->removeFilterFactory(uuid);
+  }
+
+  auto pythonErrorCallback = [](const std::string& message, const std::string& filePath) {
+    QMessageBox messageBox;
+    messageBox.setWindowTitle("Warning");
+    messageBox.setText(QString("Failed to parse Python filter. Skipping file \"%1\".").arg(QString::fromStdString(filePath)));
+    messageBox.setDetailedText(QString::fromStdString(message));
+    messageBox.setIcon(QMessageBox::Icon::Warning);
+    messageBox.addButton(QMessageBox::StandardButton::Ok);
+    messageBox.setDefaultButton(QMessageBox::StandardButton::Ok);
+    messageBox.exec();
+  };
+  auto pythonLoadedCallback = [this](const std::string& pyClass, const std::string& filePath) {
+    for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+    {
+      instance->addStdOutputMessage(QString("Loaded \"%1\" from \"%2\"").arg(QString::fromStdString(pyClass), QString::fromStdString(filePath)));
+    }
+  };
+  size_t numLoaded = PythonLoader::loadPythonFilters(*filterManager, PythonLoader::defaultPythonFilterPaths(), pythonErrorCallback, pythonLoadedCallback);
+
+  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  {
+    instance->addStdOutputMessage(QString("Reloaded %1 Python filters").arg(numLoaded));
+  }
+
+  for(auto&& [instance, json] : savedPipelines)
+  {
+    instance->deserializePipeline(json);
+  }
+
+  Q_EMIT filterFactoriesUpdated();
+}
+
+// -----------------------------------------------------------------------------
+void SIMPLViewApplication::setPythonGUIEnabled(bool value)
+{
+  m_PythonGUIEnabled = value;
+  m_ActionReloadPython->setEnabled(value);
+  for(auto instance : m_SIMPLViewInstances)
+  {
+    instance->setPythonGUIEnabled(value);
+  }
+}
+#endif
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -1173,6 +1288,13 @@ void SIMPLViewApplication::createDefaultMenuBar()
   // Create Pipeline Menu
   m_DefaultMenuBar->addMenu(m_MenuPipeline);
   m_MenuPipeline->addAction(m_ActionClearPipeline);
+#ifdef SIMPL_EMBED_PYTHON
+  m_ActionReloadPython = new QAction("Reload Python Filters", m_DefaultMenuBar);
+  m_ActionReloadPython->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+  m_ActionReloadPython->setEnabled(m_PythonGUIEnabled);
+  m_MenuPipeline->addAction(m_ActionReloadPython);
+  connect(m_ActionReloadPython, &QAction::triggered, this, &SIMPLViewApplication::reloadPythonFilters);
+#endif
 
   // Create Help Menu
   m_DefaultMenuBar->addMenu(m_MenuHelp);
