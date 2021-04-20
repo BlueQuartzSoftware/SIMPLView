@@ -39,7 +39,6 @@
 #endif
 
 #include <ctime>
-#include <iostream>
 
 #include <QtCore/QPluginLoader>
 #include <QtCore/QProcess>
@@ -55,7 +54,6 @@
 
 #include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
-#include "SIMPLib/FilterParameters/JsonFilterParametersWriter.h"
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
 #include "SIMPLib/Plugin/PluginManager.h"
 #include "SIMPLib/Plugin/PluginProxy.h"
@@ -538,7 +536,7 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     prefs->setValue("Program Mode", QString("Reset Preferences"));
 
     QMessageBox cacheClearedBox;
-    QString title = QString("The cache has been cleared successfully. Please restart %1 for the changes to take effect.").arg(BrandedStrings::ApplicationName);
+    title = QString("The cache has been cleared successfully. Please restart %1 for the changes to take effect.").arg(BrandedStrings::ApplicationName);
 
     cacheClearedBox.setText(title);
     QPushButton* restartNowBtn = cacheClearedBox.addButton("Restart Now", QMessageBox::YesRole);
@@ -550,7 +548,12 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     if(cacheClearedBox.clickedButton() == restartNowBtn)
     {
       listenExitApplicationTriggered();
+      #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
       QProcess::startDetached(QApplication::applicationFilePath());
+      #else
+      QStringList arguments;
+      QProcess::startDetached(QApplication::applicationFilePath(), arguments);
+      #endif
     }
   }
 }
@@ -757,7 +760,12 @@ void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
     if(choice == QMessageBox::Yes)
     {
       listenExitApplicationTriggered();
+      #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
       QProcess::startDetached(QApplication::applicationFilePath());
+      #else
+      QStringList arguments;
+      QProcess::startDetached(QApplication::applicationFilePath(), arguments);
+      #endif
     }
   }
 }
@@ -1360,8 +1368,8 @@ QMenu* SIMPLViewApplication::createThemeMenu(QActionGroup* actionGroup, QWidget*
   QStringList themeFiles = BrandedStrings::LoadedThemeFilePaths;
   for(int32_t i = 0; i < numThemes; i++)
   {
-    QString themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeFiles[i];
-    QAction* action = menuThemes->addAction(themeNames[i], [=] { style->loadStyleSheet(themePath); });
+    themePath = BrandedStrings::DefaultStyleDirectory + QDir::separator() + themeFiles[i];
+    action = menuThemes->addAction(themeNames[i], [=] { style->loadStyleSheet(themePath); });
     action->setCheckable(true);
     if(themePath == style->getCurrentThemeFilePath())
     {
