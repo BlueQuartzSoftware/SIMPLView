@@ -548,12 +548,12 @@ void SIMPLViewApplication::listenClearSIMPLViewCacheTriggered()
     if(cacheClearedBox.clickedButton() == restartNowBtn)
     {
       listenExitApplicationTriggered();
-      #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
       QProcess::startDetached(QApplication::applicationFilePath());
-      #else
+#else
       QStringList arguments;
       QProcess::startDetached(QApplication::applicationFilePath(), arguments);
-      #endif
+#endif
     }
   }
 }
@@ -760,12 +760,12 @@ void SIMPLViewApplication::listenDisplayPluginInfoDialogTriggered()
     if(choice == QMessageBox::Yes)
     {
       listenExitApplicationTriggered();
-      #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
       QProcess::startDetached(QApplication::applicationFilePath());
-      #else
+#else
       QStringList arguments;
       QProcess::startDetached(QApplication::applicationFilePath(), arguments);
-      #endif
+#endif
     }
   }
 }
