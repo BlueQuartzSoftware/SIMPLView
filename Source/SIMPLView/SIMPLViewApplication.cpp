@@ -1101,7 +1101,15 @@ void SIMPLViewApplication::reloadPythonFilters()
       instance->addStdOutputMessage(QString("Loaded \"%1\" from \"%2\"").arg(QString::fromStdString(pyClass), QString::fromStdString(filePath)));
     }
   };
-  size_t numLoaded = PythonLoader::loadPythonFilters(*filterManager, PythonLoader::defaultPythonFilterPaths(), pythonErrorCallback, pythonLoadedCallback);
+  auto paths = PythonLoader::defaultPythonFilterPaths();
+  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  {
+    for(const auto& path : paths)
+    {
+      instance->addStdOutputMessage(QString("Searching \"%1\"").arg(QString::fromStdString(path)));
+    }
+  }
+  size_t numLoaded = PythonLoader::loadPythonFilters(*filterManager, paths, pythonErrorCallback, pythonLoadedCallback);
 
   for(SIMPLView_UI* instance : m_SIMPLViewInstances)
   {
