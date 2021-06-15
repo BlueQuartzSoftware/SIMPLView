@@ -297,7 +297,6 @@ endif()
 include(${CMP_SOURCE_DIR}/ExtLib/Qt5Support.cmake)
 set(SIMPLView_Qt5_Components Core Widgets Network Gui Concurrent Svg Xml OpenGL PrintSupport )
 CMP_AddQt5Support( "${SIMPLView_Qt5_Components}"
-                    "${SIMPL_USE_QtWebEngine}"
                     "${SIMPLViewProj_BINARY_DIR}"
                     "SIMPLView")
 
