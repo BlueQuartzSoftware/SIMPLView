@@ -131,8 +131,11 @@ int main(int argc, char* argv[])
     {
       qputenv(k_PYTHONHOME, condaPrefix.toLocal8Bit());
     }
-    qputenv("DREAM3D_PLUGINS_LOADED", "1");
   }
+#endif
+
+#ifdef SIMPL_EMBED_PYTHON
+  qputenv("DREAM3D_PLUGINS_LOADED", "1");
 #endif
 
 #ifdef Q_OS_X11
