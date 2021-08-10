@@ -119,7 +119,11 @@ int main(int argc, char* argv[])
     QString condaPrefix = qgetenv("CONDA_PREFIX");
     if(qtPluginPath.isEmpty() && !condaPrefix.isEmpty())
     {
+#ifdef _WIN32
       QString absoluteQtPluginPath = QString("%1/Library/Plugins").arg(condaPrefix);
+#else
+      QString absoluteQtPluginPath = QString("%1/plugins").arg(condaPrefix);
+#endif
       if(QDir(absoluteQtPluginPath).exists())
       {
         qputenv(k_QT_PLUGIN_PATH, absoluteQtPluginPath.toLocal8Bit());
