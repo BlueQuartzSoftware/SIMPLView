@@ -43,6 +43,7 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QProcess>
 #include <QtCore/QThread>
+#include <QtCore/QDebug>
 
 #include <QtGui/QBitmap>
 #include <QtGui/QDesktopServices>
@@ -50,8 +51,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QSplashScreen>
 
-#include <QtCore/QDebug>
-
+#include "SIMPLib/SIMPLib.h"
 #include "SIMPLib/SIMPLibVersion.h"
 #include "SIMPLib/FilterParameters/JsonFilterParametersReader.h"
 #include "SIMPLib/Filtering/QMetaObjectUtilities.h"
@@ -75,6 +75,7 @@
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLView_UI.h"
+#include "SIMPLView/PythonImportErrorDialog.h"
 
 #include "BrandedStrings.h"
 
@@ -1086,13 +1087,10 @@ void SIMPLViewApplication::reloadPythonFilters()
   }
 
   auto pythonErrorCallback = [](const std::string& message, const std::string& filePath) {
-    QMessageBox messageBox;
-    messageBox.setWindowTitle("Warning");
+      PythonImportErrorDialog messageBox;
+    messageBox.setWindowTitle("Python Import Error");
     messageBox.setText(QString("Failed to parse Python filter. Skipping file \"%1\".").arg(QString::fromStdString(filePath)));
     messageBox.setDetailedText(QString::fromStdString(message));
-    messageBox.setIcon(QMessageBox::Icon::Warning);
-    messageBox.addButton(QMessageBox::StandardButton::Ok);
-    messageBox.setDefaultButton(QMessageBox::StandardButton::Ok);
     messageBox.exec();
   };
   auto pythonLoadedCallback = [this](const std::string& pyClass, const std::string& filePath) {
