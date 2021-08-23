@@ -85,7 +85,6 @@ set(SIMPLView_SRCS
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.cpp
   ${SIMPLView_SOURCE_DIR}/SIMPLViewUIMessageHandler.cpp
   ${SIMPLView_SOURCE_DIR}/StyleSheetEditor.cpp
-  ${SIMPLView_SOURCE_DIR}/PythonImportErrorDialog.cpp
  )
 
 #------------------------------------------------------------------
@@ -103,7 +102,6 @@ SET(SIMPLView_MOC_HDRS
   ${SIMPLView_SOURCE_DIR}/AboutSIMPLView.h
   ${SIMPLView_SOURCE_DIR}/SIMPLViewApplication.h
   ${SIMPLView_SOURCE_DIR}/StyleSheetEditor.h
-  ${SIMPLView_SOURCE_DIR}/PythonImportErrorDialog.h
 )
 
 cmp_IDE_SOURCE_PROPERTIES( "SIMPLView" "${SIMPLView_HDRS};${SIMPLView_MOC_HDRS}" "${SIMPLView_SRCS}" ${PROJECT_INSTALL_HEADERS})
@@ -113,7 +111,6 @@ SET(SIMPLView_UIS
   ${SIMPLView_SOURCE_DIR}/UI_Files/SIMPLView_UI.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/AboutSIMPLView.ui
   ${SIMPLView_SOURCE_DIR}/UI_Files/StyleSheetEditor.ui
-  ${SIMPLView_SOURCE_DIR}/UI_Files/PythonImportErrorDialog.ui
 )
 cmp_IDE_GENERATED_PROPERTIES("SIMPLView/UI_Files" "${SIMPLView_UIS}" "")
 
