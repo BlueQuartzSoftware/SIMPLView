@@ -40,15 +40,17 @@
 
 #include <ctime>
 
+#include <QtCore/QDebug>
+#include <QtCore/QMetaEnum>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QProcess>
 #include <QtCore/QThread>
-#include <QtCore/QDebug>
 
 #include <QtGui/QBitmap>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QScreen>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QSplashScreen>
 
 #include "SIMPLib/SIMPLib.h"
@@ -60,6 +62,7 @@
 #include "SIMPLib/Utilities/SIMPLDataPathValidator.h"
 
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
+#include "SVWidgetsLib/Dialogs/DetailedErrorDialog.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheck.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckData.h"
 #include "SVWidgetsLib/Dialogs/UpdateCheckDialog.h"
@@ -75,13 +78,31 @@
 #include "SIMPLView/SIMPLViewConstants.h"
 #include "SIMPLView/SIMPLViewVersion.h"
 #include "SIMPLView/SIMPLView_UI.h"
-#include "SIMPLView/PythonImportErrorDialog.h"
 
 #include "BrandedStrings.h"
 
 #ifdef SIMPL_EMBED_PYTHON
 #include "SIMPLib/Python/PythonLoader.h"
 #endif
+
+namespace
+{
+QString QEventToString(QEvent::Type type)
+{
+  static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
+  QString name = QString("QEvent::%1").arg(QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(type));
+  return name;
+}
+
+QString CreateExceptionHandlingString(const QObject* receiver, const QEvent* event, const QString& caughtObjectName)
+{
+  QString recieverName = receiver == nullptr ? "Unexpected null receiver" : receiver->objectName();
+  QString eventType = event == nullptr ? "Unexpected null event" : QEventToString(event->type());
+
+  QString message = QString("Caught %1 while handling \"%2\" event to object \"%3\". Now exiting.").arg(caughtObjectName, eventType, recieverName);
+  return message;
+}
+} // namespace
 
 namespace Detail
 {
@@ -1087,11 +1108,8 @@ void SIMPLViewApplication::reloadPythonFilters()
   }
 
   auto pythonErrorCallback = [](const std::string& message, const std::string& filePath) {
-      PythonImportErrorDialog messageBox;
-    messageBox.setWindowTitle("Python Import Error");
-    messageBox.setText(QString("Failed to parse Python filter. Skipping file \"%1\".").arg(QString::fromStdString(filePath)));
-    messageBox.setDetailedText(QString::fromStdString(message));
-    messageBox.exec();
+    DetailedErrorDialog::warning(nullptr, "Python Import Error", QString("Failed to parse Python filter. Skipping file \"%1\".").arg(QString::fromStdString(filePath)),
+                                 QString::fromStdString(message));
   };
   auto pythonLoadedCallback = [this](const std::string& pyClass, const std::string& filePath) {
     for(SIMPLView_UI* instance : m_SIMPLViewInstances)
@@ -1414,4 +1432,49 @@ void SIMPLViewApplication::createMacDockMenu()
 QMenu* SIMPLViewApplication::getRecentFilesMenu()
 {
   return m_MenuRecentFiles;
+}
+
+// -----------------------------------------------------------------------------
+bool SIMPLViewApplication::notify(QObject* receiver, QEvent* event)
+{
+  static QAtomicInt exceptionDepth = 0;
+
+  bool result = true;
+  try
+  {
+    result = QApplication::notify(receiver, event);
+  } catch(const std::exception& exception)
+  {
+    exceptionDepth++;
+    QString message = CreateExceptionHandlingString(receiver, event, "exception");
+
+    qCritical().noquote() << message;
+    qCritical().noquote() << exception.what();
+    if(exceptionDepth <= 1)
+    {
+      DetailedErrorDialog::critical(nullptr, "Error", message, exception.what());
+    }
+    else
+    {
+      qCritical().noquote() << "Skipping showing dialog.";
+    }
+    QApplication::exit(1);
+  } catch(...)
+  {
+    exceptionDepth++;
+    QString message = CreateExceptionHandlingString(receiver, event, "unknown object");
+
+    qCritical().noquote() << message;
+    if(exceptionDepth <= 1)
+    {
+      QMessageBox::critical(nullptr, "Error", message);
+    }
+    else
+    {
+      qCritical().noquote() << "Skipping showing dialog.";
+    }
+    QApplication::exit(1);
+  }
+
+  return result;
 }

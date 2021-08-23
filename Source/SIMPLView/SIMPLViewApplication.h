@@ -130,6 +130,8 @@ public:
   void setPythonGUIEnabled(bool value);
 #endif
 
+  bool notify(QObject* receiver, QEvent* event) override;
+
 Q_SIGNALS:
   void filterFactoriesUpdated();
 
