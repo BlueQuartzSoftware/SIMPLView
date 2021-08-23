@@ -1045,6 +1045,30 @@ void SIMPLViewApplication::readSettings()
 // -----------------------------------------------------------------------------
 void SIMPLViewApplication::reloadPythonFilters()
 {
+  FilterManager* filterManager = FilterManager::Instance();
+
+  std::vector<std::pair<SIMPLView_UI*, QJsonObject>> savedPipelines{};
+
+  QSet<QUuid> pythonUuids = filterManager->pythonFilterUuids();
+
+  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  {
+    if(std::any_of(pythonUuids.cbegin(), pythonUuids.cend(), [instance](const QUuid& uuid) { return instance->hasFilterInPipeline(uuid); }))
+    {
+      QJsonObject jsonPipeline;
+      try
+      {
+        jsonPipeline = instance->serializePipeline();
+      } catch(const std::exception& exception)
+      {
+        DetailedErrorDialog::warning(nullptr, "Error", "Caught exception while serializing pipeline. Aborting reloading python filters.", exception.what());
+        return;
+      }
+
+      savedPipelines.push_back({instance, jsonPipeline});
+    }
+  }
+
   static const QString k_UndoStackMessageKey = "DisplayClearUndoStackMessageBox";
 
   QtSSettings settings;
@@ -1086,20 +1110,10 @@ void SIMPLViewApplication::reloadPythonFilters()
     }
   }
 
-  FilterManager* filterManager = FilterManager::Instance();
-
-  std::vector<std::pair<SIMPLView_UI*, QJsonObject>> savedPipelines{};
-
-  QSet<QUuid> pythonUuids = filterManager->pythonFilterUuids();
-
-  for(SIMPLView_UI* instance : m_SIMPLViewInstances)
+  for(auto&& [instance, pipeline] : savedPipelines)
   {
-    if(std::any_of(pythonUuids.cbegin(), pythonUuids.cend(), [instance](const QUuid& uuid) { return instance->hasFilterInPipeline(uuid); }))
-    {
-      savedPipelines.push_back({instance, instance->serializePipeline()});
-      instance->clearPipeline(false);
-      instance->clearUndoStack();
-    }
+    instance->clearPipeline(false);
+    instance->clearUndoStack();
   }
 
   for(const QUuid& uuid : pythonUuids)

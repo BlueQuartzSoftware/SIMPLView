@@ -61,6 +61,7 @@
 #include "SVWidgetsLib/Animations/PipelineItemBorderSizeAnimation.h"
 #include "SVWidgetsLib/Core/FilterWidgetManager.h"
 #include "SVWidgetsLib/Dialogs/AboutPlugins.h"
+#include "SVWidgetsLib/Dialogs/DetailedErrorDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSFileUtils.h"
 #include "SVWidgetsLib/QtSupport/QtSMacros.h"
 #include "SVWidgetsLib/QtSupport/QtSPluginFrame.h"
@@ -196,7 +197,14 @@ bool SIMPLView_UI::savePipeline()
 
   // Write the pipeline
   SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-  viewWidget->writePipeline(filePath);
+  try
+  {
+    viewWidget->writePipeline(filePath);
+  } catch(const std::exception& exception)
+  {
+    DetailedErrorDialog::warning(nullptr, "Error", "Caught exception while attempting to save pipeline.", exception.what());
+    return false;
+  }
 
   // Set window title and save flag
   QFileInfo prefFileInfo = QFileInfo(filePath);
@@ -242,24 +250,31 @@ bool SIMPLView_UI::savePipelineAs()
 
   // Write the pipeline
   SVPipelineView* viewWidget = m_Ui->pipelineListWidget->getPipelineView();
-  int err = viewWidget->writePipeline(filePath);
 
-  if(err >= 0)
+  int err = 0;
+  try
   {
-    // Set window title and save flag
-    setWindowTitle("[*]" + fi.baseName() + " - " + BrandedStrings::ApplicationName);
-    setWindowModified(false);
-
-    // Add file to the recent files list
-    QtSRecentFileList* list = QtSRecentFileList::Instance();
-    list->addFile(filePath);
-
-    setWindowFilePath(filePath);
+    err = viewWidget->writePipeline(filePath);
+  } catch(const std::exception& exception)
+  {
+    DetailedErrorDialog::warning(nullptr, "Error", "Caught exception while attempting to save pipeline.", exception.what());
+    return false;
   }
-  else
+
+  if(err < 0)
   {
     return false;
   }
+
+  // Set window title and save flag
+  setWindowTitle("[*]" + fi.baseName() + " - " + BrandedStrings::ApplicationName);
+  setWindowModified(false);
+
+  // Add file to the recent files list
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
+
+  setWindowFilePath(filePath);
 
   // Cache the last directory
   m_LastOpenedFilePath = filePath;
@@ -1226,7 +1241,15 @@ void SIMPLView_UI::deserializePipeline(const QJsonObject& json)
 {
   SVPipelineView* pipelineView = m_Ui->pipelineListWidget->getPipelineView();
   JsonFilterParametersReader::Pointer jsonReader = JsonFilterParametersReader::New();
-  FilterPipeline::Pointer pipeline = jsonReader->readPipelineFromJson(json, pipelineView);
+  FilterPipeline::Pointer pipeline;
+  try
+  {
+    pipeline = jsonReader->readPipelineFromJson(json, pipelineView);
+  } catch(const std::exception& exception)
+  {
+    DetailedErrorDialog::warning(nullptr, "Error", "Caught exception while deserializing pipeline.", exception.what());
+    return;
+  }
   auto filterContainer = pipeline->getFilterContainer();
   std::vector<AbstractFilter::Pointer> filters(filterContainer.cbegin(), filterContainer.cend());
   pipelineView->addFilters(filters);
