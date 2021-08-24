@@ -2,8 +2,7 @@
 * BE SURE TO EDIT THE ORIGIN FILE
 */
 
-#ifndef _simplview_H_
-#define _simplview_H_
+#pragma once
 
 #define SIMPLView_EXPORT
 
@@ -13,5 +12,7 @@
 /* Defined if SIMPL uses the style sheet editor for applying custom style sheets */
 #cmakedefine SIMPLView_USE_STYLESHEETEDITOR
 
-#endif /* _simplview_H_ */
+#cmakedefine DREAM3D_ANACONDA
+
+#define SV_PLUGINS_DIR_NAME "Plugins"
 

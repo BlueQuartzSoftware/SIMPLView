@@ -229,17 +229,17 @@ bool SIMPLViewApplication::initialize(int argc, char* argv[])
 
 #if defined(Q_OS_MAC)
   dir.cdUp();
-  dir.cd("Plugins");
+  dir.cd(SV_PLUGINS_DIR_NAME);
 
 #elif defined(Q_OS_LINUX)
-  if(!dir.cd("Plugins"))
+  if(!dir.cd(SV_PLUGINS_DIR_NAME))
   {
     dir.cdUp();
-    dir.cd("Plugins");
+    dir.cd(SV_PLUGINS_DIR_NAME);
   }
 #elif defined(Q_OS_WIN)
   dir.cdUp();
-  dir.cd("Plugins");
+  dir.cd(SV_PLUGINS_DIR_NAME);
 #endif
   QApplication::addLibraryPath(dir.absolutePath());
 
@@ -287,7 +287,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   QString thePath;
 
 #if defined(Q_OS_WIN)
-  if(aPluginDir.cd("Plugins"))
+  if(aPluginDir.cd(SV_PLUGINS_DIR_NAME))
   {
     thePath = aPluginDir.absolutePath();
     pluginDirs << thePath;
@@ -297,7 +297,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   if(aPluginDir.dirName() == "MacOS")
   {
     aPluginDir.cdUp();
-    thePath = aPluginDir.absolutePath() + "/Plugins";
+    thePath = aPluginDir.absolutePath() + "/" + SV_PLUGINS_DIR_NAME;
     qDebug() << "  Adding Path " << thePath;
     pluginDirs << thePath;
     aPluginDir.cdUp();
@@ -311,22 +311,29 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     // We need this because Apple (in their infinite wisdom) changed how the current working directory is set in OS X 10.9 and above. Thanks Apple.
     chdir(aPluginDir.absolutePath().toLatin1().constData());
   }
-  // aPluginDir.cd("Plugins");
-  thePath = aPluginDir.absolutePath() + "/Plugins";
+  // aPluginDir.cd(SV_PLUGINS_DIR_NAME);
+  thePath = aPluginDir.absolutePath() + "/" + SV_PLUGINS_DIR_NAME;
   qDebug() << "  Adding Path " << thePath;
   pluginDirs << thePath;
+
+#ifdef DREAM3D_ANACONDA
+  aPluginDir.cdUp();
+  thePath = aPluginDir.absolutePath() + "/" + SV_PLUGINS_DIR_NAME;
+  qDebug() << "  Adding Path " << thePath;
+  pluginDirs << thePath;
+#endif
 
 // This is here for Xcode compatibility
 #ifdef CMAKE_INTDIR
   aPluginDir.cdUp();
-  thePath = aPluginDir.absolutePath() + "/Plugins/" + CMAKE_INTDIR;
+  thePath = aPluginDir.absolutePath() + "/" + SV_PLUGINS_DIR_NAME + "/" + CMAKE_INTDIR;
   pluginDirs << thePath;
 #endif
 #else
   // We are on Linux - I think
   // Try the current location of where the application was launched from which is
   // typically the case when debugging from a build tree
-  if(aPluginDir.cd("Plugins"))
+  if(aPluginDir.cd(SV_PLUGINS_DIR_NAME))
   {
     thePath = aPluginDir.absolutePath();
     pluginDirs << thePath;
@@ -338,7 +345,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
     // Now try moving up a directory which is what should happen when running from a
     // proper distribution of SIMPLView
     aPluginDir.cdUp();
-    if(aPluginDir.cd("Plugins"))
+    if(aPluginDir.cd(SV_PLUGINS_DIR_NAME))
     {
       thePath = aPluginDir.absolutePath();
       pluginDirs << thePath;
