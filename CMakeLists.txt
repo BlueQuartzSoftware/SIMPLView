@@ -246,13 +246,6 @@ endif()
 set(CMAKE_MODULE_PATH ${CMP_MODULES_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 
 # --------------------------------------------------------------------
-# Find HDF5 Headers/Libraries
-# HDF5 now comes with everything that is needed for CMake to load
-# up the targets (Exported) that it needs. We just need to find where
-# HDF5 is installed.
-include(${CMP_SOURCE_DIR}/ExtLib/HDF5Support.cmake)
-
-# --------------------------------------------------------------------
 # Should we use Intel Threading Building Blocks
 # --------------------------------------------------------------------
 set(SIMPL_USE_PARALLEL_ALGORITHMS "")
