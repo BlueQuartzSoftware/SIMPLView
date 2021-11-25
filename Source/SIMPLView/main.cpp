@@ -36,6 +36,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QString>
+#include <QtCore/QOperatingSystemVersion>
 
 #include <QtGui/QFontDatabase>
 
@@ -111,6 +112,13 @@ void InitStyleSheetEditor()
 // -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+#if defined(__APPLE__)
+  if(QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSCatalina)
+  {
+    qputenv("QT_MAC_WANTS_LAYER","1");
+  }
+#endif
+
 #ifdef DREAM3D_ANACONDA
   {
     constexpr const char k_QT_PLUGIN_PATH[] = "QT_PLUGIN_PATH";
