@@ -113,7 +113,7 @@ void InitStyleSheetEditor()
 int main(int argc, char* argv[])
 {
 #if defined(__APPLE__)
-  if(QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSCatalina)
+  if(QOperatingSystemVersion::current().majorVersion() > 10)
   {
     qputenv("QT_MAC_WANTS_LAYER","1");
   }
