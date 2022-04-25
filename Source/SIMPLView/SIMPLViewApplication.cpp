@@ -343,7 +343,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   sep = ':';
 #endif
   QList<QByteArray> envPaths = pluginEnvPath.split(sep);
-  foreach(QByteArray envPath, envPaths)
+  Q_FOREACH(QByteArray envPath, envPaths)
   {
     if(envPath.size() > 0)
     {
@@ -355,11 +355,11 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
   qDebug() << "Removed " << dupes << " duplicate Plugin Paths";
   QStringList pluginFilePaths;
 
-  foreach(QString pluginDirString, pluginDirs)
+  Q_FOREACH(QString pluginDirString, pluginDirs)
   {
     qDebug() << "Plugin Directory being Searched: " << pluginDirString;
     aPluginDir = QDir(pluginDirString);
-    foreach(QString fileName, aPluginDir.entryList(QDir::Files))
+    Q_FOREACH(QString fileName, aPluginDir.entryList(QDir::Files))
     {
 //   qDebug() << "File: " << fileName() << "\n";
 #ifdef QT_DEBUG
@@ -395,7 +395,7 @@ QVector<ISIMPLibPlugin*> SIMPLViewApplication::loadPlugins()
 
   // Now that we have a sorted list of plugins, go ahead and load them all from the
   // file system and add each to the toolbar and menu
-  foreach(QString path, pluginFilePaths)
+  Q_FOREACH(QString path, pluginFilePaths)
   {
     qDebug() << "Plugin Being Loaded:" << path;
     QApplication::instance()->processEvents();

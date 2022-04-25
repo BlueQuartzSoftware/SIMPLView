@@ -60,7 +60,7 @@ class PluginMaker : public QWidget, public Ui::PluginMaker
   protected:
     void setupGui();
 
-  protected slots:
+  protected Q_SLOTS:
     void on_selectButton_clicked();
     void on_generateButton_clicked();
 
@@ -75,7 +75,7 @@ class PluginMaker : public QWidget, public Ui::PluginMaker
 
     void testFileLocationsHandler();
 
-  signals:
+  Q_SIGNALS:
     void clicked(QSet<QString> names);
     void updateStatusBar(QString message);
 

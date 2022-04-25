@@ -142,7 +142,7 @@ class SIMPLView_UI : public QMainWindow
      */
     void showDockWidget(QDockWidget* dockWidget);
 
-  public slots:
+  public Q_SLOTS:
     /**
     * @brief setFilterBeingDragged
     * @param msg
@@ -250,7 +250,7 @@ class SIMPLView_UI : public QMainWindow
     */
     void handlePipelineChanges();
 
-  protected slots:
+  protected Q_SLOTS:
     /**
      * @brief Writes the window settings for the SIMPLView_UI instance.  This includes the window position and size,
      * dock widget locations, tab orders, splitter position, etc.
@@ -308,8 +308,8 @@ class SIMPLView_UI : public QMainWindow
     */
     void filterSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
-    // Our Signals that we can emit custom for this class
-  signals:
+    // Our Signals that we can Q_EMIT custom for this class
+  Q_SIGNALS:
     void parentResized();
 
     /**

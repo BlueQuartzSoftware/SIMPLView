@@ -77,7 +77,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     QString getPluginDir();
     bool isPublic();
 
-  public slots:
+  public Q_SLOTS:
     void addFilterParameterToTable(AddFilterParameter* widget);
 
   protected:
@@ -91,7 +91,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     QString getDefaultFilterHIncludesContents();
     QString getDefaultFilterCPPIncludesContents();
 
-  protected slots:
+  protected Q_SLOTS:
     void on_selectBtn_clicked();
     void on_codeChooser_currentIndexChanged(int index);
     void on_pluginDir_textChanged(const QString& text);
@@ -103,7 +103,7 @@ class FilterMaker : public QWidget, public Ui::FilterMaker
     void on_errorString_linkActivated(const QString& link);
     void generationError(const QString& test);
 
-  signals:
+  Q_SIGNALS:
     void generateBtnPressed();
     void updateStatusBar(QString message);
 

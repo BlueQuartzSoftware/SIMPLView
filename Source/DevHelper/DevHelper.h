@@ -57,7 +57,7 @@ class DevHelper : public QMainWindow, public Ui::DevHelper
   protected:
     void setupGui();
 
-  protected slots:
+  protected Q_SLOTS:
     void updateStatusMessage(QString message);
 
     void on_actionShowUserManual_triggered();

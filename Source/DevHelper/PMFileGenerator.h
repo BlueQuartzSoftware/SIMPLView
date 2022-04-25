@@ -75,10 +75,10 @@ class PMFileGenerator : public PMDirGenerator
 
     QString createReplacementString(FileType type, QSet<QString> names);
 
-  public slots:
+  public Q_SLOTS:
     virtual void generateOutput();
 
-  protected slots:
+  protected Q_SLOTS:
     virtual void pluginNameChanged (const QString& plugname);
     virtual void outputDirChanged (const QString& outputDir);
     virtual void generateOutputWithFilterNames(QSet<QString> names);

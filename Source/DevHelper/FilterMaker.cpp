@@ -206,7 +206,7 @@ void FilterMaker::on_generateBtn_clicked()
   // Add to the CMakeLists.txt file in the Test folder
   updateTestList();
 
-  emit updateStatusBar("'" + filterName + "' Generation Completed");
+  Q_EMIT updateStatusBar("'" + filterName + "' Generation Completed");
 }
 
 // -----------------------------------------------------------------------------

@@ -39,6 +39,7 @@
 #include <QtCore/QString>
 #include <QtCore/QDirIterator>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QOperatingSystemVersion>
 
 #include <QtGui/QFontDatabase>
 
@@ -107,6 +108,14 @@ void InitStyleSheetEditor()
 // -----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+#if defined(__APPLE__)
+  if( (QOperatingSystemVersion::current().majorVersion() == 10 && QOperatingSystemVersion::current().minorVersion() == 16) 
+        || QOperatingSystemVersion::current().majorVersion() > 10)
+  {
+    qputenv("QT_MAC_WANTS_LAYER","1");
+  }
+#endif
+
 #ifdef Q_OS_X11
   // Using motif style gives us test failures (and its ugly).
   // Using cleanlooks style gives us errors when using valgrind (Trolltech's bug #179200)

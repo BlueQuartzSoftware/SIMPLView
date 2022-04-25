@@ -58,7 +58,7 @@ class AboutSIMPLView : public QDialog, private Ui::AboutSIMPLView
      */
     void setLicenseFiles(const QStringList& files);
 
-  protected slots:
+  protected Q_SLOTS:
     void on_licenseCombo_currentIndexChanged(int index);
 
   protected:

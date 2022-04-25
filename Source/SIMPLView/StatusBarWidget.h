@@ -82,7 +82,7 @@ class StatusBarWidget : public QFrame, private Ui::StatusBarWidget
      */
     QString generateStyleSheet(bool error);
 
-  public slots:
+  public Q_SLOTS:
     /**
      * @brief issuesVisibilityChanged
      * @param b

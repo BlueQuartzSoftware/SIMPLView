@@ -64,10 +64,10 @@ class AddFilterParameter : public QWidget, public Ui::AddFilterParameter
   protected:
     void setupGui();
 
-  signals:
+  Q_SIGNALS:
     void addBtnPressed(AddFilterParameter* widget);
 
-  protected slots:
+  protected Q_SLOTS:
     void on_addFilterParameterBtn_clicked();
     void on_cancelBtn_clicked();
     void on_varName_textChanged(const QString& text);

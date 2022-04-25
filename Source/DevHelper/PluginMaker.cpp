@@ -839,7 +839,7 @@ void PluginMaker::setupGui()
   m_PluginName->setText("Unknown Plugin Name");
   m_PluginName->selectAll();
   treeWidget->expandAll();
-  emit updateStatusBar("Ready");
+  Q_EMIT updateStatusBar("Ready");
 
 }
 
@@ -879,14 +879,14 @@ void PluginMaker::on_generateButton_clicked()
 
   if (pluginName == "")
   {
-    emit updateStatusBar("Generation Failed --- Please provide a plugin name");
+    Q_EMIT updateStatusBar("Generation Failed --- Please provide a plugin name");
     QMessageBox::critical(this, tr("PluginMaker"), tr("The file generation was unsuccessful.\n"
                                                       "Please enter a Plugin Name."));
     return;
   }
   else if (pluginDir == "")
   {
-    emit updateStatusBar("Generation Failed --- Please provide a plugin directory");
+    Q_EMIT updateStatusBar("Generation Failed --- Please provide a plugin directory");
     QMessageBox::critical(this, tr("PluginMaker"), tr("The file generation was unsuccessful.\n"
                                                       "Please enter a Plugin Directory."));
     return;
@@ -920,7 +920,7 @@ void PluginMaker::on_generateButton_clicked()
   QDir dir2(parentPath);
   dir2.mkpath(parentPath);
 
-  emit updateStatusBar("Generation Completed");
+  Q_EMIT updateStatusBar("Generation Completed");
 }
 
 // -----------------------------------------------------------------------------
@@ -1227,7 +1227,7 @@ void PluginMaker::on_treeWidget_itemSelectionChanged()
 
   m_fileEditor->setPlainText(text);
 
-  emit updateStatusBar("Currently viewing " + currentFile->text(0));
+  Q_EMIT updateStatusBar("Currently viewing " + currentFile->text(0));
 }
 
 // -----------------------------------------------------------------------------
@@ -1327,7 +1327,7 @@ QString PluginMaker::generateCmakeContents()
 // -----------------------------------------------------------------------------
 void PluginMaker::testFileLocationsHandler()
 {
-  emit clicked(m_TestFileLocationNames);
+  Q_EMIT clicked(m_TestFileLocationNames);
 }
 
 // -----------------------------------------------------------------------------
@@ -1359,7 +1359,7 @@ bool PluginMaker::validityCheck()
   {
     generateButton->setEnabled(true);
     errorString->setText("");
-    emit updateStatusBar("Ready");
+    Q_EMIT updateStatusBar("Ready");
     return true;
   }
 }
