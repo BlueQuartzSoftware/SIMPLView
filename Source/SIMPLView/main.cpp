@@ -113,10 +113,12 @@ void InitStyleSheetEditor()
 int main(int argc, char* argv[])
 {
 #if defined(__APPLE__)
-  if(QOperatingSystemVersion::current().majorVersion() > 10)
+  if( (QOperatingSystemVersion::current().majorVersion() == 10 && QOperatingSystemVersion::current().minorVersion() == 16) 
+        || QOperatingSystemVersion::current().majorVersion() > 10)
   {
     qputenv("QT_MAC_WANTS_LAYER","1");
   }
+
 #endif
 
 #ifdef DREAM3D_ANACONDA
