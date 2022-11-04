@@ -237,6 +237,7 @@ int main(int argc, char* argv[])
   qtapp.setPythonGUIEnabled(enablePython);
   if(enablePython)
   {
+    PythonLoader::loadPluginFilters();
     qtapp.reloadPythonFilters();
     PythonLoader::addToPythonPath(PythonLoader::defaultSIMPLPythonLibPath());
   }
