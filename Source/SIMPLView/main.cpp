@@ -42,6 +42,7 @@
 
 #include <QtWidgets/QFileDialog>
 
+#include "SVWidgetsLib/Dialogs/DetailedErrorDialog.h"
 #include "SVWidgetsLib/QtSupport/QtSRecentFileList.h"
 #include "SVWidgetsLib/SVWidgetsLib.h"
 #include "SVWidgetsLib/Widgets/SVStyle.h"
@@ -237,6 +238,11 @@ int main(int argc, char* argv[])
   qtapp.setPythonGUIEnabled(enablePython);
   if(enablePython)
   {
+    QString message;
+    if(!PythonLoader::loadPluginFilters([&message](const std::string& error) { message = QString::fromStdString(error); }))
+    {
+      DetailedErrorDialog::warning(nullptr, "Python Import Error", "Failed to parse plugin Python filter.", message);
+    }
     qtapp.reloadPythonFilters();
     PythonLoader::addToPythonPath(PythonLoader::defaultSIMPLPythonLibPath());
   }
