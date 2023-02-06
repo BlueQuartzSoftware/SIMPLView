@@ -346,8 +346,11 @@ void SIMPLView_UI::closeEvent(QCloseEvent* event)
     return;
   }
 
-  // Status Bar Widget needs to write out its settings BEFORE the main window is closed
-  //  m_StatusBar->writeSettings();
+  // Add file to the recent files list
+  QString filePath = windowFilePath();
+  filePath = QDir::toNativeSeparators(filePath);
+  QtSRecentFileList* list = QtSRecentFileList::Instance();
+  list->addFile(filePath);
 
   event->accept();
 }
